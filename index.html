@@ -78,15 +78,15 @@
         h2 { color: var(--primary); font-size: 1.8rem; font-weight: 400; margin-bottom: 3px; }
         .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.85rem; color: #555; font-style: italic; }
 
-        .grid-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 10px 0; }
-        .info-box { background: var(--white); border: 1px solid var(--accent); border-radius: 10px; padding: 12px 10px; text-align: center; font-family: 'Segoe UI', sans-serif; }
-        .info-box h3 { font-size: 0.9rem; color: var(--primary); margin-bottom: 6px; }
-        .info-box img { width: 90px; height: 90px; object-fit: contain; margin: 4px auto; display: block; border-radius: 6px; border: 1px solid #eee; }
-        .info-box p { font-size: 0.75rem; color: #555; }
+        .grid-info { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 10px 0; }
+        .info-box { background: var(--white); border: 1px solid var(--accent); border-radius: 10px; padding: 12px 10px; text-align: left; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; justify-content: space-between; }
+        .info-box h3 { font-size: 0.9rem; color: var(--primary); margin-bottom: 6px; font-family: 'Playfair Display', serif; }
+        .info-box img { width: 100%; height: 85px; object-fit: cover; margin: 6px auto; display: block; border-radius: 6px; border: 1px solid #eee; }
+        .info-box p { font-size: 0.75rem; color: #555; line-height: 1.35; }
 
-        .banner-solaire { background: linear-gradient(135deg, rgba(197, 168, 128, 0.2), rgba(27, 77, 62, 0.1)); border-left: 4px solid var(--tropical-green); padding: 10px 15px; border-radius: 6px; font-family: 'Segoe UI', sans-serif; font-size: 0.8rem; color: var(--primary); text-align: center; margin: 10px 0; }
+        .banner-solaire { background: linear-gradient(135deg, rgba(197, 168, 128, 0.2), rgba(27, 77, 62, 0.1)); border-left: 4px solid var(--tropical-green); padding: 8px 12px; border-radius: 6px; font-family: 'Segoe UI', sans-serif; font-size: 0.78rem; color: var(--primary); text-align: center; margin: 8px 0; }
 
-        .footer-actions { display: flex; flex-direction: column; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 12px; font-family: 'Segoe UI', sans-serif; gap: 6px; }
+        .footer-actions { display: flex; flex-direction: column; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 10px; font-family: 'Segoe UI', sans-serif; gap: 6px; }
         .btn-action { background-color: var(--primary); color: white; padding: 10px 25px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; border: none; text-decoration: none; display: inline-block; transition: background 0.2s; }
         .btn-action:hover { background-color: var(--accent); color: var(--primary); }
 
@@ -125,20 +125,32 @@
         </div>
 
         <div class="grid-info">
+            <!-- Box 1 : Wi-Fi -->
             <div class="info-box">
                 <h3>📶 Wi-Fi Domaine</h3>
                 <img id="img-wifi" src="" alt="WiFi QR Code">
-                <p id="wifi-text-block"><b>Réseau :</b> <span id="display-ssid">SFR_JR</span><br><b>Mot de passe :</b> <code><span id="display-pass">02311760</span></code></p>
+                <p id="wifi-text-block"><b>Réseau :</b> <span id="display-ssid">SFR_JR</span><br><b>Pass :</b> <code><span id="display-pass">02311760</span></code></p>
             </div>
+            
+            <!-- Box 2 : TV & Divertissement (NOUVEAU) -->
+            <div class="info-box">
+                <h3>📺 TV & Divertissement</h3>
+                <img src="https://i.postimg.cc/8PzLb2Yn/Image.jpg" alt="Télécommande TV">
+                <p>Appuyez sur le <b>bouton encadré</b> de la télécommande. Pour regarder la TV, sélectionnez l'application <b>Orange TV</b>.</p>
+            </div>
+
+            <!-- Box 3 : Tri & Déchets -->
             <div class="info-box">
                 <h3>♻️ Tri & Déchets</h3>
                 <img id="img-dechets" src="https://i.postimg.cc/kXbdsqRb/IMG-4408.jpg" alt="Dechets">
-                <p id="compost-text">Compost & Poubelles jaunes</p>
+                <p id="compost-text">Compost & Poubelles jaunes sur le domaine.</p>
             </div>
+
+            <!-- Box 4 : Sanibroyeur -->
             <div class="info-box" style="background: rgba(255,235,238,0.85);">
                 <h3 style="color: #b94a48;">🚽 Sanibroyeur</h3>
                 <img src="https://i.postimg.cc/FRZkRwQW/IMG-4415.jpg" alt="Sanibroyeur">
-                <p style="color: #b94a48; font-weight: bold;">Papier uniquement !</p>
+                <p style="color: #b94a48; font-weight: bold;">⚠️ Papier hygiénique uniquement ! Rien d'autre.</p>
             </div>
         </div>
 
@@ -173,13 +185,13 @@
                 <option value="grandzabris">Le Grandzabris</option>
             </select>
 
-            <label style="font-size: 0.75rem; font-weight: bold; display: block; text-align: left; color: var(--primary);">Importer l'image du QR Code Wi-Fi (depuis vos photos)</label>
+            <label style="font-size: 0.75rem; font-weight: bold; display: block; text-align: left; color: var(--primary);">Importer l'image du QR Code Wi-Fi</label>
             <input type="file" id="cfg-file-wifi" accept="image/*" style="padding: 4px; font-size: 0.75rem;">
 
             <label style="font-size: 0.75rem; font-weight: bold; display: block; text-align: left; color: var(--primary);">Nom du réseau Wi-Fi (SSID)</label>
-            <input type="text" id="cfg-ssid" placeholder="Ex: SFR_JR_Ptitzabris">
+            <input type="text" id="cfg-ssid" placeholder="Ex: SFR_JR">
 
-            <label style="font-size: 0.75rem; font-weight: bold; display: block; text-align: left; color: var(--primary);">Mot de passe Wi-Fi (Password)</label>
+            <label style="font-size: 0.75rem; font-weight: bold; display: block; text-align: left; color: var(--primary);">Mot de passe Wi-Fi</label>
             <input type="text" id="cfg-password" placeholder="Ex: 02311760">
 
             <button type="button" class="modal-btn" onclick="saveConfigValues()">💾 Enregistrer</button>
@@ -196,7 +208,6 @@
             let cottageKey = giteParam.includes("grand") ? "grandzabris" : "ptitzabris";
             let cottageName = cottageKey === "grandzabris" ? "Grandzabris" : "Ptitzabris";
 
-            // Charger les valeurs Wi-Fi
             let savedWifiImg = localStorage.getItem(cottageKey + '_wifi_img');
             if (!savedWifiImg) {
                 savedWifiImg = cottageKey === "grandzabris" ? "https://i.postimg.cc/kXbdsqRb/IMG-4408.jpg" : "https://i.postimg.cc/NMsgCSvQ/IMG-4404.jpg";
@@ -209,10 +220,9 @@
             document.getElementById('display-pass').innerText = savedPass;
             document.getElementById('btn-conseils').href = `conseils.html?gite=${cottageKey}`;
 
-            let compostInfo = cottageKey === "grandzabris" ? "Compost (début passerelle) & Jaunes" : "Compost & Poubelles jaunes";
+            let compostInfo = cottageKey === "grandzabris" ? "Compost (début passerelle) & Jaunes sur le domaine." : "Compost & Poubelles jaunes sur le domaine.";
             document.getElementById('compost-text').innerText = compostInfo;
 
-            // Interrogation du Sheets pour le prénom
             try {
                 const response = await fetch(sheetApiUrl);
                 const voyageurs = await response.json();
@@ -314,4 +324,3 @@
     </script>
 </body>
 </html>
-
