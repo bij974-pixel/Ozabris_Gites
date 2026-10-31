@@ -1,13 +1,9 @@
 <!DOCTYPE html>
 <html lang="fr" dir="ltr">
 <head>
-    <link rel="canonical" href="https://jeanritter.github.io/lesozabris/">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Découvrez Les Ozabris, cottages de prestige avec espace bien-être et spa dans les Hauts de La Réunion (La Saline). Réservez votre séjour d'exception en ligne.">
-    <title class="lang-fr">Les Ozabris | Location de Cottages d'Exception</title>
-    <title class="lang-en" style="display:none;">Les Ozabris | Exceptional Cottages Rental</title>
-    <title class="lang-de" style="display:none;">Les Ozabris | Außergewöhnliche Cottages Vermietung</title>
+    <title>Bienvenue | Les Ozabris</title>
     <style>
         :root {
             --primary: #12263a;
@@ -15,7 +11,7 @@
             --text-dark: #2c3e50;
             --bg-light: #fbfbf9;
             --white: #ffffff;
-            --gold: #dfb76c;
+            --tropical-green: #1b4d3e;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Playfair Display', 'Didot', 'Georgia', serif; }
         body { background-color: var(--bg-light); color: var(--text-dark); line-height: 1.8; }
@@ -23,7 +19,7 @@
         header { 
             background: var(--primary);
             text-align: center; 
-            padding: 55px 20px 40px 20px; 
+            padding: 40px 20px 30px 20px; 
             border-bottom: 2px solid var(--accent); 
             position: relative; 
             color: var(--white);
@@ -35,38 +31,21 @@
             right: 15px; 
         }
         
-        .lang-switch { 
-            font-family: 'Segoe UI', sans-serif; 
-            font-size: 0.85rem; 
-            background: rgba(0,0,0,0.3); 
-            padding: 4px 8px; 
-            border-radius: 4px; 
-            border: 1px solid rgba(197, 168, 128, 0.3);
-        }
-        .lang-btn { background: none; border: none; cursor: pointer; opacity: 0.6; padding: 2px 4px; color: var(--white); }
-        .lang-btn.active { opacity: 1; font-weight: bold; text-decoration: underline; color: var(--accent); }
-
-        .btn-header-login { 
-            font-family: 'Segoe UI', sans-serif; 
-            font-size: 0.9rem; 
-            background: rgba(197, 168, 128, 0.2); 
-            border: 1px solid var(--accent); 
-            color: var(--white); 
-            padding: 10px 22px; 
-            border-radius: 25px; 
-            cursor: pointer; 
-            display: inline-flex; 
-            align-items: center; 
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .btn-admin {
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.8rem;
+            background: var(--accent);
+            border: 1px solid var(--accent);
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
             font-weight: 600;
+            transition: all 0.3s ease;
         }
-        .btn-header-login:hover { background: var(--accent); color: var(--primary); }
+        .btn-admin:hover { background: var(--white); }
 
-        #login-modal, #date-picker-modal {
+        #admin-modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -77,59 +56,48 @@
             padding: 20px;
         }
 
-        .brand-logo-container { max-width: 220px; margin: 0 auto 15px auto; overflow: hidden; display: flex; align-items: center; justify-content: center; border-radius: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border: 2px solid var(--accent); }
+        .brand-logo-container { max-width: 180px; margin: 0 auto 15px auto; overflow: hidden; display: flex; align-items: center; justify-content: center; border-radius: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border: 2px solid var(--accent); }
         .brand-logo-container img { width: 100%; height: auto; object-fit: contain; display: block; }
         
-        .logo-text { font-size: 3rem; font-weight: 300; letter-spacing: 6px; color: var(--white); text-transform: uppercase; margin-bottom: 3px; }
-        @media (max-width: 768px) { 
-            .logo-text { font-size: 2.1rem; } 
-            .brand-logo-container { max-width: 150px; }
-            .header-top-controls { top: 12px; right: 12px; }
-            .lang-switch { font-size: 0.78rem; padding: 3px 6px; }
-            .btn-header-login { font-size: 0.82rem; padding: 8px 16px; }
-        }
-        .subtitle { font-family: 'Segoe UI', sans-serif; font-size: 0.85rem; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; margin-bottom: 20px; font-weight: 600; display: block; }
+        .logo-text { font-size: 2.5rem; font-weight: 300; letter-spacing: 6px; color: var(--white); text-transform: uppercase; margin-bottom: 3px; }
+        .subtitle { font-family: 'Segoe UI', sans-serif; font-size: 0.85rem; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; margin-bottom: 15px; font-weight: 600; display: block; }
         
-        .badges-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; max-width: 950px; margin: 0 auto 20px auto; font-family: 'Segoe UI', sans-serif; }
-        .badge { background: rgba(255, 255, 255, 0.08); color: var(--white); padding: 6px 14px; border-radius: 2px; font-size: 0.75rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; border: 1px solid var(--accent); display: inline-flex; align-items: center; gap: 5px; }
-
-        .tagline { font-style: italic; color: #eae5db; max-width: 650px; margin: 0 auto; padding-top: 20px; border-top: 1px solid rgba(197,168,128,0.3); font-size: 1.05rem; }
+        .tagline { font-style: italic; color: #eae5db; max-width: 650px; margin: 0 auto; padding-top: 15px; border-top: 1px solid rgba(197,168,128,0.3); font-size: 0.95rem; }
         
-        .container { max-width: 1100px; margin: 40px auto; padding: 0 25px; }
+        .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
         
         .oz-card {
             background: #ffffff;
-            padding: 40px;
+            padding: 30px;
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
             width: 100%;
-            max-width: 480px;
+            max-width: 450px;
             margin: 0 auto;
             text-align: center;
             border: 1px solid var(--accent);
             position: relative;
         }
-        .oz-card h3 { color: var(--primary); font-size: 1.4rem; margin-bottom: 15px; font-weight: 400; font-family: 'Playfair Display', serif; }
-        .oz-card p { font-family: 'Segoe UI', sans-serif; font-size: 0.9rem; color: #666; margin-bottom: 25px; }
+        .oz-card h3 { color: var(--primary); font-size: 1.3rem; margin-bottom: 12px; font-weight: 400; font-family: 'Playfair Display', serif; }
+        .oz-card p { font-family: 'Segoe UI', sans-serif; font-size: 0.85rem; color: #666; margin-bottom: 20px; }
         
         .oz-input {
             width: 100%;
-            padding: 14px;
-            font-size: 1.1rem;
+            padding: 12px;
+            font-size: 1rem;
             border: 1px solid #dcdde1;
             border-radius: 8px;
             box-sizing: border-box;
             margin-bottom: 15px;
             text-align: center;
-            letter-spacing: 4px;
             font-family: 'Segoe UI', sans-serif;
         }
         .oz-btn {
             background-color: var(--primary);
             color: white;
             border: none;
-            padding: 14px 20px;
-            font-size: 0.9rem;
+            padding: 12px 20px;
+            font-size: 0.85rem;
             border-radius: 8px;
             cursor: pointer;
             width: 100%;
@@ -139,948 +107,114 @@
             font-family: 'Segoe UI', sans-serif;
             transition: background 0.2s;
         }
-        .oz-btn:hover { background-color: var(--accent); }
-        .error-msg { color: #b94a48; font-size: 0.85rem; margin-top: 15px; display: none; font-family: 'Segoe UI', sans-serif; }
-        .close-modal-btn { position: absolute; top: 12px; right: 15px; background: none; border: none; font-size: 1.3rem; cursor: pointer; color: #888; }
+        .oz-btn:hover { background-color: var(--accent); color: var(--primary); }
+        .error-msg { color: #b94a48; font-size: 0.8rem; margin-top: 12px; display: none; font-family: 'Segoe UI', sans-serif; }
+        .close-modal-btn { position: absolute; top: 12px; right: 15px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #888; }
         .close-modal-btn:hover { color: var(--primary); }
 
-        .top-return-bar { margin-bottom: 20px; text-align: right; }
-        .btn-return-top {
-            display: inline-block;
-            color: var(--primary);
-            background-color: #ffffff;
-            border: 1px solid var(--accent);
-            padding: 8px 16px;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            font-family: 'Segoe UI', sans-serif;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        .btn-return-top:hover { background-color: var(--primary); color: #ffffff; }
-
-        #guest-portal { display: none; background: var(--white); border: 2px solid var(--accent); border-radius: 12px; padding: 30px 40px 40px 40px; max-width: 900px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.05); position: relative; text-align: left; }
-        .welcome-title { color: var(--primary); font-size: 2rem; margin-bottom: 10px; text-align: center; font-weight: 300; }
-        
-        .weather-compact {
-            background: var(--bg-light);
-            border: 1px solid var(--accent);
-            border-radius: 8px;
-            padding: 12px 20px;
-            margin: 0 auto 20px auto;
-            max-width: 450px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            text-align: center;
-            font-family: 'Segoe UI', sans-serif;
-        }
-        .weather-compact span { font-size: 0.95rem; color: var(--primary); font-weight: 600; display: block; }
-        .weather-compact p { font-size: 0.8rem; color: #555; margin: 0; }
-
-        .departure-container { background: var(--bg-light); padding: 25px; border: 1px solid var(--accent); border-radius: 8px; box-shadow: 0 4px 15px rgba(18, 38, 58, 0.08); margin-bottom: 25px; font-family: 'Segoe UI', sans-serif; text-align: center; }
-        .departure-header h2 { color: var(--primary); font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 4px; }
-        .subtitle-text { font-style: italic; color: #666; margin-bottom: 15px; font-size: 0.85rem; }
-        .departure-section { margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid #eee; text-align: center; }
-        .departure-section h3 { font-size: 1rem; color: var(--primary); margin-bottom: 6px; font-family: 'Playfair Display', serif; }
-        
-        .departure-info-box {
-            background: #fdfbf7;
-            border: 1px solid var(--accent);
-            border-left: 4px solid var(--accent);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 25px;
-            font-family: 'Segoe UI', sans-serif;
-            text-align: center;
-        }
-        .departure-info-box h4 {
-            color: var(--primary);
-            font-family: 'Playfair Display', serif;
-            font-size: 1.15rem;
-            margin-bottom: 8px;
-        }
-        .departure-info-box p {
-            font-size: 0.9rem;
-            color: #555;
-            margin: 0;
-            line-height: 1.5;
-        }
-
-        .review-box { background: #fff; padding: 15px; border-radius: 8px; border-left: 4px solid var(--accent); text-align: center; margin-top: 10px; }
-        .btn-primary-review { display: inline-block; background-color: var(--primary); color: #ffffff; padding: 10px 18px; text-decoration: none; border-radius: 6px; font-weight: 600; margin-top: 10px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; transition: background 0.3s; }
-        .btn-primary-review:hover { background-color: var(--accent); color: var(--primary); }
-
-        .farewell-box {
-            background: #fdfbf7;
-            border: 1px solid var(--accent);
-            border-radius: 8px;
-            padding: 25px;
-            text-align: center;
-            margin-top: 30px;
-            font-family: 'Segoe UI', sans-serif;
-        }
-        .farewell-box h3 {
-            color: var(--primary);
-            font-family: 'Playfair Display', serif;
-            font-size: 1.25rem;
-            margin-bottom: 10px;
-        }
-        .creole-badge {
-            display: inline-block;
-            background: var(--primary);
-            color: var(--accent);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            letter-spacing: 2px;
-            margin-top: 12px;
-            border: 1px solid var(--accent);
-        }
-
-        .guide-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 20px; font-family: 'Segoe UI', sans-serif; }
-        .guide-box { background: var(--bg-light); border: 1px solid #f0eadec; border-radius: 8px; padding: 25px; display: flex; flex-direction: column; justify-content: space-between; }
-        .guide-box h5 { color: var(--primary); font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; font-family: 'Playfair Display', serif; border-bottom: 1px solid var(--accent); padding-bottom: 8px; }
-        .guide-box p, .guide-box ul { font-size: 0.9rem; color: #555; margin-bottom: 10px; }
-        .guide-box ul { padding-left: 18px; }
-        .wifi-img-box { text-align: center; background: #fff; padding: 15px; border-radius: 8px; border: 1px dashed var(--accent); margin-top: 10px; }
-        .wifi-img-box img { max-width: 100%; height: auto; max-height: 250px; object-fit: contain; display: block; margin: 0 auto; border-radius: 6px; }
-
-        #admin-dashboard, #gerard-portal { display: none; background: var(--white); border: 2px solid var(--accent); border-radius: 12px; padding: 25px; max-width: 1100px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: left; font-family: 'Segoe UI', sans-serif; overflow-x: hidden; }
-        @media (min-width: 768px) { 
-            #admin-dashboard, #gerard-portal { padding: 30px 40px 40px 40px; } 
-        }
-        
-        .admin-title { color: var(--primary); font-size: 1.8rem; margin-bottom: 8px; font-weight: 400; font-family: 'Playfair Display', serif; text-align: center; }
-        .admin-subtitle { text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 30px; }
-        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-bottom: 25px; }
-        .admin-box { background: var(--bg-light); border: 1px solid #f0eadec; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; }
-        .admin-box h5 { color: var(--primary); font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; font-family: 'Playfair Display', serif; border-bottom: 1px solid var(--accent); padding-bottom: 6px; }
-        .admin-box p { font-size: 0.88rem; color: #555; margin-bottom: 15px; }
-        .admin-link-btn { display: inline-block; background-color: var(--primary); color: #ffffff; padding: 10px 15px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; text-align: center; letter-spacing: 1px; transition: background 0.3s; border: none; cursor: pointer; }
-        .admin-link-btn:hover { background-color: var(--accent); color: var(--primary); }
-
-        .admin-schedule-section { background: var(--bg-light); border: 1px solid var(--accent); border-radius: 8px; padding: 15px; margin-top: 20px; }
-        @media (min-width: 768px) { .admin-schedule-section { padding: 25px; } }
-        
-        .admin-schedule-section h3 { color: var(--primary); font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 15px; border-bottom: 1px solid var(--accent); padding-bottom: 8px; }
-        
-        .admin-cards-container { display: flex; flex-direction: column; gap: 15px; }
-        .admin-arrival-card { background: #fff; border: 1px solid var(--accent); border-radius: 8px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-        .admin-arrival-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
-        .admin-arrival-card-header strong { font-size: 1.05rem; color: var(--primary); }
-        .admin-arrival-card-body p { font-size: 0.88rem; color: #444; margin-bottom: 6px; }
-        .admin-card-actions { margin-top: 12px; display: flex; justify-content: space-between; align-items: center; }
-
-        .btn-whatsapp { display: inline-block; background-color: #25d366; color: white; padding: 8px 14px; border-radius: 6px; text-decoration: none; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; transition: background 0.2s; border: none; cursor: pointer; text-align: center; }
-        .btn-whatsapp:hover { background-color: #20ba5a; }
-        .btn-whatsapp.disabled { background-color: #bdc3c7; color: #7f8c8d; cursor: not-allowed; opacity: 0.6; pointer-events: none; }
-
-        .section-title { font-size: 1.8rem; font-weight: 300; color: var(--primary); margin: 60px 0 25px 0; text-align: center; text-transform: uppercase; letter-spacing: 2.5px; position: relative; }
-        .section-title::after { content: ''; display: block; width: 35px; height: 1px; background: var(--accent); margin: 12px auto 0 auto; }
-        
-        .amenities-banner { background: var(--white); border: 1px solid #f0eadec; border-radius: 4px; padding: 20px; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 25px; margin-bottom: 35px; box-shadow: 0 5px 15px rgba(0,0,0,0.02); font-family: 'Segoe UI', sans-serif; }
-        .amenity-item { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: var(--primary); font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; text-align: center; }
-        
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 35px; margin-top: 20px; }
-        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
-        
-        .card { background: var(--white); border-radius: 4px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.02); border: 1px solid #f0eadec; display: flex; flex-direction: column; justify-content: space-between; }
-        .single-photo-container { width: 100%; height: 260px; background-color: #eae5db; overflow: hidden; position: relative; }
-        .single-photo-container img { width: 100%; height: 100%; object-fit: cover; }
-        .photo-label { position: absolute; bottom: 12px; left: 12px; background: rgba(18, 38, 58, 0.75); color: #fff; padding: 4px 10px; font-family: 'Segoe UI', sans-serif; font-size: 0.7rem; border-radius: 2px; letter-spacing: 1px; text-transform: uppercase; }
-        .card-content { padding: 30px; }
-        .card h3 { color: var(--primary); font-size: 1.5rem; margin-bottom: 8px; font-weight: 400; }
-        .specs { font-family: 'Segoe UI', sans-serif; font-size: 0.8rem; letter-spacing: 1px; color: var(--accent); text-transform: uppercase; margin-bottom: 18px; font-weight: 600; }
-        .card p { font-size: 0.9rem; color: #555; margin-bottom: 12px; font-family: 'Segoe UI', sans-serif; }
-        
-        .more-photos-link { display: block; text-align: center; font-family: 'Segoe UI', sans-serif; font-size: 0.8rem; color: #ff385c; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin: 15px 0 5px 0; text-decoration: none; }
-        .more-photos-link:hover { text-decoration: underline; }
-
-        .availability-box { background: #fdfbf7; border: 1px solid rgba(197, 168, 128, 0.4); border-radius: 4px; padding: 15px; margin: 18px 0; text-align: center; font-family: 'Segoe UI', sans-serif; }
-        .availability-box p { font-size: 0.85rem; color: var(--primary); margin-bottom: 10px; font-weight: 600; }
-        
-        .calendar-container {
-            margin: 15px 0;
-            border: 1px solid var(--accent);
-            border-radius: 6px;
-            overflow: hidden;
-            background: #fff;
-            padding: 5px;
-        }
-        .calendar-container iframe {
-            width: 100%;
-            height: 280px;
-            border: none;
-            border-radius: 4px;
-        }
-
-        .btn-container { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 22px; }
-        .btn { display: inline-block; text-align: center; background-color: var(--primary); color: var(--white); padding: 12px; border-radius: 2px; text-decoration: none; font-family: 'Segoe UI', sans-serif; font-weight: 600; font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; }
-
-        .section-avis-airbnb { 
-            margin: 60px auto 40px auto; 
-            padding: 45px 35px; 
-            max-width: 1100px; 
-            background-color: var(--primary); 
-            border: 2px solid var(--accent); 
-            border-radius: 8px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
-        }
-        .section-avis-airbnb h2 { 
-            text-align: center; 
-            margin-bottom: 30px; 
-            font-size: 1.6rem; 
-            color: var(--white); 
-            font-weight: 400; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            font-family: 'Playfair Display', serif; 
-        }
-        .avis-layout-deux-colonnes {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-        }
-        .colonne-cottage h3 {
-            color: var(--accent);
-            font-family: 'Playfair Display', serif;
-            font-size: 1.25rem;
-            margin-bottom: 15px;
-            text-align: center;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            border-bottom: 1px solid rgba(197, 168, 128, 0.4);
-            padding-bottom: 8px;
-        }
-        .colonne-cottage.grandzabris-col h3 { margin-top: 8px; }
-        .colonne-cottage.ptitzabris-col h3 { margin-top: 0px; }
-        
-        .liste-avis-cottage {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-height: 480px; 
-            overflow-y: auto; 
-            padding-right: 8px;
-        }
-        .liste-avis-cottage::-webkit-scrollbar { width: 6px; }
-        .liste-avis-cottage::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 4px; }
-        .liste-avis-cottage::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
-
-        .carte-avis-airbnb { 
-            background: #ffffff; 
-            border-left: 4px solid var(--accent); 
-            padding: 18px 20px; 
-            border-radius: 6px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-        }
-        
-        .etoiles-avis { font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 8px; color: #d4af37; }
-        .texte-commentaire { font-style: italic; color: #333; margin-bottom: 10px; font-family: 'Segoe UI', sans-serif; font-size: 0.9rem; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
-        .info-voyageur { font-size: 0.82rem; color: #666; font-family: 'Segoe UI', sans-serif; text-align: right; }
-
-        .eco-card { background: var(--white); border-radius: 4px; overflow: hidden; border: 1px solid #f0eadec; box-shadow: 0 10px 25px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; font-family: 'Segoe UI', sans-serif; }
-        .eco-header { display: flex; align-items: center; gap: 15px; padding: 25px 30px 15px 30px; border-bottom: 1px solid var(--accent); }
-        .eco-icon { font-size: 2.2rem; background: #f4eee3; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid var(--accent); flex-shrink: 0; }
-        .eco-card-body { padding: 20px 30px 30px 30px; }
-        .eco-card h3 { color: var(--primary); font-size: 1.3rem; font-family: 'Playfair Display', serif; font-weight: 400; }
-        .eco-card p { font-size: 0.88rem; color: #555; margin-bottom: 12px; line-height: 1.6; }
-
-        footer { background-color: var(--primary); color: #eae5db; text-align: center; padding: 50px 20px; margin-top: 80px; font-size: 0.9rem; border-top: 3px solid var(--accent); }
-        .contact-info { background: rgba(255,255,255,0.03); max-width: 550px; margin: 25px auto 0 auto; padding: 20px; border-radius: 2px; border: 1px solid rgba(197, 168, 128, 0.2); }
-        .contact-info a { color: var(--accent); text-decoration: none; font-weight: bold; }
-        .visit-counter { margin-top: 20px; font-size: 0.8rem; color: var(--accent); font-family: 'Segoe UI', sans-serif; letter-spacing: 1px; opacity: 0.85; }
-
-        /* Styles d'impression et plannings optimisés */
-        .cottage-print-title {
-            text-align: center;
-            font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
-            color: #12263a;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            font-weight: bold;
-            border-bottom: 2px solid #c5a880;
-            padding-bottom: 6px;
-        }
-        .month-sub-box {
-            margin-bottom: 12px;
-        }
-        .month-sub-title {
+        /* Portail affiché automatiquement */
+        #guest-portal {
+            background: var(--white);
+            border: 2px solid var(--accent);
+            border-radius: 14px;
+            padding: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             text-align: left;
-            font-family: 'Playfair Display', serif;
-            font-size: 0.95rem;
-            color: #12263a;
-            margin-bottom: 4px;
-            font-weight: bold;
         }
-        .calendar-table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: center;
-            font-size: 0.7rem;
-            table-layout: fixed;
-        }
-        .calendar-table th {
-            background-color: #12263a !important;
-            -webkit-print-color-adjust: exact;
-            color: white !important;
-            padding: 4px;
-            font-size: 0.65rem;
-            border: 1px solid #12263a;
-        }
-        .calendar-table td {
-            border: 1px solid #999;
-            height: 55px;
-            vertical-align: top;
-            padding: 2px;
-            width: 14.28%;
-            background: #fff;
-            overflow: hidden;
-        }
-        .calendar-table td.empty {
-            background: #f4f4f4 !important;
-            -webkit-print-color-adjust: exact;
-        }
-        .day-num {
-            font-weight: bold;
-            font-size: 0.7rem;
-            color: #12263a;
-            text-align: right;
-            display: block;
-            margin-bottom: 1px;
-        }
-        .day-notes {
-            font-size: 0.6rem;
-            text-align: left;
-            color: #333;
-            line-height: 1.0;
-        }
-        .booking-badge {
-            background-color: #fdf2e9;
-            border-left: 2px solid #c5a880;
-            padding: 1px 3px;
-            margin-top: 1px;
-            font-size: 0.58rem;
+        .welcome-title { color: var(--primary); font-size: 2rem; margin-bottom: 8px; text-align: center; font-weight: 300; }
+        
+        .guide-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-top: 25px; font-family: 'Segoe UI', sans-serif; }
+        .guide-box { background: var(--bg-light); border: 1px solid #f0eadec; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; }
+        .guide-box h5 { color: var(--primary); font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; font-family: 'Playfair Display', serif; border-bottom: 1px solid var(--accent); padding-bottom: 6px; }
+        .guide-box p { font-size: 0.85rem; color: #555; margin-bottom: 8px; }
+        
+        .wifi-img-box { text-align: center; background: #fff; padding: 12px; border-radius: 8px; border: 1px dashed var(--accent); margin-top: 10px; }
+        .wifi-img-box img { max-width: 100%; height: auto; max-height: 180px; object-fit: contain; display: block; margin: 0 auto; border-radius: 6px; }
+
+        .banner-solaire {
+            background: linear-gradient(135deg, rgba(197, 168, 128, 0.2), rgba(27, 77, 62, 0.1));
+            border-left: 4px solid var(--tropical-green);
+            padding: 12px 18px;
+            border-radius: 6px;
             font-family: 'Segoe UI', sans-serif;
-            color: #12263a;
-            font-weight: bold;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            border-radius: 2px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            text-align: center;
+            margin: 20px 0;
         }
+
+        footer { background-color: var(--primary); color: #eae5db; text-align: center; padding: 40px 20px; margin-top: 60px; font-size: 0.85rem; border-top: 3px solid var(--accent); font-family: 'Segoe UI', sans-serif; }
     </style>
 </head>
 <body>
 
     <header id="top-header">
         <div class="header-top-controls">
-            <div class="lang-switch">
-                <button onclick="setLanguage('fr')" id="btn-fr" class="lang-btn active">FR</button> | 
-                <button onclick="setLanguage('en')" id="btn-en" class="lang-btn">EN</button> | 
-                <button onclick="setLanguage('de')" id="btn-de" class="lang-btn">DE</button>
-            </div>
+            <button type="button" class="btn-admin" onclick="openAdminModal()">⚙️ Admin</button>
         </div>
         
         <div class="brand-logo-container">
             <img src="https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg" alt="Les Ozabris Logo">
         </div>
         <h1 class="logo-text">Les Ozabris</h1>
-        <span class="subtitle lang-fr">Cottages de Prestige & Perles Rares • La Réunion</span>
-        <span class="subtitle lang-en" style="display:none;">Prestigious Cottages & Rare Pearls • La Réunion</span>
-        <span class="subtitle lang-de" style="display:none;">Prachtvolle Cottages & Seltene Perlen • La Réunion</span>
+        <span class="subtitle">Cottages de Prestige & Perles Rares • La Réunion</span>
         
-        <div class="badges-container">
-            <div class="badge">⭐ Ptitzabris (Meublé de Tourisme 3 Étoiles)</div>
-            <div class="badge">⭐ Grandzabris (Meublé de Tourisme 2 Étoiles)</div>
-            <div class="badge">❤️ 1% des logements préférés sur Airbnb</div>
-        </div>
-
-        <div style="margin: 25px 0 15px 0; text-align: center;">
-            <button type="button" class="btn-header-login" onclick="openLoginModal()">
-                <span>🔑</span> 
-                <span class="lang-fr">Espace Voyageur</span>
-                <span class="lang-en" style="display:none;">Guest Area</span>
-                <span class="lang-de" style="display:none;">Gäste-Bereich</span>
-            </button>
-        </div>
-        
-        <div class="tagline lang-fr">"Une parenthèse d'exception, de sérénité absolue et d'excellence dans les Hauts de l'Île."</div>
-        <div class="tagline lang-en" style="display:none;">"An exceptional, award-winning getaway in the Highlands of the Island."</div>
-        <div class="tagline lang-de" style="display:none;">"Ein außergewöhnlicher, preisgekrönter Rückzugsort im Hochland der Insel."</div>
+        <div class="tagline">"Une parenthèse d'exception, de sérénité absolue et d'excellence dans les Hauts de l'Île."</div>
     </header>
 
-    <div id="login-modal">
-        <div class="oz-card">
-            <button type="button" class="close-modal-btn" onclick="closeLoginModal()">✕</button>
-            <h3 class="lang-fr">🔐 Espace Réservé Voyageurs</h3>
-            <h3 class="lang-en" style="display:none;">🔐 Guest Private Area</h3>
-            <h3 class="lang-de" style="display:none;">🔐 Privater Gäste-Bereich</h3>
-            
-            <p class="lang-fr">Entrez votre code PIN personnel pour accéder à votre accueil personnalisé.</p>
-            <p class="lang-en" style="display:none;">Enter your personal PIN code to access your personalized welcome.</p>
-            <p class="lang-de" style="display:none;">Geben Sie Ihren PIN-Code ein, um auf Ihre Begrüßung zuzugreifen.</p>
-            
-            <input type="password" id="pinCode" class="oz-input" placeholder="• • • • • •" maxlength="6">
-            <button type="button" class="oz-btn" ontouchstart="checkPin()" onclick="checkPin()">
-                <span class="lang-fr">Accéder à mon espace</span>
-                <span class="lang-en" style="display:none;">Access my space</span>
-                <span class="lang-de" style="display:none;">Zu meinem Bereich</span>
-            </button>
-
-            <div id="errorMsg" class="error-msg lang-fr">Code incorrect ou séjour expiré.</div>
-            <div id="errorMsg-en" class="error-msg lang-en" style="display:none;">Incorrect code or expired stay.</div>
-            <div id="errorMsg-de" class="error-msg lang-de" style="display:none;">Falscher Code oder abgelaufener Aufenthalt.</div>
+    <!-- Modale Connexion Admin (Optionnelle) -->
+    <div id="admin-modal">
+        <div class="oz-card" style="max-width: 360px;">
+            <button type="button" class="close-modal-btn" onclick="closeAdminModal()">✕</button>
+            <h3>🔒 Accès Administrateur</h3>
+            <p>Entrez votre code PIN de sécurité</p>
+            <input type="password" id="adminPin" class="oz-input" placeholder="Code PIN" maxlength="6">
+            <button type="button" class="oz-btn" onclick="checkAdminPin()">Valider</button>
+            <div id="adminErrorMsg" class="error-msg">Code PIN incorrect.</div>
         </div>
     </div>
 
-    <!-- MODALE INTERACTIVE SÉLECTION DE DATE POUR GÉRARD -->
-    <div id="date-picker-modal">
-        <div class="oz-card" style="max-width: 420px; text-align: left;">
-            <button type="button" class="close-modal-btn" onclick="closeDatePickerModal()">✕</button>
-            <h3 style="text-align: center; margin-bottom: 10px;">📅 Choisir la période</h3>
-            <p style="text-align: center; margin-bottom: 20px; font-size: 0.85rem;">Sélectionnez la date de départ (pour copier tous les avis à partir de ce jour-là) :</p>
+    <div class="container">
+        <!-- PORTAIL AFFICHÉ AUTOMATISÉ PAR LE LIEN -->
+        <div id="guest-portal">
+            <h2 class="welcome-title" id="welcome-message">Bienvenue aux Ozabris !</h2>
+            <p id="cottage-subtitle" style="text-align: center; font-family: 'Segoe UI', sans-serif; color: var(--accent); font-weight: 600; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem;">Cottage</p>
             
-            <div style="margin-bottom: 20px;">
-                <label style="font-size: 0.85rem; font-weight: bold; color: var(--primary); display: block; margin-bottom: 8px;">À partir du :</label>
-                <input type="date" id="targetReviewDate" class="oz-input" style="letter-spacing: normal; text-align: left; padding: 10px;">
+            <div class="banner-solaire">
+                ☀️ <b>Énergie Solaire & Écologie</b> — Lave & Sèche-linge en accès libre (utilisation conseillée <b>en journée</b>).
             </div>
 
-            <div style="display: flex; gap: 10px;">
-                <button type="button" class="oz-btn" style="background: #e0e0e0; color: #333;" onclick="closeDatePickerModal()">Annuler</button>
-                <button type="button" class="oz-btn" onclick="confirmCopyAvis()">Copier les avis</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="container" style="margin-top: 30px;">
-        <div id="guest-portal" style="display: none;">
-            <div class="top-return-bar">
-                <button type="button" onclick="scrollToTop()" class="btn-return-top">⬅️ <span class="lang-fr">Retour à l'accueil</span><span class="lang-en" style="display:none;">Back to Home</span><span class="lang-de" style="display:none;">Zurück zur Startseite</span></button>
-            </div>
-
-            <div class="weather-compact">
-                <div style="font-size: 1.8rem;">☀️</div>
-                <div>
-                    <span>La Saline les Hauts (97422)</span>
-                    <p class="lang-fr">Grand soleil et douce brise sur les hauteurs</p>
-                    <p class="lang-en" style="display:none;">Bright sunshine and gentle breeze in the highlands</p>
-                    <p class="lang-de" style="display:none;">Heller Sonnenschein und sanfte Brise im Hochland</p>
-                </div>
-            </div>
-
-            <div id="checkout-departure-card" class="departure-container" style="display: none;">
-                <div class="departure-header">
-                    <h2 class="lang-fr">Votre départ est proche</h2>
-                    <h2 class="lang-en" style="display:none;">Your departure is approaching</h2>
-                    <h2 class="lang-de" style="display:none;">Ihre Abreise rückt näher</h2>
-                    <p class="subtitle-text lang-fr">Précisions concernant la fin de votre séjour</p>
-                    <p class="subtitle-text lang-en" style="display:none;">Details regarding the end of your stay</p>
-                    <p class="subtitle-text lang-de" style="display:none;">Einzelheiten zum Ende Ihres Aufenthalts</p>
-                </div>
-
-                <div class="departure-section">
-                    <p id="departure-date-text" style="font-weight: 600; color: var(--primary); font-size: 1.05rem;">-</p>
-                </div>
-
-                <div class="departure-section">
-                    <h3 class="lang-fr">👋 Notre rendez-vous pour votre départ</h3>
-                    <h3 class="lang-en" style="display:none;">👋 Our meeting point for your departure</h3>
-                    <h3 class="lang-de" style="display:none;">👋 Unser Treffpunkt für Ihre Abreise</h3>
-                    <p class="lang-fr" style="font-size: 0.88rem; color: #555;">Le point de rendez-vous est fixé sur le parking pour la remise des clés.</p>
-                    <p class="lang-en" style="display:none; font-size: 0.88rem; color: #555;">The meeting point is set in the parking lot for key handover.</p>
-                    <p class="lang-de" style="display:none; font-size: 0.88rem; color: #555;">Der Treffpunkt für die Schlüsselübergabe ist auf dem Parkplatz.</p>
-                </div>
-
-                <div class="departure-section">
-                    <h3 class="lang-fr">🛏️ Consignes pour le linge de maison</h3>
-                    <h3 class="lang-en" style="display:none;">🛏️ Household linen instructions</h3>
-                    <h3 class="lang-de" style="display:none;">🛏️ Hinweise zur Bettwäsche</h3>
-                    <p class="lang-fr" style="font-size: 0.88rem; color: #555;">Déposer le linge de lit et les serviettes utilisés au pied du lit.</p>
-                    <p class="lang-en" style="display:none; font-size: 0.88rem; color: #555;">Please leave used bed linen and towels at the foot of the bed.</p>
-                    <p class="lang-de" style="display:none; font-size: 0.88rem; color: #555;">Bitte legen Sie benutzte Bettwäsche und Handtücher ans Fußende des Bettes.</p>
-                </div>
-
-                <div class="review-box">
-                    <h3 class="lang-fr">⭐ Votre avis compte énormément</h3>
-                    <h3 class="lang-en" style="display:none;">⭐ Your review matters greatly</h3>
-                    <h3 class="lang-de" style="display:none;">⭐ Ihre Bewertung ist uns sehr wichtig</h3>
-                    <p class="lang-fr" style="font-size: 0.85rem; color: #555;">Si vous avez apprécié votre séjour, un grand merci de nous laisser un mot sur Google :</p>
-                    <p class="lang-en" style="display:none; font-size: 0.85rem; color: #555;">If you enjoyed your stay, thank you so much for leaving a review on Google:</p>
-                    <p class="lang-de" style="display:none; font-size: 0.85rem; color: #555;">Wenn Ihnen Ihr Aufenthalt gefallen hat, würden wir uns über eine Bewertung auf Google freuen:</p>
-                    <a href="https://search.google.com/local/writereview?placeid=ChIJ8UOOyTt4Q4sRo0FMRBi4REw" target="_blank" class="btn-primary-review lang-fr">
-                        Laisser un avis sur Google
-                    </a>
-                    <a href="https://search.google.com/local/writereview?placeid=ChIJ8UOOyTt4Q4sRo0FMRBi4REw" target="_blank" class="btn-primary-review lang-en" style="display:none;">
-                        Leave a review on Google
-                    </a>
-                    <a href="https://search.google.com/local/writereview?placeid=ChIJ8UOOyTt4Q4sRo0FMRBi4REw" target="_blank" class="btn-primary-review lang-de" style="display:none;">
-                        Auf Google bewerten
-                    </a>
-                </div>
-            </div>
-
-            <div id="departure-info-banner" class="departure-info-box" style="display: none;">
-                <h4 class="lang-fr">📅 Informations de départ à venir</h4>
-                <h4 class="lang-en" style="display:none;">📅 Upcoming departure information</h4>
-                <h4 class="lang-de" style="display:none;">📅 Kommende Abreiseinformationen</h4>
-                <p class="lang-fr">Les consignes pratiques et les modalités pour votre départ seront mises à jour ici à l'approche de la fin de votre séjour. Pensez à vous reconnecter régulièrement pour les consulter !</p>
-                <p class="lang-en" style="display:none;">Practical instructions and details for your departure will be updated here as your stay comes to an end. Remember to check back regularly!</p>
-                <p class="lang-de" style="display:none;">Praktische Anweisungen und Details für Ihre Abreise werden hier aktualisiert, wenn sich Ihr Aufenthalt dem Ende neigt. Schauen Sie regelmäßig vorbei!</p>
-            </div>
-
-            <h2 class="welcome-title" id="welcome-message">Bienvenue !</h2>
-            <p id="welcome-subtitle-text" style="text-align: center; font-family: 'Segoe UI', sans-serif; color: #666; margin-bottom: 25px;">
-                <span class="lang-fr">Retrouvez ci-dessous toutes les informations utiles pour votre séjour aux Ozabris.</span>
-                <span class="lang-en" style="display:none;">Find below all useful information for your stay at Les Ozabris.</span>
-                <span class="lang-de" style="display:none;">Unten finden Sie alle nützlichen Informationen für Ihren Aufenthalt im Les Ozabris.</span>
-            </p>
-            
-            <div class="guide-grid" id="guide-grid-container">
+            <div class="guide-grid">
                 <div class="guide-box">
                     <div>
-                        <h5 class="lang-fr">📶 Connexion Wi-Fi</h5>
-                        <h5 class="lang-en" style="display:none;">📶 Wi-Fi Connection</h5>
-                        <h5 class="lang-de" style="display:none;">📶 WLAN-Verbindung</h5>
-                        <p id="wifi-text" style="font-size: 0.85rem; font-weight: bold; color: var(--primary);">Cottage : -</p>
+                        <h5>📶 Connexion Wi-Fi</h5>
+                        <p style="font-size: 0.85rem; font-weight: bold; color: var(--primary);">Réseau : SFR_JR</p>
                     </div>
                     <div class="wifi-img-box">
                         <img id="wifi-qr-img" src="" alt="QR Code Wifi">
-                        <p class="lang-fr" style="font-size: 0.75rem; color: #555; margin-top: 8px;">Scannez pour vous connecter en un clic</p>
-                        <p class="lang-en" style="display:none; font-size: 0.75rem; color: #555; margin-top: 8px;">Scan to connect in one click</p>
-                        <p class="lang-de" style="display:none; font-size: 0.75rem; color: #555; margin-top: 8px;">Scannen, um mit einem Klick zu verbinden</p>
+                        <p style="font-size: 0.75rem; color: #555; margin-top: 6px;">Scannez pour vous connecter</p>
                     </div>
                 </div>
 
                 <div class="guide-box">
                     <div>
-                        <h5 class="lang-fr">🧺 Lave & Sèche-linge</h5>
-                        <h5 class="lang-en" style="display:none;">🧺 Washer & Dryer</h5>
-                        <h5 class="lang-de" style="display:none;">🧺 Waschmaschine & Trockner</h5>
-                        <p class="lang-fr" style="font-size: 0.85rem;">Accès gratuit à votre disposition. Utilisation conseillée <strong>en journée</strong> pour optimiser notre production d'énergie solaire !</p>
-                        <p class="lang-en" style="display:none; font-size: 0.85rem;">Free access at your disposal. Recommended use <strong>during the day</strong> to optimize our solar energy production!</p>
-                        <p class="lang-de" style="display:none; font-size: 0.85rem;">Kostenlose Nutzung. Empfohlene Nutzung <strong>tagsüber</strong> zur Optimierung unserer Solarenergie!</p>
-                    </div>
-                </div>
-
-                <div class="guide-box">
-                    <div>
-                        <h5 class="lang-fr">♻️ Consignes Poubelles & Compost</h5>
-                        <h5 class="lang-en" style="display:none;">♻️ Trash & Compost Guidelines</h5>
-                        <h5 class="lang-de" style="display:none;">♻️ Müll- & Kompostrichtlinien</h5>
-                        <p class="lang-fr" style="font-size: 0.85rem;">Le tri sélectif est de rigueur. Une petite poubelle est à votre disposition sur chaque terrasse pour vos déchets organiques.</p>
-                        <p class="lang-en" style="display:none; font-size: 0.85rem;">Sorting is required. A small bin is available on each terrace for your organic waste.</p>
-                        <p class="lang-de" style="display:none; font-size: 0.85rem;">Mülltrennung ist erforderlich. Auf jeder Terrasse steht ein kleiner Eimer für Bioabfälle bereit.</p>
-                        
-                        <div style="background:#fdfbf7; padding:10px; border-radius:4px; text-align:left; margin-top:10px; font-size:0.8rem; border:1px solid var(--accent);">
-                            🌱 <strong class="lang-fr">Compost :</strong><strong class="lang-en" style="display:none;">Compost:</strong><strong class="lang-de" style="display:none;">Kompost:</strong> <span class="lang-fr">Si la poubelle de votre terrasse est pleine, merci de la déposer :</span><span class="lang-en" style="display:none;">If your terrace bin is full, please drop it off:</span><span class="lang-de" style="display:none;">Wenn Ihr Terrasseneimer voll ist, bringen Sie ihn bitte zu:</span>
-                            <ul style="margin-top: 4px; padding-left: 15px; font-size: 0.78rem;">
-                                <li><strong>Au Ptitzabris :</strong> <span class="lang-fr">Au début de la passerelle.</span><span class="lang-en" style="display:none;">At the start of the walkway.</span><span class="lang-de" style="display:none;">Am Anfang des Stegs.</span></li>
-                                <li><strong>Au Grandzabris :</strong> <span class="lang-fr">Au début de la passerelle, à côté de la cage des perroquets.</span><span class="lang-en" style="display:none;">At the start of the walkway, next to the parrot cage.</span><span class="lang-de" style="display:none;">Am Anfang des Stegs, neben dem Papageienkäfig.</span></li>
-                            </ul>
-                        </div>
-
-                        <div style="background:#fff; padding:10px; border-radius:4px; text-align:left; margin-top:10px; font-size:0.8rem; border:1px solid #ddd;">
-                            🗑️ <strong class="lang-fr">Jaune :</strong><strong class="lang-en" style="display:none;">Yellow bin:</strong><strong class="lang-de" style="display:none;">Gelbe Tonne:</strong> <span class="lang-fr">Emballages & Plastiques</span><span class="lang-en" style="display:none;">Packaging & Plastics</span><span class="lang-de" style="display:none;">Verpackungen & Kunststoffe</span><br>
-                            🟡 <strong class="lang-fr">Conteneur verres :</strong><strong class="lang-en" style="display:none;">Glass container:</strong><strong class="lang-de" style="display:none;">Glascontainer:</strong> <span class="lang-fr">Sur le parking au début de la descente des escaliers.</span><span class="lang-en" style="display:none;">In the parking lot at the top of the stairs.</span><span class="lang-de" style="display:none;">Auf dem Parkplatz am Anfang der Treppe.</span><br>
-                            ⚫ <strong class="lang-fr">Ordures ménagères :</strong><strong class="lang-en" style="display:none;">Household waste:</strong><strong class="lang-de" style="display:none;">Restmüll:</strong> <span class="lang-fr">Le reste</span><span class="lang-en" style="display:none;">The rest</span><span class="lang-de" style="display:none;">Der Rest</span>
+                        <h5>♻️ Consignes Poubelles & Compost</h5>
+                        <p style="font-size: 0.83rem;">Le tri sélectif est de rigueur. Une petite poubelle est à votre disposition sur votre terrasse pour vos déchets organiques.</p>
+                        <div style="background:#fdfbf7; padding:8px; border-radius:4px; font-size:0.78rem; border:1px solid var(--accent); margin-top: 6px;">
+                            🌱 <strong id="compost-location-text">Emplacement du compost</strong>
                         </div>
                     </div>
                 </div>
 
                 <div class="guide-box">
                     <div>
-                        <h5 class="lang-fr">🚽 Utilisation Sanibroyeur</h5>
-                        <h5 class="lang-en" style="display:none;">🚽 Macerator Toilet Usage</h5>
-                        <h5 class="lang-de" style="display:none;">🚽 Verwendung der Kleinhebeanlage</h5>
-                        <p class="lang-fr" style="color: #b94a48; font-weight: bold; font-size: 0.85rem;">⚠️ Papier toilette uniquement ! Interdiction de jeter lingettes ou protections.</p>
-                        <p class="lang-en" style="display:none; color: #b94a48; font-weight: bold; font-size: 0.85rem;">⚠️ Toilet paper only! Do not throw wipes or sanitary products.</p>
-                        <p class="lang-de" style="display:none; color: #b94a48; font-weight: bold; font-size: 0.85rem;">⚠️ Nur Toilettenpapier! Keine Feuchttücher oder Hygieneartikel hineinwerfen.</p>
+                        <h5>🚽 Utilisation Sanibroyeur</h5>
+                        <p style="color: #b94a48; font-weight: bold; font-size: 0.83rem;">⚠️ Papier toilette uniquement ! Interdiction formelle de jeter lingettes ou protections.</p>
                     </div>
                     <div class="wifi-img-box">
-                        <img src="https://i.postimg.cc/FRZkRwQW/IMG-4415.jpg" alt="Consignes Sanibroyeur">
-                    </div>
-                </div>
-            </div>
-
-            <div style="margin-top: 30px;" class="card" id="waze-card-box">
-                <div style="display: flex; flex-wrap: wrap;">
-                    <div class="single-photo-container" style="flex: 1; min-width: 280px; height: 280px;">
-                        <img src="https://i.postimg.cc/7L2PvXzp/IMG-4328.jpg" alt="Allée menant au parking Les Ozabris">
-                        <div class="photo-label lang-fr">Accès Parking & Sécurité</div>
-                        <div class="photo-label lang-en" style="display:none;">Parking Access & Security</div>
-                        <div class="photo-label lang-de" style="display:none;">Parkplatz & Sicherheit</div>
-                    </div>
-                    <div class="card-content" style="flex: 1.5; min-width: 280px; display: flex; flex-direction: column; justify-content: space-between;">
-                        <div>
-                            <h3 class="lang-fr">🚗 Accès & Itinéraire Waze</h3>
-                            <h3 class="lang-en" style="display:none;">🚗 Access & Waze Directions</h3>
-                            <h3 class="lang-de" style="display:none;">🚗 Anfahrt & Waze-Route</h3>
-                            <div class="specs">📍 162 rue fond coche Mahot</div>
-                            <p class="lang-fr" style="margin-bottom: 12px;">Laissez-vous guider facilement jusqu'aux Ozabris en un clic depuis votre position actuelle grâce à Waze.</p>
-                            <p class="lang-en" style="display:none; margin-bottom: 12px;">Let Waze guide you easily to Les Ozabris in one click from your current location.</p>
-                            <p class="lang-de" style="display:none; margin-bottom: 12px;">Lassen Sie sich mit Waze ganz einfach von Ihrem aktuellen Standort aus zu den Ozabris leiten.</p>
-                            
-                            <div style="background: #fdfbf7; border: 1px solid rgba(185, 74, 72, 0.3); border-left: 4px solid #b94a48; padding: 12px 15px; border-radius: 2px; margin-bottom: 15px;">
-                                <p class="lang-fr" style="font-size: 0.85rem; color: #b94a48; font-weight: bold; margin-bottom: 4px;">⚠️ Consigne indispensable pour le parking :</p>
-                                <p class="lang-en" style="display:none; font-size: 0.85rem; color: #b94a48; font-weight: bold; margin-bottom: 4px;">⚠️ Essential parking rule:</p>
-                                <p class="lang-de" style="display:none; font-size: 0.85rem; color: #b94a48; font-weight: bold; margin-bottom: 4px;">⚠️ Wichtige Parkregel:</p>
-                                
-                                <p class="lang-fr" style="font-size: 0.83rem; color: #444; margin-bottom: 0;">L'accès au parking doit obligatoirement se faire <strong>en marche en arrière</strong> pour garantir une sortie fluide et sécurisée !</p>
-                                <p class="lang-en" style="display:none; font-size: 0.83rem; color: #444; margin-bottom: 0;">Access to the parking lot must imperatively be done <strong>in reverse gear</strong> to ensure a smooth and safe exit!</p>
-                                <p class="lang-de" style="display:none; font-size: 0.83rem; color: #444; margin-bottom: 0;">Die Einfahrt in den Parkplatz muss unbedingt <strong>rückwärts</strong> erfolgen, um eine reibungslose und sichere Ausfahrt zu gewährleisten!</p>
-                            </div>
-                        </div>
-
-                        <div style="text-align: left;">
-                            <a href="https://waze.com/ul?q=162%20rue%20fond%20coche%20Mahot&navigate=yes" target="_blank" rel="noopener noreferrer" class="btn" style="display: inline-block; width: auto; padding: 10px 22px; background: #33ccff; color: #12263a;">
-                                <span class="lang-fr">📍 Lancer l'itinéraire Waze ↗</span>
-                                <span class="lang-en" style="display:none;">📍 Start Waze Directions ↗</span>
-                                <span class="lang-de" style="display:none;">📍 Waze-Navigation starten ↗</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="farewell-message-box" class="farewell-box" style="display: none;">
-                <h3 class="lang-fr">Au plaisir de vous accueillir lors d'un prochain séjour</h3>
-                <h3 class="lang-en" style="display:none;">Looking forward to welcoming you on a future stay</h3>
-                <h3 class="lang-de" style="display:none;">Wir freuen uns darauf, Sie bei einem zukünftigen Aufenthalt begrüßen zu dürfen</h3>
-                <div class="creole-badge">NAR TROUV'</div>
-            </div>
-
-            <div style="text-align: center; margin-top: 30px;">
-                <button type="button" onclick="scrollToTop()" class="btn-return-top">⬅️ <span class="lang-fr">Retour à l'accueil</span><span class="lang-en" style="display:none;">Back to Home</span><span class="lang-de" style="display:none;">Zurück zur Startseite</span></button>
-            </div>
-        </div>
-
-        <!-- ESPACE DÉDIÉ À GÉRARD (Lecture seule / Code 240743) -->
-        <div id="gerard-portal" style="display: none;">
-            <div class="top-return-bar">
-                <button type="button" onclick="scrollToTop()" class="btn-return-top">⬅️ Retour à l'accueil</button>
-            </div>
-
-            <h2 class="admin-title">📖 Le Coin de Gérard — Book & Plannings</h2>
-            <p class="admin-subtitle">Espace de consultation exclusif — Domaine Les Ozabris</p>
-
-            <div class="admin-schedule-section" style="margin-bottom: 30px;">
-                <h3>📝 Copie des Avis (Prêt pour Pages sur iPad)</h3>
-                <p style="font-size: 0.88rem; color: #555; margin-bottom: 15px;">
-                    Choisissez le cottage dont vous souhaitez copier les avis formatés pour les coller directement dans Pages :
-                </p>
-                <div style="text-align: center; margin-bottom: 15px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
-                    <button type="button" class="admin-link-btn" onclick="openDatePickerModal('ptitzabris')">📋 Copier les avis du Ptitzabris</button>
-                    <button type="button" class="admin-link-btn" onclick="openDatePickerModal('grandzabris')" style="background: var(--accent); color: var(--primary);">📋 Copier les avis du Grandzabris</button>
-                </div>
-                <div style="text-align: center;">
-                    <span id="copy-feedback" style="font-size: 0.85rem; color: #20ba5a; display: none; font-weight: bold;">Copié dans le presse-papier avec succès !</span>
-                </div>
-            </div>
-
-            <div class="admin-schedule-section">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid var(--accent); padding-bottom: 8px;">
-                    <h3 style="margin: 0; border: none; padding: 0;">📅 Plannings des Cottages (Historique inclus)</h3>
-                    <div style="display: flex; gap: 8px;">
-                        <button type="button" class="admin-link-btn" style="padding: 6px 12px; font-size: 0.75rem;" onclick="changeGerardMonth(-1)">◀ Mois Précédent</button>
-                        <button type="button" class="admin-link-btn" style="padding: 6px 12px; font-size: 0.75rem; background: var(--accent); color: var(--primary);" onclick="changeGerardMonth(0)">Mois Actuel</button>
-                        <button type="button" class="admin-link-btn" style="padding: 6px 12px; font-size: 0.75rem;" onclick="changeGerardMonth(1)">Mois Suivant ▶</button>
-                    </div>
-                </div>
-
-                <div style="display: flex; flex-direction: column; gap: 20px; margin-top: 15px;">
-                    <div style="background: #fff; padding: 15px; border: 1px solid var(--accent); border-radius: 8px; width: 100%; overflow: hidden;">
-                        <h4 style="color: var(--primary); font-family: 'Playfair Display', serif; margin-bottom: 10px; text-align: center;" id="gerard-ptit-title">Le Ptitzabris</h4>
-                        <div id="gerard-ptitzabris-grid"></div>
-                    </div>
-                    <div style="background: #fff; padding: 15px; border: 1px solid var(--accent); border-radius: 8px; width: 100%; overflow: hidden;">
-                        <h4 style="color: var(--primary); font-family: 'Playfair Display', serif; margin-bottom: 10px; text-align: center;" id="gerard-grand-title">Le Grandzabris</h4>
-                        <div id="gerard-grandzabris-grid"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div style="text-align: center; margin-top: 30px;">
-                <button type="button" onclick="scrollToTop()" class="btn-return-top" style="background: var(--primary); color: white;">Fermer et retourner au site public</button>
-            </div>
-        </div>
-
-        <!-- TABLEAU DE BORD PROPRIÉTAIRE (Code 140769) -->
-        <div id="admin-dashboard" style="display: none;">
-            <div class="top-return-bar" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                <div>
-                    <button type="button" onclick="printCottage('ptitzabris')" class="admin-link-btn" style="background: var(--accent); color: var(--primary);">🖨️ Imprimer Le Ptitzabris</button>
-                    <button type="button" onclick="printCottage('grandzabris')" class="admin-link-btn" style="background: var(--accent); color: var(--primary); margin-left: 8px;">🖨️ Imprimer Le Grandzabris</button>
-                </div>
-                <button type="button" onclick="scrollToTop()" class="btn-return-top">⬅️ Retour à l'accueil</button>
-            </div>
-
-            <h2 class="admin-title">🛠️ Tableau de Bord Propriétaire</h2>
-            <p class="admin-subtitle">Espace d'administration exclusif - Domaine Les Ozabris</p>
-
-            <div class="admin-grid">
-                <div class="admin-box">
-                    <div>
-                        <h5>📝 Google Forms (Saisie Séjour)</h5>
-                        <p>Ajoutez ou mettez à jour en direct les fiches voyageurs de votre base de données.</p>
-                    </div>
-                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfCO3OScdjsEhJ8Zihl8tNLlseeBPo9kpxibbU6_1Mm7ubOow/viewform?usp=header" target="_blank" class="admin-link-btn">Ouvrir le Formulaire ↗</a>
-                </div>
-
-                <div class="admin-box">
-                    <div>
-                        <h5>⭐ Google Forms (Avis Airbnb)</h5>
-                        <p>Ajoutez un nouveau commentaire de voyageur pour l'afficher sur votre site.</p>
-                    </div>
-                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSeMv83jgbM1M61OCESTcbUXRmM19Xgk_Jp0VbrxlJ2_OkL-5Q/viewform?usp=publish-editor" target="_blank" class="admin-link-btn">Saisir un Avis ↗</a>
-                </div>
-
-                <div class="admin-box">
-                    <div>
-                        <h5>📊 Fichier Google Sheets</h5>
-                        <p>Consultez la base de données brute et l'historique complet des réservations.</p>
-                    </div>
-                    <a href="https://docs.google.com/spreadsheets/d/1SFMb86xogujUdNoC5t8LuWORI0HAm0i8EMIy-RFIiUo/edit?usp=sharing" target="_blank" class="admin-link-btn">Ouvrir le Sheets ↗</a>
-                </div>
-
-                <div class="admin-box">
-                    <div>
-                        <h5>📈 Trafic & Visites</h5>
-                        <p>Nombre total de consultations enregistrées sur cet espace numérique :</p>
-                        <p style="font-size: 1.3rem; font-weight: bold; color: var(--primary);" id="admin-visit-count">-</p>
-                    </div>
-                    <span style="font-size: 0.75rem; color: #888; font-style: italic;">Suivi en temps réel</span>
-                </div>
-            </div>
-
-            <div class="admin-schedule-section">
-                <h3>📅 Prochaines Arrivées (7 Jours) & Envoi WhatsApp</h3>
-                <div class="admin-cards-container" id="admin-schedule-cards">
-                    <p style="text-align: center; color: #777; padding: 15px;">Chargement du planning...</p>
-                </div>
-            </div>
-
-            <div id="printable-ptitzabris" style="display:none;">
-                <div class="cottage-print-title">DOMAINE LES OZABRIS — PLANNING « LE PTITZABRIS »</div>
-                <div class="month-sub-box">
-                    <div class="month-sub-title" id="ptitzabris-m1-title">Mois en cours</div>
-                    <div id="ptitzabris-m1-grid"></div>
-                </div>
-                <div class="month-sub-box" style="margin-top: 8px;">
-                    <div class="month-sub-title" id="ptitzabris-m2-title">Mois suivant</div>
-                    <div id="ptitzabris-m2-grid"></div>
-                </div>
-            </div>
-
-            <div id="printable-grandzabris" style="display:none;">
-                <div class="cottage-print-title">DOMAINE LES OZABRIS — PLANNING « LE GRANDZABRIS »</div>
-                <div class="month-sub-box">
-                    <div class="month-sub-title" id="grandzabris-m1-title">Mois en cours</div>
-                    <div id="grandzabris-m1-grid"></div>
-                </div>
-                <div class="month-sub-box" style="margin-top: 8px;">
-                    <div class="month-sub-title" id="grandzabris-m2-title">Mois suivant</div>
-                    <div id="grandzabris-m2-grid"></div>
-                </div>
-            </div>
-
-            <div style="text-align: center; margin-top: 25px;">
-                <button type="button" onclick="scrollToTop()" class="btn-return-top" style="background: var(--primary); color: white;">Fermer et retourner au site public</button>
-            </div>
-        </div>
-    </div>
-    
-    <div id="main-content">
-        <div class="container">
-            <div class="amenities-banner">
-                <div class="amenity-item"><span>🅿️</span> <span class="lang-fr">Parking Gratuit (1 voiture par abris)</span><span class="lang-en" style="display:none;">Free Parking (1 car per shelter)</span><span class="lang-de" style="display:none;">Kostenloser Parkplatz (1 Auto pro Unterkunft)</span></div>
-            </div>
-
-            <div class="section-title lang-fr">Le Domaine & Nos Hébergements</div>
-            <div class="section-title lang-en" style="display:none;">The Domain & Our Accommodations</div>
-            <div class="section-title lang-de" style="display:none;">Das Anwesen & Unsere Unterkünfte</div>
-            
-            <div class="grid">
-                <!-- Le Ptitzabris -->
-                <div class="card">
-                    <div class="single-photo-container">
-                        <img src="https://i.postimg.cc/2jTZq8yF/IMG-4380.jpg" alt="Le Ptitzabris">
-                        <div class="photo-label">Le Ptitzabris</div>
-                    </div>
-                    <div class="card-content">
-                        <h3>« Le Ptitzabris »</h3>
-                        <div class="specs">✨ 1 Chambre King Size │ Meublé de Tourisme 3 Étoiles</div>    
-                        <p class="lang-fr">Écrin de douceur et de raffinement, conçu spécifiquement pour les escapades en amoureux.</p>
-                        <p class="lang-en" style="display:none;">A haven of softness and refinement, designed specifically for romantic getaways.</p>
-                        <p class="lang-de" style="display:none;">Ein Ort der Sanftheit und Raffinesse, speziell konzipiert für romantische Kurztrips.</p>
-                        
-                        <a href="https://www.airbnb.com/h/leptitzabris" target="_blank" rel="noopener noreferrer" class="more-photos-link">📸 Davantage de photos ici (sur Airbnb) ↗</a>
-
-                        <div class="availability-box">
-                            <p class="lang-fr">📅 Disponibilités en temps réel</p>
-                            <p class="lang-en" style="display:none;">📅 Real-time availability</p>
-                            <p class="lang-de" style="display:none;">📅 Echtzeit-Verfügbarkeit</p>
-                            
-                            <div class="calendar-container">
-                                <iframe id="calendar-ptitzabris" src="" style="border: 0" width="100%" height="280" frameborder="0" scrolling="no"></iframe>
-                            </div>
-                        </div>
-
-                        <div class="btn-container">
-                            <a href="https://www.airbnb.com/h/leptitzabris" target="_blank" rel="noopener noreferrer" class="btn">
-                                <span class="lang-fr">Réserver sur Airbnb</span>
-                                <span class="lang-en" style="display:none;">Book on Airbnb</span>
-                                <span class="lang-de" style="display:none;">Auf Airbnb buchen</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Le Grandzabris -->
-                <div class="card">
-                    <div class="single-photo-container">
-                        <img src="https://i.postimg.cc/m227V1Jq/IMG-4249.jpg" alt="Le Grandzabris">
-                        <div class="photo-label">Le Grandzabris</div>
-                    </div>
-                    <div class="card-content">
-                        <h3>« Le Grandzabris »</h3>
-                        <div class="specs">✨ 2 Chambres │ Meublé de Tourisme 2 Étoiles</div>
-                        <p class="lang-fr">Espace généreux, noble et chaleureux, idéal pour les séjours d'exception en famille ou entre amis.</p>
-                        <p class="lang-en" style="display:none;">Generous, noble, and warm space, ideal for exceptional stays with family or friends.</p>
-                        <p class="lang-de" style="display:none;">Großzügiger, edler und warmer Raum, ideal für außergewöhnliche Aufenthalte mit Familie oder Freunden.</p>
-                        
-                        <a href="https://www.airbnb.com/h/legrandzabris" target="_blank" rel="noopener noreferrer" class="more-photos-link">📸 Davantage de photos ici (sur Airbnb) ↗</a>
-
-                        <div class="availability-box">
-                            <p class="lang-fr">📅 Disponibilités en temps réel</p>
-                            <p class="lang-en" style="display:none;">📅 Real-time availability</p>
-                            <p class="lang-de" style="display:none;">📅 Echtzeit-Verfügbarkeit</p>
-                            
-                            <div class="calendar-container">
-                                <iframe id="calendar-grandzabris" src="" style="border: 0" width="100%" height="280" frameborder="0" scrolling="no"></iframe>
-                            </div>
-                        </div>
-
-                        <div class="btn-container">
-                            <a href="https://www.airbnb.com/h/legrandzabris" target="_blank" rel="noopener noreferrer" class="btn">
-                                <span class="lang-fr">Réserver sur Airbnb</span>
-                                <span class="lang-en" style="display:none;">Book on Airbnb</span>
-                                <span class="lang-de" style="display:none;">Auf Airbnb buchen</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Espace ZenAbris centré sur une ligne dédiée -->
-                <div class="card" style="grid-column: 1 / -1; max-width: 50%; margin: 0 auto; width: 100%;">
-                    <div class="single-photo-container">
-                        <img src="https://i.postimg.cc/13yj8PKc/Image.jpg" alt="Espace ZenAbris">
-                        <div class="photo-label">Le ZenAbris</div>
-                    </div>
-                    <div class="card-content">
-                        <h3>Espace ZenAbris</h3>
-                        <div class="specs">🌿 Bien-être │ Accès Gratuit & Partagé</div>
-                        <p class="lang-fr">Niché au cœur de notre grand jardin luxuriant, l'espace ZenAbris et son Softub Spa vous offrent un moment de lâcher-prise absolu après une belle journée de randonnée.</p>
-                        <p class="lang-en" style="display:none;">Nestled in the heart of our lush large garden, the ZenAbris area and its Softub Spa offer you a moment of absolute letting go after a wonderful day of hiking.</p>
-                        <p class="lang-de" style="display:none;">Eingebettet in unseren üppigen Garten bieten Ihnen der ZenAbris-Bereich und sein Softub-Spa einen Moment absoluter Entspannung nach einer schönen Wanderung.</p>
-                    </div>
-                </div>
-
-                <div style="grid-column: 1 / -1;">
-                    <section class="section-avis-airbnb">
-                        <h2>Ce qu'en ont pensé nos derniers voyageurs d'Airbnb</h2>
-                        <div class="avis-layout-deux-colonnes">
-                            <div class="colonne-cottage grandzabris-col">
-                                <h3>« Le Grandzabris »</h3>
-                                <div class="liste-avis-cottage" id="conteneur-avis-grandzabris"></div>
-                            </div>
-                            <div class="colonne-cottage ptitzabris-col">
-                                <h3>« Le Ptitzabris »</h3>
-                                <div class="liste-avis-cottage" id="conteneur-avis-ptitzabris"></div>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-
-                <div style="grid-column: 1 / -1; margin-top: 20px;">
-                    <div class="section-title lang-fr" style="margin-top: 0;">L'Art de Vivre au Domaine</div>
-                    <div class="section-title lang-en" style="display:none; margin-top: 0;">The Art of Living at the Domain</div>
-                    <div class="section-title lang-de" style="display:none; margin-top: 0;">Die Lebenskunst auf dem Anwesen</div>
-                    
-                    <div class="eco-card" style="margin-top: 20px;">
-                        <div class="eco-header">
-                            <div class="eco-icon">🐾</div>
-                            <div>
-                                <h3 class="lang-fr" style="font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px;">Nos Amis les Animaux</h3>
-                                <h3 class="lang-en" style="display:none; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px;">Our Animal Friends</h3>
-                                <h3 class="lang-de" style="display:none; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px;">Unsere tierischen Freunde</h3>
-                            </div>
-                        </div>
-                        <div class="eco-card-body">
-                            <p class="lang-fr" style="margin-bottom: 20px;">Niché au cœur d'une nature luxuriante et offrant une vue sur la mer, notre domaine accueille nos amis les animaux qui partagent notre quotidien avec douceur.</p>
-                            <p class="lang-en" style="display:none; margin-bottom: 20px;">Nestled in lush nature with sea views, our domain welcomes our animal friends who gently share our daily lives.</p>
-                            <p class="lang-de" style="display:none; margin-bottom: 20px;">Eingebettet in üppige Natur mit Meerblick, beherbergt unser Anwesen unsere tierischen Freunde, die unseren Alltag sanft bereichern.</p>
-                            
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px;">
-                                <div class="single-photo-container" style="height: 160px; border-radius: 6px;">
-                                    <img src="https://i.postimg.cc/nLTyZyH0/3792.jpg" alt="Coco & Moorea">
-                                    <div class="photo-label" style="font-size: 0.6rem;">Coco & Moorea</div>
-                                </div>
-                                <div class="single-photo-container" style="height: 160px; border-radius: 6px;">
-                                    <img src="https://i.postimg.cc/bJx3pbHd/2b9d89c8-1518-4f2b-90ef-fd253dabea72.jpg" alt="Chachoune">
-                                    <div class="photo-label" style="font-size: 0.6rem;">Chachoune</div>
-                                </div>
-                                <div class="single-photo-container" style="height: 160px; border-radius: 6px;">
-                                    <img src="https://i.postimg.cc/LsbMLcrY/IMG-4257.jpg" alt="Tahaa">
-                                    <div class="photo-label" style="font-size: 0.6rem;">Tahaa</div>
-                                </div>
-                                <div class="single-photo-container" style="height: 160px; border-radius: 6px;">
-                                    <img src="https://i.postimg.cc/DyPkBJ9Z/Image.jpg" alt="Les Caméléons">
-                                    <div class="photo-label" style="font-size: 0.6rem;">Les Caméléons</div>
-                                </div>
-                                <div class="single-photo-container" style="height: 160px; border-radius: 6px;">
-                                    <img src="https://i.postimg.cc/cLW1JNSN/418.jpg" alt="Chachoune">
-                                    <div class="photo-label" style="font-size: 0.6rem;">Chachoune</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="eco-card" style="grid-column: 1 / -1;">
-                    <div class="eco-header">
-                        <div class="eco-icon">🌍</div>
-                        <div>
-                            <h3 class="lang-fr">Empreinte Écologique & Solaire</h3>
-                            <h3 class="lang-en" style="display:none;">Ecological & Solar Footprint</h3>
-                            <h3 class="lang-de" style="display:none;">Ökologischer & Solarer Fußabdruck</h3>
-                            <div class="specs lang-fr" style="margin-bottom:0;">🌱 Tourisme Durable à La Réunion</div>
-                            <div class="specs lang-en" style="display:none; margin-bottom:0;">🌱 Sustainable Tourism in Réunion</div>
-                            <div class="specs lang-de" style="display:none; margin-bottom:0;">🌱 Nachhaltiger Tourismus auf La Réunion</div>
-                        </div>
-                    </div>
-                    <div class="eco-card-body">
-                        <p class="lang-fr" style="margin-bottom: 12px;">Aux Ozabris, nous conjuguons art de recevoir et préservation de notre magnifique île. Notre domaine fonctionne en harmonie totale avec le soleil grâce à des panneaux photovoltaïques couplés à des batteries. Chaque Zabris dispose par ailleurs de son propre chauffe-eau solaire.</p>
-                        <p class="lang-en" style="display:none; margin-bottom: 12px;">At Les Ozabris, we combine the art of hosting with the preservation of our magnificent island. Our domain operates in total harmony with the sun thanks to photovoltaic panels coupled with batteries. Each Zabris also has its own solar water heater.</p>
-                        <p class="lang-de" style="display:none; margin-bottom: 12px;">Im Les Ozabris verbinden wir Gastfreundschaft mit dem Schutz unserer wunderschönen Insel. Unser Anwesen arbeitet dank Photovoltaikanlagen in Harmonie mit der Sonne. Jedes Zabris verfügt zudem über einen eigenen Solarwarmwasserbereiter.</p>
-
-                        <p class="lang-fr" style="margin-bottom: 15px;">Toutes nos chambres disposent de climatiseurs réversibles inverter à haute efficacité énergétique.</p>
-                        <p class="lang-en" style="display:none; margin-bottom: 15px;">All our rooms feature high energy-efficiency inverter reversible air conditioners.</p>
-                        <p class="lang-de" style="display:none; margin-bottom: 15px;">Alle Zimmer verfügen über energieeffiziente Inverter-Klimaanlagen.</p>
-                        
-                        <div style="border-top: 1px dashed var(--accent); padding-top: 15px; text-align: center; font-style: italic; font-size: 0.85rem; color: #666;">
-                            "Florebo quocunque ferar" — "Je fleurirai partout où je serai porté" 
-                            <span class="lang-fr" style="font-size: 0.75rem; text-transform: uppercase; font-style: normal; display: block; margin-top: 3px; color: var(--accent); font-weight: 600;">(Devise de La Réunion)</span>
-                            <span class="lang-en" style="display:none; font-size: 0.75rem; text-transform: uppercase; font-style: normal; display: block; margin-top: 3px; color: var(--accent); font-weight: 600;">(Motto of Réunion)</span>
-                            <span class="lang-de" style="display:none; font-size: 0.75rem; text-transform: uppercase; font-style: normal; display: block; margin-top: 3px; color: var(--accent); font-weight: 600;">(Wahlspruch von La Réunion)</span>
-                        </div>
+                        <img src="https://i.postimg.cc/FRZkRwQW/IMG-4415.jpg" alt="Consignes Sanibroyeur" style="max-height: 120px;">
                     </div>
                 </div>
             </div>
@@ -1088,959 +222,73 @@
     </div>
 
     <footer>
-        <div class="footer-logo">Les Ozabris</div>
-        <p class="lang-fr">Cottages d'Exception & Perles Rares • La Réunion</p>
-        <p class="lang-en" style="display:none;">Exceptional Cottages & Rare Pearls • La Réunion</p>
-        <p class="lang-de" style="display:none;">Außergewöhnliche Cottages & Seltene Perlen • La Réunion</p>
-        
-        <div class="contact-info">
-            <p class="lang-fr">Contactez-nous :</p>
-            <p class="lang-en" style="display:none;">Contact us:</p>
-            <p class="lang-de" style="display:none;">Kontaktieren Sie uns:</p>
-            
-            <p style="margin: 12px 0;">
-                <a href="mailto:lesozabris@icloud.com?subject=Demande%20d%27informations%20ou%20disponibilit%C3%A9s&body=Bonjour,%0D%0A%0D%0AJe%20souhaite%20obtenir%20des%20informations%20supplémentaires%20concernant%20vos%20disponibilités%20:%0D%0A%0D%0A-%20Dates%20souhaitées%20(jour%20d%27arrivee%20inclus%20et%20jour%20de%20votre%20départ)%20:%0D%0A%0D%0A-%20Cottage%20:%0D%0A[%20]%20Le%20Ptitzabris%0D%0A[%20]%20Le%20Grandzabris%0D%0A%0D%0A-%20Nombre%20de%20voyageurs%20:%0D%0A%0D%0ACordialement," style="background: var(--accent); color: var(--primary); padding: 10px 20px; border-radius: 20px; text-decoration: none; font-weight: bold; font-family: 'Segoe UI', sans-serif; font-size: 0.85rem; display: inline-block; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: all 0.3s;">
-                    <span class="lang-fr">✉️ Nous contacter (Disponibilités & Infos)</span>
-                    <span class="lang-en" style="display:none;">✉️ Contact us (Availability & Info)</span>
-                    <span class="lang-de" style="display:none;">✉️ Kontakt (Verfügbarkeit & Info)</span>
-                </a>
-            </p>
-        </div>
-        
-        <div class="visit-counter">
-            👀 <span class="lang-fr">Visites de la page</span><span class="lang-en" style="display:none;">Page visits</span><span class="lang-de" style="display:none;">Seitenbesuche</span> : <span id="visit-count">Chargement...</span>
-        </div>
-
-        <p style="margin-top: 15px; font-size: 0.75rem; opacity: 0.7;">© 2026 Les Ozabris - Tous droits réservés.</p>
+        <p>Les Ozabris • Cottages d'Exception & Perles Rares • La Réunion</p>
+        <p style="margin-top: 10px; font-size: 0.75rem; opacity: 0.7;">© 2026 Les Ozabris - Tous droits réservés.</p>
     </footer>
 
     <script>
-        const sheetApiUrl = "https://script.google.com/macros/s/AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq/exec";
-        const avisApiUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQP_SAPkwZT9AusjxC6npbaM_VT8B8auHE-UlgO5mdZ7JZ_sWrQkEykcWuXCckiIu5kOn0fz7AzpsIH/pub?output=csv";
-
-        let currentLang = 'fr';
-        let cachedVoyageurs = [];
-        let selectedCottageForCopy = '';
-        
-        let gerardCurrentYear = new Date().getFullYear();
-        let gerardCurrentMonth = new Date().getMonth();
-
-        function formatHour(val) {
-            if (!val) return "";
-            let str = String(val).trim();
-            if (str.includes("T")) {
-                let parts = str.split("T")[1];
-                if (parts) return parts.substring(0, 5);
-            }
-            if (str.length >= 5 && str.includes(":")) return str.substring(0, 5);
-            return str;
-        }
-
-        function setLanguage(lang) {
-            currentLang = lang;
-            document.querySelectorAll('.lang-fr, .lang-en, .lang-de').forEach(el => el.style.display = 'none');
-            document.querySelectorAll('.lang-' + lang).forEach(el => {
-                if (el.tagName === 'TITLE' || el.tagName === 'SPAN') {
-                    el.style.display = 'block';
-                } else if (el.classList.contains('badge') || el.classList.contains('amenity-item') || el.classList.contains('btn-header-login')) {
-                    el.style.display = 'inline-flex';
-                } else {
-                    el.style.display = ''; 
-                }
-            });
-            document.getElementById('btn-fr').classList.toggle('active', lang === 'fr');
-            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
-            document.getElementById('btn-de').classList.toggle('active', lang === 'de');
-
-            const savedData = JSON.parse(localStorage.getItem("ozabris_voyageur_data"));
-            if (savedData && !savedData.isAdmin) {
-                const keys = Object.keys(savedData);
-                const rawHour = savedData.heureDepart || savedData.heuredepart || savedData.heure_depart || savedData[keys[11]] || savedData[keys[10]];
-                renderDepartureCard(savedData.dateDepart || savedData.depart, savedData.prenom, formatHour(rawHour));
-            }
-        }
-
         window.onload = function() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const startDate = `${year}${month}01`;
+            const urlParams = new URLSearchParams(window.location.search);
+            const gite = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
+            const prenom = urlParams.get('prenom');
 
-            const basePtitzabris = "https://calendar.google.com/calendar/embed?src=3a0thukb2dtsj75euqbvfbc4rqu0roaq%40import.calendar.google.com&ctz=Indian%2FReunion";
-            const ptitzabrisFrame = document.getElementById('calendar-ptitzabris');
-            if (ptitzabrisFrame) {
-                ptitzabrisFrame.src = `${basePtitzabris}&dates=${startDate}%2F20271231`;
+            let cottageName = "Le Ptitzabris";
+            let qrUrl = "https://i.postimg.cc/NMsgCSvQ/IMG-4404.jpg";
+            let compostText = "Au Ptitzabris : Au début de la passerelle.";
+
+            if (gite.includes("grand")) {
+                cottageName = "Le Grandzabris";
+                qrUrl = "https://i.postimg.cc/kXbdsqRb/IMG-4408.jpg";
+                compostText = "Au Grandzabris : Au début de la passerelle, à côté de la cage des perroquets.";
             }
 
-            const baseGrandzabris = "https://calendar.google.com/calendar/embed?src=rrs34qnotv0ejdh0ts9adq56jkro7q1h%40import.calendar.google.com&ctz=Indian%2FReunion";
-            const grandzabrisFrame = document.getElementById('calendar-grandzabris');
-            if (grandzabrisFrame) {
-                grandzabrisFrame.src = `${baseGrandzabris}&dates=${startDate}%2F20271231`;
+            if (prenom && prenom !== 'unknown' && prenom !== 'none' && prenom.trim() !== '') {
+                document.getElementById("welcome-message").innerText = `Bienvenue ${prenom} !`;
+            } else {
+                document.getElementById("welcome-message").innerText = `Bienvenue aux Ozabris !`;
             }
 
-            fetch(avisApiUrl + "&t=" + new Date().getTime())
-                .then(response => response.text())
-                .then(csvText => {
-                    const rows = [];
-                    let currentRow = [];
-                    let currentField = "";
-                    let inQuotes = false;
+            document.getElementById("cottage-subtitle").innerText = `Séjour au ${cottageName}`;
+            document.getElementById("wifi-qr-img").src = qrUrl;
+            document.getElementById("compost-location-text").innerText = compostText;
 
-                    for (let i = 0; i < csvText.length; i++) {
-                        let c = csvText[i];
-                        let nextC = csvText[i + 1];
-
-                        if (c === '"') {
-                            if (inQuotes && nextC === '"') {
-                                currentField += '"';
-                                i++;
-                            } else {
-                                inQuotes = !inQuotes;
-                            }
-                        } else if (c === ',' && !inQuotes) {
-                            currentRow.push(currentField.trim());
-                            currentField = "";
-                        } else if ((c === '\r' || c === '\n') && !inQuotes) {
-                            if (c === '\r' && nextC === '\n') { i++; }
-                            currentRow.push(currentField.trim());
-                            if (currentRow.length > 1 || currentRow[0] !== "") {
-                                rows.push(currentRow);
-                            }
-                            currentRow = [];
-                            currentField = "";
-                        } else {
-                            currentField += c;
-                        }
-                    }
-                    if (currentField !== "" || currentRow.length > 0) {
-                        currentRow.push(currentField.trim());
-                        rows.push(currentRow);
-                    }
-
-                    if (rows.length > 1) {
-                        const headers = rows[0].map(h => h.toLowerCase().replace(/^"|"$/g, ''));
-                        const conteneurGrandzabris = document.getElementById('conteneur-avis-grandzabris');
-                        const conteneurPtitzabris = document.getElementById('conteneur-avis-ptitzabris');
-                        
-                        if (!conteneurGrandzabris || !conteneurPtitzabris) return;
-                        
-                        conteneurGrandzabris.innerHTML = "";
-                        conteneurPtitzabris.innerHTML = "";
-
-                        let avisGrandzabris = [];
-                        let avisPtitzabris = [];
-
-                        for (let i = 1; i < rows.length; i++) {
-                            const cols = rows[i];
-                            const obj = {};
-                            for (let j = 0; j < headers.length; j++) {
-                                obj[headers[j]] = cols[j] ? cols[j].replace(/^"|"$/g, '').replace(/""/g, '"') : '';
-                            }
-
-                            let auteur = "";
-                            let logement = "";
-                            let dateBrute = "";
-                            let commentaire = "";
-                            let note = "5/5";
-
-                            for (let key in obj) {
-                                if (key.includes('prénom') || key.includes('prenom') || key.includes('auteur')) auteur = obj[key];
-                                if (key.includes('logement') || key.includes('cottage')) logement = obj[key];
-                                if (key.includes('date')) dateBrute = obj[key];
-                                if (key.includes('commentaire') || key.includes('avis') || key.includes('message')) commentaire = obj[key];
-                                if (key.includes('note') || key.includes('notation') || key.includes('étoile')) note = obj[key];
-                            }
-
-                            if (!auteur) auteur = "Voyageur";
-
-                            if (commentaire && logement) {
-                                let timestamp = 0;
-                                if (dateBrute) {
-                                    if (dateBrute.includes('/')) {
-                                        const p = dateBrute.split('/');
-                                        if (p.length === 3) {
-                                            timestamp = new Date(`${p[2]}-${p[1]}-${p[0]}`).getTime() || 0;
-                                        }
-                                    } else {
-                                        timestamp = new Date(dateBrute).getTime() || 0;
-                                    }
-                                }
-
-                                const avisObj = {
-                                    auteur,
-                                    logement,
-                                    dateBrute,
-                                    timestamp,
-                                    commentaire,
-                                    note
-                                };
-
-                                const logLower = logement.toLowerCase();
-                                if (logLower.includes('grand')) {
-                                    avisGrandzabris.push(avisObj);
-                                } else if (logLower.includes('ptit') || logLower.includes('petit')) {
-                                    avisPtitzabris.push(avisObj);
-                                }
-                            }
-                        }
-
-                        avisGrandzabris.sort((a, b) => b.timestamp - a.timestamp);
-                        avisPtitzabris.sort((a, b) => b.timestamp - a.timestamp);
-
-                        const derniersGrandzabris = avisGrandzabris.slice(0, 3);
-                        const derniersPtitzabris = avisPtitzabris.slice(0, 3);
-
-                        function afficherAvis(liste, conteneur) {
-                            if (liste.length === 0) {
-                                conteneur.innerHTML = `<p style="color: #fff; font-size: 0.85rem; font-style: italic; text-align: center; font-family: 'Segoe UI', sans-serif;">Aucun avis pour le moment.</p>`;
-                                return;
-                            }
-                            liste.forEach(avis => {
-                                let dateFormatee = avis.dateBrute;
-                                if (avis.dateBrute.includes("-")) {
-                                    const p = avis.dateBrute.split("-");
-                                    if (p.length === 3) dateFormatee = `${p[2]}/${p[1]}/${p[0]}`;
-                                }
-
-                                let nbEtoiles = 5;
-                                if (avis.note) {
-                                    let match = avis.note.match(/(\d+)/);
-                                    if (match) nbEtoiles = parseInt(match[1]);
-                                }
-                                if (nbEtoiles > 5) nbEtoiles = 5;
-                                if (nbEtoiles < 1) nbEtoiles = 1;
-
-                                let etoilesHtml = "⭐".repeat(nbEtoiles);
-
-                                const carte = document.createElement('div');
-                                carte.className = 'carte-avis-airbnb';
-                                carte.innerHTML = `
-                                    <div class="etoiles-avis">${etoilesHtml}</div>
-                                    <p class="texte-commentaire">« ${avis.commentaire} »</p>
-                                    <p class="info-voyageur"><strong>${avis.auteur}</strong> ${dateFormatee ? '(' + dateFormatee + ')' : ''}</p>
-                                `;
-                                conteneur.appendChild(carte);
-                            });
-                        }
-
-                        afficherAvis(derniersGrandzabris, conteneurGrandzabris);
-                        afficherAvis(derniersPtitzabris, conteneurPtitzabris);
-                    }
-                })
-                .catch(error => console.error("Erreur lors du chargement des avis", error));
-
-            let visits = localStorage.getItem("ozabris_visit_count") || 1240;
-            visits = parseInt(visits) + 1;
-            localStorage.setItem("ozabris_visit_count", visits);
-            document.getElementById("visit-count").innerText = visits.toLocaleString();
-
-            const pinInput = document.getElementById("pinCode");
-            if (pinInput) {
-                pinInput.addEventListener("keypress", function(event) {
+            const adminInput = document.getElementById("adminPin");
+            if (adminInput) {
+                adminInput.addEventListener("keypress", function(event) {
                     if (event.key === "Enter") {
                         event.preventDefault();
-                        checkPin();
+                        checkAdminPin();
                     }
                 });
             }
         }
 
-        function openLoginModal() {
-            document.getElementById("login-modal").style.display = "flex";
-            document.getElementById("pinCode").focus();
+        function openAdminModal() {
+            document.getElementById("admin-modal").style.display = "flex";
+            document.getElementById("adminPin").focus();
         }
-
-        function closeLoginModal() {
-            document.getElementById("login-modal").style.display = "none";
-            document.getElementById("errorMsg").style.display = "none";
-            document.getElementById("pinCode").value = "";
+        function closeAdminModal() {
+            document.getElementById("admin-modal").style.display = "none";
+            document.getElementById("adminErrorMsg").style.display = "none";
+            document.getElementById("adminPin").value = "";
         }
-
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            localStorage.removeItem("ozabris_voyageur_data");
-            document.getElementById("login-modal").style.display = "none";
-            document.getElementById("guest-portal").style.display = "none";
-            document.getElementById("admin-dashboard").style.display = "none";
-            document.getElementById("gerard-portal").style.display = "none";
-            document.getElementById("main-content").style.display = "block";
-            document.getElementById("pinCode").value = "";
-        }
-
-        async function checkPin() {
-            const entered = document.getElementById("pinCode").value.trim();
-            if (!entered) return;
-
-            if (entered === "140769") {
-                closeLoginModal();
-                document.getElementById("main-content").style.display = "none";
-                document.getElementById("guest-portal").style.display = "none";
-                document.getElementById("gerard-portal").style.display = "none";
-                document.getElementById("admin-dashboard").style.display = "block";
-                
-                let visits = localStorage.getItem("ozabris_visit_count") || 1240;
-                document.getElementById("admin-visit-count").innerText = visits.toLocaleString() + " vues";
-
-                loadAdminSchedule();
-                buildAllCottageCalendars();
-                return;
-            }
-
-            if (entered === "240743") {
-                closeLoginModal();
-                document.getElementById("main-content").style.display = "none";
-                document.getElementById("admin-dashboard").style.display = "none";
-                document.getElementById("guest-portal").style.display = "none";
-                document.getElementById("gerard-portal").style.display = "block";
-
-                loadGerardPortalData();
-                return;
-            }
-
-            try {
-                const response = await fetch(sheetApiUrl);
-                const voyageurs = await response.json();
-                const voyageurTrouve = voyageurs.find(v => String(v.pin).trim() === entered);
-
-                if (voyageurTrouve) {
-                    const departStr = voyageurTrouve.dateDepart || voyageurTrouve.depart;
-                    if (departStr) {
-                        const depDate = new Date(departStr);
-                        const today = new Date();
-                        depDate.setHours(0, 0, 0, 0);
-                        today.setHours(0, 0, 0, 0);
-
-                        const limitDate = new Date(depDate);
-                        limitDate.setDate(limitDate.getDate() + 1);
-
-                        if (today > limitDate) {
-                            document.getElementById("errorMsg").style.display = "block";
-                            document.getElementById("pinCode").value = "";
-                            return;
-                        }
-                    }
-
-                    closeLoginModal();
-                    document.getElementById("main-content").style.display = "none";
-                    document.getElementById("admin-dashboard").style.display = "none";
-                    document.getElementById("gerard-portal").style.display = "none";
-                    document.getElementById("guest-portal").style.display = "block";
-
-                    let guestLang = (voyageurTrouve.langue || voyageurTrouve.lang || 'fr').toString().trim().toLowerCase();
-                    if (guestLang.startsWith('en')) guestLang = 'en';
-                    else if (guestLang.startsWith('de')) guestLang = 'de';
-                    else guestLang = 'fr';
-
-                    setLanguage(guestLang);
-
-                    document.getElementById("wifi-text").innerText = `Cottage : ${voyageurTrouve.cottage}`;
-                    
-                    let qrUrl = "https://i.postimg.cc/NMsgCSvQ/IMG-4404.jpg"; 
-                    const cottageLower = String(voyageurTrouve.cottage).toLowerCase();
-                    if (cottageLower.includes("grandzabris")) {
-                        qrUrl = "https://i.postimg.cc/kXbdsqRb/IMG-4408.jpg";
-                    }
-                    document.getElementById("wifi-qr-img").src = qrUrl;
-
-                    localStorage.setItem("ozabris_voyageur_data", JSON.stringify(voyageurTrouve));
-                    
-                    const keys = Object.keys(voyageurTrouve);
-                    const rawHour = voyageurTrouve.heureDepart || voyageurTrouve.heuredepart || voyageurTrouve.heure_depart || voyageurTrouve[keys[11]] || voyageurTrouve[keys[10]];
-                    renderDepartureCard(departStr, voyageurTrouve.prenom, formatHour(rawHour));
-
-                } else {
-                    document.getElementById("errorMsg").style.display = "block";
-                    document.getElementById("pinCode").value = "";
-                }
-            } catch(e) {
-                console.error("Erreur de connexion", e);
-                alert("Erreur de liaison avec la base de données. Vérifiez votre connexion.");
-            }
-        }
-
-        function renderDepartureCard(dateStr, prenom, heureDepart) {
-            const departureCard = document.getElementById('checkout-departure-card');
-            const departureInfoBanner = document.getElementById('departure-info-banner');
-            const welcomeTitle = document.getElementById('welcome-message');
-            const welcomeSubText = document.getElementById('welcome-subtitle-text');
-            const wazeCardBox = document.getElementById('waze-card-box');
-            const farewellBox = document.getElementById('farewell-message-box');
-
-            if (!dateStr) {
-                departureCard.style.display = 'none';
-                departureInfoBanner.style.display = 'block';
-                welcomeTitle.innerText = `Bienvenue, ${prenom} !`;
-                welcomeSubText.style.display = 'block';
-                wazeCardBox.style.display = 'block';
-                farewellBox.style.display = 'none';
-                return;
-            }
-
-            const depDate = new Date(dateStr);
-            const today = new Date();
-            depDate.setHours(0,0,0,0);
-            today.setHours(0,0,0,0);
-
-            const diffTime = depDate - today;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-            if (diffDays >= -1 && diffDays <= 2) {
-                departureCard.style.display = 'block';
-                departureInfoBanner.style.display = 'none';
-                welcomeTitle.innerText = prenom;
-                welcomeSubText.style.display = 'none';
-
-                wazeCardBox.style.display = 'none';
-                farewellBox.style.display = 'block';
-
-                let locale = 'fr-FR';
-                if (currentLang === 'en') locale = 'en-US';
-                if (currentLang === 'de') locale = 'de-DE';
-
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                const formattedDate = depDate.toLocaleDateString(locale, options);
-                
-                const departureTime = (heureDepart && String(heureDepart).trim() !== "") ? heureDepart : "10:00";
-
-                let text = `Votre départ est prévu le ${formattedDate} à ${departureTime}`;
-                if (currentLang === 'en') text = `Your departure is scheduled for ${formattedDate} at ${departureTime}`;
-                if (currentLang === 'de') text = `Ihre Abreise ist am ${formattedDate} um ${departureTime} geplant`;
-
-                document.getElementById('departure-date-text').innerText = text;
+        function checkAdminPin() {
+            const pin = document.getElementById("adminPin").value.trim();
+            if (pin === "140769") {
+                closeAdminModal();
+                alert("Accès administrateur validé !");
             } else {
-                departureCard.style.display = 'none';
-                departureInfoBanner.style.display = 'block';
-                welcomeTitle.innerText = `Bienvenue, ${prenom} !`;
-                welcomeSubText.style.display = 'block';
-                wazeCardBox.style.display = 'block';
-                farewellBox.style.display = 'none';
+                document.getElementById("adminErrorMsg").style.display = "block";
+                document.getElementById("adminPin").value = "";
             }
-        }
-
-                        async function loadAdminSchedule() {
-            const container = document.getElementById("admin-schedule-cards");
-            container.innerHTML = `<p style="text-align: center; color: #777; padding: 15px;">Chargement des données en cours...</p>`;
-
-            try {
-                const response = await fetch(sheetApiUrl);
-                cachedVoyageurs = await response.json();
-
-                if (!cachedVoyageurs || cachedVoyageurs.length === 0) {
-                    container.innerHTML = `<p style="text-align: center; color: #777; padding: 15px;">Aucun voyageur enregistré dans la base pour le moment.</p>`;
-                    return;
-                }
-
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-
-                const limitDate = new Date(today);
-                limitDate.setDate(today.getDate() + 7);
-
-                let html = "";
-                let displayedCount = 0;
-
-                cachedVoyageurs.forEach(v => {
-                    const arriveeStr = v.dateArrivee || v.arrivee;
-                    const departStr = v.dateDepart || v.depart;
-
-                    if (!arriveeStr || !departStr) return;
-
-                    const arrDate = new Date(arriveeStr);
-                    const depDate = new Date(departStr);
-                    arrDate.setHours(0, 0, 0, 0);
-                    depDate.setHours(0, 0, 0, 0);
-
-                    const lendemainDepart = new Date(depDate);
-                    lendemainDepart.setDate(depDate.getDate() + 1);
-
-                    const isPassed = today > lendemainDepart;
-                    const isUpcomingSoon = arrDate <= limitDate;
-
-                    if (!isPassed && isUpcomingSoon) {
-                        displayedCount++;
-                        const prenom = v.prenom || "N/A";
-                        const cottage = v.cottage || "Cottage";
-                        const pin = v.pin || "N/A";
-                        
-                        let tel = v.telephone || v.tel || "";
-                        tel = tel.toString().replace(/\D/g, ''); 
-
-                        const veilleArrivee = new Date(arrDate);
-                        veilleArrivee.setDate(arrDate.getDate() - 1);
-
-                        const canSend = today >= veilleArrivee && today <= depDate;
-
-                        const siteUrl = window.location.href.split('?')[0];
-                        
-                        let guestLang = (v.langue || v.lang || 'fr').toString().trim().toLowerCase();
-                        if (guestLang.startsWith('en')) guestLang = 'en';
-                        else if (guestLang.startsWith('de')) guestLang = 'de';
-                        else guestLang = 'fr';
-
-                        // Construction des consignes de code selon le cottage
-                        let doorCodeInstruction = "";
-                        const cottageLower = cottage.toLowerCase();
-                        
-                        if (guestLang === 'en') {
-                            let spaceCodeText = `Your personal PIN code for the guest space is: ${pin}`;
-                            if (cottageLower.includes("ptit")) {
-                                let doorPin = pin + "1";
-                                doorCodeInstruction = `${spaceCodeText}\n\nHere is your code to open the door of your Ptitzabris, which is especially useful in case you forget your keys inside! ${doorPin} `;
-                            } else {
-                                doorCodeInstruction = spaceCodeText;
-                            }
-                        } else if (guestLang === 'de') {
-                            let spaceCodeText = `Ihr persönlicher PIN-Code für den Gäste-Bereich lautet: ${pin}`;
-                            if (cottageLower.includes("ptit")) {
-                                let doorPin = pin + "1";
-                                doorCodeInstruction = `${spaceCodeText}\n\nHier ist Ihr Code zum Öffnen der Tür Ihres Ptitzabris, besonders nützlich, falls Sie die Schlüssel drinnen vergessen! ${doorPin} `;
-                            } else {
-                                doorCodeInstruction = spaceCodeText;
-                            }
-                        } else {
-                            let spaceCodeText = `Votre code PIN personnel pour l'espace voyageur est : ${pin}`;
-                            if (cottageLower.includes("ptit")) {
-                                let doorPin = pin + "1";
-                                doorCodeInstruction = `${spaceCodeText}\n\nVoici votre code pour pouvoir ouvrir la porte de votre Ptitzabris surtout utile en cas d’oublie des clés à l’intérieur de ce dernier ! ${doorPin} `;
-                            } else {
-                                doorCodeInstruction = spaceCodeText;
-                            }
-                        }
-
-                        let msgText = "";
-                        if (guestLang === 'en') {
-                            msgText = `Hello ${prenom},\n\nYour stay at Les Ozabris approaches! ${doorCodeInstruction}\n\nYou can access your personalized space and all information regarding your stay here: ${siteUrl}\n\nIf you are traveling with companions and haven't shared their names yet, please let me know so I can personalize your welcome.\n\nAlso, as soon as your ${cottage} is ready, if it's ready before our standard arrival time (15:00), I will send you a message to let you know.\n\nLooking forward to welcoming you,\nJean`;
-                        } else if (guestLang === 'de') {
-                            msgText = `Hallo ${prenom},\n\nIhr Aufenthalt im Les Ozabris rückt näher! ${doorCodeInstruction}\n\nSie können auf Ihren persönlichen Bereich und alle Informationen zu Ihrem Aufenthalt hier zugreifen: ${siteUrl}\n\nFalls Sie in Begleitung reisen und mir die Namen Ihrer Begleitpersonen noch nicht mitgeteilt haben, lassen Sie es mich bitte wissen, damit ich Ihren Empfang persönlich gestalten kann.\n\nIch werde Ihnen außerdem Bescheid geben, sobald Ihr ${cottage} bezugsfertig ist, falls dies vor der regulären Ankunftszeit (15:00 Uhr) der Fall sein sollte.\n\nWir freuen uns darauf, Sie willkommen zu heißen,\nJean`;
-                        } else {
-                            msgText = `Bonjour ${prenom},\n\nVotre séjour aux Ozabris approche ! ${doorCodeInstruction}\n\nVous pouvez accéder à votre espace personnalisé et toutes les informations de votre séjour ici : ${siteUrl}\n\nSi vous êtes accompagné(e), merci de me communiquer tous les prénoms des accompagnants si ces derniers n'ont pas été communiqués lors de votre réservation, afin que je puisse personnaliser votre accueil.\n\nJe ne manquerai pas de vous envoyer un message pour vous prévenir dès que le ${cottage} sera prêt, au cas où il serait disponible avant l'heure officielle d'arrivée (15:00).\n\nAu plaisir de vous accueillir,\nJean`;
-                        }
-                        
-                        const encodedMsg = encodeURIComponent(msgText);
-                        const whatsappLink = tel ? `https://wa.me/${tel}?text=${encodedMsg}` : `https://wa.me/?text=${encodedMsg}`;
-
-                        const btnClass = canSend ? "btn-whatsapp" : "btn-whatsapp disabled";
-                        const btnText = canSend ? "💬 WhatsApp" : "⏳ En attente";
-
-                        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                        const formattedArr = isNaN(arrDate) ? arriveeStr : arrDate.toLocaleDateString('fr-FR', options);
-                        const formattedDep = isNaN(depDate) ? departStr : depDate.toLocaleDateString('fr-FR', options);
-
-                        html += `<div class="admin-arrival-card">
-                            <div class="admin-arrival-card-header">
-                                <strong>${prenom}</strong>
-                                <span style="font-size: 0.82rem; background: #f4eee3; padding: 3px 8px; border-radius: 4px; color: var(--primary); font-weight: 600;">${cottage}</span>
-                            </div>
-                            <div class="admin-arrival-card-body">
-                                <p>📥 <strong>Arrivée :</strong> ${formattedArr}</p>
-                                <p>📤 <strong>Départ :</strong> ${formattedDep}</p>
-                                <p>🔑 <strong>Code PIN :</strong> <code>${pin}</code></p>
-                                <p>🌐 <strong>Langue :</strong> ${guestLang.toUpperCase()}</p>
-                            </div>
-                            <div class="admin-card-actions">
-                                <span style="font-size: 0.75rem; color: #777;">${canSend ? 'Prêt à l\'envoi' : 'Envoi possible J-1'}</span>
-                                <a href="${canSend ? whatsappLink : '#'}" class="${btnClass}" ${canSend ? 'target="_blank"' : ''}>${btnText}</a>
-                            </div>
-                        `;
-                    }
-                });
-
-                if (displayedCount === 0) {
-                    container.innerHTML = `<p style="text-align: center; color: #777; padding: 15px;">Aucune arrivée prévue dans les 7 prochains jours.</p>`;
-                } else {
-                    container.innerHTML = html;
-                }
-            } catch (err) {
-                console.error("Erreur de chargement du planning", err);
-                container.innerHTML = `<p style="text-align: center; color: #b94a48; padding: 15px;">Impossible de charger les arrivées depuis Google Sheets. Vérifiez l'API.</p>`;
-            }
-        }
-
-        function buildCalendarGrid(year, month, cottageKeyword, titleElementId, gridElementId) {
-            const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
-            document.getElementById(titleElementId).innerText = `${monthNames[month]} ${year}`;
-
-            const firstDayIndex = (new Date(year, month, 1).getDay() + 6) % 7;
-            const totalDays = new Date(year, month + 1, 0).getDate();
-
-            let tableHtml = `<table class="calendar-table">
-                <thead>
-                    <tr>
-                        <th>Lun</th><th>Mar</th><th>Mer</th><th>Jeu</th><th>Ven</th><th>Sam</th><th>Dim</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>`;
-
-            let dayCounter = 1;
-            let currentCell = 0;
-
-            for (let i = 0; i < firstDayIndex; i++) {
-                tableHtml += `<td class="empty"></td>`;
-                currentCell++;
-            }
-
-            while (dayCounter <= totalDays) {
-                if (currentCell > 0 && currentCell % 7 === 0) {
-                    tableHtml += `</tr><tr>`;
-                }
-
-                let bookingsHtml = "";
-                if (cachedVoyageurs && cachedVoyageurs.length > 0) {
-                    const currentDateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayCounter).padStart(2, '0')}`;
-                    const currentDateTime = new Date(currentDateStr).setHours(0,0,0,0);
-
-                    cachedVoyageurs.forEach(v => {
-                        const cottageName = String(v.cottage || "").toLowerCase();
-                        if (cottageName.includes(cottageKeyword)) {
-                            const arrStr = v.dateArrivee || v.arrivee;
-                            const depStr = v.dateDepart || v.depart;
-                            if (arrStr && depStr) {
-                                const arrTime = new Date(arrStr).setHours(0,0,0,0);
-                                const depTime = new Date(depStr).setHours(0,0,0,0);
-
-                                if (currentDateTime >= arrTime && currentDateTime <= depTime) {
-                                    const prenom = v.prenom || "Résa";
-                                    bookingsHtml += `<div class="booking-badge" title="${prenom}">${prenom}</div>`;
-                                }
-                            }
-                        }
-                    });
-                }
-
-                tableHtml += `<td>
-                    <span class="day-num">${dayCounter}</span>
-                    <div class="day-notes">${bookingsHtml}</div>
-                </td>`;
-                dayCounter++;
-                currentCell++;
-            }
-
-            while (currentCell % 7 !== 0) {
-                tableHtml += `<td class="empty"></td>`;
-                currentCell++;
-            }
-
-            tableHtml += `</tr></tbody></table>`;
-            document.getElementById(gridElementId).innerHTML = tableHtml;
-        }
-
-        async function buildAllCottageCalendars() {
-            if (!cachedVoyageurs || cachedVoyageurs.length === 0) {
-                try {
-                    const response = await fetch(sheetApiUrl);
-                    cachedVoyageurs = await response.json();
-                } catch(e) {
-                    console.error("Impossible de charger les réservations pour les plannings", e);
-                }
-            }
-
-            const now = new Date();
-            const currentYear = now.getFullYear();
-            const currentMonth = now.getMonth();
-
-            let nextMonth = currentMonth + 1;
-            let nextYear = currentYear;
-            if (nextMonth > 11) {
-                nextMonth = 0;
-                nextYear++;
-            }
-
-            buildCalendarGrid(currentYear, currentMonth, 'ptit', 'ptitzabris-m1-title', 'ptitzabris-m1-grid');
-            buildCalendarGrid(nextYear, nextMonth, 'ptit', 'ptitzabris-m2-title', 'ptitzabris-m2-grid');
-
-            buildCalendarGrid(currentYear, currentMonth, 'grand', 'grandzabris-m1-title', 'grandzabris-m1-grid');
-            buildCalendarGrid(nextYear, nextMonth, 'grand', 'grandzabris-m2-title', 'grandzabris-m2-grid');
-        }
-
-        async function loadGerardPortalData() {
-            if (!cachedVoyageurs || cachedVoyageurs.length === 0) {
-                try {
-                    const response = await fetch(sheetApiUrl);
-                    cachedVoyageurs = await response.json();
-                } catch(e) {
-                    console.error("Impossible de charger les plannings pour Gérard", e);
-                }
-            }
-            renderGerardCalendars();
-        }
-
-        function changeGerardMonth(direction) {
-            if (direction === 0) {
-                const now = new Date();
-                gerardCurrentYear = now.getFullYear();
-                gerardCurrentMonth = now.getMonth();
-            } else {
-                gerardCurrentMonth += direction;
-                if (gerardCurrentMonth > 11) {
-                    gerardCurrentMonth = 0;
-                    gerardCurrentYear++;
-                } else if (gerardCurrentMonth < 0) {
-                    gerardCurrentMonth = 11;
-                    gerardCurrentYear--;
-                }
-            }
-            renderGerardCalendars();
-        }
-
-        function renderGerardCalendars() {
-            const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
-
-            document.getElementById('gerard-ptit-title').innerText = `Le Ptitzabris — ${monthNames[gerardCurrentMonth]} ${gerardCurrentYear}`;
-            document.getElementById('gerard-grand-title').innerText = `Le Grandzabris — ${monthNames[gerardCurrentMonth]} ${gerardCurrentYear}`;
-
-            buildCalendarGridForGerard(gerardCurrentYear, gerardCurrentMonth, 'ptit', 'gerard-ptitzabris-grid');
-            buildCalendarGridForGerard(gerardCurrentYear, gerardCurrentMonth, 'grand', 'gerard-grandzabris-grid');
-        }
-
-        function buildCalendarGridForGerard(year, month, cottageKeyword, gridElementId) {
-            const firstDayIndex = (new Date(year, month, 1).getDay() + 6) % 7;
-            const totalDays = new Date(year, month + 1, 0).getDate();
-
-            let tableHtml = `<table class="calendar-table">
-                <thead>
-                    <tr><th>Lun</th><th>Mar</th><th>Mer</th><th>Jeu</th><th>Ven</th><th>Sam</th><th>Dim</th></tr>
-                </thead>
-                <tbody><tr>`;
-
-            let dayCounter = 1;
-            let currentCell = 0;
-
-            for (let i = 0; i < firstDayIndex; i++) {
-                tableHtml += `<td class="empty"></td>`;
-                currentCell++;
-            }
-
-            while (dayCounter <= totalDays) {
-                if (currentCell > 0 && currentCell % 7 === 0) {
-                    tableHtml += `</tr><tr>`;
-                }
-
-                let bookingsHtml = "";
-                if (cachedVoyageurs && cachedVoyageurs.length > 0) {
-                    const currentDateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayCounter).padStart(2, '0')}`;
-                    const currentDateTime = new Date(currentDateStr).setHours(0,0,0,0);
-
-                    cachedVoyageurs.forEach(v => {
-                        const cottageName = String(v.cottage || "").toLowerCase();
-                        if (cottageName.includes(cottageKeyword)) {
-                            const arrStr = v.dateArrivee || v.arrivee;
-                            const depStr = v.dateDepart || v.depart;
-                            if (arrStr && depStr) {
-                                const arrTime = new Date(arrStr).setHours(0,0,0,0);
-                                const depTime = new Date(depStr).setHours(0,0,0,0);
-
-                                if (currentDateTime >= arrTime && currentDateTime <= depTime) {
-                                    const prenom = v.prenom || "Résa";
-                                    bookingsHtml += `<div class="booking-badge">${prenom}</div>`;
-                                }
-                            }
-                        }
-                    });
-                }
-
-                tableHtml += `<td>
-                    <span class="day-num">${dayCounter}</span>
-                    <div class="day-notes">${bookingsHtml}</div>
-                </td>`;
-                dayCounter++;
-                currentCell++;
-            }
-
-            while (currentCell % 7 !== 0) {
-                tableHtml += `<td class="empty"></td>`;
-                currentCell++;
-            }
-
-            tableHtml += `</tr></tbody></table>`;
-            document.getElementById(gridElementId).innerHTML = tableHtml;
-        }
-
-        function openDatePickerModal(cottage) {
-            selectedCottageForCopy = cottage;
-            const todayStr = new Date().toISOString().split('T')[0];
-            document.getElementById('targetReviewDate').value = todayStr;
-            document.getElementById('date-picker-modal').style.display = 'flex';
-        }
-
-        function closeDatePickerModal() {
-            document.getElementById('date-picker-modal').style.display = 'none';
-        }
-
-        function confirmCopyAvis() {
-            const dateInput = document.getElementById('targetReviewDate').value;
-            closeDatePickerModal();
-            if (!dateInput) return;
-
-            const targetDateLimit = new Date(dateInput).setHours(0,0,0,0);
-
-            fetch(avisApiUrl + "&t=" + new Date().getTime())
-                .then(response => response.text())
-                .then(csvText => {
-                    const rows = [];
-                    let currentRow = [];
-                    let currentField = "";
-                    let inQuotes = false;
-
-                    for (let i = 0; i < csvText.length; i++) {
-                        let c = csvText[i];
-                        let nextC = csvText[i + 1];
-                        if (c === '"') {
-                            if (inQuotes && nextC === '"') { currentField += '"'; i++; }
-                            else { inQuotes = !inQuotes; }
-                        } else if (c === ',' && !inQuotes) {
-                            currentRow.push(currentField.trim());
-                            currentField = "";
-                        } else if ((c === '\r' || c === '\n') && !inQuotes) {
-                            if (c === '\r' && nextC === '\n') { i++; }
-                            currentRow.push(currentField.trim());
-                            if (currentRow.length > 1 || currentRow[0] !== "") rows.push(currentRow);
-                            currentRow = [];
-                            currentField = "";
-                        } else {
-                            currentField += c;
-                        }
-                    }
-                    if (currentField !== "" || currentRow.length > 0) {
-                        currentRow.push(currentField.trim());
-                        rows.push(currentRow);
-                    }
-
-                    if (rows.length > 1) {
-                        const headers = rows[0].map(h => h.toLowerCase().replace(/^"|"$/g, ''));
-                        let cottageTitle = selectedCottageForCopy === 'ptitzabris' ? 'LE PTITZABRIS' : 'LE GRANDZABRIS';
-
-                        let parsedAvis = [];
-
-                        for (let i = 1; i < rows.length; i++) {
-                            const cols = rows[i];
-                            const obj = {};
-                            for (let j = 0; j < headers.length; j++) {
-                                obj[headers[j]] = cols[j] ? cols[j].replace(/^"|"$/g, '').replace(/""/g, '"') : '';
-                            }
-
-                            let auteur = "";
-                            let provenance = "";
-                            let logement = "";
-                            let dateBrute = "";
-                            let commentaire = "";
-                            let note = "5/5";
-
-                            for (let key in obj) {
-                                if (key.includes('prénom') || key.includes('prenom') || key.includes('auteur')) auteur = obj[key];
-                                if (key.includes('provenance') || key.includes('pays') || key.includes('ville')) provenance = obj[key];
-                                if (key.includes('logement') || key.includes('cottage')) logement = obj[key];
-                                if (key.includes('date')) dateBrute = obj[key];
-                                if (key.includes('commentaire') || key.includes('avis') || key.includes('message')) commentaire = obj[key];
-                                if (key.includes('note') || key.includes('notation') || key.includes('étoile')) note = obj[key];
-                            }
-
-                            if (commentaire && logement) {
-                                let logLower = logement.toLowerCase();
-                                let matchCottage = (selectedCottageForCopy === 'ptitzabris' && (logLower.includes('ptit') || logLower.includes('petit'))) ||
-                                                   (selectedCottageForCopy === 'grandzabris' && logLower.includes('grand'));
-
-                                if (matchCottage) {
-                                    let timestamp = 0;
-                                    if (dateBrute) {
-                                        if (dateBrute.includes('/')) {
-                                            const p = dateBrute.split('/');
-                                            if (p.length === 3) timestamp = new Date(`${p[2]}-${p[1]}-${p[0]}`).getTime() || 0;
-                                        } else {
-                                            timestamp = new Date(dateBrute).getTime() || 0;
-                                        }
-                                    }
-                                    parsedAvis.push({ auteur, provenance, dateBrute, timestamp, commentaire, note });
-                                }
-                            }
-                        }
-
-                        let avisFiltres = parsedAvis.filter(a => a.timestamp >= targetDateLimit);
-                        // Tri dans l'ordre croissant (du plus ancien au plus récent)
-                        avisFiltres.sort((a, b) => a.timestamp - b.timestamp);
-
-                        if (avisFiltres.length === 0) {
-                            alert("Aucun avis trouvé à partir de cette date.");
-                            return;
-                        }
-
-                        let formattedText = `=== CHRONIQUE & AVIS AIRBNB : ${cottageTitle} ===\n\n`;
-
-                        avisFiltres.forEach(avis => {
-                            let dateFormatee = avis.dateBrute;
-                            if (avis.dateBrute.includes("-")) {
-                                const p = avis.dateBrute.split("-");
-                                if (p.length === 3) dateFormatee = `${p[2]}/${p[1]}/${p[0]}`;
-                            }
-
-                            let nbEtoiles = 5;
-                            if (avis.note) {
-                                let match = avis.note.match(/(\d+)/);
-                                if (match) nbEtoiles = parseInt(match[1]);
-                            }
-                            let etoilesStr = "⭐".repeat(nbEtoiles);
-
-                            // Mise en forme style Airbnb avec nom/provenance/date en tête
-                            let headerInfo = `— ${avis.auteur || 'Voyageur'}`;
-                            if (avis.provenance) headerInfo += ` (${avis.provenance})`;
-                            if (dateFormatee) headerInfo += ` — ${dateFormatee}`;
-
-                            formattedText += `${headerInfo}\n`;
-                            formattedText += `${etoilesStr}\n`;
-                            formattedText += `“ ${avis.commentaire} ”\n\n----------------------------------------\n\n`;
-                        });
-
-                        navigator.clipboard.writeText(formattedText).then(() => {
-                            const feedback = document.getElementById('copy-feedback');
-                            feedback.innerText = `${avisFiltres.length} avis copié(s) (chronologiques) depuis le ${dateInput} avec succès !`;
-                            feedback.style.display = 'inline';
-                            setTimeout(() => { feedback.style.display = 'none'; }, 4000);
-                        });
-                    }
-                })
-                .catch(err => {
-                    alert("Erreur lors de la copie des avis.");
-                });
-        }
-
-        function printCottage(cottageType) {
-            const contentId = cottageType === 'ptitzabris' ? 'printable-ptitzabris' : 'printable-grandzabris';
-            const sourceHtml = document.getElementById(contentId).innerHTML;
-
-            const printWindow = window.open('', '_blank', 'width=900,height=700');
-            printWindow.document.write(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <meta charset="UTF-8">
-                    <title>Impression Planning</title>
-                    <style>
-                        @page { size: A4 landscape; margin: 8mm; }
-                        body { font-family: 'Playfair Display', serif; background: #fff; padding: 10px; }
-                        .cottage-print-title { text-align: center; font-size: 1.3rem; color: #12263a; margin-bottom: 12px; text-transform: uppercase; font-weight: bold; border-bottom: 2px solid #c5a880; padding-bottom: 6px; }
-                        .month-sub-box { margin-bottom: 15px; }
-                        .month-sub-title { text-align: left; font-size: 1rem; color: #12263a; margin-bottom: 5px; font-weight: bold; }
-                        .calendar-table { width: 100%; border-collapse: collapse; text-align: center; font-size: 0.75rem; }
-                        .calendar-table th { background-color: #12263a !important; -webkit-print-color-adjust: exact; color: white !important; padding: 5px; font-size: 0.7rem; border: 1px solid #12263a; }
-                        .calendar-table td { border: 1px solid #999; height: 68px; vertical-align: top; padding: 3px; width: 14.28%; background: #fff; }
-                        .calendar-table td.empty { background: #f4f4f4 !important; -webkit-print-color-adjust: exact; }
-                        .day-num { font-weight: bold; font-size: 0.8rem; color: #12263a; text-align: right; display: block; margin-bottom: 2px; font-family: sans-serif; }
-                        .day-notes { font-size: 0.68rem; text-align: left; color: #333; line-height: 1.1; }
-                        .booking-badge { background-color: #fdf2e9; border-left: 2px solid #c5a880; padding: 2px 4px; margin-top: 2px; font-size: 0.62rem; font-family: 'Segoe UI', sans-serif; color: #12263a; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-radius: 2px; }
-                    </style>
-                </head>
-                <body>
-                    ${sourceHtml}
-                </body>
-                </html>
-            `);
-            printWindow.document.close();
-            printWindow.focus();
-            setTimeout(() => {
-                printWindow.print();
-                printWindow.close();
-            }, 300);
         }
     </script>
 </body>
 </html>
+```eof
+
+### 📺 Comment configurer tes liens sur tes box TV :
+* **Pour Le Ptitzabris** : `[https://ton-pseudo.github.io/Ozabris_Gites/?gite=ptitzabris&prenom=NomDuVoyageur](https://ton-pseudo.github.io/Ozabris_Gites/?gite=ptitzabris&prenom=NomDuVoyageur)`
+* **Pour Le Grandzabris** : `[https://ton-pseudo.github.io/Ozabris_Gites/?gite=grandzabris&prenom=NomDuVoyageur](https://ton-pseudo.github.io/Ozabris_Gites/?gite=grandzabris&prenom=NomDuVoyageur)`
+
+Enregistre ce code dans ton `index.html` sur GitHub et mets à jour les liens sur tes box TV : tout s'affichera instantanément et de façon totalement autonome !
