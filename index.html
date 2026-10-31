@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenue | Les Ozabris</title>
+    <style>
+        :root { --primary: #12263a; --accent: #c5a880; --text-dark: #2c3e50; --white: #ffffff; --tropical-green: #1b4d3e; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Playfair Display', 'Georgia', serif; }
+        
+        body {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 10px;
+            background: linear-gradient(rgba(18, 38, 58, 0.75), rgba(18, 38, 58, 0.85)), url('fond_page.png') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .tv-card {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 950px;
+            min-height: 88vh;
+            border-radius: 16px;
+            padding: 20px 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border: 2px solid var(--accent);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-align: center;
+            margin: auto;
+            position: relative;
+        }
+
+        header { margin-bottom: 5px; position: relative; }
+        h1 { color: var(--primary); font-size: 2.1rem; font-weight: 400; margin-bottom: 3px; }
+        .subtitle { font-family: 'Segoe UI', sans-serif; font-size: 0.9rem; color: #555; font-style: italic; }
+
+        .admin-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.75rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .admin-btn:hover { background: var(--primary); color: white; }
+
+        .gite-selector {
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            gap: 5px;
+        }
+        .gite-tab {
+            background: #e2e8f0;
+            color: var(--primary);
+            border: 1px solid var(--accent);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.75rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .gite-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .grid-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 10px 0; }
+        .info-box { background: var(--white); border: 1px solid var(--accent); border-radius: 10px; padding: 12px 10px; text-align: center; font-family: 'Segoe UI', sans-serif; }
+        .info-box h3 { font-size: 0.9rem; color: var(--primary); margin-bottom: 6px; }
+        .info-box img { width: 85px; height: 85px; object-fit: contain; margin: 4px auto; display: block; border-radius: 6px; }
+        .info-box p { font-size: 0.75rem; color: #555; }
+
+        .banner-solaire { background: linear-gradient(135deg, rgba(197, 168, 128, 0.2), rgba(27, 77, 62, 0.1)); border-left: 4px solid var(--tropical-green); padding: 10px 15px; border-radius: 6px; font-family: 'Segoe UI', sans-serif; font-size: 0.8rem; color: var(--primary); text-align: center; }
+
+        .footer-images-container {
+            display: flex; justify-content: center; align-items: center; gap: 8px; margin: 6px 0;
+        }
+        .footer-images-container img {
+            width: 60px !important; height: 40px !important; object-fit: cover !important; border-radius: 4px; border: 1px solid var(--accent);
+        }
+
+        .footer-actions { display: flex; flex-direction: column; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 12px; font-family: 'Segoe UI', sans-serif; gap: 6px; }
+        .btn-action { background-color: var(--primary); color: white; padding: 10px 25px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; border: none; text-decoration: none; display: inline-block; }
+        .btn-action:hover { background-color: var(--accent); color: var(--primary); }
+        .remote-tip { font-size: 0.7rem; color: #777; font-style: italic; }
+
+        /* Modals Admin */
+        #admin-modal, #config-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 38, 58, 0.85); justify-content: center; align-items: center; z-index: 1000; font-family: 'Segoe UI', sans-serif;
+        }
+        .modal-content {
+            background: white; padding: 25px; border-radius: 14px; width: 90%; max-width: 480px; text-align: center; border: 2px solid var(--accent); max-height: 90vh; overflow-y: auto;
+        }
+        .modal-content input, .modal-content textarea, .modal-content select {
+            width: 100%; padding: 8px; margin: 6px 0 12px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 0.85rem;
+        }
+        .modal-btn {
+            background: var(--primary); color: white; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 5px;
+        }
+        .modal-btn:hover { background: var(--accent); color: var(--primary); }
+    </style>
+</head>
+<body>
+    <div class="tv-card">
+        <header>
+            <div class="gite-selector">
+                <button id="tab-ptitzabris" class="gite-tab active" onclick="switchGite('ptitzabris')">Le Ptitzabris</button>
+                <button id="tab-grandzabris" class="gite-tab" onclick="switchGite('grandzabris')">Le Grandzabris</button>
+            </div>
+            <button class="admin-btn" onclick="openAdmin()">⚙️ Admin</button>
+            <h1 id="welcome-title">Bienvenue au Ptitzabris !</h1>
+            <p class="subtitle">🌿 Une parenthèse d'exception, de sérénité et de nature au cœur des Hauts de La Réunion.</p>
+        </header>
+
+        <div class="grid-info">
+            <div class="info-box">
+                <h3 id="label-wifi">📶 Wi-Fi Domaine</h3>
+                <img id="img-wifi" src="Wifi.jpeg" alt="WiFi">
+                <p id="text-wifi"><b>SFR_JR</b><br><code>02311760</code></p>
+            </div>
+            <div class="info-box">
+                <h3>♻️ Tri & Déchets</h3>
+                <img id="img-dechets" src="Dechets.png" alt="Dechets">
+                <p>Compost & Poubelles jaunes</p>
+            </div>
+            <div class="info-box" style="background: rgba(255,235,238,0.85);">
+                <h3 style="color: #b94a48;">🚽 Sanibroyeur</h3>
+                <img id="img-sanibroyeur" src="sanibroyeur.png" alt="Sanibroyeur">
+                <p style="color: #b94a48; font-weight: bold;">Papier uniquement !</p>
+            </div>
+        </div>
+
+        <div class="banner-solaire">☀️ <b>Énergie Solaire & Écologie</b> — Lave & Sèche-linge en accès libre (utilisation conseillée <b>en journée</b>).</div>
+        
+        <div class="footer-images-container" id="footer-gallery">
+            <img src="IMG_4812.jpeg" alt="Ozabris">
+            <img src="IMG_4814.jpeg" alt="Ozabris">
+            <img src="IMG_4818.jpeg" alt="Ozabris">
+            <img src="IMG_4819.jpeg" alt="Ozabris">
+            <img src="IMG_4828.jpeg" alt="Ozabris">
+            <img src="IMG_4830.jpeg" alt="Ozabris">
+        </div>
+
+        <div class="footer-actions">
+            <a id="btn-conseils" href="conseils.html" class="btn-action">🌟 Découvrir nos conseils personnalisés</a>
+            <span class="remote-tip">💡 Pour quitter cet écran à tout moment, appuyez sur le bouton <b>Accueil</b> de votre télécommande.</span>
+        </div>
+    </div>
+
+    <!-- Modale Connexion Admin -->
+    <div id="admin-modal">
+        <div class="modal-content" style="max-width: 350px;">
+            <h3>🔒 Accès Administrateur</h3>
+            <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">Entrez votre code PIN</p>
+            <input type="password" id="pin-input" placeholder="Code PIN" maxlength="6" onkeydown="checkEnter(event)">
+            <br>
+            <button class="modal-btn" onclick="verifyPin()">Valider</button>
+            <button class="modal-btn" onclick="closeAdmin()" style="background: #ccc; color: #333; margin-left: 10px;">Annuler</button>
+        </div>
+    </div>
+
+    <!-- Modale Configuration Admin par Gîte -->
+    <div id="config-modal">
+        <div class="modal-content">
+            <h3>⚙️ Configuration du Gîte</h3>
+            
+            <label style="font-size: 0.75rem; font-weight: bold; display: block; text-align: left; color: var(--primary);">Sélectionner le gîte à modifier</label>
+            <select id="cfg-gite-select" onchange="loadAdminDataForSelectedGite()">
+                <option value="ptitzabris">Le Ptitzabris</option>
+                <option value="grandzabris">Le Grandzabris</option>
+            </select>
+
+            <label style="font-size: 0.75rem; font-weight: bold; display: block; text-align: left; color: var(--primary);">Prénom du voyageur actuel</label>
+            <input type="text" id="cfg-prenom" placeholder="Ex: Béatrice (laisser vide si aucun)">
+
+            <label style="font-size: 0.75rem; font-weight: bold; display: block; text-align: left; color: var(--primary);">Lien du bouton Conseils</label>
+            <input type="text" id="cfg-lien" placeholder="Ex: conseils.html">
+
+            <label style="font-size: 0.75rem; font-weight: bold; display: block; text-align: left; color: var(--primary);">Nom de l'image Wi-Fi (QR Code)</label>
+            <input type="text" id="cfg-wifi" placeholder="Wifi.jpeg">
+
+            <label style="font-size: 0.75rem; font-weight: bold; display: block; text-align: left; color: var(--primary);">Nom de l'image Déchets (QR Code)</label>
+            <input type="text" id="cfg-dechets" placeholder="Dechets.png">
+
+            <label style="font-size: 0.75rem; font-weight: bold; display: block; text-align: left; color: var(--primary);">Infos Wi-Fi (Texte descriptif & code)</label>
+            <input type="text" id="cfg-wifitext" placeholder="<b>SFR_JR</b><br><code>02311760</code>">
+
+            <div style="margin-top: 15px;">
+                <button class="modal-btn" onclick="saveConfig()">💾 Enregistrer</button>
+                <button class="modal-btn" onclick="closeConfig()" style="background: #ccc; color: #333; margin-left: 10px;">Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentGite = 'ptitzabris';
+
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const giteParam = urlParams.get('gite');
+            const prenomParam = urlParams.get('prenom');
+
+            if (giteParam && (giteParam === 'ptitzabris' || giteParam === 'grandzabris')) {
+                currentGite = giteParam;
+            }
+            if (prenomParam) {
+                localStorage.setItem(currentGite + '_prenom', prenomParam);
+            }
+
+            renderGite();
+        }
+
+        function switchGite(gite) {
+            currentGite = gite;
+            renderGite();
+        }
+
+        function renderGite() {
+            document.getElementById('tab-ptitzabris').className = 'gite-tab' + (currentGite === 'ptitzabris' ? ' active' : '');
+            document.getElementById('tab-grandzabris').className = 'gite-tab' + (currentGite === 'grandzabris' ? ' active' : '');
+
+            const nomGite = currentGite === 'ptitzabris' ? 'Ptitzabris' : 'Grandzabris';
+            
+            const prenom = localStorage.getItem(currentGite + '_prenom') || '';
+            if (prenom && prenom !== 'unknown' && prenom !== 'none' && prenom.trim() !== '') {
+                document.getElementById('welcome-title').innerText = `Bienvenue ${prenom} au ${nomGite} !`;
+            } else {
+                document.getElementById('welcome-title').innerText = `Bienvenue au ${nomGite} !`;
+            }
+
+            const lien = localStorage.getItem(currentGite + '_lien') || 'conseils.html';
+            document.getElementById('btn-conseils').href = lien;
+
+            const wifiImg = localStorage.getItem(currentGite + '_wifi_img') || 'Wifi.jpeg';
+            document.getElementById('img-wifi').src = wifiImg;
+
+            const dechetsImg = localStorage.getItem(currentGite + '_dechets_img') || 'Dechets.png';
+            document.getElementById('img-dechets').src = dechetsImg;
+
+            const wifiText = localStorage.getItem(currentGite + '_wifi_text') || '<b>SFR_JR</b><br><code>02311760</code>';
+            document.getElementById('text-wifi').innerHTML = wifiText;
+        }
+
+        function openAdmin() {
+            document.getElementById('admin-modal').style.display = 'flex';
+            document.getElementById('pin-input').focus();
+        }
+        function closeAdmin() {
+            document.getElementById('admin-modal').style.display = 'none';
+            document.getElementById('pin-input').value = '';
+        }
+        function checkEnter(event) {
+            if (event.key === 'Enter') verifyPin();
+        }
+        function verifyPin() {
+            const pin = document.getElementById('pin-input').value;
+            if (pin === '140769') {
+                closeAdmin();
+                document.getElementById('cfg-gite-select').value = currentGite;
+                loadAdminDataForSelectedGite();
+                document.getElementById('config-modal').style.display = 'flex';
+            } else {
+                alert('Code PIN incorrect.');
+                document.getElementById('pin-input').value = '';
+            }
+        }
+        function closeConfig() {
+            document.getElementById('config-modal').style.display = 'none';
+        }
+
+        function loadAdminDataForSelectedGite() {
+            const selected = document.getElementById('cfg-gite-select').value;
+            document.getElementById('cfg-prenom').value = localStorage.getItem(selected + '_prenom') || '';
+            document.getElementById('cfg-lien').value = localStorage.getItem(selected + '_lien') || 'conseils.html';
+            document.getElementById('cfg-wifi').value = localStorage.getItem(selected + '_wifi_img') || 'Wifi.jpeg';
+            document.getElementById('cfg-dechets').value = localStorage.getItem(selected + '_dechets_img') || 'Dechets.png';
+            document.getElementById('cfg-wifitext').value = localStorage.getItem(selected + '_wifi_text') || '<b>SFR_JR</b><br><code>02311760</code>';
+        }
+
+        function saveConfig() {
+            const selected = document.getElementById('cfg-gite-select').value;
+            localStorage.setItem(selected + '_prenom', document.getElementById('cfg-prenom').value);
+            localStorage.setItem(selected + '_lien', document.getElementById('cfg-lien').value);
+            localStorage.setItem(selected + '_wifi_img', document.getElementById('cfg-wifi').value);
+            localStorage.setItem(selected + '_dechets_img', document.getElementById('cfg-dechets').value);
+            localStorage.setItem(selected + '_wifi_text', document.getElementById('cfg-wifitext').value);
+
+            alert('Modifications enregistrées avec succès pour le ' + (selected === 'ptitzabris' ? 'Ptitzabris' : 'Grandzabris') + ' !');
+            closeConfig();
+            renderGite();
+        }
+    </script>
+</body>
+</html>
+```eof
+
+Tu n'as plus qu'à copier ce bloc de code dans ton fichier `index.html` sur GitHub. Bon courage pour l'installation finale !
