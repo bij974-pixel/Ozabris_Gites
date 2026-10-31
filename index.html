@@ -78,17 +78,17 @@
         h2 { color: var(--primary); font-size: 1.7rem; font-weight: 400; margin-bottom: 2px; }
         .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.8rem; color: #555; font-style: italic; }
 
-        /* Grille à 3 colonnes pour garder les photos à la bonne taille */
-        .grid-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 10px 0; }
-        .info-box { background: var(--white); border: 1px solid var(--accent); border-radius: 10px; padding: 12px 10px; text-align: center; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; justify-content: space-between; }
-        .info-box h3 { font-size: 0.9rem; color: var(--primary); margin-bottom: 5px; font-family: 'Playfair Display', serif; }
-        .info-box img { width: 80px; height: 80px; object-fit: contain; margin: 4px auto; display: block; border-radius: 6px; border: 1px solid #eee; }
-        .info-box p { font-size: 0.72rem; color: #555; line-height: 1.35; }
+        /* Grille à 4 colonnes pour afficher Wi-Fi, TV, Tri et Sanibroyeur */
+        .grid-info { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 8px 0; }
+        .info-box { background: var(--white); border: 1px solid var(--accent); border-radius: 10px; padding: 10px 8px; text-align: center; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; justify-content: space-between; }
+        .info-box h3 { font-size: 0.82rem; color: var(--primary); margin-bottom: 4px; font-family: 'Playfair Display', serif; }
+        .info-box img { width: 75px; height: 75px; object-fit: cover; margin: 4px auto; display: block; border-radius: 6px; border: 1px solid #eee; }
+        .info-box p { font-size: 0.68rem; color: #555; line-height: 1.3; }
 
-        .banner-solaire { background: linear-gradient(135deg, rgba(197, 168, 128, 0.2), rgba(27, 77, 62, 0.1)); border-left: 4px solid var(--tropical-green); padding: 8px 12px; border-radius: 6px; font-family: 'Segoe UI', sans-serif; font-size: 0.78rem; color: var(--primary); text-align: center; margin: 8px 0; }
+        .banner-solaire { background: linear-gradient(135deg, rgba(197, 168, 128, 0.2), rgba(27, 77, 62, 0.1)); border-left: 4px solid var(--tropical-green); padding: 8px 12px; border-radius: 6px; font-family: 'Segoe UI', sans-serif; font-size: 0.76rem; color: var(--primary); text-align: center; margin: 6px 0; }
 
         .footer-actions { display: flex; flex-direction: column; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 10px; font-family: 'Segoe UI', sans-serif; gap: 6px; }
-        .btn-action { background-color: var(--primary); color: white; padding: 10px 25px; border-radius: 8px; font-weight: 600; font-size: 0.82rem; cursor: pointer; border: none; text-decoration: none; display: inline-block; transition: background 0.2s; }
+        .btn-action { background-color: var(--primary); color: white; padding: 9px 22px; border-radius: 8px; font-weight: 600; font-size: 0.82rem; cursor: pointer; border: none; text-decoration: none; display: inline-block; transition: background 0.2s; }
         .btn-action:hover { background-color: var(--accent); color: var(--primary); }
 
         /* Modals Admin */
@@ -135,8 +135,8 @@
             
             <!-- Box 2 : TV & Box -->
             <div class="info-box">
-                <h3>📺 TV & Divertissement</h3>
-                <img src="https://i.postimg.cc/zfz7HxhN/Image.png" alt="Télécommande TV">
+                <h3>📺 TV & Box</h3>
+                <img src="https://i.postimg.cc/8PzLb2Yn/Image.jpg" alt="Télécommande TV">
                 <p>Appuyez sur le <b>bouton entouré</b>. Pour la TV, choisissez l'appli <b>Orange TV</b>.</p>
             </div>
 
@@ -144,7 +144,14 @@
             <div class="info-box">
                 <h3>♻️ Tri & Déchets</h3>
                 <img id="img-dechets" src="https://i.postimg.cc/kXbdsqRb/IMG-4408.jpg" alt="Dechets">
-                <p id="compost-text">Compost & Poubelles jaunes sur le domaine.</p>
+                <p id="compost-text">Compost & Poubelles jaunes.</p>
+            </div>
+
+            <!-- Box 4 : Sanibroyeur -->
+            <div class="info-box" style="background: rgba(255,235,238,0.85);">
+                <h3 style="color: #b94a48;">🚽 Sanibroyeur</h3>
+                <img src="https://i.postimg.cc/FRZkRwQW/IMG-4415.jpg" alt="Sanibroyeur">
+                <p style="color: #b94a48; font-weight: bold;">Papier uniquement ! Rien d'autre.</p>
             </div>
         </div>
 
@@ -214,7 +221,7 @@
             document.getElementById('display-pass').innerText = savedPass;
             document.getElementById('btn-conseils').href = `conseils.html?gite=${cottageKey}`;
 
-            let compostInfo = cottageKey === "grandzabris" ? "Compost (début passerelle) & Jaunes sur le domaine." : "Compost & Poubelles jaunes sur le domaine.";
+            let compostInfo = cottageKey === "grandzabris" ? "Compost (début passerelle) & Jaunes." : "Compost & Poubelles jaunes.";
             document.getElementById('compost-text').innerText = compostInfo;
 
             try {
