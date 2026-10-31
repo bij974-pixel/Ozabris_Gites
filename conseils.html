@@ -289,7 +289,7 @@
 
         function saveAdviceConfig() {
             const advices = getStoredAdvices();
-            let pendingFiles = 0;
+            let promises = [];
 
             advices.forEach((adv, index) => {
                 adv.active = document.getElementById(`adv-active-${index}`).checked;
@@ -303,27 +303,24 @@
 
                 const fileInput = document.getElementById(`adv-file-${index}`);
                 if (fileInput.files && fileInput.files[0]) {
-                    pendingFiles++;
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        adv.img = e.target.result;
-                        pendingFiles--;
-                        if (pendingFiles === 0) finalizeSave(advices);
-                    };
-                    reader.readAsDataURL(fileInput.files[0]);
+                    const p = new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            adv.img = e.target.result;
+                            resolve();
+                        };
+                        reader.readAsDataURL(fileInput.files[0]);
+                    });
+                    promises.push(p);
                 }
             });
 
-            if (pendingFiles === 0) {
-                finalizeSave(advices);
-            }
-        }
-
-        function finalizeSave(advices) {
-            localStorage.setItem('ozabris_custom_10_advices', JSON.stringify(advices));
-            alert('Conseils personnalisés mis à jour avec succès !');
-            closeConfigModal();
-            renderAdvices();
+            Promise.all(promises).then(() => {
+                localStorage.setItem('ozabris_custom_10_advices', JSON.stringify(advices));
+                alert('Conseils personnalisés mis à jour avec succès !');
+                closeConfigModal();
+                renderAdvices();
+            });
         }
     </script>
 </body>
