@@ -275,7 +275,10 @@
                     <textarea id="adv-text-${index}" placeholder="Texte">${adv.text}</textarea>
                     
                     <label style="font-size: 0.68rem; font-weight: bold; color: #555; display: block; margin-top: 2px;">Photo (Fichier ou URL)</label>
-                    <input type="file" id="adv-file-${index}" accept="image/*" style="font-size: 0.68rem; margin-bottom: 2px;">
+                    <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 2px;">
+                        <input type="file" id="adv-file-${index}" accept="image/*" style="font-size: 0.68rem; margin: 0; flex-grow: 1;">
+                        <button type="button" onclick="clearAdviceImage(${index})" title="Supprimer la photo" style="background: #b94a48; color: white; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer; font-size: 0.75rem;">🗑️ Vider</button>
+                    </div>
                     <input type="text" id="adv-img-${index}" value="${adv.img}" placeholder="Ou URL image directe" style="margin-bottom: 4px;">
 
                     <div style="display: flex; gap: 6px;">
@@ -285,6 +288,12 @@
                 `;
                 listContainer.appendChild(group);
             });
+        }
+
+        function clearAdviceImage(index) {
+            document.getElementById(`adv-file-${index}`).value = "";
+            document.getElementById(`adv-img-${index}`).value = "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg";
+            alert("Photo vidée pour cet encadré. Piquez sur 'Enregistrer' pour valider.");
         }
 
         function saveAdviceConfig() {
@@ -309,9 +318,7 @@
                             adv.img = e.target.result;
                             resolve();
                         };
-                        reader.onerror = function() {
-                            resolve(); // Continue même si une image échoue
-                        };
+                        reader.onerror = () => resolve();
                         reader.readAsDataURL(fileInput.files[0]);
                     });
                     promises.push(p);
@@ -321,11 +328,6 @@
             Promise.all(promises).then(() => {
                 localStorage.setItem('ozabris_custom_10_advices', JSON.stringify(advices));
                 alert('Conseils personnalisés mis à jour avec succès !');
-                closeConfigModal();
-                renderAdvices();
-            }).catch(() => {
-                localStorage.setItem('ozabris_custom_10_advices', JSON.stringify(advices));
-                alert('Conseils mis à jour avec succès !');
                 closeConfigModal();
                 renderAdvices();
             });
