@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conseils Personnalisés | Les Ozabris</title>
+    <style>
+        :root { --primary: #12263a; --accent: #c5a880; --text-dark: #2c3e50; --white: #ffffff; --tropical-green: #1b4d3e; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Playfair Display', 'Georgia', serif; }
+        
+        body {
+            width: 100vw;
+            min-height: 100vh;
+            margin: 0;
+            padding: 10px;
+            background: linear-gradient(rgba(18, 38, 58, 0.75), rgba(18, 38, 58, 0.85)), url('fond_page.png') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        header { 
+            background: var(--primary);
+            text-align: center; 
+            padding: 25px 20px 20px 20px; 
+            border-bottom: 2px solid var(--accent); 
+            position: relative; 
+            color: var(--white);
+            width: 100%;
+            max-width: 950px;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            border: 2px solid var(--accent);
+            border-bottom: none;
+        }
+
+        .header-top-controls { position: absolute; top: 12px; right: 15px; }
+        .btn-admin {
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.75rem;
+            background: var(--accent);
+            border: 1px solid var(--accent);
+            color: var(--primary);
+            padding: 5px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-admin:hover { background: var(--white); }
+
+        .brand-logo-container { max-width: 120px; margin: 0 auto 8px auto; overflow: hidden; display: flex; align-items: center; justify-content: center; border-radius: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border: 2px solid var(--accent); }
+        .brand-logo-container img { width: 100%; height: auto; object-fit: contain; display: block; }
+        
+        .logo-text { font-size: 1.8rem; font-weight: 300; letter-spacing: 3px; color: var(--white); text-transform: uppercase; margin-bottom: 2px; }
+        .subtitle { font-family: 'Segoe UI', sans-serif; font-size: 0.7rem; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; display: block; }
+
+        .tv-card {
+            background: rgba(255, 255, 255, 0.98);
+            width: 100%;
+            max-width: 950px;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            padding: 20px 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border: 2px solid var(--accent);
+            border-top: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-align: center;
+            margin: auto;
+            position: relative;
+        }
+
+        .card-header { margin-bottom: 15px; }
+        h2 { color: var(--primary); font-size: 1.8rem; font-weight: 400; margin-bottom: 3px; }
+        .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.85rem; color: #555; font-style: italic; }
+
+        .advice-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 15px; }
+        .advice-box { background: var(--white); border: 1px solid var(--accent); border-radius: 10px; padding: 15px; text-align: left; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; justify-content: space-between; }
+        .advice-box h3 { font-size: 0.95rem; color: var(--primary); margin-bottom: 6px; font-family: 'Playfair Display', serif; }
+        .advice-box p { font-size: 0.8rem; color: #555; margin-bottom: 8px; }
+        .advice-box img { width: 100%; height: 110px; object-fit: cover; border-radius: 6px; border: 1px solid #eee; margin-top: 6px; }
+        .advice-box a { color: var(--primary); font-weight: bold; text-decoration: underline; font-size: 0.8rem; }
+
+        .footer-actions { display: flex; justify-content: center; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 12px; font-family: 'Segoe UI', sans-serif; }
+        .btn-action { background-color: var(--primary); color: white; padding: 10px 25px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; border: none; text-decoration: none; display: inline-block; transition: background 0.2s; }
+        .btn-action:hover { background-color: var(--accent); color: var(--primary); }
+
+        /* Modals Admin */
+        #admin-modal, #config-admin-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 38, 58, 0.85); justify-content: center; align-items: center; z-index: 1000; font-family: 'Segoe UI', sans-serif;
+        }
+        .modal-content {
+            background: white; padding: 25px; border-radius: 14px; width: 90%; max-width: 480px; text-align: center; border: 2px solid var(--accent); max-height: 90vh; overflow-y: auto;
+        }
+        .modal-content input[type="text"], .modal-content textarea {
+            width: 100%; padding: 8px; margin: 4px 0 10px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 0.8rem;
+        }
+        .modal-content textarea { resize: none; height: 55px; }
+        .modal-btn {
+            background: var(--primary); color: white; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 5px;
+        }
+        .modal-btn:hover { background: var(--accent); color: var(--primary); }
+        .advice-config-group { background: #fdfbf7; border: 1px solid var(--accent); padding: 10px; border-radius: 8px; margin-bottom: 10px; text-align: left; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-top-controls">
+            <button type="button" class="btn-admin" onclick="openPinModal()">⚙️ Admin</button>
+        </div>
+        <div class="brand-logo-container">
+            <img src="https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg" alt="Les Ozabris Logo">
+        </div>
+        <h1 class="logo-text">Les Ozabris</h1>
+        <span class="subtitle">Cottages de Prestige & Perles Rares • La Réunion</span>
+    </header>
+
+    <div class="tv-card">
+        <div class="card-header">
+            <h2>Conseils & Recommandations</h2>
+            <p class="welcome-sub">🌿 Tout pour découvrir La Réunion et profiter pleinement de votre séjour aux Ozabris.</p>
+        </div>
+
+        <div class="advice-grid" id="advice-grid-container">
+            <!-- Les encadrés s'afficheront dynamiquement ici selon les cases cochées dans l'admin -->
+        </div>
+        
+        <div class="footer-actions">
+            <a id="back-home-btn" href="index.html" class="btn-action">🏠 Retour à l'accueil</a>
+        </div>
+    </div>
+
+    <!-- Étape 1 : Demande du PIN Admin -->
+    <div id="admin-modal">
+        <div class="modal-content" style="max-width: 320px;">
+            <button type="button" onclick="closePinModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
+            <h3>🔒 Accès Admin</h3>
+            <p style="font-size: 0.8rem; color: #666; margin: 5px 0;">Code PIN de sécurité</p>
+            <input type="password" id="adminPin" placeholder="PIN" maxlength="6">
+            <button type="button" class="modal-btn" onclick="verifyPin()">Valider</button>
+            <p id="adminError" style="color: #b94a48; font-size: 0.75rem; margin-top: 8px; display: none;">Code incorrect</p>
+        </div>
+    </div>
+
+    <!-- Étape 2 : Configuration Admin des Conseils (Cases à cocher, photos, textes, liens) -->
+    <div id="config-admin-modal">
+        <div class="modal-content">
+            <button type="button" onclick="closeConfigModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
+            <h3>⚙️ Gestion des Conseils</h3>
+            <p style="font-size: 0.75rem; color: #666; margin-bottom: 10px;">Cochez pour afficher l'encadré, modifiez son contenu et ajoutez vos liens ou photos.</p>
+            
+            <div id="admin-advice-list">
+                <!-- Généré dynamiquement en JS -->
+            </div>
+
+            <button type="button" class="modal-btn" onclick="saveAdviceConfig()">💾 Enregistrer</button>
+        </div>
+    </div>
+
+    <script>
+        const defaultAdvices = [
+            { id: 1, active: true, title: "🌊 État du Lagon & Sécurité", text: "Matinée lumineuse idéale pour le lagon de l'Ermitage ou une balade dans les Hauts. Profitez bien de votre journée !", img: "https://i.postimg.cc/7L2PvXzp/IMG-4328.jpg", linkText: "", linkUrl: "" },
+            { id: 2, active: true, title: "🚗 Location & Infos Routes", text: "Anticipez vos montées vers les cirques (Cilaos, Mafate, Salazie) de préférence tôt le matin pour profiter d'un ciel dégagé.", img: "https://i.postimg.cc/m227V1Jq/IMG-4249.jpg", linkText: "", linkUrl: "" },
+            { id: 3, active: true, title: "🥖 Boulangerie & Commerces", text: "Retrouvez toutes les adresses de proximité à La Saline pour vos courses quotidiennes et pains frais.", img: "https://i.postimg.cc/2jTZq8yF/IMG-4380.jpg", linkText: "", linkUrl: "" },
+            { id: 4, active: true, title: "🍽️ Nos Bonnes Tables & Restaurants", text: "Envie d'un bon cari réunionnais ou d'une table raffinée ? Laissez-vous tenter par nos coups de cœur de l'île.", img: "https://i.postimg.cc/13yj8PKc/Image.jpg", linkText: "", linkUrl: "" }
+        ];
+
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const giteParam = urlParams.get('gite') || 'ptitzabris';
+            document.getElementById('back-home-btn').href = `index.html?gite=${giteParam}`;
+
+            renderAdvices();
+
+            const adminPin = document.getElementById('adminPin');
+            if (adminPin) {
+                adminPin.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') verifyPin();
+                });
+            }
+        }
+
+        function getStoredAdvices() {
+            const saved = localStorage.getItem('ozabris_custom_advices');
+            if (saved) {
+                try { return JSON.parse(saved); } catch(e) {}
+            }
+            return defaultAdvices;
+        }
+
+        function renderAdvices() {
+            const advices = getStoredAdvices();
+            const container = document.getElementById('advice-grid-container');
+            container.innerHTML = "";
+
+            advices.forEach(adv => {
+                if (adv.active) {
+                    const box = document.createElement('div');
+                    box.className = 'advice-box';
+                    
+                    let linkHtml = "";
+                    if (adv.linkUrl && adv.linkText) {
+                        linkHtml = `<p style="margin-top: 6px;"><a href="${adv.linkUrl}" target="_blank">${adv.linkText} ↗</a></p>`;
+                    }
+
+                    box.innerHTML = `
+                        <div>
+                            <h3>${adv.title}</h3>
+                            <p>${adv.text}</p>
+                            ${linkHtml}
+                        </div>
+                        <img src="${adv.img}" alt="${adv.title}">
+                    `;
+                    container.appendChild(box);
+                }
+            });
+        }
+
+        function openPinModal() {
+            document.getElementById('admin-modal').style.display = 'flex';
+            document.getElementById('adminPin').focus();
+        }
+        function closePinModal() {
+            document.getElementById('admin-modal').style.display = 'none';
+            document.getElementById('adminError').style.display = 'none';
+            document.getElementById('adminPin').value = '';
+        }
+        function verifyPin() {
+            const pin = document.getElementById('adminPin').value.trim();
+            if (pin === '140769') {
+                closePinModal();
+                document.getElementById('config-admin-modal').style.display = 'flex';
+                buildAdminAdviceForm();
+            } else {
+                document.getElementById('adminError').style.display = 'block';
+                document.getElementById('adminPin').value = '';
+            }
+        }
+        function closeConfigModal() {
+            document.getElementById('config-admin-modal').style.display = 'none';
+        }
+
+        function buildAdminAdviceForm() {
+            const advices = getStoredAdvices();
+            const listContainer = document.getElementById('admin-advice-list');
+            listContainer.innerHTML = "";
+
+            advices.forEach((adv, index) => {
+                const group = document.createElement('div');
+                group.className = 'advice-config-group';
+                group.innerHTML = `
+                    <label style="display: flex; align-items: center; gap: 8px; font-weight: bold; color: var(--primary); cursor: pointer; margin-bottom: 6px;">
+                        <input type="checkbox" id="adv-active-${index}" ${adv.active ? 'checked' : ''} style="width: 16px; height: 16px;">
+                        Afficher l'encadré ${index + 1}
+                    </label>
+                    <input type="text" id="adv-title-${index}" value="${adv.title}" placeholder="Titre de l'encadré">
+                    <textarea id="adv-text-${index}" placeholder="Texte de conseil">${adv.text}</textarea>
+                    
+                    <label style="font-size: 0.7rem; font-weight: bold; color: #555; display: block; margin-top: 4px;">Photo (Importer depuis vos photos ou coller un lien URL)</label>
+                    <input type="file" id="adv-file-${index}" accept="image/*" style="font-size: 0.7rem; margin-bottom: 4px;">
+                    <input type="text" id="adv-img-${index}" value="${adv.img}" placeholder="Ou lien image direct">
+
+                    <div style="display: flex; gap: 8px; margin-top: 4px;">
+                        <input type="text" id="adv-linktext-${index}" value="${adv.linkText || ''}" placeholder="Nom du lien web (ex: Réserver)" style="margin: 0;">
+                        <input type="text" id="adv-linkurl-${index}" value="${adv.linkUrl || ''}" placeholder="URL du lien (https://...)" style="margin: 0;">
+                    </div>
+                `;
+                listContainer.appendChild(group);
+            });
+        }
+
+        function saveAdviceConfig() {
+            const advices = getStoredAdvices();
+            let pendingFiles = 0;
+
+            advices.forEach((adv, index) => {
+                adv.active = document.getElementById(`adv-active-${index}`).checked;
+                adv.title = document.getElementById(`adv-title-${index}`).value;
+                adv.text = document.getElementById(`adv-text-${index}`).value;
+                adv.linkText = document.getElementById(`adv-linktext-${index}`).value;
+                adv.linkUrl = document.getElementById(`adv-linkurl-${index}`).value;
+                
+                const manualUrl = document.getElementById(`adv-img-${index}`).value.trim();
+                if (manualUrl) adv.img = manualUrl;
+
+                const fileInput = document.getElementById(`adv-file-${index}`);
+                if (fileInput.files && fileInput.files[0]) {
+                    pendingFiles++;
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        adv.img = e.target.result;
+                        pendingFiles--;
+                        if (pendingFiles === 0) finalizeSave(advices);
+                    };
+                    reader.readAsDataURL(fileInput.files[0]);
+                }
+            });
+
+            if (pendingFiles === 0) {
+                finalizeSave(advices);
+            }
+        }
+
+        function finalizeSave(advices) {
+            localStorage.setItem('ozabris_custom_advices', JSON.stringify(advices));
+            alert('Conseils personnalisés mis à jour avec succès !');
+            closeConfigModal();
+            renderAdvices();
+        }
+    </script>
+</body>
+</html>
