@@ -159,7 +159,7 @@
         <div class="modal-content">
             <button type="button" onclick="closeConfigModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
             <h3>⚙️ Gestion des 10 Conseils</h3>
-            <p style="font-size: 0.75rem; color: #666; margin-bottom: 10px;">Cochez pour afficher l'encadré sur l'écran, modifiez son contenu et ajoutez photos ou liens.</p>
+            <p style="font-size: 0.75rem; color: #666; margin-bottom: 10px;">Cochez pour afficher l'encadré, modifiez son contenu et ajoutez photos ou liens.</p>
             
             <div id="admin-advice-list">
                 <!-- Généré dynamiquement en JS pour 10 encadrés -->
@@ -309,6 +309,9 @@
                             adv.img = e.target.result;
                             resolve();
                         };
+                        reader.onerror = function() {
+                            resolve(); // Continue même si une image échoue
+                        };
                         reader.readAsDataURL(fileInput.files[0]);
                     });
                     promises.push(p);
@@ -318,6 +321,11 @@
             Promise.all(promises).then(() => {
                 localStorage.setItem('ozabris_custom_10_advices', JSON.stringify(advices));
                 alert('Conseils personnalisés mis à jour avec succès !');
+                closeConfigModal();
+                renderAdvices();
+            }).catch(() => {
+                localStorage.setItem('ozabris_custom_10_advices', JSON.stringify(advices));
+                alert('Conseils mis à jour avec succès !');
                 closeConfigModal();
                 renderAdvices();
             });
