@@ -13,144 +13,102 @@
             --white: #ffffff;
             --tropical-green: #1b4d3e;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Playfair Display', 'Didot', 'Georgia', serif; }
-        body { background-color: var(--bg-light); color: var(--text-dark); line-height: 1.8; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Playfair Display', 'Georgia', serif; }
+        
+        body { 
+            background-color: var(--bg-light); 
+            color: var(--text-dark); 
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
         
         header { 
             background: var(--primary);
             text-align: center; 
-            padding: 40px 20px 30px 20px; 
+            padding: 30px 20px 25px 20px; 
             border-bottom: 2px solid var(--accent); 
             position: relative; 
             color: var(--white);
         }
         
-        .header-top-controls { 
-            position: absolute; 
-            top: 15px; 
-            right: 15px; 
-        }
-        
+        .header-top-controls { position: absolute; top: 12px; right: 15px; }
         .btn-admin {
             font-family: 'Segoe UI', sans-serif;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             background: var(--accent);
             border: 1px solid var(--accent);
             color: var(--primary);
-            padding: 6px 14px;
+            padding: 5px 12px;
             border-radius: 20px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.3s ease;
         }
         .btn-admin:hover { background: var(--white); }
 
-        #admin-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(18, 38, 58, 0.85);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .brand-logo-container { max-width: 180px; margin: 0 auto 15px auto; overflow: hidden; display: flex; align-items: center; justify-content: center; border-radius: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border: 2px solid var(--accent); }
+        .brand-logo-container { max-width: 130px; margin: 0 auto 10px auto; overflow: hidden; display: flex; align-items: center; justify-content: center; border-radius: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border: 2px solid var(--accent); }
         .brand-logo-container img { width: 100%; height: auto; object-fit: contain; display: block; }
         
-        .logo-text { font-size: 2.5rem; font-weight: 300; letter-spacing: 6px; color: var(--white); text-transform: uppercase; margin-bottom: 3px; }
-        .subtitle { font-family: 'Segoe UI', sans-serif; font-size: 0.85rem; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; margin-bottom: 15px; font-weight: 600; display: block; }
+        .logo-text { font-size: 2rem; font-weight: 300; letter-spacing: 4px; color: var(--white); text-transform: uppercase; margin-bottom: 2px; }
+        .subtitle { font-family: 'Segoe UI', sans-serif; font-size: 0.75rem; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; font-weight: 600; display: block; }
         
-        .tagline { font-style: italic; color: #eae5db; max-width: 650px; margin: 0 auto; padding-top: 15px; border-top: 1px solid rgba(197,168,128,0.3); font-size: 0.95rem; }
-        
-        .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
-        
-        .oz-card {
-            background: #ffffff;
-            padding: 30px;
+        .main-container {
+            max-width: 1000px;
+            width: 95%;
+            margin: 25px auto;
+            padding: 0 10px;
+        }
+
+        .tv-card {
+            background: rgba(255, 255, 255, 0.98);
             border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            width: 100%;
-            max-width: 450px;
-            margin: 0 auto;
-            text-align: center;
-            border: 1px solid var(--accent);
-            position: relative;
-        }
-        .oz-card h3 { color: var(--primary); font-size: 1.3rem; margin-bottom: 12px; font-weight: 400; font-family: 'Playfair Display', serif; }
-        .oz-card p { font-family: 'Segoe UI', sans-serif; font-size: 0.85rem; color: #666; margin-bottom: 20px; }
-        
-        .oz-input {
-            width: 100%;
-            padding: 12px;
-            font-size: 1rem;
-            border: 1px solid #dcdde1;
-            border-radius: 8px;
-            box-sizing: border-box;
-            margin-bottom: 15px;
-            text-align: center;
-            font-family: 'Segoe UI', sans-serif;
-        }
-        .oz-btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 0.85rem;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-family: 'Segoe UI', sans-serif;
-            transition: background 0.2s;
-        }
-        .oz-btn:hover { background-color: var(--accent); color: var(--primary); }
-        .error-msg { color: #b94a48; font-size: 0.8rem; margin-top: 12px; display: none; font-family: 'Segoe UI', sans-serif; }
-        .close-modal-btn { position: absolute; top: 12px; right: 15px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #888; }
-        .close-modal-btn:hover { color: var(--primary); }
-
-        /* Portail affiché automatiquement */
-        #guest-portal {
-            background: var(--white);
+            padding: 25px 30px;
+            box-shadow: 0 15px 35px rgba(18, 38, 58, 0.15);
             border: 2px solid var(--accent);
-            border-radius: 14px;
-            padding: 30px;
-            max-width: 900px;
-            margin: 0 auto;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            text-align: left;
-        }
-        .welcome-title { color: var(--primary); font-size: 2rem; margin-bottom: 8px; text-align: center; font-weight: 300; }
-        
-        .guide-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-top: 25px; font-family: 'Segoe UI', sans-serif; }
-        .guide-box { background: var(--bg-light); border: 1px solid #f0eadec; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; }
-        .guide-box h5 { color: var(--primary); font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; font-family: 'Playfair Display', serif; border-bottom: 1px solid var(--accent); padding-bottom: 6px; }
-        .guide-box p { font-size: 0.85rem; color: #555; margin-bottom: 8px; }
-        
-        .wifi-img-box { text-align: center; background: #fff; padding: 12px; border-radius: 8px; border: 1px dashed var(--accent); margin-top: 10px; }
-        .wifi-img-box img { max-width: 100%; height: auto; max-height: 180px; object-fit: contain; display: block; margin: 0 auto; border-radius: 6px; }
-
-        .banner-solaire {
-            background: linear-gradient(135deg, rgba(197, 168, 128, 0.2), rgba(27, 77, 62, 0.1));
-            border-left: 4px solid var(--tropical-green);
-            padding: 12px 18px;
-            border-radius: 6px;
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 0.85rem;
-            color: var(--primary);
             text-align: center;
-            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
-        footer { background-color: var(--primary); color: #eae5db; text-align: center; padding: 40px 20px; margin-top: 60px; font-size: 0.85rem; border-top: 3px solid var(--accent); font-family: 'Segoe UI', sans-serif; }
+        .card-header h2 { color: var(--primary); font-size: 1.9rem; font-weight: 400; margin-bottom: 4px; }
+        .card-header .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.85rem; color: #555; font-style: italic; }
+
+        .grid-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .info-box { background: var(--white); border: 1px solid var(--accent); border-radius: 10px; padding: 12px; text-align: center; font-family: 'Segoe UI', sans-serif; }
+        .info-box h3 { font-size: 0.85rem; color: var(--primary); margin-bottom: 6px; }
+        .info-box img { width: 90px; height: 90px; object-fit: contain; margin: 4px auto; display: block; border-radius: 6px; }
+        .info-box p { font-size: 0.75rem; color: #555; }
+
+        .banner-solaire { background: linear-gradient(135deg, rgba(197, 168, 128, 0.2), rgba(27, 77, 62, 0.1)); border-left: 4px solid var(--tropical-green); padding: 10px 15px; border-radius: 6px; font-family: 'Segoe UI', sans-serif; font-size: 0.8rem; color: var(--primary); text-align: center; }
+
+        .footer-images-container {
+            display: flex; justify-content: center; align-items: center; gap: 8px; margin: 5px 0;
+        }
+        .footer-images-container img {
+            width: 65px !important; height: 45px !important; object-fit: cover !important; border-radius: 6px; border: 1px solid var(--accent);
+        }
+
+        .footer-actions { display: flex; justify-content: center; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 15px; font-family: 'Segoe UI', sans-serif; }
+        .btn-action { background-color: var(--primary); color: white; padding: 10px 22px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; border: none; text-decoration: none; display: inline-block; transition: background 0.2s; }
+        .btn-action:hover { background-color: var(--accent); color: var(--primary); }
+
+        footer { background-color: var(--primary); color: #eae5db; text-align: center; padding: 25px 20px; font-size: 0.8rem; border-top: 3px solid var(--accent); font-family: 'Segoe UI', sans-serif; margin-top: 40px; }
+
+        #admin-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 38, 58, 0.85); z-index: 9999; justify-content: center; align-items: center; padding: 20px; font-family: 'Segoe UI', sans-serif;
+        }
+        .modal-content { background: white; padding: 25px; border-radius: 14px; width: 90%; max-width: 360px; text-align: center; border: 2px solid var(--accent); }
+        .modal-content input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 0.9rem; text-align: center; }
+        .modal-btn { background: var(--primary); color: white; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .modal-btn:hover { background: var(--accent); color: var(--primary); }
     </style>
 </head>
 <body>
 
-    <header id="top-header">
+    <header>
         <div class="header-top-controls">
             <button type="button" class="btn-admin" onclick="openAdminModal()">⚙️ Admin</button>
         </div>
@@ -160,135 +118,152 @@
         </div>
         <h1 class="logo-text">Les Ozabris</h1>
         <span class="subtitle">Cottages de Prestige & Perles Rares • La Réunion</span>
-        
-        <div class="tagline">"Une parenthèse d'exception, de sérénité absolue et d'excellence dans les Hauts de l'Île."</div>
     </header>
 
-    <!-- Modale Connexion Admin (Optionnelle) -->
     <div id="admin-modal">
-        <div class="oz-card" style="max-width: 360px;">
-            <button type="button" class="close-modal-btn" onclick="closeAdminModal()">✕</button>
-            <h3>🔒 Accès Administrateur</h3>
-            <p>Entrez votre code PIN de sécurité</p>
-            <input type="password" id="adminPin" class="oz-input" placeholder="Code PIN" maxlength="6">
-            <button type="button" class="oz-btn" onclick="checkAdminPin()">Valider</button>
-            <div id="adminErrorMsg" class="error-msg">Code PIN incorrect.</div>
+        <div class="modal-content">
+            <button type="button" onclick="closeAdminModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
+            <h3>🔒 Accès Admin</h3>
+            <p style="font-size: 0.8rem; color: #666; margin: 5px 0;">Code PIN de sécurité</p>
+            <input type="password" id="adminPin" placeholder="PIN" maxlength="6">
+            <button type="button" class="modal-btn" onclick="checkAdminPin()">Valider</button>
+            <p id="adminError" style="color: #b94a48; font-size: 0.75rem; margin-top: 8px; display: none;">Code incorrect</p>
         </div>
     </div>
 
-    <div class="container">
-        <!-- PORTAIL AFFICHÉ AUTOMATISÉ PAR LE LIEN -->
-        <div id="guest-portal">
-            <h2 class="welcome-title" id="welcome-message">Bienvenue aux Ozabris !</h2>
-            <p id="cottage-subtitle" style="text-align: center; font-family: 'Segoe UI', sans-serif; color: var(--accent); font-weight: 600; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem;">Cottage</p>
-            
+    <div class="main-container">
+        <div class="tv-card">
+            <div class="card-header">
+                <h2 id="welcome-title">Bienvenue !</h2>
+                <p class="welcome-sub">🌿 Une parenthèse d'exception, de sérénité et de nature au cœur des Hauts de La Réunion.</p>
+            </div>
+
+            <div class="grid-info">
+                <div class="info-box">
+                    <h3>📶 Wi-Fi Domaine</h3>
+                    <img id="img-wifi" src="https://i.postimg.cc/NMsgCSvQ/IMG-4404.jpg" alt="WiFi">
+                    <p><b>SFR_JR</b><br><code>02311760</code></p>
+                </div>
+                <div class="info-box">
+                    <h3>♻️ Tri & Déchets</h3>
+                    <img id="img-dechets" src="https://i.postimg.cc/kXbdsqRb/IMG-4408.jpg" alt="Dechets">
+                    <p id="compost-text">Compost & Poubelles jaunes</p>
+                </div>
+                <div class="info-box" style="background: rgba(255,235,238,0.85);">
+                    <h3 style="color: #b94a48;">🚽 Sanibroyeur</h3>
+                    <img src="https://i.postimg.cc/FRZkRwQW/IMG-4415.jpg" alt="Sanibroyeur">
+                    <p style="color: #b94a48; font-weight: bold;">Papier uniquement !</p>
+                </div>
+            </div>
+
             <div class="banner-solaire">
                 ☀️ <b>Énergie Solaire & Écologie</b> — Lave & Sèche-linge en accès libre (utilisation conseillée <b>en journée</b>).
             </div>
 
-            <div class="guide-grid">
-                <div class="guide-box">
-                    <div>
-                        <h5>📶 Connexion Wi-Fi</h5>
-                        <p style="font-size: 0.85rem; font-weight: bold; color: var(--primary);">Réseau : SFR_JR</p>
-                    </div>
-                    <div class="wifi-img-box">
-                        <img id="wifi-qr-img" src="" alt="QR Code Wifi">
-                        <p style="font-size: 0.75rem; color: #555; margin-top: 6px;">Scannez pour vous connecter</p>
-                    </div>
-                </div>
+            <div class="footer-images-container">
+                <img src="https://i.postimg.cc/2jTZq8yF/IMG-4380.jpg" alt="Ozabris">
+                <img src="https://i.postimg.cc/m227V1Jq/IMG-4249.jpg" alt="Ozabris">
+                <img src="https://i.postimg.cc/13yj8PKc/Image.jpg" alt="Ozabris">
+                <img src="https://i.postimg.cc/nLTyZyH0/3792.jpg" alt="Ozabris">
+                <img src="https://i.postimg.cc/LsbMLcrY/IMG-4257.jpg" alt="Ozabris">
+            </div>
 
-                <div class="guide-box">
-                    <div>
-                        <h5>♻️ Consignes Poubelles & Compost</h5>
-                        <p style="font-size: 0.83rem;">Le tri sélectif est de rigueur. Une petite poubelle est à votre disposition sur votre terrasse pour vos déchets organiques.</p>
-                        <div style="background:#fdfbf7; padding:8px; border-radius:4px; font-size:0.78rem; border:1px solid var(--accent); margin-top: 6px;">
-                            🌱 <strong id="compost-location-text">Emplacement du compost</strong>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="guide-box">
-                    <div>
-                        <h5>🚽 Utilisation Sanibroyeur</h5>
-                        <p style="color: #b94a48; font-weight: bold; font-size: 0.83rem;">⚠️ Papier toilette uniquement ! Interdiction formelle de jeter lingettes ou protections.</p>
-                    </div>
-                    <div class="wifi-img-box">
-                        <img src="https://i.postimg.cc/FRZkRwQW/IMG-4415.jpg" alt="Consignes Sanibroyeur" style="max-height: 120px;">
-                    </div>
-                </div>
+            <div class="footer-actions">
+                <a id="btn-conseils" href="conseils.html" class="btn-action">🌟 Découvrir nos conseils personnalisés</a>
             </div>
         </div>
     </div>
 
     <footer>
         <p>Les Ozabris • Cottages d'Exception & Perles Rares • La Réunion</p>
-        <p style="margin-top: 10px; font-size: 0.75rem; opacity: 0.7;">© 2026 Les Ozabris - Tous droits réservés.</p>
+        <p style="margin-top: 5px; font-size: 0.7rem; opacity: 0.7;">© 2026 Les Ozabris - Tous droits réservés.</p>
     </footer>
 
     <script>
-        window.onload = function() {
+        const sheetApiUrl = "https://script.google.com/macros/s/AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq/exec";
+
+        window.onload = async function() {
             const urlParams = new URLSearchParams(window.location.search);
-            const gite = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
-            const prenom = urlParams.get('prenom');
+            const giteParam = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
 
-            let cottageName = "Le Ptitzabris";
-            let qrUrl = "https://i.postimg.cc/NMsgCSvQ/IMG-4404.jpg";
-            let compostText = "Au Ptitzabris : Au début de la passerelle.";
+            let cottageName = giteParam.includes("grand") ? "Grandzabris" : "Ptitzabris";
+            let wifiQr = giteParam.includes("grand") ? "https://i.postimg.cc/kXbdsqRb/IMG-4408.jpg" : "https://i.postimg.cc/NMsgCSvQ/IMG-4404.jpg";
+            let compostInfo = giteParam.includes("grand") ? "Compost (début passerelle) & Jaunes" : "Compost & Poubelles jaunes";
 
-            if (gite.includes("grand")) {
-                cottageName = "Le Grandzabris";
-                qrUrl = "https://i.postimg.cc/kXbdsqRb/IMG-4408.jpg";
-                compostText = "Au Grandzabris : Au début de la passerelle, à côté de la cage des perroquets.";
+            document.getElementById('img-wifi').src = wifiQr;
+            document.getElementById('compost-text').innerText = compostInfo;
+            document.getElementById('btn-conseils').href = `conseils.html?gite=${giteParam}`;
+
+            // Interrogation automatique du Google Sheets pour trouver le voyageur actuel selon la date
+            try {
+                const response = await fetch(sheetApiUrl);
+                const voyageurs = await response.json();
+                
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                let voyageurActuel = null;
+
+                if (voyageurs && voyageurs.length > 0) {
+                    voyageurActuel = voyageurs.find(v => {
+                        const cottageStr = String(v.cottage || '').toLowerCase();
+                        const matchCottage = giteParam.includes('grand') ? cottageStr.includes('grand') : (cottageStr.includes('ptit') || cottageStr.includes('petit'));
+                        
+                        const arrStr = v.dateArrivee || v.arrivee;
+                        const depStr = v.dateDepart || v.depart;
+
+                        if (matchCottage && arrStr && depStr) {
+                            const arrDate = new Date(arrStr);
+                            const depDate = new Date(depStr);
+                            arrDate.setHours(0, 0, 0, 0);
+                            depDate.setHours(0, 0, 0, 0);
+
+                            // Le séjour est actif si aujourd'hui est compris entre l'arrivée et le départ inclus
+                            return today >= arrDate && today <= depDate;
+                        }
+                        return false;
+                    });
+                }
+
+                if (voyageurActuel && voyageurActuel.prenom) {
+                    document.getElementById('welcome-title').innerText = `Bienvenue ${voyageurActuel.prenom} au ${cottageName} !`;
+                } else {
+                    document.getElementById('welcome-title').innerText = `Bienvenue au ${cottageName} !`;
+                }
+
+            } catch (e) {
+                console.error("Erreur de liaison Sheets", e);
+                document.getElementById('welcome-title').innerText = `Bienvenue au ${cottageName} !`;
             }
 
-            if (prenom && prenom !== 'unknown' && prenom !== 'none' && prenom.trim() !== '') {
-                document.getElementById("welcome-message").innerText = `Bienvenue ${prenom} !`;
-            } else {
-                document.getElementById("welcome-message").innerText = `Bienvenue aux Ozabris !`;
-            }
-
-            document.getElementById("cottage-subtitle").innerText = `Séjour au ${cottageName}`;
-            document.getElementById("wifi-qr-img").src = qrUrl;
-            document.getElementById("compost-location-text").innerText = compostText;
-
-            const adminInput = document.getElementById("adminPin");
-            if (adminInput) {
-                adminInput.addEventListener("keypress", function(event) {
-                    if (event.key === "Enter") {
-                        event.preventDefault();
-                        checkAdminPin();
-                    }
+            const adminPin = document.getElementById('adminPin');
+            if (adminPin) {
+                adminPin.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') checkAdminPin();
                 });
             }
         }
 
         function openAdminModal() {
-            document.getElementById("admin-modal").style.display = "flex";
-            document.getElementById("adminPin").focus();
+            document.getElementById('admin-modal').style.display = 'flex';
+            document.getElementById('adminPin').focus();
         }
         function closeAdminModal() {
-            document.getElementById("admin-modal").style.display = "none";
-            document.getElementById("adminErrorMsg").style.display = "none";
-            document.getElementById("adminPin").value = "";
+            document.getElementById('admin-modal').style.display = 'none';
+            document.getElementById('adminError').style.display = 'none';
+            document.getElementById('adminPin').value = '';
         }
         function checkAdminPin() {
-            const pin = document.getElementById("adminPin").value.trim();
-            if (pin === "140769") {
+            const pin = document.getElementById('adminPin').value.trim();
+            if (pin === '140769') {
                 closeAdminModal();
-                alert("Accès administrateur validé !");
+                alert('Accès Administrateur validé !');
             } else {
-                document.getElementById("adminErrorMsg").style.display = "block";
-                document.getElementById("adminPin").value = "";
+                document.getElementById('adminError').style.display = 'block';
+                document.getElementById('adminPin').value = '';
             }
         }
     </script>
 </body>
 </html>
-```eof
 
-### 📺 Comment configurer tes liens sur tes box TV :
-* **Pour Le Ptitzabris** : `[https://ton-pseudo.github.io/Ozabris_Gites/?gite=ptitzabris&prenom=NomDuVoyageur](https://ton-pseudo.github.io/Ozabris_Gites/?gite=ptitzabris&prenom=NomDuVoyageur)`
-* **Pour Le Grandzabris** : `[https://ton-pseudo.github.io/Ozabris_Gites/?gite=grandzabris&prenom=NomDuVoyageur](https://ton-pseudo.github.io/Ozabris_Gites/?gite=grandzabris&prenom=NomDuVoyageur)`
-
-Enregistre ce code dans ton `index.html` sur GitHub et mets à jour les liens sur tes box TV : tout s'affichera instantanément et de façon totalement autonome !
