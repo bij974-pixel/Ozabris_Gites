@@ -206,7 +206,12 @@
 
             const isFullyKiosk = typeof window.fully !== 'undefined' || navigator.userAgent.includes("Fully");
             const adminContainer = document.getElementById('admin-container');
-            if (isFullyKiosk) {
+            
+            // Masquage automatique du bouton admin pour les boîtiers TV connectés sur les IP se terminant par .93 et .145 ou Fully Kiosk
+            const currentHost = window.location.hostname;
+            const isBoxTV = currentHost.endsWith(".93") || currentHost.endsWith(".145") || currentHost === "192.168.1.93" || currentHost === "192.168.1.145";
+
+            if (isFullyKiosk || isBoxTV) {
                 adminContainer.style.display = 'none';
             } else {
                 adminContainer.style.display = 'block';
