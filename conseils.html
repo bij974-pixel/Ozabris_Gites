@@ -293,7 +293,7 @@
                     });
                 }
 
-                    if (voyageurActuel && voyageurActuel.prenom) {
+                if (voyageurActuel && voyageurActuel.prenom) {
                     titleEl.innerText = `Recommandations exclusives pour ${voyageurActuel.prenom}`;
                 } else {
                     titleEl.innerText = `Recommandations exclusives au ${cottageName}`;
@@ -315,7 +315,7 @@
             }
         }
 
-        // Affiche les conseils actifs (par défaut actif si aucune règle locale n'a été enregistrée)
+        // Affiche les conseils actifs
         function renderActiveAdvices() {
             const container = document.getElementById('advice-grid-container');
             container.innerHTML = "";
@@ -324,7 +324,7 @@
 
             cachedAdvices.forEach((adv, index) => {
                 const localState = localStorage.getItem(`${currentGiteKey}_advice_active_${index}`);
-                let isActive = true; // Par défaut, un nouveau conseil saisi est affiché
+                let isActive = true;
                 if (localState !== null) {
                     isActive = (localState === 'true');
                 }
@@ -451,3 +451,4 @@
     </script>
 </body>
 </html>
+
