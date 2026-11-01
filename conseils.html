@@ -24,7 +24,7 @@
         header { 
             background: var(--primary);
             text-align: center; 
-            padding: 25px 20px 20px 20px; 
+            padding: 20px 20px 15px 20px; 
             border-bottom: 2px solid var(--accent); 
             position: relative; 
             color: var(--white);
@@ -51,11 +51,11 @@
         }
         .btn-admin:hover { background: var(--white); }
 
-        .brand-logo-container { max-width: 120px; margin: 0 auto 8px auto; overflow: hidden; display: flex; align-items: center; justify-content: center; border-radius: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border: 2px solid var(--accent); }
+        .brand-logo-container { max-width: 110px; margin: 0 auto 6px auto; overflow: hidden; display: flex; align-items: center; justify-content: center; border-radius: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border: 2px solid var(--accent); }
         .brand-logo-container img { width: 100%; height: auto; object-fit: contain; display: block; }
         
-        .logo-text { font-size: 1.8rem; font-weight: 300; letter-spacing: 3px; color: var(--white); text-transform: uppercase; margin-bottom: 2px; }
-        .subtitle { font-family: 'Segoe UI', sans-serif; font-size: 0.7rem; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; display: block; }
+        .logo-text { font-size: 1.6rem; font-weight: 300; letter-spacing: 3px; color: var(--white); text-transform: uppercase; margin-bottom: 2px; }
+        .subtitle { font-family: 'Segoe UI', sans-serif; font-size: 0.65rem; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; display: block; }
 
         .tv-card {
             background: rgba(255, 255, 255, 0.98);
@@ -63,7 +63,7 @@
             max-width: 950px;
             border-bottom-left-radius: 16px;
             border-bottom-right-radius: 16px;
-            padding: 20px 25px;
+            padding: 15px 25px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.4);
             border: 2px solid var(--accent);
             border-top: none;
@@ -75,28 +75,30 @@
             position: relative;
         }
 
-        .card-header { margin-bottom: 15px; }
-        h2 { color: var(--primary); font-size: 1.8rem; font-weight: 400; margin-bottom: 3px; }
-        .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.85rem; color: #555; font-style: italic; }
+        .card-header { margin-bottom: 10px; }
+        h2 { color: var(--primary); font-size: 1.6rem; font-weight: 400; margin-bottom: 2px; }
+        .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.8rem; color: #555; font-style: italic; }
 
+        /* Conteneur scrollable fluide et garanti pour tous les encadrés */
         .advice-grid { 
             display: grid; 
             grid-template-columns: repeat(2, 1fr); 
-            gap: 15px; 
-            margin-bottom: 15px; 
-            max-height: 52vh; 
+            gap: 12px; 
+            margin-bottom: 12px; 
+            max-height: 58vh; 
             overflow-y: auto; 
             padding-right: 8px; 
-            text-align: left;
+            -webkit-overflow-scrolling: touch;
         }
-        .advice-box { background: var(--white); border: 1px solid var(--accent); border-radius: 10px; padding: 15px; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; justify-content: space-between; }
-        .advice-box h3 { font-size: 0.95rem; color: var(--primary); margin-bottom: 6px; font-family: 'Playfair Display', serif; }
-        .advice-box p { font-size: 0.8rem; color: #555; margin-bottom: 8px; }
-        .advice-box img { width: 100%; height: 110px; object-fit: cover; border-radius: 6px; border: 1px solid #eee; margin-top: 6px; }
-        .advice-box a { color: var(--primary); font-weight: bold; text-decoration: underline; font-size: 0.8rem; }
+        
+        .advice-box { background: var(--white); border: 1px solid var(--accent); border-radius: 10px; padding: 12px; text-align: left; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; justify-content: space-between; }
+        .advice-box h3 { font-size: 0.9rem; color: var(--primary); margin-bottom: 4px; font-family: 'Playfair Display', serif; }
+        .advice-box p { font-size: 0.78rem; color: #555; margin-bottom: 6px; }
+        .advice-box img { width: 100%; height: 95px; object-fit: cover; border-radius: 6px; border: 1px solid #eee; margin-top: 4px; }
+        .advice-box a { color: var(--primary); font-weight: bold; text-decoration: underline; font-size: 0.78rem; }
 
-        .footer-actions { display: flex; justify-content: center; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 12px; font-family: 'Segoe UI', sans-serif; }
-        .btn-action { background-color: var(--primary); color: white; padding: 10px 25px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; border: none; text-decoration: none; display: inline-block; transition: background 0.2s; }
+        .footer-actions { display: flex; justify-content: center; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 10px; font-family: 'Segoe UI', sans-serif; }
+        .btn-action { background-color: var(--primary); color: white; padding: 8px 22px; border-radius: 8px; font-weight: 600; font-size: 0.8rem; cursor: pointer; border: none; text-decoration: none; display: inline-block; transition: background 0.2s; }
         .btn-action:hover { background-color: var(--accent); color: var(--primary); }
 
         /* Modals Admin */
@@ -107,7 +109,7 @@
             background: white; padding: 25px; border-radius: 14px; width: 90%; max-width: 550px; text-align: center; border: 2px solid var(--accent); max-height: 90vh; display: flex; flex-direction: column;
         }
         .modal-header-fixed {
-            background: #fff; padding-bottom: 12px; border-bottom: 2px solid var(--accent); margin-bottom: 10px; flex-shrink: 0; text-align: left;
+            background: #fff; padding-bottom: 10px; border-bottom: 2px solid var(--accent); margin-bottom: 10px; flex-shrink: 0; text-align: left;
         }
         .modal-body-scroll {
             overflow-y: auto; flex-grow: 1; padding-right: 5px; text-align: left;
@@ -142,7 +144,7 @@
         </div>
 
         <div class="advice-grid" id="advice-grid-container">
-            <!-- Les encadrés dynamiques s'afficheront ici -->
+            <!-- Les encadrés s'afficheront ici -->
         </div>
         
         <div class="footer-actions">
@@ -167,12 +169,12 @@
         <div class="modal-content">
             <div class="modal-header-fixed">
                 <button type="button" onclick="closeConfigModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
-                <h3 style="color: var(--primary); font-family: 'Playfair Display', serif; text-align: center; margin-bottom: 8px;">⚙️ Gestion des 10 Conseils</h3>
+                <h3 style="color: var(--primary); font-family: 'Playfair Display', serif; text-align: center;">⚙️ Gestion des 10 Conseils & Titres</h3>
                 
-                <label style="font-size: 0.72rem; font-weight: bold; color: var(--primary); display: block; margin-top: 4px;">Titre principal de la page :</label>
+                <label style="font-size: 0.75rem; font-weight: bold; color: var(--primary); display: block; margin-top: 6px;">Titre principal de la page :</label>
                 <input type="text" id="cfg-page-title" value="Conseils & Recommandations">
 
-                <label style="font-size: 0.72rem; font-weight: bold; color: var(--primary); display: block;">Sous-titre de la page :</label>
+                <label style="font-size: 0.75rem; font-weight: bold; color: var(--primary); display: block;">Sous-titre de la page :</label>
                 <input type="text" id="cfg-page-sub" value="🌿 Tout pour découvrir La Réunion et profiter pleinement de votre séjour aux Ozabris." style="margin-bottom: 6px;">
 
                 <button type="button" class="modal-btn" onclick="saveAdviceConfig()" id="save-btn">💾 Enregistrer toutes les modifications</button>
@@ -198,17 +200,16 @@
             { id: 10, active: false, target: "both", title: "💡 Conseil Personnalisé 10", text: "Ajoutez ici un conseil sur mesure pour vos voyageurs.", img: "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg", linkText: "", linkUrl: "" }
         ];
 
-        let currentGite = 'grandzabris';
+        let currentGite = 'ptitzabris';
 
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
-            const giteParam = (urlParams.get('gite') || 'grandzabris').toLowerCase();
-            currentGite = giteParam.includes('grand') ? 'grandzabris' : 'ptitzabris';
-
-            document.getElementById('back-home-btn').href = `index.html?gite=${currentGite}`;
+            currentGite = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
+            document.getElementById('back-home-btn').href = `index.html?gite=${currentGite}&v=99`;
 
             const isFullyKiosk = typeof window.fully !== 'undefined' || navigator.userAgent.includes("Fully");
             const adminContainer = document.getElementById('admin-container');
+            
             const currentHost = window.location.hostname;
             const isBoxTV = currentHost.endsWith(".93") || currentHost.endsWith(".145") || currentHost === "192.168.1.93" || currentHost === "192.168.1.145";
 
@@ -230,8 +231,8 @@
         }
 
         function loadHeaderTexts() {
-            const savedTitle = localStorage.getItem('ozabris_page_title') || "Conseils & Recommandations";
-            const savedSub = localStorage.getItem('ozabris_page_sub') || "🌿 Tout pour découvrir La Réunion et profiter pleinement de votre séjour aux Ozabris.";
+            const savedTitle = localStorage.getItem('ozabris_page_title') || sessionStorage.getItem('ozabris_page_title') || "Conseils & Recommandations";
+            const savedSub = localStorage.getItem('ozabris_page_sub') || sessionStorage.getItem('ozabris_page_sub') || "🌿 Tout pour découvrir La Réunion et profiter pleinement de votre séjour aux Ozabris.";
 
             document.getElementById('page-main-title').innerText = savedTitle;
             document.getElementById('page-main-sub').innerText = savedSub;
@@ -239,7 +240,7 @@
         }
 
         function getStoredAdvices() {
-            const saved = localStorage.getItem('ozabris_custom_10_advices_v9');
+            const saved = localStorage.getItem('ozabris_custom_10_advices_v6') || sessionStorage.getItem('ozabris_custom_10_advices_v6');
             if (saved) {
                 try { 
                     const parsed = JSON.parse(saved);
@@ -255,16 +256,7 @@
             container.innerHTML = "";
 
             advices.forEach(adv => {
-                const targetVal = adv.target ? adv.target.toLowerCase() : 'both';
-                let matchGite = false;
-                if (targetVal === 'both') {
-                    matchGite = true;
-                } else if (currentGite === 'grandzabris' && targetVal.includes('grand')) {
-                    matchGite = true;
-                } else if (currentGite === 'ptitzabris' && (targetVal.includes('ptit') || targetVal.includes('petit'))) {
-                    matchGite = true;
-                }
-
+                const matchGite = (adv.target === 'both' || adv.target === currentGite);
                 if (adv.active && matchGite) {
                     const box = document.createElement('div');
                     box.className = 'advice-box';
@@ -370,8 +362,14 @@
 
             const newTitle = document.getElementById('cfg-page-title').value.trim();
             const newSub = document.getElementById('cfg-page-sub').value.trim();
-            if (newTitle) localStorage.setItem('ozabris_page_title', newTitle);
-            if (newSub) localStorage.setItem('ozabris_page_sub', newSub);
+            if (newTitle) {
+                localStorage.setItem('ozabris_page_title', newTitle);
+                sessionStorage.setItem('ozabris_page_title', newTitle);
+            }
+            if (newSub) {
+                localStorage.setItem('ozabris_page_sub', newSub);
+                sessionStorage.setItem('ozabris_page_sub', newSub);
+            }
 
             let promises = advices.map((adv, index) => {
                 return new Promise((resolve) => {
@@ -425,21 +423,23 @@
 
             Promise.all(promises).then(() => {
                 const dataString = JSON.stringify(advices);
-                localStorage.setItem('ozabris_custom_10_advices_v9', dataString);
+                localStorage.setItem('ozabris_custom_10_advices_v6', dataString);
+                sessionStorage.setItem('ozabris_custom_10_advices_v6', dataString);
 
                 btn.innerText = "💾 Enregistrer toutes les modifications";
                 btn.disabled = false;
-                alert('Conseils mis à jour avec succès !');
+                alert('Modifications enregistrées avec succès !');
                 closeConfigModal();
                 loadHeaderTexts();
                 renderAdvices();
             }).catch(() => {
                 const dataString = JSON.stringify(advices);
-                localStorage.setItem('ozabris_custom_10_advices_v9', dataString);
+                localStorage.setItem('ozabris_custom_10_advices_v6', dataString);
+                sessionStorage.setItem('ozabris_custom_10_advices_v6', dataString);
 
                 btn.innerText = "💾 Enregistrer toutes les modifications";
                 btn.disabled = false;
-                alert('Conseils mis à jour avec succès !');
+                alert('Modifications enregistrées avec succès !');
                 closeConfigModal();
                 loadHeaderTexts();
                 renderAdvices();
