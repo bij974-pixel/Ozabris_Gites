@@ -93,24 +93,43 @@
         .advice-box { background: var(--white); border: 1px solid var(--accent); border-radius: 10px; padding: 12px; text-align: left; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; justify-content: space-between; }
         .advice-box h3 { font-size: 0.9rem; color: var(--primary); margin-bottom: 4px; font-family: 'Playfair Display', serif; }
         .advice-box p { font-size: 0.78rem; color: #555; margin-bottom: 6px; }
-        .advice-box img { width: 100%; height: 95px; object-fit: cover; border-radius: 6px; border: 1px solid #eee; margin-top: 4px; }
-        .advice-box a { color: var(--primary); font-weight: bold; text-decoration: underline; font-size: 0.78rem; }
+        
+        .advice-img-wrapper {
+            width: 100%;
+            height: 110px;
+            background-color: #fcfbfa;
+            border-radius: 6px;
+            border: 1px solid #eee;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .advice-box img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; 
+            display: block; 
+        }
+
+        .advice-box a { color: var(--primary); font-weight: bold; text-decoration: underline; font-size: 0.78rem; display: inline-block; margin-top: 2px; }
 
         .footer-actions { display: flex; justify-content: center; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 10px; font-family: 'Segoe UI', sans-serif; }
         .btn-action { background-color: var(--primary); color: white; padding: 8px 22px; border-radius: 8px; font-weight: 600; font-size: 0.8rem; cursor: pointer; border: none; text-decoration: none; display: inline-block; transition: background 0.2s; }
         .btn-action:hover { background-color: var(--accent); color: var(--primary); }
 
-        #admin-modal {
+        #admin-modal, #admin-options-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 38, 58, 0.85); justify-content: center; align-items: center; z-index: 1000; font-family: 'Segoe UI', sans-serif;
         }
         .modal-content {
-            background: white; padding: 25px; border-radius: 14px; width: 90%; max-width: 320px; text-align: center; border: 2px solid var(--accent);
+            background: white; padding: 25px; border-radius: 14px; width: 90%; max-width: 340px; text-align: center; border: 2px solid var(--accent);
         }
         .modal-content input {
             width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 0.85rem; text-align: center;
         }
         .modal-btn {
-            background: var(--primary); color: white; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 5px;
+            background: var(--primary); color: white; border: none; padding: 9px 18px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 8px; font-size: 0.85rem; text-decoration: none; display: inline-block; box-sizing: border-box;
         }
         .modal-btn:hover { background: var(--accent); color: var(--primary); }
     </style>
@@ -142,6 +161,7 @@
         </div>
     </div>
 
+    <!-- Modale de saisie du PIN -->
     <div id="admin-modal">
         <div class="modal-content">
             <button type="button" onclick="closePinModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
@@ -153,8 +173,20 @@
         </div>
     </div>
 
+    <!-- Modale des choix après PIN réussi -->
+    <div id="admin-options-modal">
+        <div class="modal-content">
+            <button type="button" onclick="closeOptionsModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
+            <h3>⚙️ Espace Gestion</h3>
+            <p style="font-size: 0.8rem; color: #666; margin: 8px 0 15px 0;">Que souhaitez-vous faire ?</p>
+            
+            <!-- Lien direct vers ton Google Form -->
+            <a href="https://forms.gle/w77k6We9HrzRxERy7" target="_blank" class="modal-btn" style="background-color: var(--tropical-green, #12263a);">📝 Ajouter un conseil (Google Form)</a>
+            <button type="button" class="modal-btn" onclick="location.reload()" style="background-color: var(--accent); color: var(--primary);">🔄 Rafraîchir les conseils</button>
+        </div>
+    </div>
+
     <script>
-        // Ton lien d'application web Google Apps Script tout neuf
         const sheetApiUrl = "https://script.google.com/macros/s/AKfycbzN-EJyO0uciXYmK4Z7jFH46rBVPBB-ufkfx5Fv0xSlhMFYZoIMeBZyQsVoBEdQO4U2Bw/exec";
 
         let currentGite = 'ptitzabris';
@@ -188,7 +220,6 @@
         async function loadAdvicesFromSheet() {
             const container = document.getElementById('advice-grid-container');
             try {
-                // On ajoute ?type=conseils pour que l'Apps Script sache qu'il doit lire l'onglet "Conseils"
                 const response = await fetch(sheetApiUrl + "?type=conseils&t=" + new Date().getTime());
                 const advices = await response.json();
 
@@ -218,18 +249,23 @@
                         const box = document.createElement('div');
                         box.className = 'advice-box';
                         
+                        const titleText = adv.title || 'Conseil';
+                        const imageUrl = adv.img ? adv.img.trim() : "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg";
+
                         let linkHtml = "";
                         if (adv.linkUrl) {
-                            linkHtml = `<p style="margin-top: 4px;"><a href="${adv.linkUrl}" target="_blank">${adv.linkText || 'En savoir plus'} ↗</a></p>`;
+                            linkHtml = `<p style="margin-top: 6px;"><a href="${adv.linkUrl}" target="_blank">Découvrir ${titleText} ↗</a></p>`;
                         }
 
                         box.innerHTML = `
                             <div>
-                                <h3>${adv.title || 'Conseil'}</h3>
+                                <h3>${titleText}</h3>
                                 <p>${adv.text || ''}</p>
                                 ${linkHtml}
                             </div>
-                            <img src="${adv.img}" alt="${adv.title || 'Conseil'}">
+                            <div class="advice-img-wrapper">
+                                <img src="${imageUrl}" alt="${titleText}" onerror="this.src='https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg'">
+                            </div>
                         `;
                         container.appendChild(box);
                     }
@@ -253,11 +289,14 @@
             document.getElementById('adminError').style.display = 'none';
             document.getElementById('adminPin').value = '';
         }
+        function closeOptionsModal() {
+            document.getElementById('admin-options-modal').style.display = 'none';
+        }
         function verifyPin() {
             const pin = document.getElementById('adminPin').value.trim();
             if (pin === '140769') {
                 closePinModal();
-                alert("Pour ajouter de nouveaux conseils, il te suffit de remplir ton Google Form ! Ils s'afficheront tout seuls sur le site.");
+                document.getElementById('admin-options-modal').style.display = 'flex';
             } else {
                 document.getElementById('adminError').style.display = 'block';
                 document.getElementById('adminPin').value = '';
