@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Administration | Les Ozabris</title>
+    <style>
+        :root { --primary: #12263a; --accent: #c5a880; --text-dark: #2c3e50; --white: #ffffff; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body {
+            width: 100vw;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(rgba(18, 38, 58, 0.85), rgba(18, 38, 58, 0.92)), url('fond_page.png') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .admin-container {
+            background: white;
+            width: 100%;
+            max-width: 800px;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            border: 2px solid var(--accent);
+            margin-top: 20px;
+        }
+
+        h1 { font-family: 'Playfair Display', serif; color: var(--primary); font-size: 1.8rem; margin-bottom: 8px; text-align: center; }
+        .subtitle { font-size: 0.85rem; color: #666; text-align: center; margin-bottom: 25px; }
+
+        .controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        select {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--accent);
+            font-size: 0.95rem;
+            color: var(--primary);
+            font-weight: bold;
+            background: #fff;
+            cursor: pointer;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.2s;
+        }
+        .btn:hover { background: var(--accent); color: var(--primary); }
+        .btn-danger { background: #b94a48; }
+        .btn-danger:hover { background: #953b39; color: white; }
+        .btn-form { background: #2e6930; }
+        .btn-form:hover { background: #235224; color: white; }
+
+        .table-responsive {
+            width: 100%;
+            max-height: 55vh;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .admin-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left; background: white; }
+        .admin-table th, .admin-table td { padding: 12px 15px; border-bottom: 1px solid #eee; }
+        .admin-table th { background: var(--primary); color: white; font-family: 'Playfair Display', serif; position: sticky; top: 0; z-index: 2; }
+        
+        .toggle-switch { cursor: pointer; padding: 6px 14px; border-radius: 6px; font-weight: bold; border: none; font-size: 0.8rem; }
+        .btn-on { background: #d4edda; color: #155724; }
+        .btn-off { background: #f8d7da; color: #721c24; }
+
+        .footer-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="admin-container">
+        <h1>⚙️ Espace de Gestion Global</h1>
+        <p class="subtitle">Gérez l'affichage des conseils et recommandations pour chaque gîte en toute simplicité.</p>
+
+        <div class="controls-row">
+            <div>
+                <label for="admin-select-gite" style="font-weight: bold; color: var(--primary); margin-right: 10px;">Cottage cible :</label>
+                <select id="admin-select-gite" onchange="buildAdminTable()">
+                    <option value="ptitzabris">Le Ptitzabris</option>
+                    <option value="grandzabris">Le Grandzabris</option>
+                </select>
+            </div>
+            <div>
+                <a href="https://forms.gle/w77k6We9HrzRxERy7" target="_blank" class="btn btn-form">📝 Saisir un nouveau conseil (Google Form)</a>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Titre de la recommandation</th>
+                        <th style="text-align: center; width: 150px;">Statut d'affichage</th>
+                    </tr>
+                </thead>
+                <tbody id="admin-advice-tbody">
+                    <tr><td colspan="2" style="text-align: center; color: #666; padding: 20px;">Chargement des conseils depuis Google Sheet...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer-actions">
+            <button type="button" class="btn btn-danger" onclick="confirmResetAll()">🔄 Tout désactiver pour ce gîte</button>
+            <a href="conseils.html" class="btn">🏠 Retour aux Conseils</a>
+        </div>
+    </div>
+
+    <script>
+        // URL Apps Script dédiée aux conseils que tu m'as fournie
+        const sheetConseilsApiUrl = "https://script.google.com/macros/s/AKfycbzdEv_frdNqscUxHQW6xXpePamOztmC0xLWa5CRMjY4fFsKuMdcvJda7fDkXiWqAYcu1A/exec";
+        
+        let cachedAdvices = [];
+
+        window.onload = async function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const giteParam = urlParams.get('gite');
+            if (giteParam) {
+                document.getElementById('admin-select-gite').value = giteParam.toLowerCase().includes('grand') ? 'grandzabris' : 'ptitzabris';
+            }
+
+            try {
+                const response = await fetch(sheetConseilsApiUrl + "?t=" + new Date().getTime());
+                const data = await response.json();
+                
+                cachedAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || data.data || []);
+                buildAdminTable();
+            } catch (e) {
+                document.getElementById('admin-advice-tbody').innerHTML = `<tr><td colspan="2" style="text-align: center; color: #b94a48; padding: 20px;">Erreur de chargement des données. Vérifie l'URL de l'API.</td></tr>`;
+            }
+        }
+
+        function buildAdminTable() {
+            const selectedGite = document.getElementById('admin-select-gite').value;
+            const tbody = document.getElementById('admin-advice-tbody');
+            tbody.innerHTML = "";
+
+            if (!cachedAdvices || cachedAdvices.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="2" style="text-align: center; color: #666; padding: 20px;">Aucun conseil trouvé dans le Google Sheet.</td></tr>`;
+                return;
+            }
+
+            cachedAdvices.forEach((adv, index) => {
+                const titleText = adv['Nom de la recommandation'] || adv.title || adv['Nom'] || adv['titre'] || '';
+                if (!titleText || titleText.trim() === '') return;
+
+                const localState = localStorage.getItem(`${selectedGite}_advice_active_${index}`);
+                let isActive = true;
+                if (localState !== null) {
+                    isActive = (localState === 'true');
+                }
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight: 600; color: var(--text-dark);">${titleText}</td>
+                    <td style="text-align: center;">
+                        <button type="button" class="toggle-switch ${isActive ? 'btn-on' : 'btn-off'}" onclick="toggleAdviceState(${index}, '${selectedGite}')">
+                            ${isActive ? '✓ Actif' : '✕ Inactif'}
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function toggleAdviceState(index, gite) {
+            const localState = localStorage.getItem(`${gite}_advice_active_${index}`);
+            let currentState = true;
+            if (localState !== null) {
+                currentState = (localState === 'true');
+            }
+
+            localStorage.setItem(`${gite}_advice_active_${index}`, !currentState);
+            buildAdminTable();
+        }
+
+        function confirmResetAll() {
+            const selectedGite = document.getElementById('admin-select-gite').value;
+            const giteDisplayName = selectedGite === 'grandzabris' ? 'Le Grandzabris' : 'Le Ptitzabris';
+            
+            if (confirm(`Êtes-vous sûr de vouloir désactiver tous les conseils pour ${giteDisplayName} ?`)) {
+                cachedAdvices.forEach((_, index) => {
+                    localStorage.setItem(`${selectedGite}_advice_active_${index}`, 'false');
+                });
+                buildAdminTable();
+                alert(`Tous les conseils ont été désactivés pour ${giteDisplayName} !`);
+            }
+        }
+    </script>
+</body>
+</html>
