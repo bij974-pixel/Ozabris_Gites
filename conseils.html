@@ -251,8 +251,8 @@
                 }
                 subEl.innerHTML = `✨ Sélection sur-mesure de nos plus belles adresses, imaginée spécialement pour votre séjour aux Ozabris.`;
 
-                // 2. Récupération du Sheet des conseils
-                const response = await fetch(sheetConseilsApiUrl + "?t=" + new Date().getTime());
+                // 2. Récupération de l'onglet Conseils avec ?type=conseils
+                const response = await fetch(sheetConseilsApiUrl + "?type=conseils&t=" + new Date().getTime());
                 const data = await response.json();
 
                 cachedAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || data.data || []);
@@ -276,11 +276,10 @@
             let activeCount = 0;
 
             cachedAdvices.forEach((adv, index) => {
-                // Lecture exacte de la colonne "Nom de la recommandation"
-                const titleText = adv['Nom de la recommandation'] || '';
-                if (!titleText || titleText.trim() === '' || titleText.toLowerCase().includes('horodateur')) return;
+                // Utilisation de .title (généré par ton Apps Script)
+                const titleText = adv.title || adv['Nom de la recommandation'] || '';
+                if (!titleText || titleText.trim() === '') return;
 
-                // Par défaut, si rien n'est stocké dans le localStorage, le conseil est ACTIF (true)
                 const localState = localStorage.getItem(`${currentGiteKey}_advice_active_${index}`);
                 let isActive = true;
                 if (localState !== null) {
@@ -292,9 +291,9 @@
                     const box = document.createElement('div');
                     box.className = 'advice-box';
                     
-                    const descText = adv['Commentaire sur la recommandation'] || '';
-                    const imageUrl = adv['Lien postimage'] || '';
-                    const linkUrl = adv['Lien web'] || '';
+                    const descText = adv.text || adv['Commentaire sur la recommandation'] || '';
+                    const imageUrl = adv.img || adv['Lien postimage'] || '';
+                    const linkUrl = adv.linkUrl || adv['Lien web'] || '';
 
                     let imgHtml = "";
                     if (imageUrl && imageUrl.trim() !== "" && imageUrl.startsWith("http")) {
@@ -348,4 +347,3 @@
     </script>
 </body>
 </html>
-
