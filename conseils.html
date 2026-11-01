@@ -267,6 +267,7 @@
             const subEl = document.getElementById('page-main-sub');
 
             try {
+                // 1. Chargement des voyageurs pour le prénom
                 const resVoyageurs = await fetch(sheetApiUrl + "?t=" + new Date().getTime());
                 const voyageurs = await resVoyageurs.json();
                 
@@ -274,7 +275,7 @@
                 today.setHours(0, 0, 0, 0);
 
                 let voyageurActuel = null;
-                if (voyageurs && voyageurs.length > 0) {
+                if (Array.isArray(voyageurs) && voyageurs.length > 0) {
                     voyageurActuel = voyageurs.find(v => {
                         const cottageStr = String(v.cottage || '').toLowerCase();
                         const matchCottage = cottageKey === 'grandzabris' ? cottageStr.includes('grand') : (cottageStr.includes('ptit') || cottageStr.includes('petit'));
@@ -300,8 +301,11 @@
                 }
                 subEl.innerHTML = `✨ Sélection sur-mesure de nos plus belles adresses, imaginée spécialement pour votre séjour aux Ozabris.`;
 
-                const response = await fetch(sheetApiUrl + "?type=conseils&t=" + new Date().getTime());
-                cachedAdvices = await response.json();
+                // 2. Chargement de l'onglet Conseils via l'action spécifique
+                const response = await fetch(sheetApiUrl + "?action=conseils&t=" + new Date().getTime());
+                const data = await response.json();
+
+                cachedAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || []);
 
                 if (!Array.isArray(cachedAdvices) || cachedAdvices.length === 0) {
                     container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Conseils et recommandations à venir.</p>`;
@@ -323,6 +327,9 @@
             let activeCount = 0;
 
             cachedAdvices.forEach((adv, index) => {
+                const titleText = adv.title || adv['Nom de la recommandation'] || adv['Nom'] || '';
+                if (!titleText || titleText.trim() === '') return;
+
                 const localState = localStorage.getItem(`${currentGiteKey}_advice_active_${index}`);
                 let isActive = true;
                 if (localState !== null) {
@@ -334,11 +341,12 @@
                     const box = document.createElement('div');
                     box.className = 'advice-box';
                     
-                    const titleText = adv.title || 'Conseil';
-                    const imageUrl = adv.img || adv.lienPostimage || adv.image || adv.photo || "";
+                    const descText = adv.text || adv['Commentaire sur la recommandation'] || adv['Commentaire'] || '';
+                    const imageUrl = adv.img || adv['Lien postimage'] || adv.image || adv.photo || '';
+                    const linkUrl = adv.linkUrl || adv['Lien web'] || adv.lien || '';
 
                     let imgHtml = "";
-                    if (imageUrl) {
+                    if (imageUrl && imageUrl.trim() !== "") {
                         imgHtml = `
                             <div class="advice-img-wrapper">
                                 <img src="${imageUrl.trim()}" alt="${titleText}">
@@ -347,14 +355,14 @@
                     }
 
                     let linkHtml = "";
-                    if (adv.linkUrl) {
-                        linkHtml = `<p style="margin-top: 6px;"><a href="${adv.linkUrl}" target="_blank">Découvrir ${titleText} ↗</a></p>`;
+                    if (linkUrl && linkUrl.trim() !== "") {
+                        linkHtml = `<p style="margin-top: 6px;"><a href="${linkUrl.trim()}" target="_blank">Découvrir ${titleText} ↗</a></p>`;
                     }
 
                     box.innerHTML = `
                         <div>
                             <h3>${titleText}</h3>
-                            <p>${adv.text || ''}</p>
+                            <p>${descText}</p>
                             ${linkHtml}
                         </div>
                         ${imgHtml}
@@ -374,6 +382,9 @@
             tbody.innerHTML = "";
 
             cachedAdvices.forEach((adv, index) => {
+                const titleText = adv.title || adv['Nom de la recommandation'] || adv['Nom'] || '';
+                if (!titleText || titleText.trim() === '') return;
+
                 const localState = localStorage.getItem(`${selectedGite}_advice_active_${index}`);
                 let isActive = true;
                 if (localState !== null) {
@@ -382,7 +393,7 @@
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td style="font-weight: 500; color: var(--primary);">${adv.title || 'Conseil #' + (index+1)}</td>
+                    <td style="font-weight: 500; color: var(--primary);">${titleText}</td>
                     <td style="text-align: center;">
                         <button type="button" class="toggle-switch ${isActive ? 'btn-on' : 'btn-off'}" onclick="toggleAdviceState(${index}, '${selectedGite}')">
                             ${isActive ? '✓ Actif' : '✕ Inactif'}
@@ -451,4 +462,3 @@
     </script>
 </body>
 </html>
-
