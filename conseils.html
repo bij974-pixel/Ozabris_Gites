@@ -125,9 +125,9 @@
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 38, 58, 0.85); justify-content: center; align-items: center; z-index: 1000; font-family: 'Segoe UI', sans-serif;
         }
         .modal-content {
-            background: white; padding: 25px; border-radius: 14px; width: 90%; max-width: 420px; text-align: center; border: 2px solid var(--accent); max-height: 85vh; overflow-y: auto;
+            background: white; padding: 25px; border-radius: 14px; width: 90%; max-width: 440px; text-align: center; border: 2px solid var(--accent); max-height: 85vh; overflow-y: auto;
         }
-        .modal-content input {
+        .modal-content select, .modal-content input {
             width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 0.85rem; text-align: center;
         }
         .modal-btn {
@@ -191,18 +191,23 @@
             <p style="font-size: 0.8rem; color: #666; margin: 8px 0 15px 0;">Choisissez une action :</p>
             
             <a href="https://forms.gle/w77k6We9HrzRxERy7" target="_blank" class="modal-btn" style="background-color: var(--primary);">📝 Saisir un nouveau conseil (Google Form)</a>
-            <button type="button" class="modal-btn" onclick="openTableModal()" style="background-color: var(--accent); color: var(--primary);">📋 Réinitialiser / Gérer l'affichage des conseils</button>
+            <button type="button" class="modal-btn" onclick="openTableModal()" style="background-color: var(--accent); color: var(--primary);">📋 Gérer / Réinitialiser par Gîte</button>
         </div>
     </div>
 
-    <!-- Modale du Tableau de Gestion & Réinitialisation -->
+    <!-- Modale du Tableau de Gestion Spécifique par Gîte -->
     <div id="admin-table-modal">
         <div class="modal-content">
             <button type="button" onclick="closeTableModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
-            <h3>📋 Gestion et Réinitialisation</h3>
-            <p style="font-size: 0.78rem; color: #666; margin: 6px 0 12px 0;">Activez ou désactivez les conseils en un clic :</p>
+            <h3>📋 Gestion par Gîte</h3>
             
-            <div style="max-height: 200px; overflow-y: auto; border: 1px solid #ddd; border-radius: 6px;">
+            <label style="font-size: 0.78rem; font-weight: bold; display: block; text-align: left; color: var(--primary); margin-top: 10px;">Sélectionner le gîte à configurer :</label>
+            <select id="admin-select-gite" onchange="buildAdminTable()">
+                <option value="ptitzabris">Le Ptitzabris</option>
+                <option value="grandzabris">Le Grandzabris</option>
+            </select>
+
+            <div style="max-height: 180px; overflow-y: auto; border: 1px solid #ddd; border-radius: 6px; margin-top: 10px;">
                 <table class="admin-table">
                     <thead>
                         <tr>
@@ -216,7 +221,7 @@
                 </table>
             </div>
 
-            <button type="button" class="modal-btn" onclick="resetAllAdvices()" style="background-color: #b94a48; color: white; margin-top: 12px;">🔄 Tout désactiver (Réinitialiser)</button>
+            <button type="button" class="modal-btn" onclick="confirmResetAll()" style="background-color: #b94a48; color: white; margin-top: 12px;">🔄 Tout désactiver pour ce gîte</button>
             <button type="button" class="modal-btn" onclick="location.reload()" style="background-color: var(--primary); color: white;">💾 Enregistrer & Fermer</button>
         </div>
     </div>
@@ -288,7 +293,7 @@
                     });
                 }
 
-                if (voyageurActuel && voyageurActuel.prenom) {
+                    if (voyageurActuel && voyageurActuel.prenom) {
                     titleEl.innerText = `Recommandations exclusives pour ${voyageurActuel.prenom}`;
                 } else {
                     titleEl.innerText = `Recommandations exclusives au ${cottageName}`;
@@ -299,19 +304,18 @@
                 cachedAdvices = await response.json();
 
                 if (!Array.isArray(cachedAdvices) || cachedAdvices.length === 0) {
-                    container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Aucun conseil trouvé dans le Google Sheet.</p>`;
+                    container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Conseils et recommandations à venir.</p>`;
                     return;
                 }
 
                 renderActiveAdvices();
-                buildAdminTable();
 
             } catch (e) {
-                container.innerHTML = `<p style="text-align: center; color: #b94a48; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Erreur de chargement depuis Google Sheet.</p>`;
+                container.innerHTML = `<p style="text-align: center; color: #b94a48; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Conseils et recommandations à venir.</p>`;
             }
         }
 
-        // Affiche tous les conseils marqués sur Oui / Actifs
+        // Affiche les conseils actifs (par défaut actif si aucune règle locale n'a été enregistrée)
         function renderActiveAdvices() {
             const container = document.getElementById('advice-grid-container');
             container.innerHTML = "";
@@ -319,13 +323,10 @@
             let activeCount = 0;
 
             cachedAdvices.forEach((adv, index) => {
-                const localState = localStorage.getItem(`advice_active_${index}`);
-                let isActive = true;
+                const localState = localStorage.getItem(`${currentGiteKey}_advice_active_${index}`);
+                let isActive = true; // Par défaut, un nouveau conseil saisi est affiché
                 if (localState !== null) {
                     isActive = (localState === 'true');
-                } else {
-                    const activeVal = String(adv.active || adv.statut || '').trim().toLowerCase();
-                    isActive = (activeVal === '' || activeVal === 'true' || activeVal === 'oui' || activeVal === 'vrai' || activeVal === '1' || adv.active === true);
                 }
 
                 if (isActive) {
@@ -334,7 +335,16 @@
                     box.className = 'advice-box';
                     
                     const titleText = adv.title || 'Conseil';
-                    const imageUrl = adv.img ? adv.img.trim() : "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg";
+                    const imageUrl = adv.img || adv.lienPostimage || adv.image || adv.photo || "";
+
+                    let imgHtml = "";
+                    if (imageUrl) {
+                        imgHtml = `
+                            <div class="advice-img-wrapper">
+                                <img src="${imageUrl.trim()}" alt="${titleText}">
+                            </div>
+                        `;
+                    }
 
                     let linkHtml = "";
                     if (adv.linkUrl) {
@@ -347,38 +357,34 @@
                             <p>${adv.text || ''}</p>
                             ${linkHtml}
                         </div>
-                        <div class="advice-img-wrapper">
-                            <img src="${imageUrl}" alt="${titleText}" onerror="this.src='https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg'">
-                        </div>
+                        ${imgHtml}
                     `;
                     container.appendChild(box);
                 }
             });
 
             if (activeCount === 0) {
-                container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Aucun conseil actif. Rendez-vous dans Admin ⚙️ pour en activer.</p>`;
+                container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Conseils et recommandations à venir.</p>`;
             }
         }
 
         function buildAdminTable() {
+            const selectedGite = document.getElementById('admin-select-gite').value;
             const tbody = document.getElementById('admin-advice-tbody');
             tbody.innerHTML = "";
 
             cachedAdvices.forEach((adv, index) => {
-                const localState = localStorage.getItem(`advice_active_${index}`);
+                const localState = localStorage.getItem(`${selectedGite}_advice_active_${index}`);
                 let isActive = true;
                 if (localState !== null) {
                     isActive = (localState === 'true');
-                } else {
-                    const activeVal = String(adv.active || adv.statut || '').trim().toLowerCase();
-                    isActive = (activeVal === '' || activeVal === 'true' || activeVal === 'oui' || activeVal === 'vrai' || activeVal === '1' || adv.active === true);
                 }
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td style="font-weight: 500; color: var(--primary);">${adv.title || 'Conseil #' + (index+1)}</td>
                     <td style="text-align: center;">
-                        <button type="button" class="toggle-switch ${isActive ? 'btn-on' : 'btn-off'}" onclick="toggleAdviceState(${index})">
+                        <button type="button" class="toggle-switch ${isActive ? 'btn-on' : 'btn-off'}" onclick="toggleAdviceState(${index}, '${selectedGite}')">
                             ${isActive ? '✓ Actif' : '✕ Inactif'}
                         </button>
                     </td>
@@ -387,28 +393,28 @@
             });
         }
 
-        function toggleAdviceState(index) {
-            const localState = localStorage.getItem(`advice_active_${index}`);
+        function toggleAdviceState(index, gite) {
+            const localState = localStorage.getItem(`${gite}_advice_active_${index}`);
             let currentState = true;
             if (localState !== null) {
                 currentState = (localState === 'true');
-            } else {
-                const activeVal = String(cachedAdvices[index].active || cachedAdvices[index].statut || '').trim().toLowerCase();
-                currentState = (activeVal === '' || activeVal === 'true' || activeVal === 'oui' || activeVal === 'vrai' || activeVal === '1' || cachedAdvices[index].active === true);
             }
 
-            localStorage.setItem(`advice_active_${index}`, !currentState);
+            localStorage.setItem(`${gite}_advice_active_${index}`, !currentState);
             buildAdminTable();
-            renderActiveAdvices();
         }
 
-        function resetAllAdvices() {
-            cachedAdvices.forEach((_, index) => {
-                localStorage.setItem(`advice_active_${index}`, 'false');
-            });
-            buildAdminTable();
-            renderActiveAdvices();
-            alert("Tous les conseils ont été désactivés !");
+        function confirmResetAll() {
+            const selectedGite = document.getElementById('admin-select-gite').value;
+            const giteDisplayName = selectedGite === 'grandzabris' ? 'Le Grandzabris' : 'Le Ptitzabris';
+            
+            if (confirm(`Êtes-vous sûr de vouloir désactiver tous les conseils pour ${giteDisplayName} ?`)) {
+                cachedAdvices.forEach((_, index) => {
+                    localStorage.setItem(`${selectedGite}_advice_active_${index}`, 'false');
+                });
+                buildAdminTable();
+                alert(`Tous les conseils ont été désactivés pour ${giteDisplayName} !`);
+            }
         }
 
         function openPinModal() {
@@ -425,6 +431,8 @@
         }
         function openTableModal() {
             document.getElementById('admin-options-modal').style.display = 'none';
+            document.getElementById('admin-select-gite').value = currentGiteKey;
+            buildAdminTable();
             document.getElementById('admin-table-modal').style.display = 'flex';
         }
         function closeTableModal() {
