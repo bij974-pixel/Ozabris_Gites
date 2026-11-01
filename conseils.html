@@ -36,17 +36,18 @@
             border-bottom: none;
         }
 
-        .header-top-controls { position: absolute; top: 12px; right: 15px; display: block; }
+        .header-top-controls { position: absolute; top: 12px; right: 15px; display: block; z-index: 10; }
         .btn-admin {
             font-family: 'Segoe UI', sans-serif;
             font-size: 0.75rem;
             background: var(--accent);
             border: 1px solid var(--accent);
             color: var(--primary);
-            padding: 5px 12px;
+            padding: 6px 14px;
             border-radius: 20px;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         .btn-admin:hover { background: var(--white); }
 
@@ -203,12 +204,12 @@
             currentGite = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
             document.getElementById('back-home-btn').href = `index.html?gite=${currentGite}&v=99`;
 
-            // Le bouton admin s'affiche partout (téléphone, PC, Safari...) et se masque UNIQUEMENT sur Fully Kiosk
             const isFullyKiosk = typeof window.fully !== 'undefined' || navigator.userAgent.includes("Fully");
+            const adminContainer = document.getElementById('admin-container');
             if (isFullyKiosk) {
-                document.getElementById('admin-container').style.display = 'none';
+                adminContainer.style.display = 'none';
             } else {
-                document.getElementById('admin-container').style.display = 'block';
+                adminContainer.style.display = 'block';
             }
 
             loadHeaderTexts();
@@ -223,8 +224,8 @@
         }
 
         function loadHeaderTexts() {
-            const savedTitle = localStorage.getItem('ozabris_page_title') || "Conseils & Recommandations";
-            const savedSub = localStorage.getItem('ozabris_page_sub') || "🌿 Tout pour découvrir La Réunion et profiter pleinement de votre séjour aux Ozabris.";
+            const savedTitle = localStorage.getItem('ozabris_page_title') || sessionStorage.getItem('ozabris_page_title') || "Conseils & Recommandations";
+            const savedSub = localStorage.getItem('ozabris_page_sub') || sessionStorage.getItem('ozabris_page_sub') || "🌿 Tout pour découvrir La Réunion et profiter pleinement de votre séjour aux Ozabris.";
 
             document.getElementById('page-main-title').innerText = savedTitle;
             document.getElementById('page-main-sub').innerText = savedSub;
@@ -232,14 +233,13 @@
         }
 
         function getStoredAdvices() {
-            const saved = localStorage.getItem('ozabris_custom_10_advices_v4');
+            const saved = localStorage.getItem('ozabris_custom_10_advices_v6') || sessionStorage.getItem('ozabris_custom_10_advices_v6');
             if (saved) {
                 try { 
                     const parsed = JSON.parse(saved);
                     if (Array.isArray(parsed) && parsed.length > 0) return parsed;
                 } catch(e) {}
             }
-            localStorage.setItem('ozabris_custom_10_advices_v4', JSON.stringify(defaultAdvices));
             return defaultAdvices;
         }
 
@@ -355,8 +355,14 @@
 
             const newTitle = document.getElementById('cfg-page-title').value.trim();
             const newSub = document.getElementById('cfg-page-sub').value.trim();
-            if (newTitle) localStorage.setItem('ozabris_page_title', newTitle);
-            if (newSub) localStorage.setItem('ozabris_page_sub', newSub);
+            if (newTitle) {
+                localStorage.setItem('ozabris_page_title', newTitle);
+                sessionStorage.setItem('ozabris_page_title', newTitle);
+            }
+            if (newSub) {
+                localStorage.setItem('ozabris_page_sub', newSub);
+                sessionStorage.setItem('ozabris_page_sub', newSub);
+            }
 
             let promises = advices.map((adv, index) => {
                 return new Promise((resolve) => {
@@ -409,7 +415,10 @@
             });
 
             Promise.all(promises).then(() => {
-                localStorage.setItem('ozabris_custom_10_advices_v4', JSON.stringify(advices));
+                const dataString = JSON.stringify(advices);
+                localStorage.setItem('ozabris_custom_10_advices_v6', dataString);
+                sessionStorage.setItem('ozabris_custom_10_advices_v6', dataString);
+
                 btn.innerText = "💾 Enregistrer toutes les modifications";
                 btn.disabled = false;
                 alert('Modifications enregistrées avec succès !');
@@ -417,7 +426,10 @@
                 loadHeaderTexts();
                 renderAdvices();
             }).catch(() => {
-                localStorage.setItem('ozabris_custom_10_advices_v4', JSON.stringify(advices));
+                const dataString = JSON.stringify(advices);
+                localStorage.setItem('ozabris_custom_10_advices_v6', dataString);
+                sessionStorage.setItem('ozabris_custom_10_advices_v6', dataString);
+
                 btn.innerText = "💾 Enregistrer toutes les modifications";
                 btn.disabled = false;
                 alert('Modifications enregistrées avec succès !');
