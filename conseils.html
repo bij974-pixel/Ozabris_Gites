@@ -123,19 +123,28 @@
         .btn-action { background-color: var(--primary); color: white; padding: 8px 22px; border-radius: 8px; font-weight: 600; font-size: 0.8rem; cursor: pointer; border: none; text-decoration: none; display: inline-block; transition: background 0.2s; }
         .btn-action:hover { background-color: var(--accent); color: var(--primary); }
 
-        #admin-modal, #admin-options-modal {
+        /* Modales Admin */
+        #admin-modal, #admin-options-modal, #admin-table-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 38, 58, 0.85); justify-content: center; align-items: center; z-index: 1000; font-family: 'Segoe UI', sans-serif;
         }
         .modal-content {
-            background: white; padding: 25px; border-radius: 14px; width: 90%; max-width: 340px; text-align: center; border: 2px solid var(--accent);
+            background: white; padding: 25px; border-radius: 14px; width: 90%; max-width: 420px; text-align: center; border: 2px solid var(--accent); max-height: 85vh; overflow-y: auto;
         }
         .modal-content input {
             width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 0.85rem; text-align: center;
         }
         .modal-btn {
-            background: var(--primary); color: white; border: none; padding: 9px 18px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 8px; font-size: 0.85rem; text-decoration: none; display: inline-block; box-sizing: border-box;
+            background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; font-size: 0.85rem; text-decoration: none; display: inline-block; box-sizing: border-box; text-align: center;
         }
         .modal-btn:hover { background: var(--accent); color: var(--primary); }
+
+        /* Tableau de gestion interactif */
+        .admin-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.78rem; text-align: left; }
+        .admin-table th, .admin-table td { padding: 8px; border-bottom: 1px solid #eee; }
+        .admin-table th { background: var(--primary); color: white; font-family: 'Playfair Display', serif; }
+        .toggle-switch { cursor: pointer; padding: 4px 10px; border-radius: 4px; font-weight: bold; border: none; font-size: 0.72rem; }
+        .btn-on { background: #d4edda; color: #155724; }
+        .btn-off { background: #f8d7da; color: #721c24; }
     </style>
 </head>
 <body>
@@ -167,7 +176,7 @@
 
     <!-- Modale de saisie du PIN -->
     <div id="admin-modal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 320px;">
             <button type="button" onclick="closePinModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
             <h3>🔒 Accès Admin</h3>
             <p style="font-size: 0.8rem; color: #666; margin: 5px 0;">Code PIN de sécurité</p>
@@ -177,28 +186,60 @@
         </div>
     </div>
 
-    <!-- Modale des choix après PIN réussi -->
+    <!-- Modale des 2 choix principaux après PIN réussi -->
     <div id="admin-options-modal">
         <div class="modal-content">
             <button type="button" onclick="closeOptionsModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
             <h3>⚙️ Espace Gestion</h3>
-            <p style="font-size: 0.8rem; color: #666; margin: 8px 0 15px 0;">Que souhaitez-vous faire ?</p>
+            <p style="font-size: 0.8rem; color: #666; margin: 8px 0 15px 0;">Choisissez une action :</p>
             
-            <a href="https://forms.gle/w77k6We9HrzRxERy7" target="_blank" class="modal-btn">📝 Ajouter un conseil (Google Form)</a>
-            <button type="button" class="modal-btn" onclick="location.reload()" style="background-color: var(--accent); color: var(--primary);">🔄 Rafraîchir les conseils</button>
+            <!-- Choix 1 : Accès au Google Form pour saisie -->
+            <a href="https://forms.gle/w77k6We9HrzRxERy7" target="_blank" class="modal-btn" style="background-color: var(--primary);">📝 Saisir un nouveau conseil (Google Form)</a>
+            
+            <!-- Choix 2 : Accès au tableau pour réinitialisation / désactivation -->
+            <button type="button" class="modal-btn" onclick="openTableModal()" style="background-color: var(--accent); color: var(--primary);">📋 Réinitialiser / Gérer l'affichage des conseils</button>
+        </div>
+    </div>
+
+    <!-- Modale du Tableau de Gestion & Réinitialisation -->
+    <div id="admin-table-modal">
+        <div class="modal-content">
+            <button type="button" onclick="closeTableModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
+            <h3>📋 Gestion et Réinitialisation</h3>
+            <p style="font-size: 0.78rem; color: #666; margin: 6px 0 12px 0;">Activez ou désactivez les conseils en un clic :</p>
+            
+            <div style="max-height: 200px; overflow-y: auto; border: 1px solid #ddd; border-radius: 6px;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Titre</th>
+                            <th style="text-align: center;">Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-advice-tbody">
+                        <tr><td colspan="2" style="text-align: center; color: #666;">Chargement...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button type="button" class="modal-btn" onclick="resetAllAdvices()" style="background-color: #b94a48; color: white; margin-top: 12px;">🔄 Tout désactiver (Réinitialiser)</button>
+            <button type="button" class="modal-btn" onclick="location.reload()" style="background-color: var(--primary); color: white;">💾 Enregistrer & Fermer</button>
         </div>
     </div>
 
     <script>
         const sheetApiUrl = "https://script.google.com/macros/s/AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq/exec";
 
+        let cachedAdvices = [];
+        let currentGiteKey = 'ptitzabris';
+
         window.onload = async function() {
             const urlParams = new URLSearchParams(window.location.search);
             const giteParam = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
-            const cottageKey = giteParam.includes("grand") ? "grandzabris" : "ptitzabris";
-            const cottageName = cottageKey === "grandzabris" ? "Grandzabris" : "Ptitzabris";
+            currentGiteKey = giteParam.includes("grand") ? "grandzabris" : "ptitzabris";
+            let cottageName = currentGiteKey === "grandzabris" ? "Grandzabris" : "Ptitzabris";
 
-            document.getElementById('back-home-btn').href = `index.html?gite=${cottageKey}&v=99`;
+            document.getElementById('back-home-btn').href = `index.html?gite=${currentGiteKey}&v=99`;
 
             const isFullyKiosk = typeof window.fully !== 'undefined' || navigator.userAgent.includes("Fully");
             const adminContainer = document.getElementById('admin-container');
@@ -211,7 +252,7 @@
                 adminContainer.style.display = 'block';
             }
 
-            await loadPageData(cottageKey, cottageName);
+            await loadPageData(currentGiteKey, cottageName);
 
             const adminPin = document.getElementById('adminPin');
             if (adminPin) {
@@ -227,7 +268,6 @@
             const subEl = document.getElementById('page-main-sub');
 
             try {
-                // 1. Récupération exacte du voyageur actif selon les dates (comme sur l'index)
                 const resVoyageurs = await fetch(sheetApiUrl + "?t=" + new Date().getTime());
                 const voyageurs = await resVoyageurs.json();
                 
@@ -254,7 +294,6 @@
                     });
                 }
 
-                // 2. Affichage propre du prénom récupéré du Sheet principal
                 if (voyageurActuel && voyageurActuel.prenom) {
                     titleEl.innerText = `Recommandations exclusives pour ${voyageurActuel.prenom}`;
                 } else {
@@ -262,53 +301,122 @@
                 }
                 subEl.innerHTML = `✨ Sélection sur-mesure de nos plus belles adresses, imaginée spécialement pour votre séjour aux Ozabris.`;
 
-                // 3. Récupération des conseils et filtrage sur Super U 3B
                 const response = await fetch(sheetApiUrl + "?type=conseils&t=" + new Date().getTime());
-                const advices = await response.json();
+                cachedAdvices = await response.json();
 
-                if (!Array.isArray(advices) || advices.length === 0) {
+                if (!Array.isArray(cachedAdvices) || cachedAdvices.length === 0) {
                     container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 1; padding: 20px;">Aucun conseil trouvé dans le Google Sheet.</p>`;
                     return;
                 }
 
-                container.innerHTML = "";
-
-                // On ne garde que l'élément Super U
-                const superUConseil = advices.find(adv => {
-                    const title = String(adv.title || '').toLowerCase();
-                    return title.includes('super u');
-                });
-
-                if (superUConseil) {
-                    const box = document.createElement('div');
-                    box.className = 'advice-box';
-                    
-                    const titleText = superUConseil.title || 'Super U 3B';
-                    const imageUrl = superUConseil.img ? superUConseil.img.trim() : "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg";
-
-                    let linkHtml = "";
-                    if (superUConseil.linkUrl) {
-                        linkHtml = `<p style="margin-top: 6px;"><a href="${superUConseil.linkUrl}" target="_blank">Découvrir ${titleText} ↗</a></p>`;
-                    }
-
-                    box.innerHTML = `
-                        <div>
-                            <h3>${titleText}</h3>
-                            <p>${superUConseil.text || ''}</p>
-                            ${linkHtml}
-                        </div>
-                        <div class="advice-img-wrapper">
-                            <img src="${imageUrl}" alt="${titleText}" onerror="this.src='https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg'">
-                        </div>
-                    `;
-                    container.appendChild(box);
-                } else {
-                    container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 1; padding: 20px;">Super U n'est pas encore configuré dans le Google Sheet.</p>`;
-                }
+                renderActiveAdvice();
+                buildAdminTable();
 
             } catch (e) {
                 container.innerHTML = `<p style="text-align: center; color: #b94a48; font-family: 'Segoe UI', sans-serif; grid-column: span 1; padding: 20px;">Erreur de chargement depuis Google Sheet.</p>`;
             }
+        }
+
+        function renderActiveAdvice() {
+            const container = document.getElementById('advice-grid-container');
+            container.innerHTML = "";
+
+            // On cherche le premier conseil actif selon le stockage local
+            let activeAdvice = null;
+            
+            for (let i = 0; i < cachedAdvices.length; i++) {
+                const localState = localStorage.getItem(`advice_active_${i}`);
+                let isActive = true;
+                if (localState !== null) {
+                    isActive = (localState === 'true');
+                } else {
+                    const activeVal = String(cachedAdvices[i].active || '').trim().toLowerCase();
+                    isActive = (activeVal === 'true' || activeVal === 'oui' || activeVal === 'vrai' || activeVal === '1' || cachedAdvices[i].active === true);
+                }
+
+                if (isActive) {
+                    activeAdvice = cachedAdvices[i];
+                    break; // On prend le premier actif (ex: Super U)
+                }
+            }
+
+            if (activeAdvice) {
+                const box = document.createElement('div');
+                box.className = 'advice-box';
+                
+                const titleText = activeAdvice.title || 'Conseil';
+                const imageUrl = activeAdvice.img ? activeAdvice.img.trim() : "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg";
+
+                let linkHtml = "";
+                if (activeAdvice.linkUrl) {
+                    linkHtml = `<p style="margin-top: 6px;"><a href="${activeAdvice.linkUrl}" target="_blank">Découvrir ${titleText} ↗</a></p>`;
+                }
+
+                box.innerHTML = `
+                    <div>
+                        <h3>${titleText}</h3>
+                        <p>${activeAdvice.text || ''}</p>
+                        ${linkHtml}
+                    </div>
+                    <div class="advice-img-wrapper">
+                        <img src="${imageUrl}" alt="${titleText}" onerror="this.src='https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg'">
+                    </div>
+                `;
+                container.appendChild(box);
+            } else {
+                container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 1; padding: 20px;">Aucun conseil actif pour le moment. Rendez-vous dans Admin ⚙️ pour en activer un.</p>`;
+            }
+        }
+
+        function buildAdminTable() {
+            const tbody = document.getElementById('admin-advice-tbody');
+            tbody.innerHTML = "";
+
+            cachedAdvices.forEach((adv, index) => {
+                const localState = localStorage.getItem(`advice_active_${index}`);
+                let isActive = true;
+                if (localState !== null) {
+                    isActive = (localState === 'true');
+                } else {
+                    const activeVal = String(adv.active || '').trim().toLowerCase();
+                    isActive = (activeVal === 'true' || activeVal === 'oui' || activeVal === 'vrai' || activeVal === '1' || adv.active === true);
+                }
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-weight: 500; color: var(--primary);">${adv.title || 'Conseil #' + (index+1)}</td>
+                    <td style="text-align: center;">
+                        <button type="button" class="toggle-switch ${isActive ? 'btn-on' : 'btn-off'}" onclick="toggleAdviceState(${index})">
+                            ${isActive ? '✓ Actif' : '✕ Inactif'}
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function toggleAdviceState(index) {
+            const localState = localStorage.getItem(`advice_active_${index}`);
+            let currentState = true;
+            if (localState !== null) {
+                currentState = (localState === 'true');
+            } else {
+                const activeVal = String(cachedAdvices[index].active || '').trim().toLowerCase();
+                currentState = (activeVal === 'true' || activeVal === 'oui' || activeVal === 'vrai' || activeVal === '1' || cachedAdvices[index].active === true);
+            }
+
+            localStorage.setItem(`advice_active_${index}`, !currentState);
+            buildAdminTable();
+            renderActiveAdvice();
+        }
+
+        function resetAllAdvices() {
+            cachedAdvices.forEach((_, index) => {
+                localStorage.setItem(`advice_active_${index}`, 'false');
+            });
+            buildAdminTable();
+            renderActiveAdvice();
+            alert("Tous les conseils ont été désactivés (réinitialisation effectuée) !");
         }
 
         function openPinModal() {
@@ -323,6 +431,13 @@
         function closeOptionsModal() {
             document.getElementById('admin-options-modal').style.display = 'none';
         }
+        function openTableModal() {
+            document.getElementById('admin-options-modal').style.display = 'none';
+            document.getElementById('admin-table-modal').style.display = 'flex';
+        }
+        function closeTableModal() {
+            document.getElementById('admin-table-modal').style.display = 'none';
+        }
         function verifyPin() {
             const pin = document.getElementById('adminPin').value.trim();
             if (pin === '140769') {
@@ -336,3 +451,4 @@
     </script>
 </body>
 </html>
+
