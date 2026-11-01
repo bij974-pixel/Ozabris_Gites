@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title-meta">Conseils Personnalisés | Les Ozabris</title>
+    <title>Bienvenue | Les Ozabris</title>
     <style>
         :root { --primary: #12263a; --accent: #c5a880; --text-dark: #2c3e50; --white: #ffffff; --tropical-green: #1b4d3e; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Playfair Display', 'Georgia', serif; }
@@ -36,18 +36,17 @@
             border-bottom: none;
         }
 
-        .header-top-controls { position: absolute; top: 12px; right: 15px; display: block; z-index: 10; }
+        .header-top-controls { position: absolute; top: 12px; right: 15px; }
         .btn-admin {
             font-family: 'Segoe UI', sans-serif;
             font-size: 0.75rem;
             background: var(--accent);
             border: 1px solid var(--accent);
             color: var(--primary);
-            padding: 6px 14px;
+            padding: 5px 12px;
             border-radius: 20px;
             cursor: pointer;
-            font-weight: 700;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            font-weight: 600;
         }
         .btn-admin:hover { background: var(--white); }
 
@@ -75,28 +74,20 @@
             position: relative;
         }
 
-        .card-header { margin-bottom: 15px; }
+        .card-header { margin-bottom: 10px; }
         h2 { color: var(--primary); font-size: 1.8rem; font-weight: 400; margin-bottom: 3px; }
         .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.85rem; color: #555; font-style: italic; }
 
-        .advice-grid { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 15px; 
-            margin-bottom: 15px; 
-            max-height: 52vh; 
-            overflow-y: auto; 
-            padding-right: 8px; 
-            text-align: left;
-        }
-        .advice-box { background: var(--white); border: 1px solid var(--accent); border-radius: 10px; padding: 15px; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; justify-content: space-between; }
-        .advice-box h3 { font-size: 0.95rem; color: var(--primary); margin-bottom: 6px; font-family: 'Playfair Display', serif; }
-        .advice-box p { font-size: 0.8rem; color: #555; margin-bottom: 8px; }
-        .advice-box img { width: 100%; height: 110px; object-fit: cover; border-radius: 6px; border: 1px solid #eee; margin-top: 6px; }
-        .advice-box a { color: var(--primary); font-weight: bold; text-decoration: underline; font-size: 0.8rem; }
+        .grid-info { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 10px 0; }
+        .info-box { background: var(--white); border: 1px solid var(--accent); border-radius: 10px; padding: 10px 8px; text-align: center; font-family: 'Segoe UI', sans-serif; }
+        .info-box h3 { font-size: 0.85rem; color: var(--primary); margin-bottom: 5px; }
+        .info-box img { width: 75px; height: 75px; object-fit: contain; margin: 4px auto; display: block; border-radius: 6px; border: 1px solid #eee; }
+        .info-box p { font-size: 0.7rem; color: #555; }
 
-        .footer-actions { display: flex; justify-content: center; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 12px; font-family: 'Segoe UI', sans-serif; }
-        .btn-action { background-color: var(--primary); color: white; padding: 10px 25px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; border: none; text-decoration: none; display: inline-block; transition: background 0.2s; }
+        .banner-solaire { background: linear-gradient(135deg, rgba(197, 168, 128, 0.2), rgba(27, 77, 62, 0.1)); border-left: 4px solid var(--tropical-green); padding: 8px 12px; border-radius: 6px; font-family: 'Segoe UI', sans-serif; font-size: 0.78rem; color: var(--primary); text-align: center; margin: 8px 0; }
+
+        .footer-actions { display: flex; flex-direction: column; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 10px; font-family: 'Segoe UI', sans-serif; gap: 6px; }
+        .btn-action { background-color: var(--primary); color: white; padding: 8px 20px; border-radius: 8px; font-weight: 600; font-size: 0.82rem; cursor: pointer; border: none; text-decoration: none; display: inline-block; transition: background 0.2s; }
         .btn-action:hover { background-color: var(--accent); color: var(--primary); }
 
         /* Modals Admin */
@@ -104,23 +95,15 @@
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 38, 58, 0.85); justify-content: center; align-items: center; z-index: 1000; font-family: 'Segoe UI', sans-serif;
         }
         .modal-content {
-            background: white; padding: 25px; border-radius: 14px; width: 90%; max-width: 550px; text-align: center; border: 2px solid var(--accent); max-height: 90vh; display: flex; flex-direction: column;
+            background: white; padding: 25px; border-radius: 14px; width: 90%; max-width: 420px; text-align: center; border: 2px solid var(--accent); max-height: 90vh; overflow-y: auto;
         }
-        .modal-header-fixed {
-            background: #fff; padding-bottom: 12px; border-bottom: 2px solid var(--accent); margin-bottom: 10px; flex-shrink: 0; text-align: left;
+        .modal-content input, .modal-content select {
+            width: 100%; padding: 8px; margin: 6px 0 12px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 0.85rem; text-align: center;
         }
-        .modal-body-scroll {
-            overflow-y: auto; flex-grow: 1; padding-right: 5px; text-align: left;
-        }
-        .modal-content input[type="text"], .modal-content textarea, .modal-content select {
-            width: 100%; padding: 7px; margin: 4px 0 8px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 0.8rem;
-        }
-        .modal-content textarea { resize: none; height: 50px; }
         .modal-btn {
-            background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem; width: 100%; box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            background: var(--primary); color: white; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 5px;
         }
         .modal-btn:hover { background: var(--accent); color: var(--primary); }
-        .advice-config-group { background: #fdfbf7; border: 1px solid var(--accent); padding: 12px; border-radius: 8px; margin-bottom: 12px; }
     </style>
 </head>
 <body>
@@ -137,92 +120,162 @@
 
     <div class="tv-card">
         <div class="card-header">
-            <h2 id="page-main-title">Conseils & Recommandations</h2>
-            <p id="page-main-sub" class="welcome-sub">🌿 Tout pour découvrir La Réunion et profiter pleinement de votre séjour aux Ozabris.</p>
+            <h2 id="welcome-title">Bienvenue !</h2>
+            <p class="welcome-sub">🌿 Une parenthèse d'exception, de sérénité et de nature au cœur des Hauts de La Réunion.</p>
         </div>
 
-        <div class="advice-grid" id="advice-grid-container">
-            <!-- Les encadrés dynamiques s'afficheront ici -->
+        <div class="grid-info">
+            <div class="info-box">
+                <h3>📶 Wi-Fi Domaine</h3>
+                <img id="img-wifi" src="" alt="WiFi QR Code">
+                <p><b>Réseau :</b> <span id="display-ssid">SFR_JR</span><br><b>Pass :</b> <code><span id="display-pass">02311760</span></code></p>
+            </div>
+            <div class="info-box">
+                <h3>📺 TV & Box</h3>
+                <img src="https://i.postimg.cc/pT3Z2q5f/IMG-4402.jpg" alt="Telecommande">
+                <p>Appuyez sur le bouton entouré. Pour la TV, choisissez l'appli Orange TV.</p>
+            </div>
+            <div class="info-box">
+                <h3>♻️ Tri & Déchets</h3>
+                <img src="https://i.postimg.cc/kXbdsqRb/IMG-4408.jpg" alt="Dechets">
+                <p id="compost-text">Compost & Jaunes.</p>
+            </div>
+            <div class="info-box" style="background: rgba(255,235,238,0.85);">
+                <h3 style="color: #b94a48;">🚽 Sanibroyeur</h3>
+                <img src="https://i.postimg.cc/FRZkRwQW/IMG-4415.jpg" alt="Sanibroyeur">
+                <p style="color: #b94a48; font-weight: bold;">Papier uniquement ! Rien d'autre.</p>
+            </div>
         </div>
+
+        <div class="banner-solaire">☀️ <b>Énergie Solaire & Écologie</b> — Lave & Sèche-linge en accès libre (utilisation conseillée <b>en journée</b>).</div>
         
         <div class="footer-actions">
-            <a id="back-home-btn" href="index.html" class="btn-action">🏠 Retour à l'accueil</a>
+            <a id="btn-conseils" href="conseils.html" class="btn-action">🌟 Découvrir nos conseils personnalisés</a>
         </div>
     </div>
 
     <!-- Étape 1 : Demande du PIN Admin -->
     <div id="admin-modal">
-        <div class="modal-content" style="max-width: 320px; height: auto;">
+        <div class="modal-content" style="max-width: 320px;">
             <button type="button" onclick="closePinModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
             <h3>🔒 Accès Admin</h3>
             <p style="font-size: 0.8rem; color: #666; margin: 5px 0;">Code PIN de sécurité</p>
-            <input type="password" id="adminPin" placeholder="PIN" maxlength="6" style="text-align: center;">
+            <input type="password" id="adminPin" placeholder="PIN" maxlength="6">
             <button type="button" class="modal-btn" onclick="verifyPin()">Valider</button>
             <p id="adminError" style="color: #b94a48; font-size: 0.75rem; margin-top: 8px; display: none;">Code incorrect</p>
         </div>
     </div>
 
-    <!-- Étape 2 : Configuration Admin -->
+    <!-- Étape 2 : Panneau de Configuration Admin -->
     <div id="config-admin-modal">
         <div class="modal-content">
-            <div class="modal-header-fixed">
-                <button type="button" onclick="closeConfigModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
-                <h3 style="color: var(--primary); font-family: 'Playfair Display', serif; text-align: center; margin-bottom: 8px;">⚙️ Gestion des 10 Conseils</h3>
-                
-                <button type="button" class="modal-btn" onclick="saveAdviceConfig()" id="save-btn">💾 Enregistrer toutes les modifications</button>
-            </div>
+            <button type="button" onclick="closeConfigModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
+            <h3>⚙️ Configuration du Gîte</h3>
             
-            <div class="modal-body-scroll" id="admin-advice-list">
-                <!-- Généré dynamiquement -->
-            </div>
+            <label style="font-size: 0.75rem; font-weight: bold; display: block; text-align: left; color: var(--primary);">Sélectionner le gîte à configurer</label>
+            <select id="cfg-select-gite" onchange="loadConfigValues()">
+                <option value="ptitzabris">Le Ptitzabris</option>
+                <option value="grandzabris">Le Grandzabris</option>
+            </select>
+
+            <label style="font-size: 0.75rem; font-weight: bold; display: block; text-align: left; color: var(--primary);">Importer l'image du QR Code Wi-Fi</label>
+            <input type="file" id="cfg-file-wifi" accept="image/*" style="padding: 4px; font-size: 0.75rem;">
+
+            <label style="font-size: 0.75rem; font-weight: bold; display: block; text-align: left; color: var(--primary);">Nom du réseau Wi-Fi (SSID)</label>
+            <input type="text" id="cfg-ssid" placeholder="Ex: SFR_JR">
+
+            <label style="font-size: 0.75rem; font-weight: bold; display: block; text-align: left; color: var(--primary);">Mot de passe Wi-Fi</label>
+            <input type="text" id="cfg-password" placeholder="Ex: 02311760">
+
+            <button type="button" class="modal-btn" onclick="saveConfigValues()">💾 Enregistrer</button>
         </div>
     </div>
 
     <script>
-        const defaultAdvices = [
-            { id: 1, active: true, target: "both", title: "🛒 Super marché le plus proche", text: "Le super marché le plus proche est à 10mn d'ici, le SUPER U de Trois Bassins (lien pour les horaires ci-dessous)", img: "https://i.postimg.cc/7L2PvXzp/IMG-4328.jpg", linkText: "Horaires Super U", linkUrl: "https://i.postimg.cc/zfz7HxhN/Image.png" },
-            { id: 2, active: true, target: "both", title: "🚗 Location & Infos Routes", text: "Anticipez vos montées vers les cirques de préférence tôt le matin.", img: "https://i.postimg.cc/m227V1Jq/IMG-4249.jpg", linkText: "", linkUrl: "" },
-            { id: 3, active: true, target: "both", title: "🥖 Boulangerie & Commerces", text: "Retrouvez toutes les adresses de proximité à La Saline pour vos courses.", img: "https://i.postimg.cc/2jTZq8yF/IMG-4380.jpg", linkText: "", linkUrl: "" },
-            { id: 4, active: true, target: "both", title: "🍽️ Nos Bonnes Tables", text: "Envie d'un bon cari réunionnais ou d'une table raffinée ? Nos coups de cœur.", img: "https://i.postimg.cc/13yj8PKc/Image.jpg", linkText: "", linkUrl: "" },
-            { id: 5, active: false, target: "both", title: "💡 Conseil Personnalisé 5", text: "Ajoutez ici un conseil sur mesure pour vos voyageurs.", img: "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg", linkText: "", linkUrl: "" },
-            { id: 6, active: false, target: "both", title: "💡 Conseil Personnalisé 6", text: "Ajoutez ici un conseil sur mesure pour vos voyageurs.", img: "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg", linkText: "", linkUrl: "" },
-            { id: 7, active: false, target: "both", title: "💡 Conseil Personnalisé 7", text: "Ajoutez ici un conseil sur mesure pour vos voyageurs.", img: "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg", linkText: "", linkUrl: "" },
-            { id: 8, active: false, target: "both", title: "💡 Conseil Personnalisé 8", text: "Ajoutez ici un conseil sur mesure pour vos voyageurs.", img: "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg", linkText: "", linkUrl: "" },
-            { id: 9, active: false, target: "both", title: "💡 Conseil Personnalisé 9", text: "Ajoutez ici un conseil sur mesure pour vos voyageurs.", img: "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg", linkText: "", linkUrl: "" },
-            { id: 10, active: false, target: "both", title: "💡 Conseil Personnalisé 10", text: "Ajoutez ici un conseil sur mesure pour vos voyageurs.", img: "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg", linkText: "", linkUrl: "" }
-        ];
+        const sheetApiUrl = "https://script.google.com/macros/s/AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq/exec";
 
-        let currentGite = 'ptitzabris';
+        window.onload = async function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let giteParam = (urlParams.get('gite') || '').toLowerCase();
 
-        window.onload = function() {
-            // Actualisation automatique et forcée à chaque ouverture de page pour éviter les mémoires bloquées
-            if (!sessionStorage.getItem('advice_refreshed_v8')) {
-                sessionStorage.setItem('advice_refreshed_v8', 'true');
-                location.reload();
-                return;
-            } else {
-                sessionStorage.removeItem('advice_refreshed_v8');
+            // Si aucun gîte n'est précisé, on force Grandzabris pour la télé et Ptitzabris pour le téléphone
+            if (!giteParam) {
+                const currentHost = window.location.hostname;
+                const isBoxTV = currentHost.endsWith(".93") || currentHost === "192.168.1.93" || typeof window.fully !== 'undefined';
+                giteParam = isBoxTV ? "grandzabris" : "ptitzabris";
             }
 
-            const urlParams = new URLSearchParams(window.location.search);
-            const giteParam = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
-            currentGite = giteParam.includes('grand') ? 'grandzabris' : 'ptitzabris';
+            let cottageKey = giteParam.includes("grand") ? "grandzabris" : "ptitzabris";
+            let cottageName = cottageKey === "grandzabris" ? "Grandzabris" : "Ptitzabris";
 
-            document.getElementById('back-home-btn').href = `index.html?gite=${currentGite}`;
-
-            const isFullyKiosk = typeof window.fully !== 'undefined' || navigator.userAgent.includes("Fully");
-            const adminContainer = document.getElementById('admin-container');
+            // Masquage automatique du bouton admin pour les box TV
             const currentHost = window.location.hostname;
+            const isFullyKiosk = typeof window.fully !== 'undefined' || navigator.userAgent.includes("Fully");
             const isBoxTV = currentHost.endsWith(".93") || currentHost.endsWith(".145") || currentHost === "192.168.1.93" || currentHost === "192.168.1.145";
 
+            const adminContainer = document.getElementById('admin-container');
             if (isFullyKiosk || isBoxTV) {
                 adminContainer.style.display = 'none';
             } else {
                 adminContainer.style.display = 'block';
             }
 
-            loadHeaderTexts();
-            renderAdvices();
+            let savedWifiImg = localStorage.getItem(cottageKey + '_wifi_img');
+            if (!savedWifiImg) {
+                savedWifiImg = cottageKey === "grandzabris" ? "https://i.postimg.cc/kXbdsqRb/IMG-4408.jpg" : "https://i.postimg.cc/NMsgCSvQ/IMG-4404.jpg";
+            }
+            let savedSsid = localStorage.getItem(cottageKey + '_ssid') || "SFR_JR";
+            let savedPass = localStorage.getItem(cottageKey + '_password') || "02311760";
+
+            document.getElementById('img-wifi').src = savedWifiImg;
+            document.getElementById('display-ssid').innerText = savedSsid;
+            document.getElementById('display-pass').innerText = savedPass;
+            document.getElementById('btn-conseils').href = `conseils.html?gite=${cottageKey}`;
+
+            let compostInfo = cottageKey === "grandzabris" ? "Compost (début passerelle) & Jaunes." : "Compost & Poubelles jaunes.";
+            document.getElementById('compost-text').innerText = compostInfo;
+
+            // Récupération des prénoms depuis le Google Sheet
+            try {
+                const response = await fetch(sheetApiUrl);
+                const voyageurs = await response.json();
+                
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                let voyageurActuel = null;
+                if (voyageurs && voyageurs.length > 0) {
+                    voyageurActuel = voyageurs.find(v => {
+                        const cottageStr = String(v.cottage || '').toLowerCase();
+                        let matchCottage = false;
+                        if (cottageKey === 'grandzabris') {
+                            matchCottage = cottageStr.includes('grand') && !cottageStr.includes('ptit') && !cottageStr.includes('petit');
+                        } else {
+                            matchCottage = cottageStr.includes('ptit') || cottageStr.includes('petit');
+                        }
+                        
+                        const arrStr = v.dateArrivee || v.arrivee;
+                        const depStr = v.dateDepart || v.depart;
+
+                        if (matchCottage && arrStr && depStr) {
+                            const arrDate = new Date(arrStr);
+                            const depDate = new Date(depStr);
+                            arrDate.setHours(0, 0, 0, 0);
+                            depDate.setHours(0, 0, 0, 0);
+                            return today >= arrDate && today <= depDate;
+                        }
+                        return false;
+                    });
+                }
+
+                if (voyageurActuel && voyageurActuel.prenom) {
+                    document.getElementById('welcome-title').innerText = `Bienvenue ${voyageurActuel.prenom} au ${cottageName} !`;
+                } else {
+                    document.getElementById('welcome-title').innerText = `Bienvenue au ${cottageName} !`;
+                }
+            } catch (e) {
+                document.getElementById('welcome-title').innerText = `Bienvenue au ${cottageName} !`;
+            }
 
             const adminPin = document.getElementById('adminPin');
             if (adminPin) {
@@ -230,64 +283,6 @@
                     if (e.key === 'Enter') verifyPin();
                 });
             }
-        }
-
-        function loadHeaderTexts() {
-            const savedTitle = localStorage.getItem('ozabris_conseils_title') || "Conseils & Recommandations";
-            const savedSub = localStorage.getItem('ozabris_conseils_sub') || "🌿 Tout pour découvrir La Réunion et profiter pleinement de votre séjour aux Ozabris.";
-
-            document.getElementById('page-main-title').innerText = savedTitle;
-            document.getElementById('page-main-sub').innerText = savedSub;
-            document.getElementById('page-title-meta').innerText = savedTitle + " | Les Ozabris";
-        }
-
-        function getStoredAdvices() {
-            const saved = localStorage.getItem('ozabris_custom_10_advices_v8');
-            if (saved) {
-                try { 
-                    const parsed = JSON.parse(saved);
-                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-                } catch(e) {}
-            }
-            return defaultAdvices;
-        }
-
-        function renderAdvices() {
-            const advices = getStoredAdvices();
-            const container = document.getElementById('advice-grid-container');
-            container.innerHTML = "";
-
-            advices.forEach(adv => {
-                const targetVal = adv.target ? adv.target.toLowerCase() : 'both';
-                let matchGite = false;
-                if (targetVal === 'both') {
-                    matchGite = true;
-                } else if (currentGite === 'grandzabris' && targetVal.includes('grand')) {
-                    matchGite = true;
-                } else if (currentGite === 'ptitzabris' && (targetVal.includes('ptit') || targetVal.includes('petit'))) {
-                    matchGite = true;
-                }
-
-                if (adv.active && matchGite) {
-                    const box = document.createElement('div');
-                    box.className = 'advice-box';
-                    
-                    let linkHtml = "";
-                    if (adv.linkUrl && adv.linkText) {
-                        linkHtml = `<p style="margin-top: 4px;"><a href="${adv.linkUrl}" target="_blank">${adv.linkText} ↗</a></p>`;
-                    }
-
-                    box.innerHTML = `
-                        <div>
-                            <h3>${adv.title}</h3>
-                            <p>${adv.text}</p>
-                            ${linkHtml}
-                        </div>
-                        <img src="${adv.img}" alt="${adv.title}">
-                    `;
-                    container.appendChild(box);
-                }
-            });
         }
 
         function openPinModal() {
@@ -304,7 +299,7 @@
             if (pin === '140769') {
                 closePinModal();
                 document.getElementById('config-admin-modal').style.display = 'flex';
-                buildAdminAdviceForm();
+                loadConfigValues();
             } else {
                 document.getElementById('adminError').style.display = 'block';
                 document.getElementById('adminPin').value = '';
@@ -314,128 +309,37 @@
             document.getElementById('config-admin-modal').style.display = 'none';
         }
 
-        function buildAdminAdviceForm() {
-            const advices = getStoredAdvices();
-            const listContainer = document.getElementById('admin-advice-list');
-            listContainer.innerHTML = "";
-
-            advices.forEach((adv, index) => {
-                const targetVal = adv.target || 'both';
-                const group = document.createElement('div');
-                group.className = 'advice-config-group';
-                group.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                        <label style="display: flex; align-items: center; gap: 6px; font-weight: bold; color: var(--primary); cursor: pointer;">
-                            <input type="checkbox" id="adv-active-${index}" ${adv.active ? 'checked' : ''} style="width: 16px; height: 16px;">
-                            Encadré ${index + 1}
-                        </label>
-                        <select id="adv-target-${index}" style="width: 160px; margin: 0; padding: 4px; font-size: 0.75rem;">
-                            <option value="both" ${targetVal === 'both' ? 'selected' : ''}>📍 Les deux gîtes</option>
-                            <option value="ptitzabris" ${targetVal === 'ptitzabris' ? 'selected' : ''}>🏠 Ptitzabris uniquement</option>
-                            <option value="grandzabris" ${targetVal === 'grandzabris' ? 'selected' : ''}>🏡 Grandzabris uniquement</option>
-                        </select>
-                    </div>
-                    <input type="text" id="adv-title-${index}" value="${adv.title}" placeholder="Titre">
-                    <textarea id="adv-text-${index}" placeholder="Texte">${adv.text}</textarea>
-                    
-                    <label style="font-size: 0.68rem; font-weight: bold; color: #555; display: block; margin-top: 2px;">Photo (Fichier ou URL)</label>
-                    <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 4px;">
-                        <input type="file" id="adv-file-${index}" accept="image/*" style="font-size: 0.68rem; margin: 0; flex-grow: 1;">
-                        <button type="button" onclick="clearAdviceImage(${index})" style="background: #b94a48; color: white; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer; font-size: 0.72rem;">🗑️ Vider</button>
-                    </div>
-                    <input type="text" id="adv-img-${index}" value="${adv.img}" placeholder="Ou URL image directe" style="margin-bottom: 6px;">
-
-                    <div style="display: flex; gap: 6px;">
-                        <input type="text" id="adv-linktext-${index}" value="${adv.linkText || ''}" placeholder="Nom lien (ex: Réserver)" style="margin: 0;">
-                        <input type="text" id="adv-linkurl-${index}" value="${adv.linkUrl || ''}" placeholder="URL lien (https://...)" style="margin: 0;">
-                    </div>
-                `;
-                listContainer.appendChild(group);
-            });
+        function loadConfigValues() {
+            const selected = document.getElementById('cfg-select-gite').value;
+            document.getElementById('cfg-ssid').value = localStorage.getItem(selected + '_ssid') || "SFR_JR";
+            document.getElementById('cfg-password').value = localStorage.getItem(selected + '_password') || "02311760";
         }
 
-        function clearAdviceImage(index) {
-            document.getElementById(`adv-file-${index}`).value = "";
-            document.getElementById(`adv-img-${index}`).value = "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg";
-            alert("Photo vidée.");
-        }
+        function saveConfigValues() {
+            const selected = document.getElementById('cfg-select-gite').value;
+            const ssid = document.getElementById('cfg-ssid').value.trim();
+            const password = document.getElementById('cfg-password').value.trim();
+            const fileInput = document.getElementById('cfg-file-wifi');
 
-        function saveAdviceConfig() {
-            const advices = getStoredAdvices();
-            const btn = document.getElementById('save-btn');
-            btn.innerText = "⏳ Enregistrement...";
-            btn.disabled = true;
+            localStorage.setItem(selected + '_ssid', ssid);
+            localStorage.setItem(selected + '_password', password);
 
-            let promises = advices.map((adv, index) => {
-                return new Promise((resolve) => {
-                    adv.active = document.getElementById(`adv-active-${index}`).checked;
-                    adv.target = document.getElementById(`adv-target-${index}`).value;
-                    adv.title = document.getElementById(`adv-title-${index}`).value;
-                    adv.text = document.getElementById(`adv-text-${index}`).value;
-                    adv.linkText = document.getElementById(`adv-linktext-${index}`).value;
-                    adv.linkUrl = document.getElementById(`adv-linkurl-${index}`).value;
-                    
-                    const manualUrl = document.getElementById(`adv-img-${index}`).value.trim();
-                    if (manualUrl) adv.img = manualUrl;
-
-                    const fileInput = document.getElementById(`adv-file-${index}`);
-                    if (fileInput.files && fileInput.files[0]) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            const img = new Image();
-                            img.onload = function() {
-                                const canvas = document.createElement('canvas');
-                                let width = img.width;
-                                let height = img.height;
-                                const max_size = 600;
-
-                                if (width > height && width > max_size) {
-                                    height *= max_size / width;
-                                    width = max_size;
-                                } else if (height > max_size) {
-                                    width *= max_size / height;
-                                    height = max_size;
-                                }
-
-                                canvas.width = width;
-                                canvas.height = height;
-                                const ctx = canvas.getContext('2d');
-                                ctx.drawImage(img, 0, 0, width, height);
-                                
-                                adv.img = canvas.toDataURL('image/jpeg', 0.8);
-                                resolve();
-                            };
-                            img.onerror = () => resolve();
-                            img.src = e.target.result;
-                        };
-                        reader.onerror = () => resolve();
-                        reader.readAsDataURL(fileInput.files[0]);
-                    } else {
-                        resolve();
-                    }
-                });
-            });
-
-            Promise.all(promises).then(() => {
-                const dataString = JSON.stringify(advices);
-                localStorage.setItem('ozabris_custom_10_advices_v8', dataString);
-
-                btn.innerText = "💾 Enregistrer toutes les modifications";
-                btn.disabled = false;
-                alert('Conseils mis à jour avec succès !');
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    localStorage.setItem(selected + '_wifi_img', e.target.result);
+                    alert('Paramètres mis à jour !');
+                    closeConfigModal();
+                    location.reload();
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                alert('Paramètres mis à jour !');
                 closeConfigModal();
-                renderAdvices();
-            }).catch(() => {
-                const dataString = JSON.stringify(advices);
-                localStorage.setItem('ozabris_custom_10_advices_v8', dataString);
-
-                btn.innerText = "💾 Enregistrer toutes les modifications";
-                btn.disabled = false;
-                alert('Conseils mis à jour avec succès !');
-                closeConfigModal();
-                renderAdvices();
-            });
+                location.reload();
+            }
         }
     </script>
 </body>
 </html>
+
