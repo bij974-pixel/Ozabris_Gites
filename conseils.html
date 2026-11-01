@@ -134,7 +134,7 @@
         </div>
 
         <div class="advice-grid" id="advice-grid-container">
-            <!-- Les conseils s'affichent automatiquement ici -->
+            <p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Chargement des conseils depuis Google Sheet...</p>
         </div>
         
         <div class="footer-actions">
@@ -154,51 +154,12 @@
     </div>
 
     <script>
-        // ==========================================
-        // TES CONSEILS EN DUR (MODIFIABLES ICI DIRECTEMENT)
-        // ==========================================
-        const advicesList = [
-            {
-                active: true,
-                target: "both", // "both" pour les deux gîtes, "ptitzabris", ou "grandzabris"
-                title: "Super U 3B",
-                text: "Supermarché le plus proche d'ici",
-                img: "https://i.postimg.cc/m2/IMG-4328.jpg",
-                linkText: "Horaires",
-                linkUrl: "https://www.magasins-u.com"
-            },
-            {
-                active: true,
-                target: "ptitzabris",
-                title: "Vanille Vallée",
-                text: "Leurs sachets pour les préparation de Rhum arrangé",
-                img: "https://i.postimg.cc/m2/IMG-4249.jpg",
-                linkText: "En savoir plus",
-                linkUrl: ""
-            },
-            {
-                active: true,
-                target: "both",
-                title: "Le VORTEX Énergétique de l'Étang",
-                text: "Un lieu hors du temps, un moment pour se ressourcer",
-                img: "https://i.postimg.cc/50L/Image.jpg",
-                linkText: "TripAdvisor",
-                linkUrl: "https://www.tripadvisor.fr"
-            },
-            {
-                active: true,
-                target: "both",
-                title: "Marché forain de St Paul",
-                text: "Le plus grand marché de L'île ! Je vous conseille d'y aller tôt le matin.",
-                img: "https://i.postimg.cc/d3Y/IMG-4380.jpg",
-                linkText: "Guide Réunion",
-                linkUrl: "https://www.ouest-lareunion.com"
-            }
-        ];
+        // Ton lien d'application web Google Apps Script tout neuf
+        const sheetApiUrl = "https://script.google.com/macros/s/AKfycbzN-EJyO0uciXYmK4Z7jFH46rBVPBB-ufkfx5Fv0xSlhMFYZoIMeBZyQsVoBEdQO4U2Bw/exec";
 
         let currentGite = 'ptitzabris';
 
-        window.onload = function() {
+        window.onload = async function() {
             const urlParams = new URLSearchParams(window.location.search);
             currentGite = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
             document.getElementById('back-home-btn').href = `index.html?gite=${currentGite}&v=99`;
@@ -214,7 +175,7 @@
                 adminContainer.style.display = 'block';
             }
 
-            renderAdvices();
+            await loadAdvicesFromSheet();
 
             const adminPin = document.getElementById('adminPin');
             if (adminPin) {
@@ -224,45 +185,62 @@
             }
         }
 
-        function renderAdvices() {
+        async function loadAdvicesFromSheet() {
             const container = document.getElementById('advice-grid-container');
-            container.innerHTML = "";
+            try {
+                // On ajoute ?type=conseils pour que l'Apps Script sache qu'il doit lire l'onglet "Conseils"
+                const response = await fetch(sheetApiUrl + "?type=conseils&t=" + new Date().getTime());
+                const advices = await response.json();
 
-            advicesList.forEach(adv => {
-                const targetVal = String(adv.target || 'both').toLowerCase();
-                let matchGite = false;
-
-                if (targetVal === 'both' || targetVal === 'les deux' || targetVal === 'tous') {
-                    matchGite = true;
-                } else if (currentGite === 'grandzabris' && targetVal.includes('grand')) {
-                    matchGite = true;
-                } else if (currentGite === 'ptitzabris' && (targetVal.includes('ptit') || targetVal.includes('petit'))) {
-                    matchGite = true;
+                if (!Array.isArray(advices) || advices.length === 0) {
+                    container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Aucun conseil trouvé dans le Google Sheet.</p>`;
+                    return;
                 }
 
-                if (adv.active && matchGite) {
-                    const box = document.createElement('div');
-                    box.className = 'advice-box';
+                container.innerHTML = "";
+
+                advices.forEach(adv => {
+                    const activeVal = String(adv.active || '').trim().toLowerCase();
+                    const isActive = (activeVal === 'true' || activeVal === 'oui' || activeVal === 'vrai' || activeVal === '1' || adv.active === true);
                     
-                    let linkHtml = "";
-                    if (adv.linkUrl) {
-                        linkHtml = `<p style="margin-top: 4px;"><a href="${adv.linkUrl}" target="_blank">${adv.linkText || 'En savoir plus'} ↗</a></p>`;
+                    const targetVal = String(adv.target || 'both').toLowerCase();
+
+                    let matchGite = false;
+                    if (targetVal.includes('les deux') || targetVal.includes('both') || targetVal.includes('tous')) {
+                        matchGite = true;
+                    } else if (currentGite === 'grandzabris' && targetVal.includes('grand')) {
+                        matchGite = true;
+                    } else if (currentGite === 'ptitzabris' && (targetVal.includes('ptit') || targetVal.includes('petit'))) {
+                        matchGite = true;
                     }
 
-                    box.innerHTML = `
-                        <div>
-                            <h3>${adv.title || 'Conseil'}</h3>
-                            <p>${adv.text || ''}</p>
-                            ${linkHtml}
-                        </div>
-                        <img src="${adv.img}" alt="${adv.title || 'Conseil'}">
-                    `;
-                    container.appendChild(box);
-                }
-            });
+                    if (isActive && matchGite) {
+                        const box = document.createElement('div');
+                        box.className = 'advice-box';
+                        
+                        let linkHtml = "";
+                        if (adv.linkUrl) {
+                            linkHtml = `<p style="margin-top: 4px;"><a href="${adv.linkUrl}" target="_blank">${adv.linkText || 'En savoir plus'} ↗</a></p>`;
+                        }
 
-            if (container.innerHTML === "") {
-                container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Aucun conseil actif pour ce gîte.</p>`;
+                        box.innerHTML = `
+                            <div>
+                                <h3>${adv.title || 'Conseil'}</h3>
+                                <p>${adv.text || ''}</p>
+                                ${linkHtml}
+                            </div>
+                            <img src="${adv.img}" alt="${adv.title || 'Conseil'}">
+                        `;
+                        container.appendChild(box);
+                    }
+                });
+
+                if (container.innerHTML === "") {
+                    container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Aucun conseil actif pour ce gîte dans le Google Sheet.</p>`;
+                }
+
+            } catch (e) {
+                container.innerHTML = `<p style="text-align: center; color: #b94a48; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Erreur de chargement depuis le Google Sheet.</p>`;
             }
         }
 
@@ -279,7 +257,7 @@
             const pin = document.getElementById('adminPin').value.trim();
             if (pin === '140769') {
                 closePinModal();
-                alert("Pour modifier vos conseils, il vous suffit de modifier directement le tableau `advicesList` tout en haut du code JavaScript de cette page !");
+                alert("Pour ajouter de nouveaux conseils, il te suffit de remplir ton Google Form ! Ils s'afficheront tout seuls sur le site.");
             } else {
                 document.getElementById('adminError').style.display = 'block';
                 document.getElementById('adminPin').value = '';
