@@ -81,22 +81,25 @@
 
         .advice-grid { 
             display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
+            grid-template-columns: repeat(1, 1fr); 
             gap: 12px; 
             margin-bottom: 12px; 
             max-height: 52vh; 
             overflow-y: auto; 
             padding-right: 8px; 
             -webkit-overflow-scrolling: touch;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
-        .advice-box { background: var(--white); border: 1px solid var(--accent); border-radius: 10px; padding: 12px; text-align: left; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; justify-content: space-between; }
-        .advice-box h3 { font-size: 0.9rem; color: var(--primary); margin-bottom: 4px; font-family: 'Playfair Display', serif; }
-        .advice-box p { font-size: 0.78rem; color: #555; margin-bottom: 6px; }
+        .advice-box { background: var(--white); border: 1px solid var(--accent); border-radius: 10px; padding: 14px; text-align: left; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; justify-content: space-between; }
+        .advice-box h3 { font-size: 1rem; color: var(--primary); margin-bottom: 4px; font-family: 'Playfair Display', serif; }
+        .advice-box p { font-size: 0.82rem; color: #555; margin-bottom: 6px; }
         
         .advice-img-wrapper {
             width: 100%;
-            max-height: 130px;
+            max-height: 180px;
             background-color: #fcfbfa;
             border-radius: 6px;
             border: 1px solid #eee;
@@ -109,12 +112,12 @@
         }
         .advice-box img { 
             width: 100%; 
-            max-height: 120px; 
+            max-height: 170px; 
             object-fit: contain; 
             display: block; 
         }
 
-        .advice-box a { color: var(--primary); font-weight: bold; text-decoration: underline; font-size: 0.78rem; display: inline-block; margin-top: 2px; }
+        .advice-box a { color: var(--primary); font-weight: bold; text-decoration: underline; font-size: 0.82rem; display: inline-block; margin-top: 4px; }
 
         .footer-actions { display: flex; justify-content: center; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 10px; font-family: 'Segoe UI', sans-serif; }
         .btn-action { background-color: var(--primary); color: white; padding: 8px 22px; border-radius: 8px; font-weight: 600; font-size: 0.8rem; cursor: pointer; border: none; text-decoration: none; display: inline-block; transition: background 0.2s; }
@@ -149,12 +152,12 @@
 
     <div class="tv-card">
         <div class="card-header">
-            <h2 id="page-main-title">Conseils & Recommandations</h2>
+            <h2 id="page-main-title">Recommandations exclusives</h2>
             <p id="page-main-sub" class="welcome-sub">🌿 Chargement de vos recommandations personnalisées...</p>
         </div>
 
         <div class="advice-grid" id="advice-grid-container">
-            <p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Chargement des conseils...</p>
+            <p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 1; padding: 20px;">Chargement...</p>
         </div>
         
         <div class="footer-actions">
@@ -187,13 +190,16 @@
     </div>
 
     <script>
-        const sheetApiUrl = "https://script.google.com/macros/s/AKfycbzN-EJyO0uciXYmK4Z7jFH46rBVPBB-ufkfx5Fv0xSlhMFYZoIMeBZyQsVoBEdQO4U2Bw/exec";
+        const sheetApiUrl = "https://script.google.com/macros/s/AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq/exec";
 
         let currentGite = 'ptitzabris';
 
         window.onload = async function() {
             const urlParams = new URLSearchParams(window.location.search);
-            currentGite = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
+            const giteParam = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
+            currentGite = giteParam.includes("grand") ? "grandzabris" : "ptitzabris";
+            let cottageName = currentGite === "grandzabris" ? "Grandzabris" : "Ptitzabris";
+
             document.getElementById('back-home-btn').href = `index.html?gite=${currentGite}&v=99`;
 
             const isFullyKiosk = typeof window.fully !== 'undefined' || navigator.userAgent.includes("Fully");
@@ -207,7 +213,7 @@
                 adminContainer.style.display = 'block';
             }
 
-            await loadPageData(currentGite);
+            await loadPageData(currentGite, cottageName);
 
             const adminPin = document.getElementById('adminPin');
             if (adminPin) {
@@ -217,95 +223,93 @@
             }
         }
 
-        async function loadPageData(gite) {
+        async function loadPageData(cottageKey, cottageName) {
             const container = document.getElementById('advice-grid-container');
             const titleEl = document.getElementById('page-main-title');
             const subEl = document.getElementById('page-main-sub');
 
             try {
-                // 1. Récupération simultanée du prénom du voyageur et de la liste des conseils
-                let voyageurPrenom = "";
-                try {
-                    const resVoyageurs = await fetch(sheetApiUrl + "?t=" + new Date().getTime());
-                    const voyageursList = await resVoyageurs.json();
-                    if (Array.isArray(voyageursList) && voyageursList.length > 0) {
-                        let match = voyageursList.find(v => String(v.cottage || '').toLowerCase().includes(gite));
-                        if (!match) match = voyageursList[0];
-                        if (match && match.prenom) {
-                            voyageurPrenom = match.prenom;
+                // 1. Récupération exacte du voyageur actif selon les dates (comme sur l'index)
+                const resVoyageurs = await fetch(sheetApiUrl + "?t=" + new Date().getTime());
+                const voyageurs = await resVoyageurs.json();
+                
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                let voyageurActuel = null;
+                if (voyageurs && voyageurs.length > 0) {
+                    voyageurActuel = voyageurs.find(v => {
+                        const cottageStr = String(v.cottage || '').toLowerCase();
+                        const matchCottage = cottageKey === 'grandzabris' ? cottageStr.includes('grand') : (cottageStr.includes('ptit') || cottageStr.includes('petit'));
+                        
+                        const arrStr = v.dateArrivee || v.arrivee;
+                        const depStr = v.dateDepart || v.depart;
+
+                        if (matchCottage && arrStr && depStr) {
+                            const arrDate = new Date(arrStr);
+                            const depDate = new Date(depStr);
+                            arrDate.setHours(0, 0, 0, 0);
+                            depDate.setHours(0, 0, 0, 0);
+                            return today >= arrDate && today <= depDate;
                         }
-                    }
-                } catch(err) {
-                    console.log("Nom par défaut");
+                        return false;
+                    });
                 }
 
-                // 2. Personnalisation haut de gamme avec le prénom
-                if (voyageurPrenom) {
-                    titleEl.innerText = `Recommandations exclusives pour ${voyageurPrenom}`;
-                    subEl.innerHTML = `✨ Sélection sur-mesure de nos plus belles adresses, imaginée spécialement pour votre séjour aux Ozabris.`;
+                // 2. Affichage propre du prénom corrigé
+                if (voyageurActuel && voyageurActuel.prenom) {
+                    titleEl.innerText = `Recommandations exclusives pour ${voyageurActuel.prenom}`;
                 } else {
-                    titleEl.innerText = `Conseils & Recommandations Privilège`;
-                    subEl.innerHTML = `🌿 Une sélection intimiste de nos coups de cœur pour révéler toute la magie de La Réunion.`;
+                    titleEl.innerText = `Recommandations exclusives au ${cottageName}`;
                 }
+                subEl.innerHTML = `✨ Sélection sur-mesure de nos plus belles adresses, imaginée spécialement pour votre séjour aux Ozabris.`;
 
-                // 3. Récupération des conseils
+                // 3. Récupération des conseils et filtrage sur Super U 3B
                 const response = await fetch(sheetApiUrl + "?type=conseils&t=" + new Date().getTime());
                 const advices = await response.json();
 
                 if (!Array.isArray(advices) || advices.length === 0) {
-                    container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Aucun conseil trouvé dans le Google Sheet.</p>`;
+                    container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 1; padding: 20px;">Aucun conseil trouvé dans le Google Sheet.</p>`;
                     return;
                 }
 
                 container.innerHTML = "";
 
-                advices.forEach(adv => {
-                    const activeVal = String(adv.active || '').trim().toLowerCase();
-                    const isActive = (activeVal === 'true' || activeVal === 'oui' || activeVal === 'vrai' || activeVal === '1' || adv.active === true);
-                    
-                    const targetVal = String(adv.target || 'both').toLowerCase();
-
-                    let matchGite = false;
-                    if (targetVal.includes('les deux') || targetVal.includes('both') || targetVal.includes('tous')) {
-                        matchGite = true;
-                    } else if (currentGite === 'grandzabris' && targetVal.includes('grand')) {
-                        matchGite = true;
-                    } else if (currentGite === 'ptitzabris' && (targetVal.includes('ptit') || targetVal.includes('petit'))) {
-                        matchGite = true;
-                    }
-
-                    if (isActive && matchGite) {
-                        const box = document.createElement('div');
-                        box.className = 'advice-box';
-                        
-                        const titleText = adv.title || 'Conseil';
-                        const imageUrl = adv.img ? adv.img.trim() : "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg";
-
-                        let linkHtml = "";
-                        if (adv.linkUrl) {
-                            linkHtml = `<p style="margin-top: 6px;"><a href="${adv.linkUrl}" target="_blank">Découvrir ${titleText} ↗</a></p>`;
-                        }
-
-                        box.innerHTML = `
-                            <div>
-                                <h3>${titleText}</h3>
-                                <p>${adv.text || ''}</p>
-                                ${linkHtml}
-                            </div>
-                            <div class="advice-img-wrapper">
-                                <img src="${imageUrl}" alt="${titleText}" onerror="this.src='https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg'">
-                            </div>
-                        `;
-                        container.appendChild(box);
-                    }
+                // On ne garde que l'élément Super U (titre contenant "Super U")
+                const superUConseil = advices.find(adv => {
+                    const title = String(adv.title || '').toLowerCase();
+                    return title.includes('super u');
                 });
 
-                if (container.innerHTML === "") {
-                    container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Aucun conseil actif pour ce gîte.</p>`;
+                if (superUConseil) {
+                    const box = document.createElement('div');
+                    box.className = 'advice-box';
+                    
+                    const titleText = superUConseil.title || 'Super U 3B';
+                    const imageUrl = superUConseil.img ? superUConseil.img.trim() : "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg";
+
+                    let linkHtml = "";
+                    if (superUConseil.linkUrl) {
+                        linkHtml = `<p style="margin-top: 6px;"><a href="${superUConseil.linkUrl}" target="_blank">Découvrir ${titleText} ↗</a></p>`;
+                    }
+
+                    box.innerHTML = `
+                        <div>
+                            <h3>${titleText}</h3>
+                            <p>${superUConseil.text || ''}</p>
+                            ${linkHtml}
+                        </div>
+                        <div class="advice-img-wrapper">
+                            <img src="${imageUrl}" alt="${titleText}" onerror="this.src='https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg'">
+                        </div>
+                    `;
+                    container.appendChild(box);
+                } else {
+                    container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 1; padding: 20px;">Super U n'est pas encore configuré dans le Google Sheet.</p>`;
                 }
 
             } catch (e) {
-                container.innerHTML = `<p style="text-align: center; color: #b94a48; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Erreur de chargement depuis Google Sheet.</p>`;
+                container.innerHTML = `<p style="text-align: center; color: #b94a48; font-family: 'Segoe UI', sans-serif; grid-column: span 1; padding: 20px;">Erreur de chargement depuis Google Sheet.</p>`;
             }
         }
 
@@ -334,4 +338,3 @@
     </script>
 </body>
 </html>
-
