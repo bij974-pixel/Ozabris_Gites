@@ -81,25 +81,22 @@
 
         .advice-grid { 
             display: grid; 
-            grid-template-columns: repeat(1, 1fr); 
+            grid-template-columns: repeat(2, 1fr); 
             gap: 12px; 
             margin-bottom: 12px; 
             max-height: 52vh; 
             overflow-y: auto; 
             padding-right: 8px; 
             -webkit-overflow-scrolling: touch;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
         }
         
-        .advice-box { background: var(--white); border: 1px solid var(--accent); border-radius: 10px; padding: 14px; text-align: left; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; justify-content: space-between; }
-        .advice-box h3 { font-size: 1rem; color: var(--primary); margin-bottom: 4px; font-family: 'Playfair Display', serif; }
-        .advice-box p { font-size: 0.82rem; color: #555; margin-bottom: 6px; }
+        .advice-box { background: var(--white); border: 1px solid var(--accent); border-radius: 10px; padding: 12px; text-align: left; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; justify-content: space-between; }
+        .advice-box h3 { font-size: 0.9rem; color: var(--primary); margin-bottom: 4px; font-family: 'Playfair Display', serif; }
+        .advice-box p { font-size: 0.78rem; color: #555; margin-bottom: 6px; }
         
         .advice-img-wrapper {
             width: 100%;
-            max-height: 180px;
+            max-height: 120px;
             background-color: #fcfbfa;
             border-radius: 6px;
             border: 1px solid #eee;
@@ -112,12 +109,12 @@
         }
         .advice-box img { 
             width: 100%; 
-            max-height: 170px; 
+            max-height: 110px; 
             object-fit: contain; 
             display: block; 
         }
 
-        .advice-box a { color: var(--primary); font-weight: bold; text-decoration: underline; font-size: 0.82rem; display: inline-block; margin-top: 4px; }
+        .advice-box a { color: var(--primary); font-weight: bold; text-decoration: underline; font-size: 0.78rem; display: inline-block; margin-top: 2px; }
 
         .footer-actions { display: flex; justify-content: center; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 10px; font-family: 'Segoe UI', sans-serif; }
         .btn-action { background-color: var(--primary); color: white; padding: 8px 22px; border-radius: 8px; font-weight: 600; font-size: 0.8rem; cursor: pointer; border: none; text-decoration: none; display: inline-block; transition: background 0.2s; }
@@ -166,7 +163,7 @@
         </div>
 
         <div class="advice-grid" id="advice-grid-container">
-            <p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 1; padding: 20px;">Chargement...</p>
+            <p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Chargement...</p>
         </div>
         
         <div class="footer-actions">
@@ -193,10 +190,7 @@
             <h3>⚙️ Espace Gestion</h3>
             <p style="font-size: 0.8rem; color: #666; margin: 8px 0 15px 0;">Choisissez une action :</p>
             
-            <!-- Choix 1 : Accès au Google Form pour saisie -->
             <a href="https://forms.gle/w77k6We9HrzRxERy7" target="_blank" class="modal-btn" style="background-color: var(--primary);">📝 Saisir un nouveau conseil (Google Form)</a>
-            
-            <!-- Choix 2 : Accès au tableau pour réinitialisation / désactivation -->
             <button type="button" class="modal-btn" onclick="openTableModal()" style="background-color: var(--accent); color: var(--primary);">📋 Réinitialiser / Gérer l'affichage des conseils</button>
         </div>
     </div>
@@ -305,66 +299,64 @@
                 cachedAdvices = await response.json();
 
                 if (!Array.isArray(cachedAdvices) || cachedAdvices.length === 0) {
-                    container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 1; padding: 20px;">Aucun conseil trouvé dans le Google Sheet.</p>`;
+                    container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Aucun conseil trouvé dans le Google Sheet.</p>`;
                     return;
                 }
 
-                renderActiveAdvice();
+                renderActiveAdvices();
                 buildAdminTable();
 
             } catch (e) {
-                container.innerHTML = `<p style="text-align: center; color: #b94a48; font-family: 'Segoe UI', sans-serif; grid-column: span 1; padding: 20px;">Erreur de chargement depuis Google Sheet.</p>`;
+                container.innerHTML = `<p style="text-align: center; color: #b94a48; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Erreur de chargement depuis Google Sheet.</p>`;
             }
         }
 
-        function renderActiveAdvice() {
+        // Affiche tous les conseils marqués sur Oui / Actifs
+        function renderActiveAdvices() {
             const container = document.getElementById('advice-grid-container');
             container.innerHTML = "";
 
-            // On cherche le premier conseil actif selon le stockage local
-            let activeAdvice = null;
-            
-            for (let i = 0; i < cachedAdvices.length; i++) {
-                const localState = localStorage.getItem(`advice_active_${i}`);
+            let activeCount = 0;
+
+            cachedAdvices.forEach((adv, index) => {
+                const localState = localStorage.getItem(`advice_active_${index}`);
                 let isActive = true;
                 if (localState !== null) {
                     isActive = (localState === 'true');
                 } else {
-                    const activeVal = String(cachedAdvices[i].active || '').trim().toLowerCase();
-                    isActive = (activeVal === 'true' || activeVal === 'oui' || activeVal === 'vrai' || activeVal === '1' || cachedAdvices[i].active === true);
+                    const activeVal = String(adv.active || adv.statut || '').trim().toLowerCase();
+                    isActive = (activeVal === '' || activeVal === 'true' || activeVal === 'oui' || activeVal === 'vrai' || activeVal === '1' || adv.active === true);
                 }
 
                 if (isActive) {
-                    activeAdvice = cachedAdvices[i];
-                    break; // On prend le premier actif (ex: Super U)
+                    activeCount++;
+                    const box = document.createElement('div');
+                    box.className = 'advice-box';
+                    
+                    const titleText = adv.title || 'Conseil';
+                    const imageUrl = adv.img ? adv.img.trim() : "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg";
+
+                    let linkHtml = "";
+                    if (adv.linkUrl) {
+                        linkHtml = `<p style="margin-top: 6px;"><a href="${adv.linkUrl}" target="_blank">Découvrir ${titleText} ↗</a></p>`;
+                    }
+
+                    box.innerHTML = `
+                        <div>
+                            <h3>${titleText}</h3>
+                            <p>${adv.text || ''}</p>
+                            ${linkHtml}
+                        </div>
+                        <div class="advice-img-wrapper">
+                            <img src="${imageUrl}" alt="${titleText}" onerror="this.src='https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg'">
+                        </div>
+                    `;
+                    container.appendChild(box);
                 }
-            }
+            });
 
-            if (activeAdvice) {
-                const box = document.createElement('div');
-                box.className = 'advice-box';
-                
-                const titleText = activeAdvice.title || 'Conseil';
-                const imageUrl = activeAdvice.img ? activeAdvice.img.trim() : "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg";
-
-                let linkHtml = "";
-                if (activeAdvice.linkUrl) {
-                    linkHtml = `<p style="margin-top: 6px;"><a href="${activeAdvice.linkUrl}" target="_blank">Découvrir ${titleText} ↗</a></p>`;
-                }
-
-                box.innerHTML = `
-                    <div>
-                        <h3>${titleText}</h3>
-                        <p>${activeAdvice.text || ''}</p>
-                        ${linkHtml}
-                    </div>
-                    <div class="advice-img-wrapper">
-                        <img src="${imageUrl}" alt="${titleText}" onerror="this.src='https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg'">
-                    </div>
-                `;
-                container.appendChild(box);
-            } else {
-                container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 1; padding: 20px;">Aucun conseil actif pour le moment. Rendez-vous dans Admin ⚙️ pour en activer un.</p>`;
+            if (activeCount === 0) {
+                container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Aucun conseil actif. Rendez-vous dans Admin ⚙️ pour en activer.</p>`;
             }
         }
 
@@ -378,8 +370,8 @@
                 if (localState !== null) {
                     isActive = (localState === 'true');
                 } else {
-                    const activeVal = String(adv.active || '').trim().toLowerCase();
-                    isActive = (activeVal === 'true' || activeVal === 'oui' || activeVal === 'vrai' || activeVal === '1' || adv.active === true);
+                    const activeVal = String(adv.active || adv.statut || '').trim().toLowerCase();
+                    isActive = (activeVal === '' || activeVal === 'true' || activeVal === 'oui' || activeVal === 'vrai' || activeVal === '1' || adv.active === true);
                 }
 
                 const tr = document.createElement('tr');
@@ -401,13 +393,13 @@
             if (localState !== null) {
                 currentState = (localState === 'true');
             } else {
-                const activeVal = String(cachedAdvices[index].active || '').trim().toLowerCase();
-                currentState = (activeVal === 'true' || activeVal === 'oui' || activeVal === 'vrai' || activeVal === '1' || cachedAdvices[index].active === true);
+                const activeVal = String(cachedAdvices[index].active || cachedAdvices[index].statut || '').trim().toLowerCase();
+                currentState = (activeVal === '' || activeVal === 'true' || activeVal === 'oui' || activeVal === 'vrai' || activeVal === '1' || cachedAdvices[index].active === true);
             }
 
             localStorage.setItem(`advice_active_${index}`, !currentState);
             buildAdminTable();
-            renderActiveAdvice();
+            renderActiveAdvices();
         }
 
         function resetAllAdvices() {
@@ -415,8 +407,8 @@
                 localStorage.setItem(`advice_active_${index}`, 'false');
             });
             buildAdminTable();
-            renderActiveAdvice();
-            alert("Tous les conseils ont été désactivés (réinitialisation effectuée) !");
+            renderActiveAdvices();
+            alert("Tous les conseils ont été désactivés !");
         }
 
         function openPinModal() {
@@ -451,4 +443,3 @@
     </script>
 </body>
 </html>
-
