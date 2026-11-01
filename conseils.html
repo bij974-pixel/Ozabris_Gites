@@ -120,28 +120,20 @@
         .btn-action { background-color: var(--primary); color: white; padding: 8px 22px; border-radius: 8px; font-weight: 600; font-size: 0.8rem; cursor: pointer; border: none; text-decoration: none; display: inline-block; transition: background 0.2s; }
         .btn-action:hover { background-color: var(--accent); color: var(--primary); }
 
-        /* Modales Admin */
-        #admin-modal, #admin-options-modal, #admin-table-modal {
+        /* Modale de saisie du PIN uniquement */
+        #admin-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 38, 58, 0.85); justify-content: center; align-items: center; z-index: 1000; font-family: 'Segoe UI', sans-serif;
         }
         .modal-content {
-            background: white; padding: 25px; border-radius: 14px; width: 90%; max-width: 440px; text-align: center; border: 2px solid var(--accent); max-height: 85vh; overflow-y: auto;
+            background: white; padding: 25px; border-radius: 14px; width: 90%; max-width: 320px; text-align: center; border: 2px solid var(--accent);
         }
-        .modal-content select, .modal-content input {
+        .modal-content input {
             width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 0.85rem; text-align: center;
         }
         .modal-btn {
             background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; font-size: 0.85rem; text-decoration: none; display: inline-block; box-sizing: border-box; text-align: center;
         }
         .modal-btn:hover { background: var(--accent); color: var(--primary); }
-
-        /* Tableau de gestion interactif */
-        .admin-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.78rem; text-align: left; }
-        .admin-table th, .admin-table td { padding: 8px; border-bottom: 1px solid #eee; }
-        .admin-table th { background: var(--primary); color: white; font-family: 'Playfair Display', serif; }
-        .toggle-switch { cursor: pointer; padding: 4px 10px; border-radius: 4px; font-weight: bold; border: none; font-size: 0.72rem; }
-        .btn-on { background: #d4edda; color: #155724; }
-        .btn-off { background: #f8d7da; color: #721c24; }
     </style>
 </head>
 <body>
@@ -173,56 +165,13 @@
 
     <!-- Modale de saisie du PIN -->
     <div id="admin-modal">
-        <div class="modal-content" style="max-width: 320px;">
+        <div class="modal-content">
             <button type="button" onclick="closePinModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
             <h3>🔒 Accès Admin</h3>
             <p style="font-size: 0.8rem; color: #666; margin: 5px 0;">Code PIN de sécurité</p>
             <input type="password" id="adminPin" placeholder="PIN" maxlength="6">
             <button type="button" class="modal-btn" onclick="verifyPin()">Valider</button>
             <p id="adminError" style="color: #b94a48; font-size: 0.75rem; margin-top: 8px; display: none;">Code incorrect</p>
-        </div>
-    </div>
-
-    <!-- Modale des 2 choix principaux après PIN réussi -->
-    <div id="admin-options-modal">
-        <div class="modal-content">
-            <button type="button" onclick="closeOptionsModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
-            <h3>⚙️ Espace Gestion</h3>
-            <p style="font-size: 0.8rem; color: #666; margin: 8px 0 15px 0;">Choisissez une action :</p>
-            
-            <a href="https://forms.gle/w77k6We9HrzRxERy7" target="_blank" class="modal-btn" style="background-color: var(--primary);">📝 Saisir un nouveau conseil (Google Form)</a>
-            <button type="button" class="modal-btn" onclick="openTableModal()" style="background-color: var(--accent); color: var(--primary);">📋 Gérer / Réinitialiser par Gîte</button>
-        </div>
-    </div>
-
-    <!-- Modale du Tableau de Gestion Spécifique par Gîte -->
-    <div id="admin-table-modal">
-        <div class="modal-content">
-            <button type="button" onclick="closeTableModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
-            <h3>📋 Gestion par Gîte</h3>
-            
-            <label style="font-size: 0.78rem; font-weight: bold; display: block; text-align: left; color: var(--primary); margin-top: 10px;">Sélectionner le gîte à configurer :</label>
-            <select id="admin-select-gite" onchange="buildAdminTable()">
-                <option value="ptitzabris">Le Ptitzabris</option>
-                <option value="grandzabris">Le Grandzabris</option>
-            </select>
-
-            <div style="max-height: 180px; overflow-y: auto; border: 1px solid #ddd; border-radius: 6px; margin-top: 10px;">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Titre</th>
-                            <th style="text-align: center;">Statut</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-advice-tbody">
-                        <tr><td colspan="2" style="text-align: center; color: #666;">Chargement...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <button type="button" class="modal-btn" onclick="confirmResetAll()" style="background-color: #b94a48; color: white; margin-top: 12px;">🔄 Tout désactiver pour ce gîte</button>
-            <button type="button" class="modal-btn" onclick="location.reload()" style="background-color: var(--primary); color: white;">💾 Enregistrer & Fermer</button>
         </div>
     </div>
 
@@ -374,63 +323,6 @@
             }
         }
 
-        function buildAdminTable() {
-            const selectedGite = document.getElementById('admin-select-gite').value;
-            const tbody = document.getElementById('admin-advice-tbody');
-            tbody.innerHTML = "";
-
-            if (!cachedAdvices || cachedAdvices.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="2" style="text-align: center; color: #666;">Aucun conseil trouvé.</td></tr>`;
-                return;
-            }
-
-            cachedAdvices.forEach((adv, index) => {
-                const titleText = adv['Nom de la recommandation'] || adv.title || adv['Nom'] || adv['titre'] || '';
-                if (!titleText || titleText.trim() === '') return;
-
-                const localState = localStorage.getItem(`${selectedGite}_advice_active_${index}`);
-                let isActive = true;
-                if (localState !== null) {
-                    isActive = (localState === 'true');
-                }
-
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td style="font-weight: 500; color: var(--primary);">${titleText}</td>
-                    <td style="text-align: center;">
-                        <button type="button" class="toggle-switch ${isActive ? 'btn-on' : 'btn-off'}" onclick="toggleAdviceState(${index}, '${selectedGite}')">
-                            ${isActive ? '✓ Actif' : '✕ Inactif'}
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function toggleAdviceState(index, gite) {
-            const localState = localStorage.getItem(`${gite}_advice_active_${index}`);
-            let currentState = true;
-            if (localState !== null) {
-                currentState = (localState === 'true');
-            }
-
-            localStorage.setItem(`${gite}_advice_active_${index}`, !currentState);
-            buildAdminTable();
-        }
-
-        function confirmResetAll() {
-            const selectedGite = document.getElementById('admin-select-gite').value;
-            const giteDisplayName = selectedGite === 'grandzabris' ? 'Le Grandzabris' : 'Le Ptitzabris';
-            
-            if (confirm(`Êtes-vous sûr de vouloir désactiver tous les conseils pour ${giteDisplayName} ?`)) {
-                cachedAdvices.forEach((_, index) => {
-                    localStorage.setItem(`${selectedGite}_advice_active_${index}`, 'false');
-                });
-                buildAdminTable();
-                alert(`Tous les conseils ont été désactivés pour ${giteDisplayName} !`);
-            }
-        }
-
         function openPinModal() {
             document.getElementById('admin-modal').style.display = 'flex';
             document.getElementById('adminPin').focus();
@@ -440,23 +332,11 @@
             document.getElementById('adminError').style.display = 'none';
             document.getElementById('adminPin').value = '';
         }
-        function closeOptionsModal() {
-            document.getElementById('admin-options-modal').style.display = 'none';
-        }
-        function openTableModal() {
-            document.getElementById('admin-options-modal').style.display = 'none';
-            document.getElementById('admin-select-gite').value = currentGiteKey;
-            buildAdminTable();
-            document.getElementById('admin-table-modal').style.display = 'flex';
-        }
-        function closeTableModal() {
-            document.getElementById('admin-table-modal').style.display = 'none';
-        }
         function verifyPin() {
             const pin = document.getElementById('adminPin').value.trim();
             if (pin === '140769') {
-                closePinModal();
-                document.getElementById('admin-options-modal').style.display = 'flex';
+                // Redirection vers la page admin.html grand format
+                window.location.href = `admin.html?gite=${currentGiteKey}`;
             } else {
                 document.getElementById('adminError').style.display = 'block';
                 document.getElementById('adminPin').value = '';
@@ -465,4 +345,3 @@
     </script>
 </body>
 </html>
-
