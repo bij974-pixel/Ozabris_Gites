@@ -103,7 +103,7 @@
 
     <div class="admin-container">
         <h1>⚙️ Espace de Gestion Global</h1>
-        <p class="subtitle">Gérez l'affichage des conseils et recommandations pour chaque gîte en toute simplicité.</p>
+        <p class="subtitle">Gérez l'affichage des conseils et recommandations pour chaque gîte.</p>
 
         <div class="controls-row">
             <div>
@@ -127,7 +127,7 @@
                     </tr>
                 </thead>
                 <tbody id="admin-advice-tbody">
-                    <tr><td colspan="2" style="text-align: center; color: #666; padding: 20px;">Chargement des conseils...</td></tr>
+                    <tr><td colspan="2" style="text-align: center; color: #666; padding: 20px;">Chargement depuis l'API...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -151,14 +151,14 @@
             }
 
             try {
-                // CORRECTION ICI : on ajoute bien "?type=conseils" pour que l'Apps Script lise l'onglet Conseils
+                // Ajout indispensable de ?type=conseils pour correspondre à ton Apps Script
                 const response = await fetch(sheetConseilsApiUrl + "?type=conseils&t=" + new Date().getTime());
                 const data = await response.json();
                 
                 cachedAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || data.data || []);
                 buildAdminTable();
             } catch (e) {
-                document.getElementById('admin-advice-tbody').innerHTML = `<tr><td colspan="2" style="text-align: center; color: #b94a48; padding: 20px;">Erreur de chargement des données.</td></tr>`;
+                document.getElementById('admin-advice-tbody').innerHTML = `<tr><td colspan="2" style="text-align: center; color: #b94a48; padding: 20px;">Erreur de chargement depuis l'API.</td></tr>`;
             }
         }
 
@@ -168,12 +168,12 @@
             tbody.innerHTML = "";
 
             if (!cachedAdvices || cachedAdvices.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="2" style="text-align: center; color: #666; padding: 20px;">Aucun conseil trouvé dans le Google Sheet.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="2" style="text-align: center; color: #666; padding: 20px;">Aucun conseil trouvé via l'API.</td></tr>`;
                 return;
             }
 
             cachedAdvices.forEach((adv, index) => {
-                // Ton script renvoie directement l'objet avec la propriété .title
+                // Ton Apps Script renvoie une propriété .title
                 const titleText = adv.title || adv['Nom de la recommandation'] || '';
                 if (!titleText || titleText.trim() === '') return;
 
