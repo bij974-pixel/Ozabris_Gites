@@ -76,8 +76,8 @@
         }
 
         .card-header { margin-bottom: 10px; }
-        h2 { color: var(--primary); font-size: 1.6rem; font-weight: 400; margin-bottom: 2px; }
-        .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.8rem; color: #555; font-style: italic; }
+        h2 { color: var(--primary); font-size: 1.5rem; font-weight: 400; margin-bottom: 2px; }
+        .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.78rem; color: #555; font-style: italic; }
 
         .advice-grid { 
             display: grid; 
@@ -96,7 +96,7 @@
         
         .advice-img-wrapper {
             width: 100%;
-            max-height: 140px;
+            max-height: 130px;
             background-color: #fcfbfa;
             border-radius: 6px;
             border: 1px solid #eee;
@@ -109,7 +109,7 @@
         }
         .advice-box img { 
             width: 100%; 
-            max-height: 130px; 
+            max-height: 120px; 
             object-fit: contain; 
             display: block; 
         }
@@ -150,11 +150,11 @@
     <div class="tv-card">
         <div class="card-header">
             <h2 id="page-main-title">Conseils & Recommandations</h2>
-            <p id="page-main-sub" class="welcome-sub">🌿 Tout pour découvrir La Réunion et profiter pleinement de votre séjour aux Ozabris.</p>
+            <p id="page-main-sub" class="welcome-sub">🌿 Chargement de vos recommandations personnalisées...</p>
         </div>
 
         <div class="advice-grid" id="advice-grid-container">
-            <p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Chargement des conseils depuis Google Sheet...</p>
+            <p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Chargement des conseils...</p>
         </div>
         
         <div class="footer-actions">
@@ -207,7 +207,7 @@
                 adminContainer.style.display = 'block';
             }
 
-            await loadAdvicesFromSheet();
+            await loadPageData(currentGite);
 
             const adminPin = document.getElementById('adminPin');
             if (adminPin) {
@@ -217,9 +217,38 @@
             }
         }
 
-        async function loadAdvicesFromSheet() {
+        async function loadPageData(gite) {
             const container = document.getElementById('advice-grid-container');
+            const titleEl = document.getElementById('page-main-title');
+            const subEl = document.getElementById('page-main-sub');
+
             try {
+                // 1. Récupération simultanée du prénom du voyageur et de la liste des conseils
+                let voyageurPrenom = "";
+                try {
+                    const resVoyageurs = await fetch(sheetApiUrl + "?t=" + new Date().getTime());
+                    const voyageursList = await resVoyageurs.json();
+                    if (Array.isArray(voyageursList) && voyageursList.length > 0) {
+                        let match = voyageursList.find(v => String(v.cottage || '').toLowerCase().includes(gite));
+                        if (!match) match = voyageursList[0];
+                        if (match && match.prenom) {
+                            voyageurPrenom = match.prenom;
+                        }
+                    }
+                } catch(err) {
+                    console.log("Nom par défaut");
+                }
+
+                // 2. Personnalisation haut de gamme avec le prénom
+                if (voyageurPrenom) {
+                    titleEl.innerText = `Recommandations exclusives pour ${voyageurPrenom}`;
+                    subEl.innerHTML = `✨ Sélection sur-mesure de nos plus belles adresses, imaginée spécialement pour votre séjour aux Ozabris.`;
+                } else {
+                    titleEl.innerText = `Conseils & Recommandations Privilège`;
+                    subEl.innerHTML = `🌿 Une sélection intimiste de nos coups de cœur pour révéler toute la magie de La Réunion.`;
+                }
+
+                // 3. Récupération des conseils
                 const response = await fetch(sheetApiUrl + "?type=conseils&t=" + new Date().getTime());
                 const advices = await response.json();
 
@@ -272,11 +301,11 @@
                 });
 
                 if (container.innerHTML === "") {
-                    container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Aucun conseil actif pour ce gîte dans le Google Sheet.</p>`;
+                    container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Aucun conseil actif pour ce gîte.</p>`;
                 }
 
             } catch (e) {
-                container.innerHTML = `<p style="text-align: center; color: #b94a48; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Erreur de chargement depuis le Google Sheet.</p>`;
+                container.innerHTML = `<p style="text-align: center; color: #b94a48; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Erreur de chargement depuis Google Sheet.</p>`;
             }
         }
 
@@ -305,3 +334,4 @@
     </script>
 </body>
 </html>
+
