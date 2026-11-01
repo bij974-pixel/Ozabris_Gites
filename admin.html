@@ -103,7 +103,7 @@
 
     <div class="admin-container">
         <h1>⚙️ Espace de Gestion Global</h1>
-        <p class="subtitle">Gérez l'affichage des conseils et recommandations pour chaque gîte en toute simplicité.</p>
+        <p class="subtitle">Gérez l'affichage des conseils et recommandations pour chaque gîte.</p>
 
         <div class="controls-row">
             <div>
@@ -127,7 +127,7 @@
                     </tr>
                 </thead>
                 <tbody id="admin-advice-tbody">
-                    <tr><td colspan="2" style="text-align: center; color: #666; padding: 20px;">Chargement des conseils depuis Google Sheet...</td></tr>
+                    <tr><td colspan="2" style="text-align: center; color: #666; padding: 20px;">Chargement en cours...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -139,7 +139,6 @@
     </div>
 
     <script>
-        // URL Apps Script dédiée au Sheet des conseils
         const sheetConseilsApiUrl = "https://script.google.com/macros/s/AKfycbzdEv_frdNqscUxHQW6xXpePamOztmC0xLWa5CRMjY4fFsKuMdcvJda7fDkXiWqAYcu1A/exec";
         
         let cachedAdvices = [];
@@ -152,13 +151,28 @@
             }
 
             try {
-                const response = await fetch(sheetConseilsApiUrl + "?t=" + new Date().getTime());
-                const data = await response.json();
+                const response = await fetch(sheetConseilsApiUrl);
+                const textData = await response.text();
                 
-                cachedAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || data.data || []);
+                try {
+                    cachedAdvices = JSON.parse(textData);
+                } catch (err) {
+                    // Si ce n'est pas du JSON direct, on tente de l'extraire ou d'afficher l'erreur brute
+                    console.error("Réponse brute non JSON :", textData);
+                }
+
+                if (!Array.isArray(cachedAdvices) && typeof cachedAdvices === 'object') {
+                    cachedAdvices = cachedAdvices.conseils || cachedAdvices.rows || cachedAdvices.data || Object.values(cachedAdvices);
+                }
+
+                if (!Array.isArray(cachedAdvices) || cachedAdvices.length === 0) {
+                    document.getElementById('admin-advice-tbody').innerHTML = `<tr><td colspan="2" style="text-align: center; color: #b94a48; padding: 20px;">Aucune donnée reçue. (Vérifiez que le script Apps Script est bien redéployé en tant que "Application Web" accessible par "Tout le monde")</td></tr>`;
+                    return;
+                }
+
                 buildAdminTable();
             } catch (e) {
-                document.getElementById('admin-advice-tbody').innerHTML = `<tr><td colspan="2" style="text-align: center; color: #b94a48; padding: 20px;">Erreur de chargement des données. Vérifie l'URL de l'API.</td></tr>`;
+                document.getElementById('admin-advice-tbody').innerHTML = `<tr><td colspan="2" style="text-align: center; color: #b94a48; padding: 20px;">Erreur de connexion à l'API.</td></tr>`;
             }
         }
 
@@ -167,14 +181,15 @@
             const tbody = document.getElementById('admin-advice-tbody');
             tbody.innerHTML = "";
 
-            if (!cachedAdvices || cachedAdvices.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="2" style="text-align: center; color: #666; padding: 20px;">Aucun conseil trouvé dans le Google Sheet.</td></tr>`;
-                return;
-            }
-
             cachedAdvices.forEach((adv, index) => {
-                // Lecture exacte de la colonne "Nom de la recommandation" de ton Google Sheet
-                const titleText = adv['Nom de la recommandation'] || adv.title || adv['Nom'] || adv['titre'] || '';
+                // Recherche exhaustive de la valeur du titre dans toutes les clés possibles
+                let titleText = '';
+                if (typeof adv === 'object' && adv !== null) {
+                    titleText = adv['Nom de la recommandation'] || adv.title || adv['Nom'] || adv['titre'] || adv[Object.keys(adv)[1]] || '';
+                } else if (typeof adv === 'string') {
+                    titleText = adv;
+                }
+
                 if (!titleText || titleText.trim() === '') return;
 
                 const localState = localStorage.getItem(`${selectedGite}_advice_active_${index}`);
