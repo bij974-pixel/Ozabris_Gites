@@ -84,11 +84,12 @@
             grid-template-columns: repeat(2, 1fr); 
             gap: 15px; 
             margin-bottom: 15px; 
-            max-height: 55vh; 
+            max-height: 52vh; 
             overflow-y: auto; 
             padding-right: 5px; 
+            text-align: left;
         }
-        .advice-box { background: var(--white); border: 1px solid var(--accent); border-radius: 10px; padding: 15px; text-align: left; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; justify-content: space-between; }
+        .advice-box { background: var(--white); border: 1px solid var(--accent); border-radius: 10px; padding: 15px; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; justify-content: space-between; height: auto; }
         .advice-box h3 { font-size: 0.95rem; color: var(--primary); margin-bottom: 6px; font-family: 'Playfair Display', serif; }
         .advice-box p { font-size: 0.8rem; color: #555; margin-bottom: 8px; }
         .advice-box img { width: 100%; height: 110px; object-fit: cover; border-radius: 6px; border: 1px solid #eee; margin-top: 6px; }
@@ -141,7 +142,7 @@
         </div>
 
         <div class="advice-grid" id="advice-grid-container">
-            <!-- Les encadrés s'afficheront ici -->
+            <!-- Les encadrés dynamiques s'afficheront ici -->
         </div>
         
         <div class="footer-actions">
@@ -201,13 +202,15 @@
 
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
-            currentGite = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
+            const giteParam = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
+            currentGite = giteParam.includes('grand') ? 'grandzabris' : 'ptitzabris';
+
             document.getElementById('back-home-btn').href = `index.html?gite=${currentGite}&v=99`;
 
             const isFullyKiosk = typeof window.fully !== 'undefined' || navigator.userAgent.includes("Fully");
             const adminContainer = document.getElementById('admin-container');
             
-            // Masquage automatique du bouton admin pour les boîtiers TV connectés sur les IP se terminant par .93 et .145 ou Fully Kiosk
+            // Masquage automatique du bouton admin pour les boîtiers TV (.93 et .145) ou Fully Kiosk
             const currentHost = window.location.hostname;
             const isBoxTV = currentHost.endsWith(".93") || currentHost.endsWith(".145") || currentHost === "192.168.1.93" || currentHost === "192.168.1.145";
 
@@ -254,7 +257,17 @@
             container.innerHTML = "";
 
             advices.forEach(adv => {
-                const matchGite = (adv.target === 'both' || adv.target === currentGite);
+                const targetVal = adv.target ? adv.target.toLowerCase() : 'both';
+                
+                let matchGite = false;
+                if (targetVal === 'both') {
+                    matchGite = true;
+                } else if (currentGite === 'grandzabris' && targetVal.includes('grand')) {
+                    matchGite = true;
+                } else if (currentGite === 'ptitzabris' && (targetVal.includes('ptit') || targetVal.includes('petit'))) {
+                    matchGite = true;
+                }
+
                 if (adv.active && matchGite) {
                     const box = document.createElement('div');
                     box.className = 'advice-box';
