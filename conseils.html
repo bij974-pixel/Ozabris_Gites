@@ -192,15 +192,13 @@
     <script>
         const sheetApiUrl = "https://script.google.com/macros/s/AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq/exec";
 
-        let currentGite = 'ptitzabris';
-
         window.onload = async function() {
             const urlParams = new URLSearchParams(window.location.search);
             const giteParam = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
-            currentGite = giteParam.includes("grand") ? "grandzabris" : "ptitzabris";
-            let cottageName = currentGite === "grandzabris" ? "Grandzabris" : "Ptitzabris";
+            const cottageKey = giteParam.includes("grand") ? "grandzabris" : "ptitzabris";
+            const cottageName = cottageKey === "grandzabris" ? "Grandzabris" : "Ptitzabris";
 
-            document.getElementById('back-home-btn').href = `index.html?gite=${currentGite}&v=99`;
+            document.getElementById('back-home-btn').href = `index.html?gite=${cottageKey}&v=99`;
 
             const isFullyKiosk = typeof window.fully !== 'undefined' || navigator.userAgent.includes("Fully");
             const adminContainer = document.getElementById('admin-container');
@@ -213,7 +211,7 @@
                 adminContainer.style.display = 'block';
             }
 
-            await loadPageData(currentGite, cottageName);
+            await loadPageData(cottageKey, cottageName);
 
             const adminPin = document.getElementById('adminPin');
             if (adminPin) {
@@ -256,7 +254,7 @@
                     });
                 }
 
-                // 2. Affichage propre du prénom corrigé
+                // 2. Affichage propre du prénom récupéré du Sheet principal
                 if (voyageurActuel && voyageurActuel.prenom) {
                     titleEl.innerText = `Recommandations exclusives pour ${voyageurActuel.prenom}`;
                 } else {
@@ -275,7 +273,7 @@
 
                 container.innerHTML = "";
 
-                // On ne garde que l'élément Super U (titre contenant "Super U")
+                // On ne garde que l'élément Super U
                 const superUConseil = advices.find(adv => {
                     const title = String(adv.title || '').toLowerCase();
                     return title.includes('super u');
