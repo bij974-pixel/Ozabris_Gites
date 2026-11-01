@@ -154,7 +154,7 @@
                 const response = await fetch(sheetConseilsApiUrl + "?t=" + new Date().getTime());
                 const data = await response.json();
                 
-                cachedAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || data.data || []);
+                cachedAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || []);
                 buildAdminTable();
             } catch (e) {
                 document.getElementById('admin-advice-tbody').innerHTML = `<tr><td colspan="2" style="text-align: center; color: #b94a48; padding: 20px;">Erreur de chargement des données.</td></tr>`;
@@ -172,7 +172,7 @@
             }
 
             cachedAdvices.forEach((adv, index) => {
-                const titleText = adv['Nom de la recommandation'] || adv.title || adv['Nom'] || adv['titre'] || '';
+                const titleText = adv['Nom de la recommandation'] || '';
                 if (!titleText || titleText.trim() === '') return;
 
                 const localState = localStorage.getItem(`${selectedGite}_advice_active_${index}`);
