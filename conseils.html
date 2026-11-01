@@ -198,18 +198,18 @@
                 container.innerHTML = "";
 
                 advices.forEach(adv => {
-                    // Vérifie si actif (gère "Oui", "Vrai", true, etc.)
-                    const activeVal = String(adv.active).trim().toLowerCase();
+                    // On s'assure de bien lire les valeurs (qu'elles soient en majuscules ou minuscules)
+                    const activeVal = String(adv.active || '').trim().toLowerCase();
                     const isActive = (activeVal === 'true' || activeVal === 'oui' || activeVal === 'vrai' || activeVal === '1' || adv.active === true);
                     
                     const targetVal = String(adv.target || 'both').toLowerCase();
 
                     let matchGite = false;
-                    if (targetVal === 'both' || targetVal === 'les deux' || targetVal === 'tous') {
+                    if (targetVal.includes('les deux') || targetVal.includes('both') || targetVal.includes('tous')) {
                         matchGite = true;
-                    } else if (currentGite === 'grandzabris' && (targetVal.includes('grand') || targetVal.includes('grandzabris'))) {
+                    } else if (currentGite === 'grandzabris' && targetVal.includes('grand')) {
                         matchGite = true;
-                    } else if (currentGite === 'ptitzabris' && (targetVal.includes('ptit') || targetVal.includes('petit') || targetVal.includes('ptitzabris'))) {
+                    } else if (currentGite === 'ptitzabris' && (targetVal.includes('ptit') || targetVal.includes('petit'))) {
                         matchGite = true;
                     }
 
