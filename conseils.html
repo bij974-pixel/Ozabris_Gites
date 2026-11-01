@@ -168,9 +168,7 @@ window.onload = function() {
 const urlParams = new URLSearchParams(window.location.search);
 const giteParam = urlParams.get('gite') || 'ptitzabris';
 document.getElementById('back-home-btn').href = ⁠index.html?gite=${giteParam}⁠;
-// DÉTECTION INTELLIGENTE :
-// Le bouton Admin est masqué par défaut sur la TV (Fully Kiosk).
-// Pour l'afficher sur ton téléphone ou ton ordi, ajoute ?admin=true dans l'URL.
+// Gestion de l'affichage de l'Admin : Visible si ?admin=true ou sur ordinateur/téléphone, masqué sur la TV standard
 const isAdminMode = urlParams.get('admin') === 'true';
 const isFullyKiosk = typeof window.fully !== 'undefined' || navigator.userAgent.includes("Fully");
 if (isAdminMode || !isFullyKiosk) {
@@ -187,7 +185,10 @@ if (e.key === 'Enter') verifyPin();
 function getStoredAdvices() {
 const saved = localStorage.getItem('ozabris_custom_10_advices');
 if (saved) {
-try { return JSON.parse(saved); } catch(e) {}
+try {
+const parsed = JSON.parse(saved);
+if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+} catch(e) {}
 }
 return defaultAdvices;
 }
@@ -260,16 +261,20 @@ function saveAdviceConfig() {
 const advices = getStoredAdvices();
 let promises = [];
 advices.forEach((adv, index) => {
-adv.active = document.getElementById(⁠adv-active-${index}⁠).checked;
-adv.title = document.getElementById(⁠adv-title-${index}⁠).value;
-adv.text = document.getElementById(⁠adv-text-${index}⁠)[value || 'value']; // standard input read
-adv.text = document.getElementById(⁠adv-text-${index}⁠).value;
-adv.linkText = document.getElementById(⁠adv-linktext-${index}⁠).value;
-adv.linkUrl = document.getElementById(⁠adv-linkurl-${index}⁠).value;
-const manualUrl = document.getElementById(⁠adv-img-${index}⁠).value.trim();
-if (manualUrl) adv.img = manualUrl;
+const activeEl = document.getElementById(⁠adv-active-${index}⁠);
+if (activeEl) adv.active = activeEl.checked;
+const titleEl = document.getElementById(⁠adv-title-${index}⁠);
+if (titleEl) adv.title = titleEl.value;
+const textEl = document.getElementById(⁠adv-text-${index}⁠);
+if (textEl) adv.text = textEl.value;
+const linkTextEl = document.getElementById(⁠adv-linktext-${index}⁠);
+if (linkTextEl) adv.linkText = linkTextEl.value;
+const linkUrlEl = document.getElementById(⁠adv-linkurl-${index}⁠);
+if (linkUrlEl) adv.linkUrl = linkUrlEl.value;
+const manualUrlEl = document.getElementById(⁠adv-img-${index}⁠);
+if (manualUrlEl && manualUrlEl.value.trim()) adv.img = manualUrlEl.value.trim();
 const fileInput = document.getElementById(⁠adv-file-${index}⁠);
-if (fileInput.files && fileInput.files[0]) {
+if (fileInput && fileInput.files && fileInput.files[0]) {
 const p = new Promise((resolve) => {
 const reader = new FileReader();
 reader.onload = function(e) {
