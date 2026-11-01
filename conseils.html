@@ -120,7 +120,7 @@
         .btn-action { background-color: var(--primary); color: white; padding: 8px 22px; border-radius: 8px; font-weight: 600; font-size: 0.8rem; cursor: pointer; border: none; text-decoration: none; display: inline-block; transition: background 0.2s; }
         .btn-action:hover { background-color: var(--accent); color: var(--primary); }
 
-        /* Modale de saisie du PIN uniquement */
+        /* Modale PIN */
         #admin-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 38, 58, 0.85); justify-content: center; align-items: center; z-index: 1000; font-family: 'Segoe UI', sans-serif;
         }
@@ -255,7 +255,7 @@
                 const response = await fetch(sheetConseilsApiUrl + "?t=" + new Date().getTime());
                 const data = await response.json();
 
-                cachedAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || []);
+                cachedAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || data.data || []);
 
                 if (!Array.isArray(cachedAdvices) || cachedAdvices.length === 0) {
                     container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 20px;">Conseils et recommandations à venir.</p>`;
@@ -276,9 +276,11 @@
             let activeCount = 0;
 
             cachedAdvices.forEach((adv, index) => {
+                // Lecture exacte de la colonne "Nom de la recommandation"
                 const titleText = adv['Nom de la recommandation'] || '';
-                if (!titleText || titleText.trim() === '') return;
+                if (!titleText || titleText.trim() === '' || titleText.toLowerCase().includes('horodateur')) return;
 
+                // Par défaut, si rien n'est stocké dans le localStorage, le conseil est ACTIF (true)
                 const localState = localStorage.getItem(`${currentGiteKey}_advice_active_${index}`);
                 let isActive = true;
                 if (localState !== null) {
@@ -346,3 +348,4 @@
     </script>
 </body>
 </html>
+
