@@ -127,7 +127,7 @@
                     </tr>
                 </thead>
                 <tbody id="admin-advice-tbody">
-                    <tr><td colspan="2" style="text-align: center; color: #666; padding: 20px;">Chargement des conseils depuis Google Sheet...</td></tr>
+                    <tr><td colspan="2" style="text-align: center; color: #666; padding: 20px;">Chargement des conseils...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -172,7 +172,7 @@
             }
 
             cachedAdvices.forEach((adv, index) => {
-                // On récupère précisément le titre (colonne 2, après l'horodateur)
+                // Colonne B : Nom de la recommandation (le vrai titre court)
                 const titleText = adv['Nom de la recommandation'] || '';
                 if (!titleText || titleText.trim() === '') return;
 
@@ -221,3 +221,4 @@
     </script>
 </body>
 </html>
+
