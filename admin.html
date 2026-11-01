@@ -127,7 +127,7 @@
                     </tr>
                 </thead>
                 <tbody id="admin-advice-tbody">
-                    <tr><td colspan="2" style="text-align: center; color: #666; padding: 20px;">Chargement des conseils depuis Google Sheet...</td></tr>
+                    <tr><td colspan="2" style="text-align: center; color: #666; padding: 20px;">Connexion à l'API en cours...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -152,12 +152,19 @@
 
             try {
                 const response = await fetch(sheetConseilsApiUrl + "?t=" + new Date().getTime());
-                const data = await response.json();
+                const rawText = await response.text();
                 
-                cachedAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || []);
+                try {
+                    const data = JSON.parse(rawText);
+                    cachedAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || data.data || Object.values(data));
+                } catch (parseErr) {
+                    document.getElementById('admin-advice-tbody').innerHTML = `<tr><td colspan="2" style="color: #b94a48; padding: 20px;">Erreur JSON. Réponse reçue : <br><small>${rawText.substring(0, 150)}</small></td></tr>`;
+                    return;
+                }
+
                 buildAdminTable();
             } catch (e) {
-                document.getElementById('admin-advice-tbody').innerHTML = `<tr><td colspan="2" style="text-align: center; color: #b94a48; padding: 20px;">Erreur de chargement des données.</td></tr>`;
+                document.getElementById('admin-advice-tbody').innerHTML = `<tr><td colspan="2" style="text-align: center; color: #b94a48; padding: 20px;">Erreur réseau lors de l'appel Apps Script.</td></tr>`;
             }
         }
 
@@ -167,13 +174,26 @@
             tbody.innerHTML = "";
 
             if (!cachedAdvices || cachedAdvices.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="2" style="text-align: center; color: #666; padding: 20px;">Aucun conseil trouvé dans le Google Sheet.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="2" style="text-align: center; color: #666; padding: 20px;">Tableau vide (Aucun élément trouvé dans le JSON).</td></tr>`;
                 return;
             }
 
             cachedAdvices.forEach((adv, index) => {
-                const titleText = adv['Nom de la recommandation'] || '';
-                if (!titleText || titleText.trim() === '') return;
+                let titleText = '';
+                if (typeof adv === 'object' && adv !== null) {
+                    // On teste toutes les variations possibles de noms de clés
+                    titleText = adv['Nom de la recommandation'] || adv['nom de la recommandation'] || adv['Nom'] || adv['nom'] || adv['titre'] || adv['title'] || '';
+                    
+                    // Si toujours vide, on prend la 2ème colonne de l'objet brut (index 1)
+                    if (!titleText) {
+                        const keys = Object.keys(adv);
+                        if (keys.length > 1) {
+                            titleText = adv[keys[1]];
+                        }
+                    }
+                }
+
+                if (!titleText || typeof titleText !== 'string' || titleText.trim() === '') return;
 
                 const localState = localStorage.getItem(`${selectedGite}_advice_active_${index}`);
                 let isActive = true;
@@ -192,6 +212,10 @@
                 `;
                 tbody.appendChild(tr);
             });
+
+            if (tbody.children.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="2" style="text-align: center; color: #b94a48; padding: 20px;">Les données ont été reçues, mais aucun titre n'a pu être lu (vérifiez les en-têtes de colonnes).</td></tr>`;
+            }
         }
 
         function toggleAdviceState(index, gite) {
@@ -220,3 +244,4 @@
     </script>
 </body>
 </html>
+
