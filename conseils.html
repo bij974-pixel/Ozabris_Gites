@@ -168,7 +168,7 @@ window.onload = function() {
 const urlParams = new URLSearchParams(window.location.search);
 const giteParam = urlParams.get('gite') || 'ptitzabris';
 document.getElementById('back-home-btn').href = ⁠index.html?gite=${giteParam}⁠;
-// Gestion de l'affichage de l'Admin : Visible si ?admin=true ou sur ordinateur/téléphone, masqué sur la TV standard
+// Gestion de l'affichage de l'Admin
 const isAdminMode = urlParams.get('admin') === 'true';
 const isFullyKiosk = typeof window.fully !== 'undefined' || navigator.userAgent.includes("Fully");
 if (isAdminMode || !isFullyKiosk) {
@@ -196,8 +196,10 @@ function renderAdvices() {
 const advices = getStoredAdvices();
 const container = document.getElementById('advice-grid-container');
 container.innerHTML = "";
+let activeCount = 0;
 advices.forEach(adv => {
 if (adv.active) {
+activeCount++;
 const box = document.createElement('div');
 box.className = 'advice-box';
 let linkHtml = "";
@@ -208,6 +210,19 @@ box.innerHTML = ⁠<div> <h3>${adv.title}</h3> <p>${adv.text}</p> ${linkHtml} </
 container.appendChild(box);
 }
 });
+// Sécurité de secours absolue : si aucun conseil n'est actif, on force l'affichage des 4 par défaut
+if (activeCount === 0) {
+defaultAdvices.slice(0, 4).forEach(adv => {
+const box = document.createElement('div');
+box.className = 'advice-box';
+let linkHtml = "";
+if (adv.linkUrl && adv.linkText) {
+linkHtml = ⁠<p style="margin-top: 4px;"><a href="${adv.linkUrl}" target="_blank">${adv.linkText} ↗</a></p>⁠;
+}
+box.innerHTML = ⁠<div> <h3>${adv.title}</h3> <p>${adv.text}</p> ${linkHtml} </div> <img src="${adv.img}" alt="${adv.title}">⁠;
+container.appendChild(box);
+});
+}
 }
 function openPinModal() {
 document.getElementById('admin-modal').style.display = 'flex';
