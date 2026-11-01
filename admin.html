@@ -139,7 +139,7 @@
     </div>
 
     <script>
-        // URL Apps Script dédiée aux conseils
+        // URL Apps Script dédiée au Sheet des conseils
         const sheetConseilsApiUrl = "https://script.google.com/macros/s/AKfycbzdEv_frdNqscUxHQW6xXpePamOztmC0xLWa5CRMjY4fFsKuMdcvJda7fDkXiWqAYcu1A/exec";
         
         let cachedAdvices = [];
@@ -173,6 +173,7 @@
             }
 
             cachedAdvices.forEach((adv, index) => {
+                // Lecture exacte de la colonne "Nom de la recommandation" de ton Google Sheet
                 const titleText = adv['Nom de la recommandation'] || adv.title || adv['Nom'] || adv['titre'] || '';
                 if (!titleText || titleText.trim() === '') return;
 
