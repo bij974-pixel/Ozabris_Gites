@@ -94,4 +94,338 @@
         .advice-box a { color: var(--primary); font-weight: bold; text-decoration: underline; font-size: 0.8rem; }
 
         .footer-actions { display: flex; justify-content: center; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 12px; font-family: 'Segoe UI', sans-serif; }
-        .btn-action { background-color: var(--primary); color: white; padding: 10px 25px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; border: none; text-decoration: none; display: inline-block; transition:
+        .btn-action { background-color: var(--primary); color: white; padding: 10px 25px; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; border: none; text-decoration: none; display: inline-block; transition: background 0.2s; }
+        .btn-action:hover { background-color: var(--accent); color: var(--primary); }
+
+        /* Modals Admin */
+        #admin-modal, #config-admin-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 38, 58, 0.85); justify-content: center; align-items: center; z-index: 1000; font-family: 'Segoe UI', sans-serif;
+        }
+        .modal-content {
+            background: white; padding: 25px; border-radius: 14px; width: 90%; max-width: 550px; text-align: center; border: 2px solid var(--accent); max-height: 90vh; display: flex; flex-direction: column;
+        }
+        .modal-header-fixed {
+            background: #fff; padding-bottom: 10px; border-bottom: 2px solid var(--accent); margin-bottom: 10px; flex-shrink: 0; text-align: left;
+        }
+        .modal-body-scroll {
+            overflow-y: auto; flex-grow: 1; padding-right: 5px; text-align: left;
+        }
+        .modal-content input[type="text"], .modal-content textarea, .modal-content select {
+            width: 100%; padding: 7px; margin: 4px 0 8px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 0.8rem;
+        }
+        .modal-content textarea { resize: none; height: 50px; }
+        .modal-btn {
+            background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem; width: 100%; box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        .modal-btn:hover { background: var(--accent); color: var(--primary); }
+        .advice-config-group { background: #fdfbf7; border: 1px solid var(--accent); padding: 12px; border-radius: 8px; margin-bottom: 12px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-top-controls" id="admin-container">
+            <button type="button" class="btn-admin" onclick="openPinModal()">⚙️ Admin</button>
+        </div>
+        <div class="brand-logo-container">
+            <img src="https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg" alt="Les Ozabris Logo">
+        </div>
+        <h1 class="logo-text">Les Ozabris</h1>
+        <span class="subtitle">Cottages de Prestige & Perles Rares • La Réunion</span>
+    </header>
+
+    <div class="tv-card">
+        <div class="card-header">
+            <h2 id="page-main-title">Conseils & Recommandations</h2>
+            <p id="page-main-sub" class="welcome-sub">🌿 Tout pour découvrir La Réunion et profiter pleinement de votre séjour aux Ozabris.</p>
+        </div>
+
+        <div class="advice-grid" id="advice-grid-container">
+            <!-- Les encadrés s'afficheront ici -->
+        </div>
+        
+        <div class="footer-actions">
+            <a id="back-home-btn" href="index.html" class="btn-action">🏠 Retour à l'accueil</a>
+        </div>
+    </div>
+
+    <!-- Étape 1 : Demande du PIN Admin -->
+    <div id="admin-modal">
+        <div class="modal-content" style="max-width: 320px; height: auto;">
+            <button type="button" onclick="closePinModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
+            <h3>🔒 Accès Admin</h3>
+            <p style="font-size: 0.8rem; color: #666; margin: 5px 0;">Code PIN de sécurité</p>
+            <input type="password" id="adminPin" placeholder="PIN" maxlength="6" style="text-align: center;">
+            <button type="button" class="modal-btn" onclick="verifyPin()">Valider</button>
+            <p id="adminError" style="color: #b94a48; font-size: 0.75rem; margin-top: 8px; display: none;">Code incorrect</p>
+        </div>
+    </div>
+
+    <!-- Étape 2 : Configuration Admin -->
+    <div id="config-admin-modal">
+        <div class="modal-content">
+            <div class="modal-header-fixed">
+                <button type="button" onclick="closeConfigModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
+                <h3 style="color: var(--primary); font-family: 'Playfair Display', serif; text-align: center;">⚙️ Gestion des 10 Conseils & Titres</h3>
+                
+                <label style="font-size: 0.75rem; font-weight: bold; color: var(--primary); display: block; margin-top: 6px;">Titre principal de la page :</label>
+                <input type="text" id="cfg-page-title" value="Conseils & Recommandations">
+
+                <label style="font-size: 0.75rem; font-weight: bold; color: var(--primary); display: block;">Sous-titre de la page :</label>
+                <input type="text" id="cfg-page-sub" value="🌿 Tout pour découvrir La Réunion et profiter pleinement de votre séjour aux Ozabris." style="margin-bottom: 6px;">
+
+                <button type="button" class="modal-btn" onclick="saveAdviceConfig()" id="save-btn">💾 Enregistrer toutes les modifications</button>
+            </div>
+            
+            <div class="modal-body-scroll" id="admin-advice-list">
+                <!-- Généré dynamiquement -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const defaultAdvices = [
+            { id: 1, active: true, target: "both", title: "🛒 Super marché le plus proche", text: "Le super marché le plus proche est à 10mn d'ici, le SUPER U de Trois Bassins (lien pour les horaires ci-dessous)", img: "https://i.postimg.cc/7L2PvXzp/IMG-4328.jpg", linkText: "Horaires Super U", linkUrl: "https://i.postimg.cc/zfz7HxhN/Image.png" },
+            { id: 2, active: true, target: "both", title: "🚗 Location & Infos Routes", text: "Anticipez vos montées vers les cirques de préférence tôt le matin.", img: "https://i.postimg.cc/m227V1Jq/IMG-4249.jpg", linkText: "", linkUrl: "" },
+            { id: 3, active: true, target: "both", title: "🥖 Boulangerie & Commerces", text: "Retrouvez toutes les adresses de proximité à La Saline pour vos courses.", img: "https://i.postimg.cc/2jTZq8yF/IMG-4380.jpg", linkText: "", linkUrl: "" },
+            { id: 4, active: true, target: "both", title: "🍽️ Nos Bonnes Tables", text: "Envie d'un bon cari réunionnais ou d'une table raffinée ? Nos coups de cœur.", img: "https://i.postimg.cc/13yj8PKc/Image.jpg", linkText: "", linkUrl: "" },
+            { id: 5, active: false, target: "both", title: "💡 Conseil Personnalisé 5", text: "Ajoutez ici un conseil sur mesure pour vos voyageurs.", img: "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg", linkText: "", linkUrl: "" },
+            { id: 6, active: false, target: "both", title: "💡 Conseil Personnalisé 6", text: "Ajoutez ici un conseil sur mesure pour vos voyageurs.", img: "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg", linkText: "", linkUrl: "" },
+            { id: 7, active: false, target: "both", title: "💡 Conseil Personnalisé 7", text: "Ajoutez ici un conseil sur mesure pour vos voyageurs.", img: "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg", linkText: "", linkUrl: "" },
+            { id: 8, active: false, target: "both", title: "💡 Conseil Personnalisé 8", text: "Ajoutez ici un conseil sur mesure pour vos voyageurs.", img: "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg", linkText: "", linkUrl: "" },
+            { id: 9, active: false, target: "both", title: "💡 Conseil Personnalisé 9", text: "Ajoutez ici un conseil sur mesure pour vos voyageurs.", img: "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg", linkText: "", linkUrl: "" },
+            { id: 10, active: false, target: "both", title: "💡 Conseil Personnalisé 10", text: "Ajoutez ici un conseil sur mesure pour vos voyageurs.", img: "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg", linkText: "", linkUrl: "" }
+        ];
+
+        let currentGite = 'ptitzabris';
+
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            currentGite = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
+            document.getElementById('back-home-btn').href = `index.html?gite=${currentGite}&v=99`;
+
+            // Le bouton admin s'affiche partout (téléphone, PC, Safari...) et se masque UNIQUEMENT sur Fully Kiosk
+            const isFullyKiosk = typeof window.fully !== 'undefined' || navigator.userAgent.includes("Fully");
+            if (isFullyKiosk) {
+                document.getElementById('admin-container').style.display = 'none';
+            } else {
+                document.getElementById('admin-container').style.display = 'block';
+            }
+
+            loadHeaderTexts();
+            renderAdvices();
+
+            const adminPin = document.getElementById('adminPin');
+            if (adminPin) {
+                adminPin.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') verifyPin();
+                });
+            }
+        }
+
+        function loadHeaderTexts() {
+            const savedTitle = localStorage.getItem('ozabris_page_title') || "Conseils & Recommandations";
+            const savedSub = localStorage.getItem('ozabris_page_sub') || "🌿 Tout pour découvrir La Réunion et profiter pleinement de votre séjour aux Ozabris.";
+
+            document.getElementById('page-main-title').innerText = savedTitle;
+            document.getElementById('page-main-sub').innerText = savedSub;
+            document.getElementById('page-title-meta').innerText = savedTitle + " | Les Ozabris";
+        }
+
+        function getStoredAdvices() {
+            const saved = localStorage.getItem('ozabris_custom_10_advices_v4');
+            if (saved) {
+                try { 
+                    const parsed = JSON.parse(saved);
+                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                } catch(e) {}
+            }
+            localStorage.setItem('ozabris_custom_10_advices_v4', JSON.stringify(defaultAdvices));
+            return defaultAdvices;
+        }
+
+        function renderAdvices() {
+            const advices = getStoredAdvices();
+            const container = document.getElementById('advice-grid-container');
+            container.innerHTML = "";
+
+            advices.forEach(adv => {
+                const matchGite = (adv.target === 'both' || adv.target === currentGite);
+                if (adv.active && matchGite) {
+                    const box = document.createElement('div');
+                    box.className = 'advice-box';
+                    
+                    let linkHtml = "";
+                    if (adv.linkUrl && adv.linkText) {
+                        linkHtml = `<p style="margin-top: 4px;"><a href="${adv.linkUrl}" target="_blank">${adv.linkText} ↗</a></p>`;
+                    }
+
+                    box.innerHTML = `
+                        <div>
+                            <h3>${adv.title}</h3>
+                            <p>${adv.text}</p>
+                            ${linkHtml}
+                        </div>
+                        <img src="${adv.img}" alt="${adv.title}">
+                    `;
+                    container.appendChild(box);
+                }
+            });
+        }
+
+        function openPinModal() {
+            document.getElementById('admin-modal').style.display = 'flex';
+            document.getElementById('adminPin').focus();
+        }
+        function closePinModal() {
+            document.getElementById('admin-modal').style.display = 'none';
+            document.getElementById('adminError').style.display = 'none';
+            document.getElementById('adminPin').value = '';
+        }
+        function verifyPin() {
+            const pin = document.getElementById('adminPin').value.trim();
+            if (pin === '140769') {
+                closePinModal();
+                document.getElementById('config-admin-modal').style.display = 'flex';
+                buildAdminAdviceForm();
+            } else {
+                document.getElementById('adminError').style.display = 'block';
+                document.getElementById('adminPin').value = '';
+            }
+        }
+        function closeConfigModal() {
+            document.getElementById('config-admin-modal').style.display = 'none';
+        }
+
+        function buildAdminAdviceForm() {
+            const savedTitle = localStorage.getItem('ozabris_page_title') || "Conseils & Recommandations";
+            const savedSub = localStorage.getItem('ozabris_page_sub') || "🌿 Tout pour découvrir La Réunion et profiter pleinement de votre séjour aux Ozabris.";
+            document.getElementById('cfg-page-title').value = savedTitle;
+            document.getElementById('cfg-page-sub').value = savedSub;
+
+            const advices = getStoredAdvices();
+            const listContainer = document.getElementById('admin-advice-list');
+            listContainer.innerHTML = "";
+
+            advices.forEach((adv, index) => {
+                const targetVal = adv.target || 'both';
+                const group = document.createElement('div');
+                group.className = 'advice-config-group';
+                group.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <label style="display: flex; align-items: center; gap: 6px; font-weight: bold; color: var(--primary); cursor: pointer;">
+                            <input type="checkbox" id="adv-active-${index}" ${adv.active ? 'checked' : ''} style="width: 16px; height: 16px;">
+                            Encadré ${index + 1}
+                        </label>
+                        <select id="adv-target-${index}" style="width: 160px; margin: 0; padding: 4px; font-size: 0.75rem;">
+                            <option value="both" ${targetVal === 'both' ? 'selected' : ''}>📍 Les deux gîtes</option>
+                            <option value="ptitzabris" ${targetVal === 'ptitzabris' ? 'selected' : ''}>🏠 Ptitzabris uniquement</option>
+                            <option value="grandzabris" ${targetVal === 'grandzabris' ? 'selected' : ''}>🏡 Grandzabris uniquement</option>
+                        </select>
+                    </div>
+                    <input type="text" id="adv-title-${index}" value="${adv.title}" placeholder="Titre">
+                    <textarea id="adv-text-${index}" placeholder="Texte">${adv.text}</textarea>
+                    
+                    <label style="font-size: 0.68rem; font-weight: bold; color: #555; display: block; margin-top: 2px;">Photo (Fichier ou URL)</label>
+                    <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 4px;">
+                        <input type="file" id="adv-file-${index}" accept="image/*" style="font-size: 0.68rem; margin: 0; flex-grow: 1;">
+                        <button type="button" onclick="clearAdviceImage(${index})" style="background: #b94a48; color: white; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer; font-size: 0.72rem;">🗑️ Vider</button>
+                    </div>
+                    <input type="text" id="adv-img-${index}" value="${adv.img}" placeholder="Ou URL image directe" style="margin-bottom: 6px;">
+
+                    <div style="display: flex; gap: 6px;">
+                        <input type="text" id="adv-linktext-${index}" value="${adv.linkText || ''}" placeholder="Nom lien (ex: Réserver)" style="margin: 0;">
+                        <input type="text" id="adv-linkurl-${index}" value="${adv.linkUrl || ''}" placeholder="URL lien (https://...)" style="margin: 0;">
+                    </div>
+                `;
+                listContainer.appendChild(group);
+            });
+        }
+
+        function clearAdviceImage(index) {
+            document.getElementById(`adv-file-${index}`).value = "";
+            document.getElementById(`adv-img-${index}`).value = "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg";
+            alert("Photo vidée.");
+        }
+
+        function saveAdviceConfig() {
+            const advices = getStoredAdvices();
+            const btn = document.getElementById('save-btn');
+            btn.innerText = "⏳ Enregistrement...";
+            btn.disabled = true;
+
+            const newTitle = document.getElementById('cfg-page-title').value.trim();
+            const newSub = document.getElementById('cfg-page-sub').value.trim();
+            if (newTitle) localStorage.setItem('ozabris_page_title', newTitle);
+            if (newSub) localStorage.setItem('ozabris_page_sub', newSub);
+
+            let promises = advices.map((adv, index) => {
+                return new Promise((resolve) => {
+                    adv.active = document.getElementById(`adv-active-${index}`).checked;
+                    adv.target = document.getElementById(`adv-target-${index}`).value;
+                    adv.title = document.getElementById(`adv-title-${index}`).value;
+                    adv.text = document.getElementById(`adv-text-${index}`).value;
+                    adv.linkText = document.getElementById(`adv-linktext-${index}`).value;
+                    adv.linkUrl = document.getElementById(`adv-linkurl-${index}`).value;
+                    
+                    const manualUrl = document.getElementById(`adv-img-${index}`).value.trim();
+                    if (manualUrl) adv.img = manualUrl;
+
+                    const fileInput = document.getElementById(`adv-file-${index}`);
+                    if (fileInput.files && fileInput.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const img = new Image();
+                            img.onload = function() {
+                                const canvas = document.createElement('canvas');
+                                let width = img.width;
+                                let height = img.height;
+                                const max_size = 600;
+
+                                if (width > height && width > max_size) {
+                                    height *= max_size / width;
+                                    width = max_size;
+                                } else if (height > max_size) {
+                                    width *= max_size / height;
+                                    height = max_size;
+                                }
+
+                                canvas.width = width;
+                                canvas.height = height;
+                                const ctx = canvas.getContext('2d');
+                                ctx.drawImage(img, 0, 0, width, height);
+                                
+                                adv.img = canvas.toDataURL('image/jpeg', 0.8);
+                                resolve();
+                            };
+                            img.onerror = () => resolve();
+                            img.src = e.target.result;
+                        };
+                        reader.onerror = () => resolve();
+                        reader.readAsDataURL(fileInput.files[0]);
+                    } else {
+                        resolve();
+                    }
+                });
+            });
+
+            Promise.all(promises).then(() => {
+                localStorage.setItem('ozabris_custom_10_advices_v4', JSON.stringify(advices));
+                btn.innerText = "💾 Enregistrer toutes les modifications";
+                btn.disabled = false;
+                alert('Modifications enregistrées avec succès !');
+                closeConfigModal();
+                loadHeaderTexts();
+                renderAdvices();
+            }).catch(() => {
+                localStorage.setItem('ozabris_custom_10_advices_v4', JSON.stringify(advices));
+                btn.innerText = "💾 Enregistrer toutes les modifications";
+                btn.disabled = false;
+                alert('Modifications enregistrées avec succès !');
+                closeConfigModal();
+                loadHeaderTexts();
+                renderAdvices();
+            });
+        }
+    </script>
+</body>
+</html>
