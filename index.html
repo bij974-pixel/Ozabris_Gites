@@ -77,7 +77,6 @@
         h2 { color: var(--primary); font-size: 1.5rem; font-weight: 400; margin-bottom: 5px; }
         .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.85rem; color: #555; font-style: italic; }
 
-        /* Grille des menus d'accueil */
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -150,7 +149,7 @@
                 <p id="menu-conseils-sub">Nos adresses et coups de cœur</p>
             </a>
 
-            <a id="link-infos" href="infos.html" class="menu-box" tabindex="0">
+            <a id="link-infos" href="guide.html" class="menu-box" tabindex="0">
                 <span class="icon">📖</span>
                 <h3 id="menu-infos-title">Guide du Cottage</h3>
                 <p id="menu-infos-sub">Équipements, Wi-Fi & consignes</p>
@@ -178,7 +177,7 @@
         const sheetVoyageursApiUrl = "https://script.google.com/macros/s/AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq/exec";
 
         let currentGiteKey = 'ptitzabris';
-        let currentLang = 'fr'; // Langue par défaut
+        let currentLang = 'fr';
 
         const translations = {
             fr: {
@@ -240,9 +239,9 @@
             currentGiteKey = giteParam.includes("grand") ? "grandzabris" : "ptitzabris";
             let cottageName = currentGiteKey === "grandzabris" ? "Grandzabris" : "Ptitzabris";
 
-            // Transmission du gîte dans les liens des menus
+            // CONCORDANCE STRICTE DES LIENS AVEC LE PARAMÈTRE DU GÎTE
             document.getElementById('link-conseils').href = `conseils.html?gite=${currentGiteKey}`;
-            document.getElementById('link-infos').href = `infos.html?gite=${currentGiteKey}`;
+            document.getElementById('link-infos').href = `guide.html?gite=${currentGiteKey}`;
 
             const isFullyKiosk = typeof window.fully !== 'undefined' || navigator.userAgent.includes("Fully");
             const adminContainer = document.getElementById('admin-container');
@@ -255,7 +254,6 @@
                 adminContainer.style.display = 'block';
             }
 
-            // Chargement du voyageur et de sa langue depuis le Sheet
             try {
                 const resV = await fetch(sheetVoyageursApiUrl + "?t=" + new Date().getTime());
                 const voyageurs = await resV.json();
@@ -299,7 +297,6 @@
                 document.getElementById('page-main-title').innerText = t('welcomeAt', { cottage: cottageName });
             }
 
-            // Application des textes traduits
             document.getElementById('page-main-sub').innerText = t('subText');
             document.getElementById('menu-conseils-title').innerText = t('conseilsTitle');
             document.getElementById('menu-conseils-sub').innerText = t('conseilsSub');
