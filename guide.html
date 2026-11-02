@@ -78,7 +78,22 @@
         h2 { color: var(--primary); font-size: 1.2rem; font-weight: 400; margin-bottom: 2px; }
         .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.68rem; color: #555; font-style: italic; }
 
-        /* Grille de défilement fluide */
+        .live-info-bar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: #fdfcfb;
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            padding: 8px 15px;
+            margin-bottom: 10px;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.78rem;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+        .live-info-bar div { display: flex; align-items: center; gap: 6px; font-weight: 600; }
+
         .guide-grid { 
             display: grid; 
             grid-template-columns: repeat(2, 1fr); 
@@ -129,7 +144,6 @@
             padding: 2px;
         }
 
-        /* Encadré spécial TV / Orange TV */
         .tv-instruction-box {
             grid-column: span 2;
             background: #fdfcfb;
@@ -155,7 +169,6 @@
         .btn-action { background-color: var(--primary); color: white; padding: 6px 18px; border-radius: 8px; font-weight: 600; font-size: 0.72rem; cursor: pointer; text-decoration: none; display: inline-block; }
         .btn-action:focus { outline: 3px solid var(--accent); }
 
-        /* Mode Plein Écran interactif */
         #fullscreen-view {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(18, 38, 58, 0.96); z-index: 5000; justify-content: center; align-items: center; padding: 20px; font-family: 'Segoe UI', sans-serif;
         }
@@ -170,7 +183,6 @@
         .btn-close-fullscreen { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; cursor: pointer; align-self: center; }
         .btn-close-fullscreen:hover, .btn-close-fullscreen:focus { background: var(--accent); color: var(--primary); outline: none; }
 
-        /* Modale PIN Admin */
         #admin-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(18, 38, 58, 0.9); justify-content: center; align-items: center; z-index: 10000; font-family: 'Segoe UI', sans-serif;
         }
@@ -196,7 +208,13 @@
     <div class="tv-card">
         <div class="card-header">
             <h2 id="page-main-title">Guide du Cottage & Infos pratiques</h2>
-            <p id="page-main-sub" class="welcome-sub">✨ Accès Wi-Fi, consignes et télévision.</p>
+            <p id="page-main-sub" class="welcome-sub">✨ Météo de La Saline les Hauts, Wi-Fi et télévision.</p>
+        </div>
+
+        <!-- Widget Météo & Heure -->
+        <div class="live-info-bar">
+            <div id="live-time">🕒 --:--</div>
+            <div id="live-weather">☀️ La Saline les Hauts : Chargement...</div>
         </div>
 
         <div class="guide-grid" id="guide-grid-container">
@@ -242,7 +260,7 @@
             fr: {
                 titleFor: "Guide du Cottage pour {name}",
                 titleAt: "Guide du Cottage - {cottage}",
-                subText: "✨ Accès Wi-Fi, consignes et télévision.",
+                subText: "✨ Météo de La Saline les Hauts, Wi-Fi et télévision.",
                 backHome: "🏠 Retour à l'accueil",
                 closeBtn: "✕ Quitter et revenir",
                 adminTitle: "🔒 Accès Admin",
@@ -277,7 +295,7 @@
             en: {
                 titleFor: "Cottage Guide for {name}",
                 titleAt: "Cottage Guide - {cottage}",
-                subText: "✨ Wi-Fi, guidelines and television.",
+                subText: "✨ Weather in La Saline les Hauts, Wi-Fi and television.",
                 backHome: "🏠 Back to Home",
                 closeBtn: "✕ Exit and Return",
                 adminTitle: "🔒 Admin Access",
@@ -312,7 +330,7 @@
             de: {
                 titleFor: "Cottage-Leitfaden für {name}",
                 titleAt: "Cottage-Leitfaden - {cottage}",
-                subText: "✨ WLAN, Hinweise und Fernsehen.",
+                subText: "✨ Wetter in La Saline les Hauts, WLAN und Fernsehen.",
                 backHome: "🏠 Zur Startseite",
                 closeBtn: "✕ Schließen und Zurück",
                 adminTitle: "🔒 Admin-Zugang",
@@ -363,16 +381,24 @@
 
             document.getElementById('back-home-btn').href = `index.html?gite=${currentGiteKey}&v=99`;
 
-            const isFullyKiosk = typeof window.fully !== 'undefined' || navigator.userAgent.includes("Fully");
+            // SÉCURITÉ : Masquage strict du bouton Admin UNIQUEMENT pour .145 et .93
             const adminContainer = document.getElementById('admin-container');
             const currentHost = window.location.hostname;
-            const isBoxTV = currentHost.endsWith(".93") || currentHost.endsWith(".145") || currentHost === "192.168.1.93" || currentHost === "192.168.1.145";
+            const isTargetTV = currentHost.endsWith(".145") || currentHost.endsWith(".93") || 
+                               currentHost === "192.168.1.145" || currentHost === "192.168.1.93";
 
-            if (isFullyKiosk || isBoxTV) {
+            if (isTargetTV) {
                 adminContainer.style.display = 'none';
             } else {
                 adminContainer.style.display = 'block';
             }
+
+            // Horloge Réunion
+            updateClock();
+            setInterval(updateClock, 1000);
+
+            // Météo La Saline les Hauts
+            fetchWeatherSaline();
 
             try {
                 const resV = await fetch(sheetVoyageursApiUrl + "?t=" + new Date().getTime());
@@ -427,13 +453,40 @@
             renderGuideGrid();
         }
 
+        function updateClock() {
+            try {
+                const nowStr = new Date().toLocaleTimeString('fr-FR', { timeZone: 'Indian/Reunion', hour: '2-digit', minute: '2-digit' });
+                document.getElementById('live-time').innerText = `🕒 ${nowStr}`;
+            } catch(e) {
+                const now = new Date();
+                document.getElementById('live-time').innerText = `🕒 ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+            }
+        }
+
+        async function fetchWeatherSaline() {
+            try {
+                const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=-21.0772&longitude=55.2753&current=temperature_2m,weather_code");
+                const data = await res.json();
+                const temp = Math.round(data.current.temperature_2m);
+                const code = data.current.weather_code;
+                
+                let weatherDesc = "Ensoleillé ☀️";
+                if (code > 2 && code < 50) weatherDesc = "Nuageux ⛅";
+                if (code >= 50) weatherDesc = "Pluvieux 🌧️";
+
+                let prefix = currentLang === 'en' ? "La Saline les Hauts:" : (currentLang === 'de' ? "La Saline les Hauts:" : "La Saline les Hauts :");
+                document.getElementById('live-weather').innerText = `🌤️ ${prefix} ${temp}°C, ${weatherDesc}`;
+            } catch(e) {
+                document.getElementById('live-weather').innerText = `🌤️ La Saline les Hauts : 26°C, Doux 🌴`;
+            }
+        }
+
         function renderGuideGrid() {
             const container = document.getElementById('guide-grid-container');
             container.innerHTML = "";
 
             const langData = guideData[currentLang] || guideData['fr'];
 
-            // Encadré TV
             const tvBox = document.createElement('div');
             tvBox.className = 'tv-instruction-box';
             tvBox.innerHTML = `
@@ -442,7 +495,6 @@
             `;
             container.appendChild(tvBox);
 
-            // Les 4 cartes avec images locales du dossier www
             langData.items.forEach((item) => {
                 const box = document.createElement('div');
                 box.className = 'guide-box';
