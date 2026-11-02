@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title-meta">Guide du Cottage & Infos | Les Ozabris</title>
-    <!-- Inclusion de la bibliothèque qrcode.js pour générer les QR codes -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root { --primary: #12263a; --accent: #c5a880; --text-dark: #2c3e50; --white: #ffffff; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Playfair Display', 'Georgia', serif; }
@@ -80,7 +78,7 @@
         h2 { color: var(--primary); font-size: 1.2rem; font-weight: 400; margin-bottom: 2px; }
         .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.68rem; color: #555; font-style: italic; }
 
-        /* Grille de défilement fluide pour les éléments */
+        /* Grille de défilement fluide */
         .guide-grid { 
             display: grid; 
             grid-template-columns: repeat(2, 1fr); 
@@ -120,17 +118,15 @@
         .guide-box h3 { font-size: 0.85rem; color: var(--primary); margin-bottom: 3px; font-family: 'Playfair Display', serif; }
         .guide-box p { font-size: 0.72rem; color: #555; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 
-        .qr-thumb-container {
+        .guide-thumb {
             width: 75px;
             height: 75px;
             flex-shrink: 0;
             border-radius: 6px;
             border: 1px solid #ddd;
-            background: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 4px;
+            object-fit: contain;
+            background: #fcfbfa;
+            padding: 2px;
         }
 
         /* Encadré spécial TV / Orange TV */
@@ -139,23 +135,20 @@
             background: #fdfcfb;
             border: 2px dashed var(--accent);
             border-radius: 10px;
-            padding: 12px 15px;
+            padding: 10px 15px;
             text-align: left;
             font-family: 'Segoe UI', sans-serif;
         }
         .tv-instruction-box h3 {
             font-family: 'Playfair Display', serif;
             color: var(--primary);
-            font-size: 0.95rem;
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            font-size: 0.9rem;
+            margin-bottom: 3px;
         }
         .tv-instruction-box p {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             color: #444;
-            line-height: 1.4;
+            line-height: 1.35;
         }
 
         .footer-actions { display: flex; justify-content: center; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 8px; font-family: 'Segoe UI', sans-serif; flex-shrink: 0; }
@@ -172,18 +165,7 @@
         .fullscreen-card h3 { font-family: 'Playfair Display', serif; color: var(--primary); font-size: 1.5rem; margin-bottom: 8px; text-align: left; }
         .fullscreen-card p.fs-desc { font-size: 0.95rem; color: #333; line-height: 1.5; margin-bottom: 15px; text-align: left; }
         
-        .qr-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: #fdfcfb;
-            border: 1px solid var(--accent);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-        .qr-container p { font-size: 0.85rem; color: var(--primary); font-weight: 600; margin-bottom: 10px; font-family: 'Segoe UI', sans-serif; text-align: center; }
-        #qrcode-box { background: white; padding: 10px; border-radius: 6px; border: 1px solid #eee; display: inline-block; }
+        .fullscreen-img { width: 100%; max-height: 420px; object-fit: contain; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 15px; background: #fcfbfa; }
 
         .btn-close-fullscreen { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; cursor: pointer; align-self: center; }
         .btn-close-fullscreen:hover, .btn-close-fullscreen:focus { background: var(--accent); color: var(--primary); outline: none; }
@@ -214,10 +196,9 @@
     <div class="tv-card">
         <div class="card-header">
             <h2 id="page-main-title">Guide du Cottage & Infos pratiques</h2>
-            <p id="page-main-sub" class="welcome-sub">✨ Accès Wi-Fi, consignes et télévision par QR code.</p>
+            <p id="page-main-sub" class="welcome-sub">✨ Accès Wi-Fi, consignes et télévision.</p>
         </div>
 
-        <!-- Grille contenant l'encadré TV et les 4 QR codes -->
         <div class="guide-grid" id="guide-grid-container">
             <p style="text-align: center; color: #666; grid-column: span 2; padding: 20px;">Chargement...</p>
         </div>
@@ -261,46 +242,44 @@
             fr: {
                 titleFor: "Guide du Cottage pour {name}",
                 titleAt: "Guide du Cottage - {cottage}",
-                subText: "✨ Accès Wi-Fi, consignes et télévision par QR code.",
+                subText: "✨ Accès Wi-Fi, consignes et télévision.",
                 backHome: "🏠 Retour à l'accueil",
                 closeBtn: "✕ Quitter et revenir",
-                qrText: "📱 Scannez ce QR code pour y accéder directement depuis votre smartphone :",
                 adminTitle: "🔒 Accès Admin",
                 adminSub: "Code PIN de sécurité",
                 adminBtn: "Valider",
                 adminErr: "Code incorrect",
                 tvBoxTitle: "📺 Comment regarder la télévision en direct ?",
-                tvBoxDesc: "Pour profiter des chaînes TV, quittez le mode Kiosk (en faisant glisser le doigt depuis le bord de l'écran ou en appuyant sur la touche dédiée de votre télécommande), puis lancez l'application <b>Orange TV</b> depuis l'accueil de la box.",
+                tvBoxDesc: "Pour profiter des chaînes TV, quittez le mode Kiosk (en faisant glisser le doigt depuis le bord de l'écran ou via la télécommande), puis lancez l'application <b>Orange TV</b> depuis l'accueil de la box.",
                 items: [
                     {
                         title: "📶 Connexion Wi-Fi",
                         desc: "Accédez instantanément au réseau Wi-Fi haut débit sécurisé de votre cottage.",
-                        link: "WIFI:T:WPA;S:LesOzabris_Guest;P:Ozabris2026;;"
+                        img: "wifi.png"
                     },
                     {
                         title: "☕ Équipements & Notice",
                         desc: "Consultez la notice d'utilisation de la cuisine, de la cafetière et des installations.",
-                        link: "https://lesozabris.com/equipements"
+                        img: "equipements.png"
                     },
                     {
                         title: "🗑️ Consignes & Tri sélectif",
                         desc: "Tout savoir sur la gestion des déchets et le tri pour préserver La Réunion.",
-                        link: "https://lesozabris.com/dechets"
+                        img: "dechets.png"
                     },
                     {
                         title: "🌿 Charte & Sécurité du Domaine",
                         desc: "Consignes de calme, de respect de la nature et de sécurité aux Ozabris.",
-                        link: "https://lesozabris.com/reglement"
+                        img: "reglement.png"
                     }
                 ]
             },
             en: {
                 titleFor: "Cottage Guide for {name}",
                 titleAt: "Cottage Guide - {cottage}",
-                subText: "✨ Wi-Fi, guidelines and television via QR code.",
+                subText: "✨ Wi-Fi, guidelines and television.",
                 backHome: "🏠 Back to Home",
                 closeBtn: "✕ Exit and Return",
-                qrText: "📱 Scan this QR code to access it directly from your smartphone:",
                 adminTitle: "🔒 Admin Access",
                 adminSub: "Security PIN code",
                 adminBtn: "Validate",
@@ -311,58 +290,57 @@
                     {
                         title: "📶 Wi-Fi Connection",
                         desc: "Instantly access the secure high-speed Wi-Fi network of your cottage.",
-                        link: "WIFI:T:WPA;S:LesOzabris_Guest;P:Ozabris2026;;"
+                        img: "wifi.png"
                     },
                     {
                         title: "☕ Amenities & Manuals",
                         desc: "Check instructions for the kitchen, coffee machine, and appliances.",
-                        link: "https://lesozabris.com/equipements"
+                        img: "equipements.png"
                     },
                     {
                         title: "🗑️ Recycling & Waste",
                         desc: "Everything you need to know about waste sorting to preserve La Réunion.",
-                        link: "https://lesozabris.com/dechets"
+                        img: "dechets.png"
                     },
                     {
                         title: "🌿 Estate Guidelines & Safety",
                         desc: "Quiet hours, nature preservation, and safety rules at Les Ozabris.",
-                        link: "https://lesozabris.com/reglement"
+                        img: "reglement.png"
                     }
                 ]
             },
             de: {
                 titleFor: "Cottage-Leitfaden für {name}",
                 titleAt: "Cottage-Leitfaden - {cottage}",
-                subText: "✨ WLAN, Hinweise und Fernsehen per QR-Code.",
+                subText: "✨ WLAN, Hinweise und Fernsehen.",
                 backHome: "🏠 Zur Startseite",
                 closeBtn: "✕ Schließen und Zurück",
-                qrText: "📱 Scannen Sie diesen QR-Code, um direkt von Ihrem Smartphone aus zuzugreifen:",
                 adminTitle: "🔒 Admin-Zugang",
                 adminSub: "Sicherheits-PIN-Code",
                 adminBtn: "Bestätigen",
                 adminErr: "Falscher Code",
                 tvBoxTitle: "📺 Wie schaue ich Live-Fernsehen?",
-                tvBoxDesc: "Um TV-Sender zu sehen, verlassen Sie den Kiosk-Modus (wischen Sie vom Bildschirmrand oder verwenden Sie Ihre Fernbedienung) und starten Sie die App <b>Orange TV</b> auf dem Startbildschirm der Box.",
+                tvBoxDesc: "Um TV-Sender zu sehen, verlassen Sie den Kiosk-Modus und starten Sie die App <b>Orange TV</b> auf dem Startbildschirm der Box.",
                 items: [
                     {
                         title: "📶 WLAN-Verbindung",
                         desc: "Erhalten Sie sofortigen Zugang zum sicheren Highspeed-WLAN Ihres Cottages.",
-                        link: "WIFI:T:WPA;S:LesOzabris_Guest;P:Ozabris2026;;"
+                        img: "wifi.png"
                     },
                     {
                         title: "☕ Ausstattung & Bedienung",
                         desc: "Anleitungen für Küche, Kaffeemaschine und Geräte einsehen.",
-                        link: "https://lesozabris.com/equipements"
+                        img: "equipements.png"
                     },
                     {
                         title: "🗑️ Mülltrennung & Recycling",
                         desc: "Wissenswertes über die Mülltrennung zum Schutz von La Réunion.",
-                        link: "https://lesozabris.com/dechets"
+                        img: "dechets.png"
                     },
                     {
                         title: "🌿 Anwesen-Regeln & Sicherheit",
                         desc: "Ruhezeiten, Naturschutz und Sicherheitsregeln in Les Ozabris.",
-                        link: "https://lesozabris.com/reglement"
+                        img: "reglement.png"
                     }
                 ]
             }
@@ -455,7 +433,7 @@
 
             const langData = guideData[currentLang] || guideData['fr'];
 
-            // 1. Insertion de l'encadré TV en haut de la grille
+            // Encadré TV
             const tvBox = document.createElement('div');
             tvBox.className = 'tv-instruction-box';
             tvBox.innerHTML = `
@@ -464,15 +442,15 @@
             `;
             container.appendChild(tvBox);
 
-            // 2. Insertion des 4 QR codes pratiques
-            langData.items.forEach((item, index) => {
+            // Les 4 cartes avec images locales du dossier www
+            langData.items.forEach((item) => {
                 const box = document.createElement('div');
                 box.className = 'guide-box';
                 box.setAttribute('tabindex', '0');
 
                 const triggerAction = function(e) {
                     e.preventDefault();
-                    openFullscreen(item.title, item.desc, item.link);
+                    openFullscreen(item.title, item.desc, item.img);
                 };
 
                 box.onclick = triggerAction;
@@ -481,54 +459,31 @@
                     if (e.key === 'Enter' || e.keyCode === 13) triggerAction(e);
                 };
 
+                let imgTag = "";
+                if (item.img) {
+                    imgTag = `<img src="${item.img}" class="guide-thumb" alt="${item.title}">`;
+                }
+
                 box.innerHTML = `
                     <div class="guide-content-area">
                         <h3>${item.title}</h3>
                         <p>${item.desc}</p>
                     </div>
-                    <div class="qr-thumb-container" id="thumb-qr-${index}"></div>
+                    ${imgTag}
                 `;
                 container.appendChild(box);
-
-                try {
-                    new QRCode(document.getElementById(`thumb-qr-${index}`), {
-                        text: item.link,
-                        width: 65,
-                        height: 65,
-                        colorDark: "#12263a",
-                        colorLight: "#ffffff",
-                        correctLevel: QRCode.CorrectLevel.M
-                    });
-                } catch(err) {}
             });
         }
 
-        function openFullscreen(title, text, linkUrl) {
+        function openFullscreen(title, text, imgSrc) {
             document.getElementById('fs-title').innerText = title;
             document.getElementById('fs-text').innerText = text;
             
             const mediaContainer = document.getElementById('fs-media-container');
             mediaContainer.innerHTML = "";
 
-            const qrWrapper = document.createElement('div');
-            qrWrapper.className = 'qr-container';
-            qrWrapper.innerHTML = `
-                <p>${t('qrText')}</p>
-                <div id="qrcode-box"></div>
-            `;
-            mediaContainer.appendChild(qrWrapper);
-
-            try {
-                new QRCode(document.getElementById("qrcode-box"), {
-                    text: linkUrl,
-                    width: 180,
-                    height: 180,
-                    colorDark: "#12263a",
-                    colorLight: "#ffffff",
-                    correctLevel: QRCode.CorrectLevel.H
-                });
-            } catch(err) {
-                document.getElementById("qrcode-box").innerText = linkUrl;
+            if (imgSrc) {
+                mediaContainer.innerHTML = `<img src="${imgSrc}" alt="${title}" class="fullscreen-img">`;
             }
 
             document.getElementById('fullscreen-view').style.display = 'flex';
