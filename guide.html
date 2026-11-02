@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title-meta">Guide du Cottage & Infos | Les Ozabris</title>
+    <!-- Inclusion de la bibliothèque qrcode.js pour générer les QR codes -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root { --primary: #12263a; --accent: #c5a880; --text-dark: #2c3e50; --white: #ffffff; }
@@ -145,6 +146,19 @@
             padding: 2px;
         }
 
+        .qr-thumb-box {
+            width: 75px;
+            height: 75px;
+            flex-shrink: 0;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px;
+        }
+
         .tv-instruction-box {
             grid-column: span 2;
             background: #fdfcfb;
@@ -153,7 +167,6 @@
             padding: 8px 12px;
             text-align: left;
             font-family: 'Segoe UI', sans-serif;
-            cursor: default;
         }
         .tv-instruction-box h3 {
             font-family: 'Playfair Display', serif;
@@ -272,7 +285,7 @@
             fr: {
                 titleFor: "Guide du Cottage pour {name}",
                 titleAt: "Guide du Cottage - {cottage}",
-                subText: "✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.",
+                subText: "✨ Météo de La Saline les Hauts, Wi-Fi et télévision.",
                 backHome: "🏠 Retour à l'accueil",
                 closeBtn: "✕ Quitter et revenir",
                 qrText: "📱 Pour consulter le document en ligne depuis votre téléphone, scannez ce QR code :",
@@ -287,32 +300,34 @@
                         title: "📶 Connexion Wi-Fi",
                         desc: "• Réseau 1 : SFR_JR (mdp : 02311760)\n• Réseau 2 : SFR_JR_GZ (mdp : 02311760)\n• Réseau 3 : LeGrandZabris (mdp : Reunion974*)\nSaisissez manuellement le nom et le mot de passe.",
                         linkUrl: "",
-                        img: ""
+                        isQr: false,
+                        img: "wifi.png"
                     },
                     {
                         title: "🚽 Notice Sanibroyeur",
                         desc: "Consultez les instructions importantes d'utilisation pour préserver le bon fonctionnement des installations sanitaires.",
                         linkUrl: "https://1drv.ms/b/c/b302293c3a107d46/IQDKMy1gsI-VT57f-TffvFLZAYGZgWF8Su3TW7D9aAyesKE",
-                        img: ""
+                        isQr: true
                     },
                     {
                         title: "🗑️ Gestion des déchets & Tri",
                         desc: "Tout savoir sur le tri sélectif et la gestion des déchets pour préserver la beauté de La Réunion.",
                         linkUrl: "https://1drv.ms/b/c/b302293c3a107d46/IQDZPE7hVWyzR6Je11v5GxJpAQHKVJVyvyy-wpi8A10WimU",
-                        img: ""
+                        isQr: true
                     },
                     {
                         title: "🌿 Charte & Sécurité du Domaine",
                         desc: "Consignes de calme, de respect de la nature et de sécurité aux Ozabris pour un séjour serein.",
                         linkUrl: "",
-                        img: ""
+                        isQr: false,
+                        img: "reglement.png"
                     }
                 ]
             },
             en: {
                 titleFor: "Cottage Guide for {name}",
                 titleAt: "Cottage Guide - {cottage}",
-                subText: "✨ Use your remote control to scroll and select a card.",
+                subText: "✨ Weather in La Saline les Hauts, Wi-Fi and television.",
                 backHome: "🏠 Back to Home",
                 closeBtn: "✕ Exit and Return",
                 qrText: "📱 To view the document online from your phone, scan this QR code:",
@@ -327,32 +342,34 @@
                         title: "📶 Wi-Fi Connection",
                         desc: "• Network 1: SFR_JR (password: 02311760)\n• Network 2: SFR_JR_GZ (password: 02311760)\n• Network 3: LeGrandZabris (password: Reunion974*)\nEnter network name and password manually.",
                         linkUrl: "",
-                        img: ""
+                        isQr: false,
+                        img: "wifi.png"
                     },
                     {
                         title: "🚽 Sanibroyeur Guide",
                         desc: "Check important usage instructions to ensure proper operation of the facilities.",
                         linkUrl: "https://1drv.ms/b/c/b302293c3a107d46/IQDKMy1gsI-VT57f-TffvFLZAYGZgWF8Su3TW7D9aAyesKE",
-                        img: ""
+                        isQr: true
                     },
                     {
                         title: "🗑️ Waste Management & Sorting",
                         desc: "Everything you need to know about waste sorting to preserve La Réunion.",
                         linkUrl: "https://1drv.ms/b/c/b302293c3a107d46/IQDZPE7hVWyzR6Je11v5GxJpAQHKVJVyvyy-wpi8A10WimU",
-                        img: ""
+                        isQr: true
                     },
                     {
                         title: "🌿 Estate Guidelines & Safety",
                         desc: "Quiet hours, nature preservation, and safety rules at Les Ozabris.",
                         linkUrl: "",
-                        img: ""
+                        isQr: false,
+                        img: "reglement.png"
                     }
                 ]
             },
             de: {
                 titleFor: "Cottage-Leitfaden für {name}",
                 titleAt: "Cottage-Leitfaden - {cottage}",
-                subText: "✨ Nutzen Sie Ihre Fernbedienung zum Scrollen und Auswählen.",
+                subText: "✨ Wetter in La Saline les Hauts, WLAN und Fernsehen.",
                 backHome: "🏠 Zur Startseite",
                 closeBtn: "✕ Schließen und Zurück",
                 qrText: "📱 Um das Dokument online von Ihrem Telefon aus anzusehen, scannen Sie diesen QR-Code:",
@@ -367,25 +384,27 @@
                         title: "📶 WLAN-Verbindung",
                         desc: "• Netzwerk 1: SFR_JR (Passwort: 02311760)\n• Netzwerk 2: SFR_JR_GZ (Passwort: 02311760)\n• Netzwerk 3: LeGrandZabris (Passwort: Reunion974*)\nGeben Sie Name und Passwort manuell ein.",
                         linkUrl: "",
-                        img: ""
+                        isQr: false,
+                        img: "wifi.png"
                     },
                     {
                         title: "🚽 Sanibroyeur-Anleitung",
                         desc: "Wichtige Bedienungshinweise für den einwandfreien Betrieb der Anlage.",
                         linkUrl: "https://1drv.ms/b/c/b302293c3a107d46/IQDKMy1gsI-VT57f-TffvFLZAYGZgWF8Su3TW7D9aAyesKE",
-                        img: ""
+                        isQr: true
                     },
                     {
                         title: "🗑️ Mülltrennung & Recycling",
                         desc: "Wissenswertes über die Mülltrennung zum Schutz von La Réunion.",
                         linkUrl: "https://1drv.ms/b/c/b302293c3a107d46/IQDZPE7hVWyzR6Je11v5GxJpAQHKVJVyvyy-wpi8A10WimU",
-                        img: ""
+                        isQr: true
                     },
                     {
                         title: "🌿 Anwesen-Regeln & Sicherheit",
                         desc: "Ruhezeiten, Naturschutz und Sicherheitsregeln in Les Ozabris.",
                         linkUrl: "",
-                        img: ""
+                        isQr: false,
+                        img: "reglement.png"
                     }
                 ]
             }
@@ -518,14 +537,14 @@
             `;
             container.appendChild(tvBox);
 
-            langData.items.forEach((item) => {
+            langData.items.forEach((item, index) => {
                 const box = document.createElement('div');
                 box.className = 'advice-box';
                 box.setAttribute('tabindex', '0');
 
                 const triggerAction = function(e) {
                     e.preventDefault();
-                    openFullscreen(item.title, item.desc, item.img, item.linkUrl);
+                    openFullscreen(item.title, item.desc, item.img, item.linkUrl, item.isQr);
                 };
 
                 box.onclick = triggerAction;
@@ -534,9 +553,11 @@
                     if (e.key === 'Enter' || e.keyCode === 13) triggerAction(e);
                 };
 
-                let imgTag = "";
-                if (item.img && item.img.trim() !== "" && item.img.startsWith("http")) {
-                    imgTag = `<img src="${item.img.trim()}" class="advice-thumb" alt="${item.title}">`;
+                let mediaTag = "";
+                if (item.isQr) {
+                    mediaTag = `<div class="qr-thumb-box" id="thumb-qr-${index}"></div>`;
+                } else if (item.img && item.img.trim() !== "") {
+                    mediaTag = `<img src="${item.img.trim()}" class="advice-thumb" alt="${item.title}">`;
                 }
 
                 box.innerHTML = `
@@ -544,20 +565,35 @@
                         <h3>${item.title}</h3>
                         <p>${item.desc}</p>
                     </div>
-                    ${imgTag}
+                    ${mediaTag}
                 `;
                 container.appendChild(box);
+
+                if (item.isQr) {
+                    setTimeout(() => {
+                        try {
+                            new QRCode(document.getElementById(`thumb-qr-${index}`), {
+                                text: item.linkUrl,
+                                width: 70,
+                                height: 70,
+                                colorDark: "#12263a",
+                                colorLight: "#ffffff",
+                                correctLevel: QRCode.CorrectLevel.L
+                            });
+                        } catch(err) {}
+                    }, 50);
+                }
             });
         }
 
-        function openFullscreen(title, text, imageUrl, linkUrl) {
+        function openFullscreen(title, text, imageUrl, linkUrl, isQr) {
             document.getElementById('fs-title').innerText = title;
             document.getElementById('fs-text').innerText = text;
             
             const mediaContainer = document.getElementById('fs-media-container');
             mediaContainer.innerHTML = "";
 
-            if (linkUrl && linkUrl.trim() !== "" && linkUrl.startsWith("http")) {
+            if (isQr && linkUrl) {
                 const qrWrapper = document.createElement('div');
                 qrWrapper.className = 'qr-container';
                 qrWrapper.innerHTML = `
@@ -578,7 +614,7 @@
                 } catch(err) {
                     document.getElementById("qrcode-box").innerText = linkUrl.trim();
                 }
-            } else if (imageUrl && imageUrl.trim() !== "" && imageUrl.startsWith("http")) {
+            } else if (imageUrl && imageUrl.trim() !== "") {
                 mediaContainer.innerHTML = `<img src="${imageUrl.trim()}" alt="${title}" class="fullscreen-img">`;
             }
 
