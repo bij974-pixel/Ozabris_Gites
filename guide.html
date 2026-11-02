@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title-meta">Guide du Cottage & Infos | Les Ozabris</title>
-    <!-- Inclusion de la bibliothèque qrcode.js pour générer les QR codes dynamiquement -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root { --primary: #12263a; --accent: #c5a880; --text-dark: #2c3e50; --white: #ffffff; }
@@ -96,7 +95,6 @@
         }
         .live-info-bar div { display: flex; align-items: center; gap: 6px; font-weight: 600; }
 
-        /* Grille scrollable identique à conseils.html pour navigation fluide à la télécommande */
         .advice-grid { 
             display: grid; 
             grid-template-columns: repeat(2, 1fr); 
@@ -155,6 +153,7 @@
             padding: 8px 12px;
             text-align: left;
             font-family: 'Segoe UI', sans-serif;
+            cursor: default;
         }
         .tv-instruction-box h3 {
             font-family: 'Playfair Display', serif;
@@ -172,7 +171,6 @@
         .btn-action { background-color: var(--primary); color: white; padding: 6px 18px; border-radius: 8px; font-weight: 600; font-size: 0.72rem; cursor: pointer; text-decoration: none; display: inline-block; }
         .btn-action:focus { outline: 3px solid var(--accent); }
 
-        /* Mode Plein Écran interactif */
         #fullscreen-view {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(18, 38, 58, 0.96); z-index: 5000; justify-content: center; align-items: center; padding: 20px; font-family: 'Segoe UI', sans-serif;
         }
@@ -200,7 +198,6 @@
         .btn-close-fullscreen { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; cursor: pointer; align-self: center; }
         .btn-close-fullscreen:hover, .btn-close-fullscreen:focus { background: var(--accent); color: var(--primary); outline: none; }
 
-        /* Modale PIN Admin */
         #admin-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(18, 38, 58, 0.9); justify-content: center; align-items: center; z-index: 10000; font-family: 'Segoe UI', sans-serif;
         }
@@ -229,13 +226,11 @@
             <p id="page-main-sub" class="welcome-sub">✨ Météo de La Saline les Hauts, Wi-Fi et télévision.</p>
         </div>
 
-        <!-- Widget Météo & Heure -->
         <div class="live-info-bar">
             <div id="live-time">🕒 --:--</div>
             <div id="live-weather">☀️ La Saline les Hauts : Chargement...</div>
         </div>
 
-        <!-- Grille scrollable identique à conseils.html -->
         <div class="advice-grid" id="advice-grid-container">
             <p style="text-align: center; color: #666; grid-column: span 2; padding: 20px;">Chargement...</p>
         </div>
@@ -245,7 +240,6 @@
         </div>
     </div>
 
-    <!-- Mode Plein Écran -->
     <div id="fullscreen-view">
         <div class="fullscreen-card">
             <div>
@@ -257,7 +251,6 @@
         </div>
     </div>
 
-    <!-- Modale PIN Admin -->
     <div id="admin-modal">
         <div class="modal-content">
             <button type="button" onclick="closePinModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
@@ -415,7 +408,6 @@
 
             document.getElementById('back-home-btn').href = `index.html?gite=${currentGiteKey}&v=99`;
 
-            // SÉCURITÉ : Masquage strict du bouton Admin UNIQUEMENT pour .145 et .93
             const adminContainer = document.getElementById('admin-container');
             const currentHost = window.location.hostname;
             const isTargetTV = currentHost.endsWith(".145") || currentHost.endsWith(".93") || 
@@ -427,11 +419,8 @@
                 adminContainer.style.display = 'block';
             }
 
-            // Horloge Réunion
             updateClock();
             setInterval(updateClock, 1000);
-
-            // Météo La Saline les Hauts
             fetchWeatherSaline();
 
             try {
@@ -521,7 +510,6 @@
 
             const langData = guideData[currentLang] || guideData['fr'];
 
-            // Encadré TV en haut de la grille
             const tvBox = document.createElement('div');
             tvBox.className = 'tv-instruction-box';
             tvBox.innerHTML = `
