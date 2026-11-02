@@ -99,6 +99,7 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
+        /* Style focus indispensable pour la télécommande Android TV / Xiaomi */
         .advice-box:focus, .advice-box:hover {
             border-color: #12263a;
             box-shadow: 0 0 15px rgba(18, 38, 58, 0.4);
@@ -124,12 +125,12 @@
             padding: 3px;
         }
         .advice-box img { width: 100%; max-height: 95px; object-fit: contain; display: block; }
-        .advice-box a { color: var(--primary); font-weight: bold; text-decoration: underline; font-size: 0.78rem; display: inline-block; margin-top: 2px; pointer-events: none; }
 
         .footer-actions { display: flex; justify-content: center; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 10px; font-family: 'Segoe UI', sans-serif; }
         .btn-action { background-color: var(--primary); color: white; padding: 8px 20px; border-radius: 8px; font-weight: 600; font-size: 0.78rem; cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn-action:focus { outline: 3px solid var(--accent); }
 
-        /* Plein écran */
+        /* Mode Plein Écran interactif */
         #fullscreen-view {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(18, 38, 58, 0.96); z-index: 5000; justify-content: center; align-items: center; padding: 30px; font-family: 'Segoe UI', sans-serif;
         }
@@ -140,6 +141,7 @@
         .fullscreen-card p { font-size: 1rem; color: #333; line-height: 1.6; margin-bottom: 15px; }
         .fullscreen-img { width: 100%; max-height: 280px; object-fit: contain; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 15px; background: #fcfbfa; }
         .btn-close-fullscreen { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; font-size: 0.95rem; cursor: pointer; align-self: center; margin-top: 15px; }
+        .btn-close-fullscreen:hover, .btn-close-fullscreen:focus { background: var(--accent); color: var(--primary); outline: none; }
 
         /* Modale PIN Admin */
         #admin-modal {
