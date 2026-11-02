@@ -90,7 +90,7 @@ justify-content: space-between;
 cursor: pointer;
 transition: all 0.2s ease;
 }
-/* Style spécial focus télécommande TV / Navigation box Xiaomi */
+/* Style focus télécommande TV box Xiaomi */
 .advice-box:focus, .advice-box:hover {
 border-color: var(--primary);
 box-shadow: 0 0 12px rgba(18, 38, 58, 0.3);
@@ -277,6 +277,7 @@ titleEl.innerText = getTranslation('titleExclAt', { cottage: cottageName });
 }
 subEl.innerHTML = getTranslation('subText');
 document.getElementById('back-home-btn').innerText = getTranslation('backHome');
+// CORRECTION CLÉ : ajout de ?type=conseils pour charger les données de l'onglet Conseils
 const response = await fetch(sheetConseilsApiUrl + "?type=conseils&t=" + new Date().getTime());
 const data = await response.json();
 cachedAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || data.data || []);
@@ -305,11 +306,10 @@ if (isActive) {
 activeCount++;
 const box = document.createElement('div');
 box.className = 'advice-box';
-box.setAttribute('tabindex', '0'); // Permet le focus avec la télécommande de la box TV
+box.setAttribute('tabindex', '0'); // Navigation télécommande TV
 const descText = adv.text || adv['Commentaire sur la recommandation'] || '';
 const imageUrl = adv.img || adv['Lien postimage'] || '';
 const linkUrl = adv.linkUrl || adv['Lien web'] || '';
-// Gestion de l'action au clic / sélection TV
 const handleSelection = function(e) {
 e.preventDefault();
 if (linkUrl && linkUrl.trim() !== "" && linkUrl.startsWith("http")) {
@@ -370,7 +370,7 @@ if (pin === '140769') {
 window.location.href = ⁠admin.html?gite=${currentGiteKey}⁠;
 } else {
 document.getElementById('adminError').style.display = 'block';
-document.getElementById('adminPin').value = '';
+document.getElementById('adminPin'].value = '';
 }
 }
 </script>
