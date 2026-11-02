@@ -19,12 +19,13 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
         }
 
         header { 
             background: var(--primary);
             text-align: center; 
-            padding: 15px 20px; 
+            padding: 12px 20px; 
             position: relative; 
             color: var(--white);
             width: 100%;
@@ -33,31 +34,33 @@
             border-top-right-radius: 16px;
             border: 2px solid var(--accent);
             border-bottom: none;
+            flex-shrink: 0;
         }
 
-        .header-top-controls { position: absolute; top: 10px; right: 15px; display: block; z-index: 10; }
+        .header-top-controls { position: absolute; top: 8px; right: 15px; display: block; z-index: 10; }
         .btn-admin {
             font-family: 'Segoe UI', sans-serif;
             font-size: 0.75rem;
             background: var(--accent);
             border: 1px solid var(--accent);
             color: var(--primary);
-            padding: 6px 14px;
+            padding: 5px 12px;
             border-radius: 20px;
             cursor: pointer;
             font-weight: 700;
         }
 
-        .brand-logo-container { max-width: 90px; margin: 0 auto 4px auto; overflow: hidden; display: flex; align-items: center; justify-content: center; border-radius: 6px; border: 2px solid var(--accent); }
+        .brand-logo-container { max-width: 75px; margin: 0 auto 2px auto; overflow: hidden; display: flex; align-items: center; justify-content: center; border-radius: 6px; border: 2px solid var(--accent); }
         .brand-logo-container img { width: 100%; height: auto; object-fit: contain; display: block; }
         
-        .logo-text { font-size: 1.4rem; font-weight: 300; letter-spacing: 2px; color: var(--white); text-transform: uppercase; margin-bottom: 2px; }
-        .subtitle { font-family: 'Segoe UI', sans-serif; font-size: 0.6rem; letter-spacing: 1px; color: var(--accent); text-transform: uppercase; display: block; }
+        .logo-text { font-size: 1.2rem; font-weight: 300; letter-spacing: 2px; color: var(--white); text-transform: uppercase; margin-bottom: 0px; }
+        .subtitle { font-family: 'Segoe UI', sans-serif; font-size: 0.55rem; letter-spacing: 1px; color: var(--accent); text-transform: uppercase; display: block; }
 
         .tv-card {
             background: rgba(255, 255, 255, 0.98);
             width: 100%;
             max-width: 950px;
+            height: 75vh;
             border-bottom-left-radius: 16px;
             border-bottom-right-radius: 16px;
             padding: 15px 25px;
@@ -72,18 +75,26 @@
             position: relative;
         }
 
-        .card-header { margin-bottom: 8px; }
-        h2 { color: var(--primary); font-size: 1.3rem; font-weight: 400; margin-bottom: 2px; }
-        .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.72rem; color: #555; font-style: italic; }
+        .card-header { margin-bottom: 6px; flex-shrink: 0; }
+        h2 { color: var(--primary); font-size: 1.2rem; font-weight: 400; margin-bottom: 2px; }
+        .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.68rem; color: #555; font-style: italic; }
 
+        /* CONTENEUR DE DÉFILEMENT FLUIDE POUR TOUTES LES RECOMMANDATIONS */
         .advice-grid { 
             display: grid; 
             grid-template-columns: repeat(2, 1fr); 
             gap: 12px; 
-            margin-bottom: 12px; 
-            max-height: 52vh; 
             overflow-y: auto; 
-            padding-right: 5px; 
+            padding: 5px; 
+            flex-grow: 1;
+            align-content: start;
+        }
+        .advice-grid::-webkit-scrollbar {
+            width: 8px;
+        }
+        .advice-grid::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
         }
         
         .advice-box { 
@@ -98,39 +109,24 @@
             justify-content: space-between; 
             cursor: pointer;
             transition: all 0.2s ease;
+            min-height: 100px;
         }
-        /* Style focus indispensable pour la télécommande Android TV / Xiaomi */
         .advice-box:focus, .advice-box:hover {
             border-color: #12263a;
-            box-shadow: 0 0 15px rgba(18, 38, 58, 0.4);
+            box-shadow: 0 0 12px rgba(18, 38, 58, 0.4);
             outline: none;
-            transform: scale(1.02);
+            transform: scale(1.01);
             background: #fffdf9;
         }
 
-        .advice-box h3 { font-size: 0.9rem; color: var(--primary); margin-bottom: 4px; font-family: 'Playfair Display', serif; }
-        .advice-box p { font-size: 0.78rem; color: #555; margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-        
-        .advice-img-wrapper {
-            width: 100%;
-            max-height: 100px;
-            background-color: #fcfbfa;
-            border-radius: 6px;
-            border: 1px solid #eee;
-            margin-top: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            padding: 3px;
-        }
-        .advice-box img { width: 100%; max-height: 95px; object-fit: contain; display: block; }
+        .advice-box h3 { font-size: 0.85rem; color: var(--primary); margin-bottom: 3px; font-family: 'Playfair Display', serif; display: flex; align-items: center; gap: 6px; }
+        .advice-box p { font-size: 0.72rem; color: #555; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 
-        .footer-actions { display: flex; justify-content: center; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 10px; font-family: 'Segoe UI', sans-serif; }
-        .btn-action { background-color: var(--primary); color: white; padding: 8px 20px; border-radius: 8px; font-weight: 600; font-size: 0.78rem; cursor: pointer; text-decoration: none; display: inline-block; }
+        .footer-actions { display: flex; justify-content: center; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 8px; font-family: 'Segoe UI', sans-serif; flex-shrink: 0; }
+        .btn-action { background-color: var(--primary); color: white; padding: 6px 18px; border-radius: 8px; font-weight: 600; font-size: 0.72rem; cursor: pointer; text-decoration: none; display: inline-block; }
         .btn-action:focus { outline: 3px solid var(--accent); }
 
-        /* Mode Plein Écran interactif */
+        /* Mode Plein Écran pour lire tout le contenu en détail */
         #fullscreen-view {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(18, 38, 58, 0.96); z-index: 5000; justify-content: center; align-items: center; padding: 30px; font-family: 'Segoe UI', sans-serif;
         }
@@ -139,8 +135,7 @@
         }
         .fullscreen-card h3 { font-family: 'Playfair Display', serif; color: var(--primary); font-size: 1.6rem; margin-bottom: 12px; }
         .fullscreen-card p { font-size: 1rem; color: #333; line-height: 1.6; margin-bottom: 15px; }
-        .fullscreen-img { width: 100%; max-height: 280px; object-fit: contain; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 15px; background: #fcfbfa; }
-        .btn-close-fullscreen { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; font-size: 0.95rem; cursor: pointer; align-self: center; margin-top: 15px; }
+        .btn-close-fullscreen { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; cursor: pointer; align-self: center; margin-top: 15px; }
         .btn-close-fullscreen:hover, .btn-close-fullscreen:focus { background: var(--accent); color: var(--primary); outline: none; }
 
         /* Modale PIN Admin */
@@ -169,41 +164,41 @@
     <div class="tv-card">
         <div class="card-header">
             <h2 id="page-main-title">Recommandations exclusives</h2>
-            <p id="page-main-sub" class="welcome-sub">✨ Sélectionnez une carte avec votre télécommande.</p>
+            <p id="page-main-sub" class="welcome-sub">✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.</p>
         </div>
 
+        <!-- GRILLE SCROLLABLE AVEC TOUTES LES RECOMMANDATIONS -->
         <div class="advice-grid" id="advice-grid-container">
-            <!-- AFFICHAGE INSTANTANÉ EN DUR POUR ÉVITER TOUTE ATTENTE SUR LA TV -->
-            <div class="advice-box" tabindex="0" onclick="openFullscreen('Super U 3B', 'Supermarché le plus proche d\'ici', 'https://i.postimg.cc/vB1K719q/IMG-0801.png')" onkeydown="if(event.key==='Enter')openFullscreen('Super U 3B', 'Supermarché le plus proche d\'ici', 'https://i.postimg.cc/vB1K719q/IMG-0801.png')">
+            <!-- Super U 3B -->
+            <div class="advice-box" tabindex="0" onclick="handleCardClick('Super U 3B', 'Supermarché le plus proche d\'ici', '')" onkeydown="if(event.key==='Enter')handleCardClick('Super U 3B', 'Supermarché le plus proche d\'ici', '')">
                 <div>
-                    <h3>Super U 3B</h3>
+                    <h3>🛒 Super U 3B</h3>
                     <p>Supermarché le plus proche d'ici</p>
                 </div>
-                <div class="advice-img-wrapper"><img src="https://i.postimg.cc/vB1K719q/IMG-0801.png" alt="Super U 3B"></div>
             </div>
 
-            <div class="advice-box" tabindex="0" onclick="openFullscreen('Vanille Vallée', 'Leurs sachets pour la préparation de Rhum arrangé est un pur merveille ! Ca se trouve Saint-Philippe.', 'https://i.postimg.cc/q7SjH9V8/IMG-0800.png')" onkeydown="if(event.key==='Enter')openFullscreen('Vanille Vallée', 'Leurs sachets pour la préparation de Rhum arrangé est un pur merveille ! Ca se trouve Saint-Philippe.', 'https://i.postimg.cc/q7SjH9V8/IMG-0800.png')">
+            <!-- Vanille Vallée -->
+            <div class="advice-box" tabindex="0" onclick="handleCardClick('Vanille Vallée', 'Leurs sachets pour la préparation de Rhum arrangé est un pur merveille ! Ca se trouve Saint-Philippe.', '')" onkeydown="if(event.key==='Enter')handleCardClick('Vanille Vallée', 'Leurs sachets pour la préparation de Rhum arrangé est un pur merveille ! Ca se trouve Saint-Philippe.', '')">
                 <div>
-                    <h3>Vanille Vallée</h3>
+                    <h3>🌿 Vanille Vallée</h3>
                     <p>Leurs sachets pour la préparation de Rhum arrangé est un pur merveille ! Ca se trouve Saint-Philippe.</p>
                 </div>
-                <div class="advice-img-wrapper"><img src="https://i.postimg.cc/q7SjH9V8/IMG-0800.png" alt="Vanille Vallée"></div>
             </div>
 
-            <div class="advice-box" tabindex="0" onclick="openFullscreen('Le VORTEX Énergétique de l\'Etang Salé.', 'Un lieu hors du temps, un moment pour se ressourcer que pour soi ! Quand vous êtes face au gouffre de l\'Etang Salé il faudra prendre le sentier littoral sur votre gauche (Direction Saint-Pierre).', 'https://i.postimg.cc/3w6X8h7v/IMG-0799.png')" onkeydown="if(event.key==='Enter')openFullscreen('Le VORTEX Énergétique de l\'Etang Salé.', 'Un lieu hors du temps, un moment pour se ressourcer que pour soi ! Quand vous êtes face au gouffre de l\'Etang Salé il faudra prendre le sentier littoral sur votre gauche (Direction Saint-Pierre).', 'https://i.postimg.cc/3w6X8h7v/IMG-0799.png')">
+            <!-- Vortex Étang Salé -->
+            <div class="advice-box" tabindex="0" onclick="handleCardClick('Le VORTEX Énergétique de l\'Etang Salé.', 'Un lieu hors du temps, un moment pour se ressourcer que pour soi ! Quand vous êtes face au gouffre de l\'Etang Salé il faudra prendre le sentier littoral sur votre gauche (Direction Saint-Pierre).', '')" onkeydown="if(event.key==='Enter')handleCardClick('Le VORTEX Énergétique de l\'Etang Salé.', 'Un lieu hors du temps, un moment pour se ressourcer que pour soi ! Quand vous êtes face au gouffre de l\'Etang Salé il faudra prendre le sentier littoral sur votre gauche (Direction Saint-Pierre).', '')">
                 <div>
-                    <h3>Le VORTEX Énergétique de l'Etang Salé.</h3>
+                    <h3>✨ Le VORTEX Énergétique de l'Etang Salé.</h3>
                     <p>Un lieu hors du temps, un moment pour se ressourcer que pour soi ! Quand vous êtes face au gouffre de l'Etang Salé il faudra prendre le sentier littoral sur votre gauche (Direction Saint-Pierre).</p>
                 </div>
-                <div class="advice-img-wrapper"><img src="https://i.postimg.cc/3w6X8h7v/IMG-0799.png" alt="Le VORTEX Énergétique de l'Etang Salé."></div>
             </div>
 
-            <div class="advice-box" tabindex="0" onclick="openFullscreen('Marché forain de St Paul', 'Le plus grand marché de l\'île ! Je vous conseil de pas y aller trop tard car le climat des bas n\'est pas celui d\'ici, en été il fait très chaud et ça devient très vite désagréable !', 'https://i.postimg.cc/1Z5J0m6Q/IMG-0802.png')" onkeydown="if(event.key==='Enter')openFullscreen('Marché forain de St Paul', 'Le plus grand marché de l\'île ! Je vous conseil de pas y aller trop tard car le climat des bas n\'est pas celui d\'ici, en été il fait très chaud et ça devient très vite désagréable !', 'https://i.postimg.cc/1Z5J0m6Q/IMG-0802.png')">
+            <!-- Marché forain de St Paul -->
+            <div class="advice-box" tabindex="0" onclick="handleCardClick('Marché forain de St Paul', 'Le plus grand marché de l\'île ! Je vous conseil de pas y aller trop tard car le climat des bas n\'est pas celui d\'ici, en été il fait très chaud et ça devient très vite désagréable !', '')" onkeydown="if(event.key==='Enter')handleCardClick('Marché forain de St Paul', 'Le plus grand marché de l\'île ! Je vous conseil de pas y aller trop tard car le climat des bas n\'est pas celui d\'ici, en été il fait très chaud et ça devient très vite désagréable !', '')">
                 <div>
-                    <h3>Marché forain de St Paul</h3>
+                    <h3>☀️ Marché forain de St Paul</h3>
                     <p>Le plus grand marché de l'île ! Je vous conseil de pas y aller trop tard car le climat des bas n'est pas celui d'ici, en été il fait très chaud et ça devient très vite désagréable !</p>
                 </div>
-                <div class="advice-img-wrapper"><img src="https://i.postimg.cc/1Z5J0m6Q/IMG-0802.png" alt="Marché forain de St Paul"></div>
             </div>
         </div>
         
@@ -212,15 +207,14 @@
         </div>
     </div>
 
-    <!-- Plein écran -->
+    <!-- Mode Plein Écran -->
     <div id="fullscreen-view">
         <div class="fullscreen-card">
             <div>
                 <h3 id="fs-title">Titre</h3>
                 <p id="fs-text">Description...</p>
-                <div id="fs-img-container" style="text-align: center;"></div>
             </div>
-            <button type="button" class="btn-close-fullscreen" id="close-fs-btn" onclick="closeFullscreen()">✕ Quitter et revenir aux recommandations</button>
+            <button type="button" class="btn-close-fullscreen" id="close-fs-btn" onclick="closeFullscreen()">✕ Quitter et revenir</button>
         </div>
     </div>
 
@@ -243,7 +237,6 @@
             const urlParams = new URLSearchParams(window.location.search);
             const giteParam = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
             const currentGiteKey = giteParam.includes("grand") ? "grandzabris" : "ptitzabris";
-            let cottageName = currentGiteKey === "grandzabris" ? "Grandzabris" : "Ptitzabris";
 
             document.getElementById('back-home-btn').href = `index.html?gite=${currentGiteKey}&v=99`;
 
@@ -286,17 +279,17 @@
                 }).catch(() => {});
         }
 
-        function openFullscreen(title, text, imageUrl) {
+        function handleCardClick(title, text, linkUrl) {
+            if (linkUrl && linkUrl.trim() !== "" && linkUrl.startsWith("http")) {
+                window.open(linkUrl.trim(), '_blank');
+            } else {
+                openFullscreen(title, text);
+            }
+        }
+
+        function openFullscreen(title, text) {
             document.getElementById('fs-title').innerText = title;
             document.getElementById('fs-text').innerText = text;
-            
-            const imgContainer = document.getElementById('fs-img-container');
-            if (imageUrl && imageUrl.trim() !== "") {
-                imgContainer.innerHTML = `<img src="${imageUrl.trim()}" alt="${title}" class="fullscreen-img">`;
-            } else {
-                imgContainer.innerHTML = "";
-            }
-
             document.getElementById('fullscreen-view').style.display = 'flex';
             setTimeout(() => {
                 document.getElementById('close-fs-btn').focus();
