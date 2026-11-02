@@ -1,442 +1,379 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title-meta">Conseils Personnalisés | Les Ozabris</title>
-    <style>
-        :root { --primary: #12263a; --accent: #c5a880; --text-dark: #2c3e50; --white: #ffffff; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Playfair Display', 'Georgia', serif; }
-        
-        body {
-            width: 100vw;
-            min-height: 100vh;
-            margin: 0;
-            padding: 10px;
-            background: linear-gradient(rgba(18, 38, 58, 0.75), rgba(18, 38, 58, 0.85)), url('fond_page.png') no-repeat center center fixed;
-            background-size: cover;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        header { 
-            background: var(--primary);
-            text-align: center; 
-            padding: 15px 20px; 
-            position: relative; 
-            color: var(--white);
-            width: 100%;
-            max-width: 950px;
-            border-top-left-radius: 16px;
-            border-top-right-radius: 16px;
-            border: 2px solid var(--accent);
-            border-bottom: none;
-        }
-
-        .header-top-controls { position: absolute; top: 10px; right: 15px; display: block; z-index: 10; }
-        .btn-admin {
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 0.75rem;
-            background: var(--accent);
-            border: 1px solid var(--accent);
-            color: var(--primary);
-            padding: 6px 14px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 700;
-        }
-
-        .brand-logo-container { max-width: 90px; margin: 0 auto 4px auto; overflow: hidden; display: flex; align-items: center; justify-content: center; border-radius: 6px; border: 2px solid var(--accent); }
-        .brand-logo-container img { width: 100%; height: auto; object-fit: contain; display: block; }
-        
-        .logo-text { font-size: 1.4rem; font-weight: 300; letter-spacing: 2px; color: var(--white); text-transform: uppercase; margin-bottom: 2px; }
-        .subtitle { font-family: 'Segoe UI', sans-serif; font-size: 0.6rem; letter-spacing: 1px; color: var(--accent); text-transform: uppercase; display: block; }
-
-        .tv-card {
-            background: rgba(255, 255, 255, 0.98);
-            width: 100%;
-            max-width: 950px;
-            border-bottom-left-radius: 16px;
-            border-bottom-right-radius: 16px;
-            padding: 15px 25px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            border: 2px solid var(--accent);
-            border-top: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            text-align: center;
-            margin: auto;
-            position: relative;
-        }
-
-        .card-header { margin-bottom: 8px; }
-        h2 { color: var(--primary); font-size: 1.3rem; font-weight: 400; margin-bottom: 2px; }
-        .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.72rem; color: #555; font-style: italic; }
-
-        .advice-grid { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 12px; 
-            margin-bottom: 12px; 
-            max-height: 52vh; 
-            overflow-y: auto; 
-            padding-right: 5px; 
-        }
-        
-        .advice-box { 
-            background: var(--white); 
-            border: 2px solid var(--accent); 
-            border-radius: 10px; 
-            padding: 12px; 
-            text-align: left; 
-            font-family: 'Segoe UI', sans-serif; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: space-between; 
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .advice-box:focus, .advice-box:hover {
-            border-color: var(--primary);
-            box-shadow: 0 0 12px rgba(18, 38, 58, 0.3);
-            outline: none;
-            transform: scale(1.01);
-        }
-
-        .advice-box h3 { font-size: 0.9rem; color: var(--primary); margin-bottom: 4px; font-family: 'Playfair Display', serif; }
-        .advice-box p { font-size: 0.78rem; color: #555; margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-        
-        .advice-img-wrapper {
-            width: 100%;
-            max-height: 100px;
-            background-color: #fcfbfa;
-            border-radius: 6px;
-            border: 1px solid #eee;
-            margin-top: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            padding: 3px;
-        }
-        .advice-box img { width: 100%; max-height: 95px; object-fit: contain; display: block; }
-        .advice-box a { color: var(--primary); font-weight: bold; text-decoration: underline; font-size: 0.78rem; display: inline-block; margin-top: 2px; pointer-events: none; }
-
-        .footer-actions { display: flex; justify-content: center; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 10px; font-family: 'Segoe UI', sans-serif; }
-        .btn-action { background-color: var(--primary); color: white; padding: 8px 20px; border-radius: 8px; font-weight: 600; font-size: 0.78rem; cursor: pointer; text-decoration: none; display: inline-block; }
-
-        /* Mode Plein Écran pour les conseils sans lien web */
-        #fullscreen-view {
-            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(18, 38, 58, 0.96); z-index: 5000; justify-content: center; align-items: center; padding: 30px; font-family: 'Segoe UI', sans-serif;
-        }
-        .fullscreen-card {
-            background: white; width: 100%; max-width: 750px; max-height: 85vh; border-radius: 16px; padding: 30px; border: 3px solid var(--accent); box-shadow: 0 25px 50px rgba(0,0,0,0.6); display: flex; flex-direction: column; justify-content: space-between; overflow-y: auto; text-align: left;
-        }
-        .fullscreen-card h3 { font-family: 'Playfair Display', serif; color: var(--primary); font-size: 1.6rem; margin-bottom: 12px; }
-        .fullscreen-card p { font-size: 1rem; color: #333; line-height: 1.6; margin-bottom: 15px; }
-        .fullscreen-img { width: 100%; max-height: 280px; object-fit: contain; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 15px; background: #fcfbfa; }
-        .btn-close-fullscreen { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; font-size: 0.95rem; cursor: pointer; align-self: center; margin-top: 15px; }
-        .btn-close-fullscreen:hover { background: var(--accent); color: var(--primary); }
-
-        /* Modale PIN Admin */
-        #admin-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(18, 38, 58, 0.9); justify-content: center; align-items: center; z-index: 10000; font-family: 'Segoe UI', sans-serif;
-        }
-        .modal-content {
-            background: white; padding: 20px; border-radius: 12px; width: 85%; max-width: 300px; text-align: center; border: 2px solid var(--accent);
-        }
-        .modal-content input { width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 0.85rem; text-align: center; }
-        .modal-btn { background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 8px; font-size: 0.8rem; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="page-title-meta">Conseils Personnalisés | Les Ozabris</title>
+<style>
+:root { --primary: #12263a; --accent: #c5a880; --text-dark: #2c3e50; --white: #ffffff; }
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Playfair Display', 'Georgia', serif; }
+body {
+width: 100vw;
+min-height: 100vh;
+margin: 0;
+padding: 10px;
+background: linear-gradient(rgba(18, 38, 58, 0.75), rgba(18, 38, 58, 0.85)), url('fond_page.png') no-repeat center center fixed;
+background-size: cover;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+}
+header {
+background: var(--primary);
+text-align: center;
+padding: 15px 20px;
+position: relative;
+color: var(--white);
+width: 100%;
+max-width: 950px;
+border-top-left-radius: 16px;
+border-top-right-radius: 16px;
+border: 2px solid var(--accent);
+border-bottom: none;
+}
+.header-top-controls { position: absolute; top: 10px; right: 15px; display: block; z-index: 10; }
+.btn-admin {
+font-family: 'Segoe UI', sans-serif;
+font-size: 0.75rem;
+background: var(--accent);
+border: 1px solid var(--accent);
+color: var(--primary);
+padding: 6px 14px;
+border-radius: 20px;
+cursor: pointer;
+font-weight: 700;
+}
+.brand-logo-container { max-width: 90px; margin: 0 auto 4px auto; overflow: hidden; display: flex; align-items: center; justify-content: center; border-radius: 6px; border: 2px solid var(--accent); }
+.brand-logo-container img { width: 100%; height: auto; object-fit: contain; display: block; }
+.logo-text { font-size: 1.4rem; font-weight: 300; letter-spacing: 2px; color: var(--white); text-transform: uppercase; margin-bottom: 2px; }
+.subtitle { font-family: 'Segoe UI', sans-serif; font-size: 0.6rem; letter-spacing: 1px; color: var(--accent); text-transform: uppercase; display: block; }
+.tv-card {
+background: rgba(255, 255, 255, 0.98);
+width: 100%;
+max-width: 950px;
+border-bottom-left-radius: 16px;
+border-bottom-right-radius: 16px;
+padding: 15px 25px;
+box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+border: 2px solid var(--accent);
+border-top: none;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+text-align: center;
+margin: auto;
+position: relative;
+}
+.card-header { margin-bottom: 8px; }
+h2 { color: var(--primary); font-size: 1.3rem; font-weight: 400; margin-bottom: 2px; }
+.welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.72rem; color: #555; font-style: italic; }
+.advice-grid {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 12px;
+margin-bottom: 12px;
+max-height: 52vh;
+overflow-y: auto;
+padding-right: 5px;
+}
+.advice-box {
+background: var(--white);
+border: 2px solid var(--accent);
+border-radius: 10px;
+padding: 12px;
+text-align: left;
+font-family: 'Segoe UI', sans-serif;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+cursor: pointer;
+transition: all 0.2s ease;
+}
+/* Style focus visible télécommande Android TV */
+.advice-box:focus, .advice-box:hover {
+border-color: #12263a;
+box-shadow: 0 0 15px rgba(18, 38, 58, 0.4);
+outline: none;
+transform: scale(1.02);
+background: #fffdf9;
+}
+.advice-box h3 { font-size: 0.9rem; color: var(--primary); margin-bottom: 4px; font-family: 'Playfair Display', serif; }
+.advice-box p { font-size: 0.78rem; color: #555; margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.advice-img-wrapper {
+width: 100%;
+max-height: 100px;
+background-color: #fcfbfa;
+border-radius: 6px;
+border: 1px solid #eee;
+margin-top: 4px;
+display: flex;
+align-items: center;
+justify-content: center;
+overflow: hidden;
+padding: 3px;
+}
+.advice-box img { width: 100%; max-height: 95px; object-fit: contain; display: block; }
+.advice-box a { color: var(--primary); font-weight: bold; text-decoration: underline; font-size: 0.78rem; display: inline-block; margin-top: 2px; pointer-events: none; }
+.footer-actions { display: flex; justify-content: center; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 10px; font-family: 'Segoe UI', sans-serif; }
+.btn-action { background-color: var(--primary); color: white; padding: 8px 20px; border-radius: 8px; font-weight: 600; font-size: 0.78rem; cursor: pointer; text-decoration: none; display: inline-block; }
+.btn-action:focus { outline: 3px solid var(--accent); }
+/* Mode Plein Écran pour les conseils */
+#fullscreen-view {
+display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(18, 38, 58, 0.96); z-index: 5000; justify-content: center; align-items: center; padding: 30px; font-family: 'Segoe UI', sans-serif;
+}
+.fullscreen-card {
+background: white; width: 100%; max-width: 750px; max-height: 85vh; border-radius: 16px; padding: 30px; border: 3px solid var(--accent); box-shadow: 0 25px 50px rgba(0,0,0,0.6); display: flex; flex-direction: column; justify-content: space-between; overflow-y: auto; text-align: left;
+}
+.fullscreen-card h3 { font-family: 'Playfair Display', serif; color: var(--primary); font-size: 1.6rem; margin-bottom: 12px; }
+.fullscreen-card p { font-size: 1rem; color: #333; line-height: 1.6; margin-bottom: 15px; }
+.fullscreen-img { width: 100%; max-height: 280px; object-fit: contain; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 15px; background: #fcfbfa; }
+.btn-close-fullscreen { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; font-size: 0.95rem; cursor: pointer; align-self: center; margin-top: 15px; }
+.btn-close-fullscreen:hover, .btn-close-fullscreen:focus { background: var(--accent); color: var(--primary); outline: none; }
+/* Modale PIN Admin */
+#admin-modal {
+display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(18, 38, 58, 0.9); justify-content: center; align-items: center; z-index: 10000; font-family: 'Segoe UI', sans-serif;
+}
+.modal-content {
+background: white; padding: 20px; border-radius: 12px; width: 85%; max-width: 300px; text-align: center; border: 2px solid var(--accent);
+}
+.modal-content input { width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 0.85rem; text-align: center; }
+.modal-btn { background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 8px; font-size: 0.8rem; }
+</style>
 </head>
 <body>
-    <header>
-        <div class="header-top-controls" id="admin-container">
-            <button type="button" class="btn-admin" onclick="openPinModal()">⚙️ Admin</button>
-        </div>
-        <div class="brand-logo-container">
-            <img src="https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg" alt="Les Ozabris Logo">
-        </div>
-        <h1 class="logo-text">Les Ozabris</h1>
-        <span class="subtitle">Cottages de Prestige & Perles Rares • La Réunion</span>
-    </header>
-
-    <div class="tv-card">
-        <div class="card-header">
-            <h2 id="page-main-title">Recommandations exclusives</h2>
-            <p id="page-main-sub" class="welcome-sub">🌿 Sélectionnez une carte avec votre télécommande.</p>
-        </div>
-
-        <div class="advice-grid" id="advice-grid-container">
-            <p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 15px;">Chargement...</p>
-        </div>
-        
-        <div class="footer-actions">
-            <a id="back-home-btn" href="index.html" class="btn-action">🏠 Retour à l'accueil</a>
-        </div>
-    </div>
-
-    <!-- Vue Plein Écran pour affichage complet -->
-    <div id="fullscreen-view">
-        <div class="fullscreen-card">
-            <div>
-                <h3 id="fs-title">Titre</h3>
-                <p id="fs-text">Description...</p>
-                <div id="fs-img-container" style="text-align: center;"></div>
-            </div>
-            <button type="button" class="btn-close-fullscreen" onclick="closeFullscreen()">✕ Quitter et revenir aux recommandations</button>
-        </div>
-    </div>
-
-    <!-- Modale PIN Admin -->
-    <div id="admin-modal">
-        <div class="modal-content">
-            <button type="button" onclick="closePinModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
-            <h3>🔒 Accès Admin</h3>
-            <p style="font-size: 0.8rem; color: #666; margin: 4px 0;">Code PIN de sécurité</p>
-            <input type="password" id="adminPin" placeholder="PIN" maxlength="6">
-            <button type="button" class="modal-btn" onclick="verifyPin()">Valider</button>
-            <p id="adminError" style="color: #b94a48; font-size: 0.7rem; margin-top: 6px; display: none;">Code incorrect</p>
-        </div>
-    </div>
-
-    <script>
-        const sheetVoyageursApiUrl = "https://script.google.com/macros/s/AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq/exec";
-        const sheetConseilsApiUrl = "https://script.google.com/macros/s/AKfycbzdEv_frdNqscUxHQW6xXpePamOztmC0xLWa5CRMjY4fFsKuMdcvJda7fDkXiWqAYcu1A/exec";
-
-        let cachedAdvices = [];
-        let currentGiteKey = 'ptitzabris';
-        let currentLang = 'fr';
-
-        const i18n = {
-            fr: {
-                titleExclFor: "Recommandations exclusives pour {name}",
-                titleExclAt: "Recommandations exclusives au {cottage}",
-                subText: "✨ Sélectionnez une carte avec votre télécommande pour l'ouvrir.",
-                backHome: "🏠 Retour à l'accueil",
-                discover: "Découvrir {title} ↗",
-                noAdvice: "Conseils et recommandations à venir."
-            },
-            en: {
-                titleExclFor: "Exclusive recommendations for {name}",
-                titleExclAt: "Exclusive recommendations at {cottage}",
-                subText: "✨ Select a card with your remote control to open it.",
-                backHome: "🏠 Back to Home",
-                discover: "Discover {title} ↗",
-                noAdvice: "Advice and recommendations coming soon."
-            }
-        };
-
-        function getTranslation(key, replacements = {}) {
-            let langDict = i18n[currentLang] || i18n['fr'];
-            let text = langDict[key] || i18n['fr'][key] || key;
-            for (const [k, v] of Object.entries(replacements)) {
-                text = text.replace(new RegExp(`{${k}}`, 'g'), v);
-            }
-            return text;
-        }
-
-        window.onload = async function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const giteParam = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
-            currentGiteKey = giteParam.includes("grand") ? "grandzabris" : "ptitzabris";
-            let cottageName = currentGiteKey === "grandzabris" ? "Grandzabris" : "Ptitzabris";
-
-            document.getElementById('back-home-btn').href = `index.html?gite=${currentGiteKey}&v=99`;
-
-            const isFullyKiosk = typeof window.fully !== 'undefined' || navigator.userAgent.includes("Fully");
-            const adminContainer = document.getElementById('admin-container');
-            const currentHost = window.location.hostname;
-            const isBoxTV = currentHost.endsWith(".93") || currentHost.endsWith(".145") || currentHost === "192.168.1.93" || currentHost === "192.168.1.145";
-
-            if (isFullyKiosk || isBoxTV) {
-                adminContainer.style.display = 'none';
-            } else {
-                adminContainer.style.display = 'block';
-            }
-
-            await loadPageData(currentGiteKey, cottageName);
-        }
-
-        async function loadPageData(cottageKey, cottageName) {
-            const container = document.getElementById('advice-grid-container');
-            const titleEl = document.getElementById('page-main-title');
-            const subEl = document.getElementById('page-main-sub');
-
-            try {
-                try {
-                    const resVoyageurs = await fetch(sheetVoyageursApiUrl + "?t=" + new Date().getTime());
-                    const voyageurs = await resVoyageurs.json();
-                    
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-
-                    let voyageurActuel = null;
-                    if (Array.isArray(voyageurs) && voyageurs.length > 0) {
-                        voyageurActuel = voyageurs.find(v => {
-                            const cottageStr = String(v.cottage || '').toLowerCase();
-                            const matchCottage = cottageKey === 'grandzabris' ? cottageStr.includes('grand') : (cottageStr.includes('ptit') || cottageStr.includes('petit'));
-                            const arrStr = v.dateArrivee || v.arrivee;
-                            const depStr = v.dateDepart || v.depart;
-
-                            if (matchCottage && arrStr && depStr) {
-                                const arrDate = new Date(arrStr);
-                                const depDate = new Date(depStr);
-                                arrDate.setHours(0, 0, 0, 0);
-                                depDate.setHours(0, 0, 0, 0);
-                                return today >= arrDate && today <= depDate;
-                            }
-                            return false;
-                        });
-                    }
-
-                    if (voyageurActuel) {
-                        if (voyageurActuel.langue && i18n[voyageurActuel.langue.toLowerCase()]) {
-                            currentLang = voyageurActuel.langue.toLowerCase();
-                        }
-                        if (voyageurActuel.prenom) {
-                            titleEl.innerText = getTranslation('titleExclFor', { name: voyageurActuel.prenom });
-                        } else {
-                            titleEl.innerText = getTranslation('titleExclAt', { cottage: cottageName });
-                        }
-                    } else {
-                        titleEl.innerText = getTranslation('titleExclAt', { cottage: cottageName });
-                    }
-                } catch (errVoy) {
-                    titleEl.innerText = getTranslation('titleExclAt', { cottage: cottageName });
-                }
-
-                subEl.innerHTML = getTranslation('subText');
-                document.getElementById('back-home-btn').innerText = getTranslation('backHome');
-
-                // Appel API indispensable avec ?type=conseils
-                const response = await fetch(sheetConseilsApiUrl + "?type=conseils&t=" + new Date().getTime());
-                const data = await response.json();
-
-                cachedAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || data.data || []);
-
-                if (!Array.isArray(cachedAdvices) || cachedAdvices.length === 0) {
-                    container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 15px;">${getTranslation('noAdvice')}</p>`;
-                    return;
-                }
-
-                renderActiveAdvices();
-
-            } catch (e) {
-                container.innerHTML = `<p style="text-align: center; color: #b94a48; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 15px;">${getTranslation('noAdvice')}</p>`;
-            }
-        }
-
-        function renderActiveAdvices() {
-            const container = document.getElementById('advice-grid-container');
-            container.innerHTML = "";
-
-            let activeCount = 0;
-
-            cachedAdvices.forEach((adv) => {
-                const titleText = adv.title || adv['Nom de la recommandation'] || '';
-                if (!titleText || titleText.trim() === '') return;
-
-                // FILTRAGE DIRECT DEPUIS LE GOOGLE SHEET (propriété .active renvoyée par Apps Script)
-                const isActive = (adv.active === true || adv.active === "true");
-
-                if (isActive) {
-                    activeCount++;
-                    const box = document.createElement('div');
-                    box.className = 'advice-box';
-                    box.setAttribute('tabindex', '0'); // Navigation télécommande TV
-                    
-                    const descText = adv.text || adv['Commentaire sur la recommandation'] || '';
-                    const imageUrl = adv.img || adv['Lien postimage'] || '';
-                    const linkUrl = adv.linkUrl || adv['Lien web'] || '';
-
-                    const handleSelection = function(e) {
-                        e.preventDefault();
-                        if (linkUrl && linkUrl.trim() !== "" && linkUrl.startsWith("http")) {
-                            window.open(linkUrl.trim(), '_blank');
-                        } else {
-                            openFullscreen(titleText, descText, imageUrl);
-                        }
-                    };
-
-                    box.onclick = handleSelection;
-                    box.ontouchend = handleSelection;
-                    box.onkeydown = function(e) {
-                        if (e.key === 'Enter' || e.keyCode === 13) {
-                            handleSelection(e);
-                        }
-                    };
-
-                    let imgHtml = "";
-                    if (imageUrl && imageUrl.trim() !== "" && imageUrl.startsWith("http")) {
-                        imgHtml = `
-                            <div class="advice-img-wrapper">
-                                <img src="${imageUrl.trim()}" alt="${titleText}">
-                            </div>
-                        `;
-                    }
-
-                    let linkHtml = "";
-                    if (linkUrl && linkUrl.trim() !== "" && linkUrl.startsWith("http")) {
-                        linkHtml = `<p style="margin-top: 4px;"><a>${getTranslation('discover', { title: titleText })}</a></p>`;
-                    }
-
-                    box.innerHTML = `
-                        <div>
-                            <h3>${titleText}</h3>
-                            <p>${descText}</p>
-                            ${linkHtml}
-                        </div>
-                        ${imgHtml}
-                    `;
-                    container.appendChild(box);
-                }
-            });
-
-            if (activeCount === 0) {
-                container.innerHTML = `<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 15px;">${getTranslation('noAdvice')}</p>`;
-            }
-        }
-
-        function openFullscreen(title, text, imageUrl) {
-            document.getElementById('fs-title').innerText = title;
-            document.getElementById('fs-text').innerText = text;
-            
-            const imgContainer = document.getElementById('fs-img-container');
-            if (imageUrl && imageUrl.trim() !== "" && imageUrl.startsWith("http")) {
-                imgContainer.innerHTML = `<img src="${imageUrl.trim()}" alt="${title}" class="fullscreen-img">`;
-            } else {
-                imgContainer.innerHTML = "";
-            }
-
-            document.getElementById('fullscreen-view').style.display = 'flex';
-        }
-
-        function closeFullscreen() {
-            document.getElementById('fullscreen-view').style.display = 'none';
-        }
-
-        function openPinModal() {
-            document.getElementById('admin-modal').style.display = 'flex';
-            document.getElementById('adminPin').focus();
-        }
-        function closePinModal() {
-            document.getElementById('admin-modal').style.display = 'none';
-            document.getElementById('adminError').style.display = 'none';
-            document.getElementById('adminPin').value = '';
-        }
-        function verifyPin() {
-            const pin = document.getElementById('adminPin').value.trim();
-            if (pin === '140769') {
-                window.location.href = `admin.html?gite=${currentGiteKey}`;
-            } else {
-                document.getElementById('adminError').style.display = 'block';
-                document.getElementById('adminPin').value = '';
-            }
-        }
-    </script>
+<header>
+<div class="header-top-controls" id="admin-container">
+<button type="button" class="btn-admin" onclick="openPinModal()">⚙️ Admin</button>
+</div>
+<div class="brand-logo-container">
+<img src="https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg" alt="Les Ozabris Logo">
+</div>
+<h1 class="logo-text">Les Ozabris</h1>
+<span class="subtitle">Cottages de Prestige & Perles Rares • La Réunion</span>
+</header>
+<div class="tv-card">
+<div class="card-header">
+<h2 id="page-main-title">Recommandations exclusives</h2>
+<p id="page-main-sub" class="welcome-sub">🌿 Sélectionnez une carte avec votre télécommande.</p>
+</div>
+<div class="advice-grid" id="advice-grid-container">
+<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 15px;">Chargement...</p>
+</div>
+<div class="footer-actions">
+<a id="back-home-btn" href="index.html" class="btn-action">🏠 Retour à l'accueil</a>
+</div>
+</div>
+<!-- Vue Plein Écran pour affichage complet -->
+<div id="fullscreen-view">
+<div class="fullscreen-card">
+<div>
+<h3 id="fs-title">Titre</h3>
+<p id="fs-text">Description...</p>
+<div id="fs-img-container" style="text-align: center;"></div>
+</div>
+<button type="button" class="btn-close-fullscreen" id="close-fs-btn" onclick="closeFullscreen()">✕ Quitter et revenir aux recommandations</button>
+</div>
+</div>
+<!-- Modale PIN Admin -->
+<div id="admin-modal">
+<div class="modal-content">
+<button type="button" onclick="closePinModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
+<h3>🔒 Accès Admin</h3>
+<p style="font-size: 0.8rem; color: #666; margin: 4px 0;">Code PIN de sécurité</p>
+<input type="password" id="adminPin" placeholder="PIN" maxlength="6">
+<button type="button" class="modal-btn" onclick="verifyPin()">Valider</button>
+<p id="adminError" style="color: #b94a48; font-size: 0.7rem; margin-top: 6px; display: none;">Code incorrect</p>
+</div>
+</div>
+<script>
+const sheetVoyageursApiUrl = "https://script.google.com/macros/s/AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq/exec";
+const sheetConseilsApiUrl = "https://script.google.com/macros/s/AKfycbzdEv_frdNqscUxHQW6xXpePamOztmC0xLWa5CRMjY4fFsKuMdcvJda7fDkXiWqAYcu1A/exec";
+let cachedAdvices = [];
+let currentGiteKey = 'ptitzabris';
+let currentLang = 'fr';
+const i18n = {
+fr: {
+titleExclFor: "Recommandations exclusives pour {name}",
+titleExclAt: "Recommandations exclusives au {cottage}",
+subText: "✨ Sélectionnez une carte avec votre télécommande pour l'ouvrir.",
+backHome: "🏠 Retour à l'accueil",
+discover: "Découvrir {title} ↗",
+noAdvice: "Conseils et recommandations à venir."
+},
+en: {
+titleExclFor: "Exclusive recommendations for {name}",
+titleExclAt: "Exclusive recommendations at {cottage}",
+subText: "✨ Select a card with your remote control to open it.",
+backHome: "🏠 Back to Home",
+discover: "Discover {title} ↗",
+noAdvice: "Advice and recommendations coming soon."
+}
+};
+function getTranslation(key, replacements = {}) {
+let langDict = i18n[currentLang] || i18n['fr'];
+let text = langDict[key] || i18n['fr'][key] || key;
+for (const [k, v] of Object.entries(replacements)) {
+text = text.replace(new RegExp(⁠{${k}}⁠, 'g'), v);
+}
+return text;
+}
+window.onload = async function() {
+const urlParams = new URLSearchParams(window.location.search);
+const giteParam = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
+currentGiteKey = giteParam.includes("grand") ? "grandzabris" : "ptitzabris";
+let cottageName = currentGiteKey === "grandzabris" ? "Grandzabris" : "Ptitzabris";
+document.getElementById('back-home-btn').href = ⁠index.html?gite=${currentGiteKey}&v=99⁠;
+const isFullyKiosk = typeof window.fully !== 'undefined' || navigator.userAgent.includes("Fully");
+const adminContainer = document.getElementById('admin-container');
+const currentHost = window.location.hostname;
+const isBoxTV = currentHost.endsWith(".93") || currentHost.endsWith(".145") || currentHost === "192.168.1.93" || currentHost === "192.168.1.145";
+if (isFullyKiosk || isBoxTV) {
+adminContainer.style.display = 'none';
+} else {
+adminContainer.style.display = 'block';
+}
+await loadPageData(currentGiteKey, cottageName);
+}
+async function loadPageData(cottageKey, cottageName) {
+const container = document.getElementById('advice-grid-container');
+const titleEl = document.getElementById('page-main-title');
+const subEl = document.getElementById('page-main-sub');
+try {
+try {
+const resVoyageurs = await fetch(sheetVoyageursApiUrl + "?t=" + new Date().getTime());
+const voyageurs = await resVoyageurs.json();
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+let voyageurActuel = null;
+if (Array.isArray(voyageurs) && voyageurs.length > 0) {
+voyageurActuel = voyageurs.find(v => {
+const cottageStr = String(v.cottage || '').toLowerCase();
+const matchCottage = cottageKey === 'grandzabris' ? cottageStr.includes('grand') : (cottageStr.includes('ptit') || cottageStr.includes('petit'));
+const arrStr = v.dateArrivee || v.arrivee;
+const depStr = v.dateDepart || v.depart;
+if (matchCottage && arrStr && depStr) {
+const arrDate = new Date(arrStr);
+const depDate = new Date(depStr);
+arrDate.setHours(0, 0, 0, 0);
+depDate.setHours(0, 0, 0, 0);
+return today >= arrDate && today <= depDate;
+}
+return false;
+});
+}
+if (voyageurActuel) {
+if (voyageurActuel.langue && i18n[voyageurActuel.langue.toLowerCase()]) {
+currentLang = voyageurActuel.langue.toLowerCase();
+}
+if (voyageurActuel.prenom) {
+titleEl.innerText = getTranslation('titleExclFor', { name: voyageurActuel.prenom });
+} else {
+titleEl.innerText = getTranslation('titleExclAt', { cottage: cottageName });
+}
+} else {
+titleEl.innerText = getTranslation('titleExclAt', { cottage: cottageName });
+}
+} catch (errVoy) {
+titleEl.innerText = getTranslation('titleExclAt', { cottage: cottageName });
+}
+subEl.innerHTML = getTranslation('subText');
+document.getElementById('back-home-btn').innerText = getTranslation('backHome');
+const response = await fetch(sheetConseilsApiUrl + "?type=conseils&t=" + new Date().getTime());
+const data = await response.json();
+cachedAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || data.data || []);
+if (!Array.isArray(cachedAdvices) || cachedAdvices.length === 0) {
+container.innerHTML = ⁠<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 15px;">${getTranslation('noAdvice')}</p>⁠;
+return;
+}
+renderActiveAdvices();
+} catch (e) {
+container.innerHTML = ⁠<p style="text-align: center; color: #b94a48; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 15px;">${getTranslation('noAdvice')}</p>⁠;
+}
+}
+function renderActiveAdvices() {
+const container = document.getElementById('advice-grid-container');
+container.innerHTML = "";
+let activeCount = 0;
+cachedAdvices.forEach((adv) => {
+const titleText = adv.title || adv['Nom de la recommandation'] || '';
+if (!titleText || titleText.trim() === '') return;
+const isActive = (adv.active === true || adv.active === "true");
+if (isActive) {
+activeCount++;
+const box = document.createElement('div');
+box.className = 'advice-box';
+box.setAttribute('tabindex', '0'); // Rempli l'attribut indispensable pour que la télécommande Android TV puisse sélectionner la carte
+const descText = adv.text || adv['Commentaire sur la recommandation'] || '';
+const imageUrl = adv.img || adv['Lien postimage'] || '';
+const linkUrl = adv.linkUrl || adv['Lien web'] || '';
+const handleSelection = function(e) {
+e.preventDefault();
+if (linkUrl && linkUrl.trim() !== "" && linkUrl.startsWith("http")) {
+window.open(linkUrl.trim(), '_blank');
+} else {
+openFullscreen(titleText, descText, imageUrl);
+}
+};
+box.onclick = handleSelection;
+box.ontouchend = handleSelection;
+box.onkeydown = function(e) {
+if (e.key === 'Enter' || e.keyCode === 13) {
+handleSelection(e);
+}
+};
+let imgHtml = "";
+if (imageUrl && imageUrl.trim() !== "" && imageUrl.startsWith("http")) {
+imgHtml = ⁠<div class="advice-img-wrapper"> <img src="${imageUrl.trim()}" alt="${titleText}"> </div>⁠;
+}
+let linkHtml = "";
+if (linkUrl && linkUrl.trim() !== "" && linkUrl.startsWith("http")) {
+linkHtml = ⁠<p style="margin-top: 4px;"><a>${getTranslation('discover', { title: titleText })}</a></p>⁠;
+}
+box.innerHTML = ⁠<div> <h3>${titleText}</h3> <p>${descText}</p> ${linkHtml} </div> ${imgHtml}⁠;
+container.appendChild(box);
+}
+});
+if (activeCount === 0) {
+container.innerHTML = ⁠<p style="text-align: center; color: #666; font-family: 'Segoe UI', sans-serif; grid-column: span 2; padding: 15px;">${getTranslation('noAdvice')}</p>⁠;
+}
+}
+function openFullscreen(title, text, imageUrl) {
+document.getElementById('fs-title').innerText = title;
+document.getElementById('fs-text').innerText = text;
+const imgContainer = document.getElementById('fs-img-container');
+if (imageUrl && imageUrl.trim() !== "" && imageUrl.startsWith("http")) {
+imgContainer.innerHTML = ⁠<img src="${imageUrl.trim()}" alt="${title}" class="fullscreen-img">⁠;
+} else {
+imgContainer.innerHTML = "";
+}
+document.getElementById('fullscreen-view').style.display = 'flex';
+// Donne le focus au bouton de fermeture pour que la télécommande puisse le valider immédiatement
+setTimeout(() => {
+document.getElementById('close-fs-btn').focus();
+}, 100);
+}
+function closeFullscreen() {
+document.getElementById('fullscreen-view').style.display = 'none';
+}
+function openPinModal() {
+document.getElementById('admin-modal').style.display = 'flex';
+document.getElementById('adminPin').focus();
+}
+function closePinModal() {
+document.getElementById('admin-modal').style.display = 'none';
+document.getElementById('adminError').style.display = 'none';
+document.getElementById('adminPin').value = '';
+}
+function verifyPin() {
+const pin = document.getElementById('adminPin'].value.trim();
+if (pin === '140769') {
+window.location.href = ⁠admin.html?gite=${currentGiteKey}⁠;
+} else {
+document.getElementById('adminError').style.display = 'block';
+document.getElementById('adminPin').value = '';
+}
+}
+</script>
 </body>
 </html>
