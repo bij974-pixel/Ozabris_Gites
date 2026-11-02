@@ -135,17 +135,18 @@
         .btn-action { background-color: var(--primary); color: white; padding: 6px 18px; border-radius: 8px; font-weight: 600; font-size: 0.72rem; cursor: pointer; text-decoration: none; display: inline-block; }
         .btn-action:focus { outline: 3px solid var(--accent); }
 
-        /* Mode Plein Écran interactif */
+        /* Mode Plein Écran interactif élargi */
         #fullscreen-view {
-            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(18, 38, 58, 0.96); z-index: 5000; justify-content: center; align-items: center; padding: 30px; font-family: 'Segoe UI', sans-serif;
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(18, 38, 58, 0.96); z-index: 5000; justify-content: center; align-items: center; padding: 20px; font-family: 'Segoe UI', sans-serif;
         }
         .fullscreen-card {
-            background: white; width: 100%; max-width: 650px; max-height: 90vh; border-radius: 16px; padding: 25px; border: 3px solid var(--accent); box-shadow: 0 25px 50px rgba(0,0,0,0.6); display: flex; flex-direction: column; justify-content: space-between; overflow-y: auto; text-align: center;
+            background: white; width: 100%; max-width: 820px; max-height: 92vh; border-radius: 16px; padding: 25px; border: 3px solid var(--accent); box-shadow: 0 25px 50px rgba(0,0,0,0.6); display: flex; flex-direction: column; justify-content: space-between; overflow-y: auto; text-align: center;
         }
         .fullscreen-card h3 { font-family: 'Playfair Display', serif; color: var(--primary); font-size: 1.5rem; margin-bottom: 8px; text-align: left; }
         .fullscreen-card p.fs-desc { font-size: 0.95rem; color: #333; line-height: 1.5; margin-bottom: 15px; text-align: left; }
         
-        .fullscreen-img { width: 100%; max-height: 220px; object-fit: contain; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 15px; background: #fcfbfa; }
+        /* IMAGE EN GRAND FORMAT PLEIN ÉCRAN */
+        .fullscreen-img { width: 100%; max-height: 420px; object-fit: contain; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 15px; background: #fcfbfa; }
         
         .qr-container {
             display: flex;
@@ -364,7 +365,7 @@
             mediaContainer.innerHTML = "";
 
             if (linkUrl && linkUrl.trim() !== "" && linkUrl.startsWith("http")) {
-                // S'il y a un lien web : on affiche le QR code avec la phrase demandée
+                // S'il y a un lien web : on affiche le QR code
                 const qrWrapper = document.createElement('div');
                 qrWrapper.className = 'qr-container';
                 qrWrapper.innerHTML = `
@@ -373,12 +374,11 @@
                 `;
                 mediaContainer.appendChild(qrWrapper);
 
-                // Génération du QR code via la librairie qrcode.js
                 try {
                     new QRCode(document.getElementById("qrcode-box"), {
                         text: linkUrl.trim(),
-                        width: 140,
-                        height: 140,
+                        width: 150,
+                        height: 150,
                         colorDark: "#12263a",
                         colorLight: "#ffffff",
                         correctLevel: QRCode.CorrectLevel.H
@@ -387,7 +387,7 @@
                     document.getElementById("qrcode-box").innerText = linkUrl.trim();
                 }
             } else if (imageUrl && imageUrl.trim() !== "" && imageUrl.startsWith("http")) {
-                // S'il n'y a pas de lien web : on affiche l'image Postimage en grand
+                // S'il n'y a pas de lien web : on affiche l'image Postimage en grand format confortable
                 mediaContainer.innerHTML = `<img src="${imageUrl.trim()}" alt="${title}" class="fullscreen-img">`;
             }
 
