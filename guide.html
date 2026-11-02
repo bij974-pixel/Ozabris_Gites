@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title-meta">Guide du Cottage & Infos | Les Ozabris</title>
+    <title id="page-title-meta">Guide du Cottage | Les Ozabris</title>
+    <!-- Inclusion de la bibliothèque qrcode.js pour générer les QR codes -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root { --primary: #12263a; --accent: #c5a880; --text-dark: #2c3e50; --white: #ffffff; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Playfair Display', 'Georgia', serif; }
@@ -78,22 +80,7 @@
         h2 { color: var(--primary); font-size: 1.2rem; font-weight: 400; margin-bottom: 2px; }
         .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.68rem; color: #555; font-style: italic; }
 
-        .live-info-bar {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            background: #fdfcfb;
-            border: 1px solid var(--accent);
-            border-radius: 8px;
-            padding: 8px 15px;
-            margin-bottom: 10px;
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 0.78rem;
-            color: var(--primary);
-            flex-shrink: 0;
-        }
-        .live-info-bar div { display: flex; align-items: center; gap: 6px; font-weight: 600; }
-
+        /* Grille de cartes scrollable pour une navigation télécommande fluide */
         .guide-grid { 
             display: grid; 
             grid-template-columns: repeat(2, 1fr); 
@@ -169,6 +156,7 @@
         .btn-action { background-color: var(--primary); color: white; padding: 6px 18px; border-radius: 8px; font-weight: 600; font-size: 0.72rem; cursor: pointer; text-decoration: none; display: inline-block; }
         .btn-action:focus { outline: 3px solid var(--accent); }
 
+        /* Mode Plein Écran interactif */
         #fullscreen-view {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(18, 38, 58, 0.96); z-index: 5000; justify-content: center; align-items: center; padding: 20px; font-family: 'Segoe UI', sans-serif;
         }
@@ -178,11 +166,23 @@
         .fullscreen-card h3 { font-family: 'Playfair Display', serif; color: var(--primary); font-size: 1.5rem; margin-bottom: 8px; text-align: left; }
         .fullscreen-card p.fs-desc { font-size: 0.95rem; color: #333; line-height: 1.5; margin-bottom: 15px; text-align: left; }
         
-        .fullscreen-img { width: 100%; max-height: 420px; object-fit: contain; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 15px; background: #fcfbfa; }
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fdfcfb;
+            border: 1px solid var(--accent);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .qr-container p { font-size: 0.85rem; color: var(--primary); font-weight: 600; margin-bottom: 10px; font-family: 'Segoe UI', sans-serif; text-align: center; }
+        #qrcode-box { background: white; padding: 10px; border-radius: 6px; border: 1px solid #eee; display: inline-block; }
 
         .btn-close-fullscreen { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; cursor: pointer; align-self: center; }
         .btn-close-fullscreen:hover, .btn-close-fullscreen:focus { background: var(--accent); color: var(--primary); outline: none; }
 
+        /* Modale PIN Admin */
         #admin-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(18, 38, 58, 0.9); justify-content: center; align-items: center; z-index: 10000; font-family: 'Segoe UI', sans-serif;
         }
@@ -208,13 +208,7 @@
     <div class="tv-card">
         <div class="card-header">
             <h2 id="page-main-title">Guide du Cottage & Infos pratiques</h2>
-            <p id="page-main-sub" class="welcome-sub">✨ Météo de La Saline les Hauts, Wi-Fi et télévision.</p>
-        </div>
-
-        <!-- Widget Météo & Heure -->
-        <div class="live-info-bar">
-            <div id="live-time">🕒 --:--</div>
-            <div id="live-weather">☀️ La Saline les Hauts : Chargement...</div>
+            <p id="page-main-sub" class="welcome-sub">✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.</p>
         </div>
 
         <div class="guide-grid" id="guide-grid-container">
@@ -260,9 +254,10 @@
             fr: {
                 titleFor: "Guide du Cottage pour {name}",
                 titleAt: "Guide du Cottage - {cottage}",
-                subText: "✨ Météo de La Saline les Hauts, Wi-Fi et télévision.",
+                subText: "✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.",
                 backHome: "🏠 Retour à l'accueil",
                 closeBtn: "✕ Quitter et revenir",
+                qrText: "📱 Pour consulter le document en ligne depuis votre téléphone, scannez ce QR code :",
                 adminTitle: "🔒 Accès Admin",
                 adminSub: "Code PIN de sécurité",
                 adminBtn: "Valider",
@@ -272,32 +267,33 @@
                 items: [
                     {
                         title: "📶 Connexion Wi-Fi",
-                        desc: "Accédez instantanément au réseau Wi-Fi haut débit sécurisé de votre cottage.",
-                        img: "wifi.png"
+                        desc: "Réseau 1 : SFR_JR (mdp : 02311760)\nRéseau 2 : SFR_JR_GZ (mdp : 02311760)\nRéseau 3 : LeGrandZabris (mdp : Reunion974*)\nSaisissez manuellement le nom du réseau et le mot de passe sur votre appareil.",
+                        linkUrl: ""
                     },
                     {
-                        title: "☕ Équipements & Notice",
-                        desc: "Consultez la notice d'utilisation de la cuisine, de la cafetière et des installations.",
-                        img: "equipements.png"
+                        title: "🚽 Notice Sanibroyeur",
+                        desc: "Consultez les instructions importantes d'utilisation pour préserver le bon fonctionnement des installations.",
+                        linkUrl: "https://1drv.ms/b/c/b302293c3a107d46/IQDKMy1gsI-VT57f-TffvFLZAYGZgWF8Su3TW7D9aAyesKE"
                     },
                     {
-                        title: "🗑️ Consignes & Tri sélectif",
-                        desc: "Tout savoir sur la gestion des déchets et le tri pour préserver La Réunion.",
-                        img: "dechets.png"
+                        title: "🗑️ Gestion des déchets & Tri",
+                        desc: "Tout savoir sur le tri sélectif et la gestion des déchets pour préserver La Réunion.",
+                        linkUrl: "https://1drv.ms/b/c/b302293c3a107d46/IQDZPE7hVWyzR6Je11v5GxJpAQHKVJVyvyy-wpi8A10WimU"
                     },
                     {
                         title: "🌿 Charte & Sécurité du Domaine",
                         desc: "Consignes de calme, de respect de la nature et de sécurité aux Ozabris.",
-                        img: "reglement.png"
+                        linkUrl: ""
                     }
                 ]
             },
             en: {
                 titleFor: "Cottage Guide for {name}",
                 titleAt: "Cottage Guide - {cottage}",
-                subText: "✨ Weather in La Saline les Hauts, Wi-Fi and television.",
+                subText: "✨ Use your remote control to scroll and select a card.",
                 backHome: "🏠 Back to Home",
                 closeBtn: "✕ Exit and Return",
+                qrText: "📱 To view the document online from your phone, scan this QR code:",
                 adminTitle: "🔒 Admin Access",
                 adminSub: "Security PIN code",
                 adminBtn: "Validate",
@@ -307,32 +303,33 @@
                 items: [
                     {
                         title: "📶 Wi-Fi Connection",
-                        desc: "Instantly access the secure high-speed Wi-Fi network of your cottage.",
-                        img: "wifi.png"
+                        desc: "Network 1: SFR_JR (password: 02311760)\nNetwork 2: SFR_JR_GZ (password: 02311760)\nNetwork 3: LeGrandZabris (password: Reunion974*)\nEnter network name and password manually on your device.",
+                        linkUrl: ""
                     },
                     {
-                        title: "☕ Amenities & Manuals",
-                        desc: "Check instructions for the kitchen, coffee machine, and appliances.",
-                        img: "equipements.png"
+                        title: "🚽 Sanibroyeur Guide",
+                        desc: "Check important usage instructions to ensure proper operation of the facilities.",
+                        linkUrl: "https://1drv.ms/b/c/b302293c3a107d46/IQDKMy1gsI-VT57f-TffvFLZAYGZgWF8Su3TW7D9aAyesKE"
                     },
                     {
-                        title: "🗑️ Recycling & Waste",
+                        title: "🗑️ Waste Management & Sorting",
                         desc: "Everything you need to know about waste sorting to preserve La Réunion.",
-                        img: "dechets.png"
+                        linkUrl: "https://1drv.ms/b/c/b302293c3a107d46/IQDZPE7hVWyzR6Je11v5GxJpAQHKVJVyvyy-wpi8A10WimU"
                     },
                     {
                         title: "🌿 Estate Guidelines & Safety",
                         desc: "Quiet hours, nature preservation, and safety rules at Les Ozabris.",
-                        img: "reglement.png"
+                        linkUrl: ""
                     }
                 ]
             },
             de: {
                 titleFor: "Cottage-Leitfaden für {name}",
                 titleAt: "Cottage-Leitfaden - {cottage}",
-                subText: "✨ Wetter in La Saline les Hauts, WLAN und Fernsehen.",
+                subText: "✨ Nutzen Sie Ihre Fernbedienung zum Scrollen und Auswählen.",
                 backHome: "🏠 Zur Startseite",
                 closeBtn: "✕ Schließen und Zurück",
+                qrText: "📱 Um das Dokument online von Ihrem Telefon aus anzusehen, scannen Sie diesen QR-Code:",
                 adminTitle: "🔒 Admin-Zugang",
                 adminSub: "Sicherheits-PIN-Code",
                 adminBtn: "Bestätigen",
@@ -342,23 +339,23 @@
                 items: [
                     {
                         title: "📶 WLAN-Verbindung",
-                        desc: "Erhalten Sie sofortigen Zugang zum sicheren Highspeed-WLAN Ihres Cottages.",
-                        img: "wifi.png"
+                        desc: "Netzwerk 1: SFR_JR (Passwort: 02311760)\nNetzwerk 2: SFR_JR_GZ (Passwort: 02311760)\nNetzwerk 3: LeGrandZabris (Passwort: Reunion974*)\nGeben Sie den Netzwerknamen und das Passwort manuell auf Ihrem Gerät ein.",
+                        linkUrl: ""
                     },
                     {
-                        title: "☕ Ausstattung & Bedienung",
-                        desc: "Anleitungen für Küche, Kaffeemaschine und Geräte einsehen.",
-                        img: "equipements.png"
+                        title: "🚽 Sanibroyeur-Anleitung",
+                        desc: "Wichtige Bedienungshinweise für den einwandfreien Betrieb der Anlage.",
+                        linkUrl: "https://1drv.ms/b/c/b302293c3a107d46/IQDKMy1gsI-VT57f-TffvFLZAYGZgWF8Su3TW7D9aAyesKE"
                     },
                     {
                         title: "🗑️ Mülltrennung & Recycling",
                         desc: "Wissenswertes über die Mülltrennung zum Schutz von La Réunion.",
-                        img: "dechets.png"
+                        linkUrl: "https://1drv.ms/b/c/b302293c3a107d46/IQDZPE7hVWyzR6Je11v5GxJpAQHKVJVyvyy-wpi8A10WimU"
                     },
                     {
                         title: "🌿 Anwesen-Regeln & Sicherheit",
                         desc: "Ruhezeiten, Naturschutz und Sicherheitsregeln in Les Ozabris.",
-                        img: "reglement.png"
+                        linkUrl: ""
                     }
                 ]
             }
@@ -392,13 +389,6 @@
             } else {
                 adminContainer.style.display = 'block';
             }
-
-            // Horloge Réunion
-            updateClock();
-            setInterval(updateClock, 1000);
-
-            // Météo La Saline les Hauts
-            fetchWeatherSaline();
 
             try {
                 const resV = await fetch(sheetVoyageursApiUrl + "?t=" + new Date().getTime());
@@ -453,40 +443,13 @@
             renderGuideGrid();
         }
 
-        function updateClock() {
-            try {
-                const nowStr = new Date().toLocaleTimeString('fr-FR', { timeZone: 'Indian/Reunion', hour: '2-digit', minute: '2-digit' });
-                document.getElementById('live-time').innerText = `🕒 ${nowStr}`;
-            } catch(e) {
-                const now = new Date();
-                document.getElementById('live-time').innerText = `🕒 ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
-            }
-        }
-
-        async function fetchWeatherSaline() {
-            try {
-                const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=-21.0772&longitude=55.2753&current=temperature_2m,weather_code");
-                const data = await res.json();
-                const temp = Math.round(data.current.temperature_2m);
-                const code = data.current.weather_code;
-                
-                let weatherDesc = "Ensoleillé ☀️";
-                if (code > 2 && code < 50) weatherDesc = "Nuageux ⛅";
-                if (code >= 50) weatherDesc = "Pluvieux 🌧️";
-
-                let prefix = currentLang === 'en' ? "La Saline les Hauts:" : (currentLang === 'de' ? "La Saline les Hauts:" : "La Saline les Hauts :");
-                document.getElementById('live-weather').innerText = `🌤️ ${prefix} ${temp}°C, ${weatherDesc}`;
-            } catch(e) {
-                document.getElementById('live-weather').innerText = `🌤️ La Saline les Hauts : 26°C, Doux 🌴`;
-            }
-        }
-
         function renderGuideGrid() {
             const container = document.getElementById('guide-grid-container');
             container.innerHTML = "";
 
             const langData = guideData[currentLang] || guideData['fr'];
 
+            // Encadré TV en haut
             const tvBox = document.createElement('div');
             tvBox.className = 'tv-instruction-box';
             tvBox.innerHTML = `
@@ -502,7 +465,7 @@
 
                 const triggerAction = function(e) {
                     e.preventDefault();
-                    openFullscreen(item.title, item.desc, item.img);
+                    openFullscreen(item.title, item.desc, item.linkUrl);
                 };
 
                 box.onclick = triggerAction;
@@ -511,31 +474,47 @@
                     if (e.key === 'Enter' || e.keyCode === 13) triggerAction(e);
                 };
 
-                let imgTag = "";
-                if (item.img) {
-                    imgTag = `<img src="${item.img}" class="guide-thumb" alt="${item.title}">`;
-                }
+                // Formatage des retours à la ligne pour l'affichage dans la carte
+                let formattedDesc = item.desc.replace(/\n/g, '<br>');
 
                 box.innerHTML = `
                     <div class="guide-content-area">
                         <h3>${item.title}</h3>
-                        <p>${item.desc}</p>
+                        <p>${formattedDesc}</p>
                     </div>
-                    ${imgTag}
                 `;
                 container.appendChild(box);
             });
         }
 
-        function openFullscreen(title, text, imgSrc) {
+        function openFullscreen(title, text, linkUrl) {
             document.getElementById('fs-title').innerText = title;
-            document.getElementById('fs-text').innerText = text;
+            document.getElementById('fs-text').innerText = text.replace(/\n/g, '<br>');
             
             const mediaContainer = document.getElementById('fs-media-container');
             mediaContainer.innerHTML = "";
 
-            if (imgSrc) {
-                mediaContainer.innerHTML = `<img src="${imgSrc}" alt="${title}" class="fullscreen-img">`;
+            if (linkUrl && linkUrl.trim() !== "" && linkUrl.startsWith("http")) {
+                const qrWrapper = document.createElement('div');
+                qrWrapper.className = 'qr-container';
+                qrWrapper.innerHTML = `
+                    <p>${t('qrText')}</p>
+                    <div id="qrcode-box"></div>
+                `;
+                mediaContainer.appendChild(qrWrapper);
+
+                try {
+                    new QRCode(document.getElementById("qrcode-box"), {
+                        text: linkUrl.trim(),
+                        width: 150,
+                        height: 150,
+                        colorDark: "#12263a",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                } catch(err) {
+                    document.getElementById("qrcode-box").innerText = linkUrl.trim();
+                }
             }
 
             document.getElementById('fullscreen-view').style.display = 'flex';
