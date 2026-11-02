@@ -80,24 +80,7 @@
         h2 { color: var(--primary); font-size: 1.2rem; font-weight: 400; margin-bottom: 2px; }
         .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.68rem; color: #555; font-style: italic; }
 
-        /* Widget Météo & Heure en direct */
-        .live-info-bar {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            background: #fdfcfb;
-            border: 1px solid var(--accent);
-            border-radius: 8px;
-            padding: 8px 15px;
-            margin-bottom: 12px;
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 0.8rem;
-            color: var(--primary);
-            flex-shrink: 0;
-        }
-        .live-info-bar div { display: flex; align-items: center; gap: 6px; font-weight: 600; }
-
-        /* Grille de défilement fluide pour les QR codes & infos */
+        /* Grille de défilement fluide pour les 4 QR codes */
         .guide-grid { 
             display: grid; 
             grid-template-columns: repeat(2, 1fr); 
@@ -206,13 +189,7 @@
     <div class="tv-card">
         <div class="card-header">
             <h2 id="page-main-title">Guide du Cottage & Infos pratiques</h2>
-            <p id="page-main-sub" class="welcome-sub">✨ Météo, heure et accès Wi-Fi / consignes par QR code.</p>
-        </div>
-
-        <!-- Widget Météo & Heure -->
-        <div class="live-info-bar">
-            <div id="live-time">🕒 --:--</div>
-            <div id="live-weather">☀️ La Réunion : Chargement météo...</div>
+            <p id="page-main-sub" class="welcome-sub">✨ Sélectionnez une carte pour afficher le QR code sur votre téléphone.</p>
         </div>
 
         <!-- Grille des 4 QR codes pratiques -->
@@ -259,7 +236,7 @@
             fr: {
                 titleFor: "Guide du Cottage pour {name}",
                 titleAt: "Guide du Cottage - {cottage}",
-                subText: "✨ Météo, heure et accès Wi-Fi / consignes par QR code.",
+                subText: "✨ Sélectionnez une carte pour afficher le QR code sur votre téléphone.",
                 backHome: "🏠 Retour à l'accueil",
                 closeBtn: "✕ Quitter et revenir",
                 qrText: "📱 Scannez ce QR code pour y accéder directement depuis votre smartphone :",
@@ -293,7 +270,7 @@
             en: {
                 titleFor: "Cottage Guide for {name}",
                 titleAt: "Cottage Guide - {cottage}",
-                subText: "✨ Weather, time and Wi-Fi / guidelines via QR code.",
+                subText: "✨ Select a card to display the QR code on your phone.",
                 backHome: "🏠 Back to Home",
                 closeBtn: "✕ Exit and Return",
                 qrText: "📱 Scan this QR code to access it directly from your smartphone:",
@@ -327,7 +304,7 @@
             de: {
                 titleFor: "Cottage-Leitfaden für {name}",
                 titleAt: "Cottage-Leitfaden - {cottage}",
-                subText: "✨ Wetter, Uhrzeit und WLAN / Hinweise per QR-Code.",
+                subText: "✨ Wählen Sie eine Karte aus, um den QR-Code auf Ihrem Handy anzuzeigen.",
                 backHome: "🏠 Zur Startseite",
                 closeBtn: "✕ Schließen und Zurück",
                 qrText: "📱 Scannen Sie diesen QR-Code, um direkt von Ihrem Smartphone aus zuzugreifen:",
@@ -388,13 +365,6 @@
                 adminContainer.style.display = 'block';
             }
 
-            // Horloge en direct
-            updateClock();
-            setInterval(updateClock, 1000);
-
-            // Météo La Réunion en direct
-            fetchWeather();
-
             // Voyageur et langue
             try {
                 const resV = await fetch(sheetVoyageursApiUrl + "?t=" + new Date().getTime());
@@ -447,30 +417,6 @@
             document.getElementById('admin-modal-btn').innerText = t('adminBtn');
 
             renderGuideGrid();
-        }
-
-        function updateClock() {
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-            document.getElementById('live-time').innerText = `🕒 ${timeStr}`;
-        }
-
-        async function fetchWeather() {
-            try {
-                const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=-21.1151&longitude=55.5364&current=temperature_2m,weather_code");
-                const data = await res.json();
-                const temp = Math.round(data.current.temperature_2m);
-                const code = data.current.weather_code;
-                
-                let weatherDesc = "Ensoleillé ☀️";
-                if (code > 2 && code < 50) weatherDesc = "Nuageux ⛅";
-                if (code >= 50) weatherDesc = "Pluvieux 🌧️";
-
-                let prefix = currentLang === 'en' ? "La Réunion Weather:" : (currentLang === 'de' ? "Wetter La Réunion:" : "La Réunion :");
-                document.getElementById('live-weather').innerText = `🌤️ ${prefix} ${temp}°C, ${weatherDesc}`;
-            } catch(e) {
-                document.getElementById('live-weather').innerText = `🌤️ La Réunion : 28°C, Tropical 🌴`;
-            }
         }
 
         function renderGuideGrid() {
