@@ -97,7 +97,7 @@
         }
         .live-info-bar div { display: flex; align-items: center; gap: 6px; font-weight: 600; }
 
-        /* Conteneur de défilement fluide pour les 4 QR codes & infos */
+        /* Grille de défilement fluide pour les QR codes & infos */
         .guide-grid { 
             display: grid; 
             grid-template-columns: repeat(2, 1fr); 
@@ -154,7 +154,7 @@
         .btn-action { background-color: var(--primary); color: white; padding: 6px 18px; border-radius: 8px; font-weight: 600; font-size: 0.72rem; cursor: pointer; text-decoration: none; display: inline-block; }
         .btn-action:focus { outline: 3px solid var(--accent); }
 
-        /* Mode Plein Écran interactif (identique aux conseils) */
+        /* Mode Plein Écran interactif */
         #fullscreen-view {
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(18, 38, 58, 0.96); z-index: 5000; justify-content: center; align-items: center; padding: 20px; font-family: 'Segoe UI', sans-serif;
         }
@@ -217,7 +217,7 @@
 
         <!-- Grille des 4 QR codes pratiques -->
         <div class="guide-grid" id="guide-grid-container">
-            <!-- Rempli dynamiquement -->
+            <p style="text-align: center; color: #666; grid-column: span 2; padding: 20px;">Chargement...</p>
         </div>
         
         <div class="footer-actions">
@@ -255,7 +255,6 @@
         let currentGiteKey = 'ptitzabris';
         let currentLang = 'fr';
 
-        // Traductions interface et des 4 infos pratiques (Wi-Fi, Consignes, Équipements, Environnement)
         const guideData = {
             fr: {
                 titleFor: "Guide du Cottage pour {name}",
@@ -272,7 +271,7 @@
                     {
                         title: "📶 Connexion Wi-Fi",
                         desc: "Accédez instantanément au réseau Wi-Fi haut débit sécurisé de votre cottage.",
-                        link: "WIFI:T:WPA;S:LesOzabris_Guest;P:Ozabris2026;; " // Exemple de configuration QR Wi-Fi ou lien vers page
+                        link: "WIFI:T:WPA;S:LesOzabris_Guest;P:Ozabris2026;;"
                     },
                     {
                         title: "☕ Équipements & Notice",
@@ -306,7 +305,7 @@
                     {
                         title: "📶 Wi-Fi Connection",
                         desc: "Instantly access the secure high-speed Wi-Fi network of your cottage.",
-                        link: "WIFI:T:WPA;S:LesOzabris_Guest;P:Ozabris2026;; "
+                        link: "WIFI:T:WPA;S:LesOzabris_Guest;P:Ozabris2026;;"
                     },
                     {
                         title: "☕ Amenities & Manuals",
@@ -340,7 +339,7 @@
                     {
                         title: "📶 WLAN-Verbindung",
                         desc: "Erhalten Sie sofortigen Zugang zum sicheren Highspeed-WLAN Ihres Cottages.",
-                        link: "WIFI:T:WPA;S:LesOzabris_Guest;P:Ozabris2026;; "
+                        link: "WIFI:T:WPA;S:LesOzabris_Guest;P:Ozabris2026;;"
                     },
                     {
                         title: "☕ Ausstattung & Bedienung",
@@ -393,7 +392,7 @@
             updateClock();
             setInterval(updateClock, 1000);
 
-            // Météo La Réunion en direct (API Open-Meteo gratuite pour St-Philippe/St-Paul)
+            // Météo La Réunion en direct
             fetchWeather();
 
             // Voyageur et langue
@@ -458,7 +457,6 @@
 
         async function fetchWeather() {
             try {
-                // Coordonnées approximatives de La Réunion (Sud/Ouest)
                 const res = await fetch("https://api.open-meteo.com/v1/forecast?latitude=-21.1151&longitude=55.5364&current=temperature_2m,weather_code");
                 const data = await res.json();
                 const temp = Math.round(data.current.temperature_2m);
@@ -506,7 +504,6 @@
                 `;
                 container.appendChild(box);
 
-                // Génération de la miniature du QR code dans la boîte
                 try {
                     new QRCode(document.getElementById(`thumb-qr-${index}`), {
                         text: item.link,
@@ -565,7 +562,7 @@
         function closePinModal() {
             document.getElementById('admin-modal').style.display = 'none';
             document.getElementById('adminError').style.display = 'none';
-            document.getElementById('adminPin'].value = '';
+            document.getElementById('adminPin').value = '';
         }
         function verifyPin() {
             const pin = document.getElementById('adminPin').value.trim();
