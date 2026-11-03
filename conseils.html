@@ -72,10 +72,10 @@ position: relative;
 .card-header { margin-bottom: 6px; flex-shrink: 0; }
 h2 { color: var(--primary); font-size: 1.2rem; font-weight: 400; margin-bottom: 2px; }
 .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.68rem; color: #555; font-style: italic; }
-/* Conteneur de défilement fluide */
+/* Conteneur de défilement fluide sans chevauchement */
 .advice-grid {
 display: grid;
-grid-template-columns: repeat(2, 1fr);
+grid-template-columns: repeat(2, minmax(0, 1fr));
 gap: 12px;
 overflow-y: auto;
 padding: 5px;
@@ -98,6 +98,8 @@ gap: 10px;
 cursor: pointer;
 transition: all 0.2s ease;
 min-height: 105px;
+width: 100%;
+overflow: hidden;
 }
 .advice-box:focus, .advice-box:hover {
 border-color: #12263a;
@@ -106,8 +108,8 @@ outline: none;
 transform: scale(1.01);
 background: #fffdf9;
 }
-.advice-content-area { flex-grow: 1; overflow: hidden; }
-.advice-box h3 { font-size: 0.85rem; color: var(--primary); margin-bottom: 3px; font-family: 'Playfair Display', serif; }
+.advice-content-area { flex-grow: 1; min-width: 0; overflow: hidden; }
+.advice-box h3 { font-size: 0.85rem; color: var(--primary); margin-bottom: 3px; font-family: 'Playfair Display', serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .advice-box p { font-size: 0.72rem; color: #555; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .advice-thumb {
 width: 75px;
@@ -172,7 +174,7 @@ background: white; padding: 20px; border-radius: 12px; width: 85%; max-width: 30
 <div class="tv-card">
 <div class="card-header">
 <h2 id="page-main-title">Recommandations exclusives</h2>
-<p id="page-main-sub" class="welcome-sub">✨ Météo, adresses et coups de cœur.</p>
+<p id="page-main-sub" class="welcome-sub">✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.</p>
 </div>
 <!-- Grille scrollable dynamique -->
 <div class="advice-grid" id="advice-grid-container">
@@ -254,7 +256,7 @@ document.getElementById('page-main-title').innerText = ⁠Recommandations exclus
 } catch(e) {
 document.getElementById('page-main-title').innerText = ⁠Recommandations exclusives au ${cottageName}⁠;
 }
-document.getElementById('page-main-sub').innerText = "✨ Météo, adresses et coups de cœur.";
+document.getElementById('page-main-sub').innerText = "✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.";
 // Chargement dynamique des conseils depuis le Sheet avec affichage garanti de TOUTES les cartes actives
 try {
 const response = await fetch(sheetConseilsApiUrl + "?type=conseils&t=" + new Date().getTime());
@@ -356,7 +358,7 @@ document.getElementById('adminError').style.display = 'none';
 document.getElementById('adminPin').value = '';
 }
 function verifyPin() {
-const pin = document.getElementById('adminPin'].value.trim();
+const pin = document.getElementById('adminPin').value.trim();
 if (pin === '140769') {
 window.location.href = ⁠admin.html?gite=${currentGiteKey}⁠;
 } else {
