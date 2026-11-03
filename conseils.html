@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title-meta">Conseils Personnalisés | Les Ozabris</title>
-    <!-- Inclusion de la bibliothèque qrcode.js pour générer les QR codes dynamiquement -->
+    <!-- Inclusion de la bibliothèque qrcode.js pour générer les QR codes -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root { --primary: #12263a; --accent: #c5a880; --text-dark: #2c3e50; --white: #ffffff; }
@@ -80,7 +80,6 @@
         h2 { color: var(--primary); font-size: 1.2rem; font-weight: 400; margin-bottom: 2px; }
         .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.68rem; color: #555; font-style: italic; }
 
-        /* Conteneur de défilement fluide sans chevauchement */
         .advice-grid { 
             display: grid; 
             grid-template-columns: repeat(2, minmax(0, 1fr)); 
@@ -192,9 +191,8 @@
             <p id="page-main-sub" class="welcome-sub">✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.</p>
         </div>
 
-        <!-- Grille scrollable affichant directement les recommandations -->
         <div class="advice-grid" id="advice-grid-container">
-            <!-- Injecté immédiatement -->
+            <!-- Rendu immédiat et sécurisé -->
         </div>
         
         <div class="footer-actions">
@@ -202,7 +200,6 @@
         </div>
     </div>
 
-    <!-- Mode Plein Écran -->
     <div id="fullscreen-view">
         <div class="fullscreen-card">
             <div>
@@ -214,7 +211,6 @@
         </div>
     </div>
 
-    <!-- Modale PIN Admin -->
     <div id="admin-modal">
         <div class="modal-content">
             <button type="button" onclick="closePinModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
@@ -232,52 +228,54 @@
 
         let currentGiteKey = 'ptitzabris';
 
-        // Données par défaut immédiates (tes vraies images Postimage)
-        let cachedAdvices = [
-            { title: "Super U 3B", text: "Supermarché le plus proche d'ici", img: "https://i.postimg.cc/k47g2q8N/superu.jpg", linkUrl: "https://maps.google.com", active: true },
-            { title: "Vanille Vallée", text: "Leurs sachets pour les...", img: "https://i.postimg.cc/6q8L899s/vanille.jpg", linkUrl: "", active: true },
-            { title: "Le VORTEX Énergétique de l'Etang Salé", text: "Un lieu hors du temps, un moment po...", img: "https://i.postimg.cc/027y6J5v/vortex.jpg", linkUrl: "", active: true },
-            { title: "Marché forain de St Paul", text: "Le plus grand marché d...", img: "https://i.postimg.cc/3w9f65gX/marche.jpg", linkUrl: "", active: true },
-            { title: "Plage de l'Ermitage", text: "Idéal pour le snorkeling et la baignade sécurisée dans le lagon.", img: "https://i.postimg.cc/18Gz3k1b/ermitage.jpg", linkUrl: "", active: true },
-            { title: "Maïdo - Lever de soleil", text: "Point de vue incontournable sur le cirque de Mafate.", img: "https://i.postimg.cc/2y5Z7f6q/maido.jpg", linkUrl: "", active: true },
-            { title: "Jardin d'Éden", text: "Jardin botanique tropical à Saint-Gilles les Bains.", img: "https://i.postimg.cc/8c4h62kL/eden.jpg", linkUrl: "", active: true }
+        // Base de données locale de secours instantanée avec les vraies images Postimage
+        let localAdvices = [
+            { title: "Super U 3B", text: "Supermarché le plus proche d'ici", img: "https://i.postimg.cc/k47g2q8N/superu.jpg", linkUrl: "https://maps.google.com" },
+            { title: "Vanille Vallée", text: "Leurs sachets pour les...", img: "https://i.postimg.cc/6q8L899s/vanille.jpg", linkUrl: "" },
+            { title: "Le VORTEX Énergétique de l'Etang Salé", text: "Un lieu hors du temps, un moment po...", img: "https://i.postimg.cc/027y6J5v/vortex.jpg", linkUrl: "" },
+            { title: "Marché forain de St Paul", text: "Le plus grand marché d...", img: "https://i.postimg.cc/3w9f65gX/marche.jpg", linkUrl: "" },
+            { title: "Plage de l'Ermitage", text: "Idéal pour le snorkeling et la baignade sécurisée dans le lagon.", img: "https://i.postimg.cc/18Gz3k1b/ermitage.jpg", linkUrl: "" },
+            { title: "Maïdo - Lever de soleil", text: "Point de vue incontournable sur le cirque de Mafate.", img: "https://i.postimg.cc/2y5Z7f6q/maido.jpg", linkUrl: "" },
+            { title: "Jardin d'Éden", text: "Jardin botanique tropical à Saint-Gilles les Bains.", img: "https://i.postimg.cc/8c4h62kL/eden.jpg", linkUrl: "" }
         ];
 
-        // EXÉCUTION INSTANTANÉE (0 attente réseau pour afficher le contenu)
-        (function() {
+        document.addEventListener("DOMContentLoaded", function() {
             const urlParams = new URLSearchParams(window.location.search);
             const giteParam = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
             currentGiteKey = giteParam.includes("grand") ? "grandzabris" : "ptitzabris";
             let cottageName = currentGiteKey === "grandzabris" ? "Grandzabris" : "Ptitzabris";
 
-            document.addEventListener("DOMContentLoaded", function() {
-                const backBtn = document.getElementById('back-home-btn');
-                if (backBtn) backBtn.href = `index.html?gite=${currentGiteKey}&v=99`;
+            const backBtn = document.getElementById('back-home-btn');
+            if (backBtn) backBtn.href = `index.html?gite=${currentGiteKey}&v=99`;
 
-                const adminContainer = document.getElementById('admin-container');
-                const currentHost = window.location.hostname;
-                const isTargetTV = currentHost.endsWith(".145") || currentHost.endsWith(".93") || 
-                                   currentHost === "192.168.1.145" || currentHost === "192.168.1.93";
-                if (adminContainer) {
-                    adminContainer.style.display = isTargetTV ? 'none' : 'block';
-                }
+            const adminContainer = document.getElementById('admin-container');
+            const currentHost = window.location.hostname;
+            const isTargetTV = currentHost.endsWith(".145") || currentHost.endsWith(".93") || 
+                               currentHost === "192.168.1.145" || currentHost === "192.168.1.93";
+            if (adminContainer) {
+                adminContainer.style.display = isTargetTV ? 'none' : 'block';
+            }
 
-                // Affichage direct immédiat
-                renderGrid();
-                
-                // Fetch optionnel en arrière-plan
-                fetchRemoteData();
-            });
-        })();
+            // AFFICHAGE IMMÉDIAT GARANTI (Zéro écran blanc)
+            renderGrid(localAdvices);
 
-        function renderGrid() {
+            // Charger les données en arrière-plan sans bloquer l'affichage
+            fetchAsyncData(cottageName);
+        });
+
+        function renderGrid(list) {
             const container = document.getElementById('advice-grid-container');
             if (!container) return;
             container.innerHTML = "";
 
-            cachedAdvices.forEach((adv) => {
+            if (!list || list.length === 0) {
+                container.innerHTML = `<p style="text-align: center; color: #666; grid-column: span 2; padding: 20px;">Aucune recommandation disponible.</p>`;
+                return;
+            }
+
+            list.forEach((adv) => {
                 const titleText = adv.title || '';
-                if (!titleText) return;
+                if (!titleText.trim()) return;
 
                 const descText = adv.text || '';
                 const imageUrl = adv.img || '';
@@ -299,7 +297,7 @@
                 };
 
                 let imgTag = "";
-                if (imageUrl && imageUrl.startsWith("http")) {
+                if (imageUrl && imageUrl.trim().startsWith("http")) {
                     imgTag = `<img src="${imageUrl.trim()}" class="advice-thumb" alt="${titleText}">`;
                 }
 
@@ -314,7 +312,7 @@
             });
         }
 
-        async function fetchRemoteData() {
+        async function fetchAsyncData(cottageName) {
             try {
                 const resV = await fetch(sheetVoyageursApiUrl + "?t=" + new Date().getTime());
                 const voyageurs = await resV.json();
@@ -338,6 +336,9 @@
                     if (v && v.prenom) {
                         const titleEl = document.getElementById('page-main-title');
                         if (titleEl) titleEl.innerText = `Recommandations exclusives pour ${v.prenom}`;
+                    } else {
+                        const titleEl = document.getElementById('page-main-title');
+                        if (titleEl) titleEl.innerText = `Recommandations exclusives au ${cottageName}`;
                     }
                 }
             } catch(e) {}
@@ -347,14 +348,15 @@
                 const data = await response.json();
                 const remoteAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || data.data || []);
                 if (remoteAdvices.length > 0) {
-                    cachedAdvices = remoteAdvices.map(adv => ({
+                    const formatted = remoteAdvices.map(adv => ({
                         title: adv.title || adv['Nom de la recommandation'] || '',
                         text: adv.text || adv['Commentaire sur la recommandation'] || adv['Commentaire'] || adv['Description'] || '',
                         img: adv.img || adv['Lien postimage'] || '',
-                        linkUrl: adv.linkUrl || adv['Lien web'] || '',
-                        active: true
-                    }));
-                    renderGrid();
+                        linkUrl: adv.linkUrl || adv['Lien web'] || ''
+                    })).filter(x => x.title !== '');
+                    if (formatted.length > 0) {
+                        renderGrid(formatted);
+                    }
                 }
             } catch (err) {}
         }
