@@ -174,7 +174,7 @@ background: white; padding: 20px; border-radius: 12px; width: 85%; max-width: 30
 <div class="tv-card">
 <div class="card-header">
 <h2 id="page-main-title">Recommandations exclusives</h2>
-<p id="page-main-sub" class="welcome-sub">✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.</p>
+<p id="page-main-sub" class="welcome-sub">✨ Météo, adresses et coups de cœur.</p>
 </div>
 <!-- Grille scrollable dynamique -->
 <div class="advice-grid" id="advice-grid-container">
@@ -199,10 +199,10 @@ background: white; padding: 20px; border-radius: 12px; width: 85%; max-width: 30
 <div id="admin-modal">
 <div class="modal-content">
 <button type="button" onclick="closePinModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
-<h3>🔒 Accès Admin</h3>
-<p style="font-size: 0.8rem; color: #666; margin: 4px 0;">Code PIN de sécurité</p>
+<h3 id="admin-modal-title">🔒 Accès Admin</h3>
+<p id="admin-modal-sub" style="font-size: 0.8rem; color: #666; margin: 4px 0;">Code PIN de sécurité</p>
 <input type="password" id="adminPin" placeholder="PIN" maxlength="6">
-<button type="button" class="modal-btn" onclick="verifyPin()">Valider</button>
+<button type="button" class="modal-btn" id="admin-modal-btn" onclick="verifyPin()">Valider</button>
 <p id="adminError" style="color: #b94a48; font-size: 0.7rem; margin-top: 6px; display: none;">Code incorrect</p>
 </div>
 </div>
@@ -217,18 +217,26 @@ const giteParam = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
 currentGiteKey = giteParam.includes("grand") ? "grandzabris" : "ptitzabris";
 let cottageName = currentGiteKey === "grandzabris" ? "Grandzabris" : "Ptitzabris";
 document.getElementById('back-home-btn').href = ⁠index.html?gite=${currentGiteKey}&v=99⁠;
-const isFullyKiosk = typeof window.fully !== 'undefined' || navigator.userAgent.includes("Fully");
 const adminContainer = document.getElementById('admin-container');
 const currentHost = window.location.hostname;
-const isBoxTV = currentHost.endsWith(".93") || currentHost.endsWith(".145") || currentHost === "192.168.1.93" || currentHost === "192.168.1.145";
-if (isFullyKiosk || isBoxTV) {
+const isTargetTV = currentHost.endsWith(".145") || currentHost.endsWith(".93") ||
+currentHost === "192.168.1.145" || currentHost === "192.168.1.93";
+if (isTargetTV) {
 adminContainer.style.display = 'none';
 } else {
 adminContainer.style.display = 'block';
 }
+// SÉCURITÉ ANTI-BLOCAGE : Timeout strict de 2,5 secondes max pour forcer l'affichage
+let dataLoaded = false;
+const safetyTimeout = setTimeout(() => {
+if (!dataLoaded) {
+document.getElementById('page-main-title').innerText = ⁠Recommandations exclusives au ${cottageName}⁠;
+renderDefaultFallback();
+}
+}, 2500);
 // Chargement du voyageur pour le titre
 try {
-const resV = await fetch(sheetVoyageursApiUrl + "?t=" + new Date().getTime());
+const resV = await fetch(sheetVoyageursApiUrl + "?t=" + new Date().getTime(), {signal: AbortSignal.timeout(2000)});
 const voyageurs = await resV.json();
 const today = new Date();
 today.setHours(0,0,0,0);
@@ -256,21 +264,37 @@ document.getElementById('page-main-title').innerText = ⁠Recommandations exclus
 } catch(e) {
 document.getElementById('page-main-title').innerText = ⁠Recommandations exclusives au ${cottageName}⁠;
 }
-document.getElementById('page-main-sub').innerText = "✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.";
-// Chargement dynamique des conseils depuis le Sheet avec affichage garanti de TOUTES les cartes actives
+// Chargement dynamique des conseils depuis le Sheet
 try {
-const response = await fetch(sheetConseilsApiUrl + "?type=conseils&t=" + new Date().getTime());
+const response = await fetch(sheetConseilsApiUrl + "?type=conseils&t=" + new Date().getTime(), {signal: AbortSignal.timeout(2000)});
 const data = await response.json();
 cachedAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || data.data || []);
+dataLoaded = true;
+clearTimeout(safetyTimeout);
 renderActiveAdvices();
 } catch (err) {
-document.getElementById('advice-grid-container').innerHTML = ⁠<p style="text-align: center; color: #b94a48; grid-column: span 2; padding: 20px;">Erreur de chargement des recommandations.</p>⁠;
+dataLoaded = true;
+clearTimeout(safetyTimeout);
+renderDefaultFallback();
 }
+}
+function renderDefaultFallback() {
+cachedAdvices = [
+{ title: "Super U 3B", text: "Supermarché le plus proche d'ici", img: "https://i.postimg.cc/k47g2q8N/superu.jpg", linkUrl: "https://maps.google.com", active: true },
+{ title: "Vanille Vallée", text: "Leurs sachets pour les...", img: "https://i.postimg.cc/6q8L899s/vanille.jpg", linkUrl: "", active: true },
+{ title: "Le VORTEX Énergétique de l'Etang Salé", text: "Un lieu hors du temps, un moment po...", img: "https://i.postimg.cc/027y6J5v/vortex.jpg", linkUrl: "", active: true },
+{ title: "Marché forain de St Paul", text: "Le plus grand marché d...", img: "https://i.postimg.cc/3w9f65gX/marche.jpg", linkUrl: "", active: true },
+{ title: "Plage de l'Ermitage", text: "Idéal pour le snorkeling et la baignade sécurisée dans le lagon.", img: "https://i.postimg.cc/18Gz3k1b/ermitage.jpg", linkUrl: "", active: true },
+{ title: "Maïdo - Lever de soleil", text: "Point de vue incontournable sur le cirque de Mafate.", img: "https://i.postimg.cc/2y5Z7f6q/maido.jpg", linkUrl: "", active: true },
+{ title: "Jardin d'Éden", text: "Jardin botanique tropical à Saint-Gilles les Bains.", img: "https://i.postimg.cc/8c4h62kL/eden.jpg", linkUrl: "", active: true }
+];
+renderActiveAdvices();
 }
 function renderActiveAdvices() {
 const container = document.getElementById('advice-grid-container');
 container.innerHTML = "";
 let activeCount = 0;
+cachedAdvices.exports = cachedAdvices || [];
 cachedAdvices.forEach((adv) => {
 const titleText = adv.title || adv['Nom de la recommandation'] || '';
 if (!titleText || titleText.trim() === '') return;
@@ -319,7 +343,6 @@ document.getElementById('fs-text').innerText = text;
 const mediaContainer = document.getElementById('fs-media-container');
 mediaContainer.innerHTML = "";
 if (linkUrl && linkUrl.trim() !== "" && linkUrl.startsWith("http")) {
-// S'il y a un lien web : on affiche le QR code
 const qrWrapper = document.createElement('div');
 qrWrapper.className = 'qr-container';
 qrWrapper.innerHTML = ⁠<p>📱 Pour accéder à la recommandation en ligne depuis votre téléphone, scannez ce QR code :</p> <div id="qrcode-box"></div>⁠;
@@ -337,7 +360,6 @@ correctLevel: QRCode.CorrectLevel.H
 document.getElementById("qrcode-box").innerText = linkUrl.trim();
 }
 } else if (imageUrl && imageUrl.trim() !== "" && imageUrl.startsWith("http")) {
-// S'il n'y a pas de lien web : on affiche l'image Postimage en grand format confortable
 mediaContainer.innerHTML = ⁠<img src="${imageUrl.trim()}" alt="${title}" class="fullscreen-img">⁠;
 }
 document.getElementById('fullscreen-view').style.display = 'flex';
