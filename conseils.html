@@ -174,11 +174,11 @@ background: white; padding: 20px; border-radius: 12px; width: 85%; max-width: 30
 <div class="tv-card">
 <div class="card-header">
 <h2 id="page-main-title">Recommandations exclusives</h2>
-<p id="page-main-sub" class="welcome-sub">✨ Météo, adresses et coups de cœur.</p>
+<p id="page-main-sub" class="welcome-sub">✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.</p>
 </div>
 <!-- Grille scrollable dynamique -->
 <div class="advice-grid" id="advice-grid-container">
-<p style="text-align: center; color: #666; grid-column: span 2; padding: 20px;">Chargement...</p>
+<!-- Chargement immédiat par défaut en dur pour garantir zéro écran blanc -->
 </div>
 <div class="footer-actions">
 <a id="back-home-btn" href="index.html" class="btn-action">🏠 Retour à l'accueil</a>
@@ -200,7 +200,7 @@ background: white; padding: 20px; border-radius: 12px; width: 85%; max-width: 30
 <div class="modal-content">
 <button type="button" onclick="closePinModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
 <h3 id="admin-modal-title">🔒 Accès Admin</h3>
-<p id="admin-modal-sub" style="font-size: 0.8rem; color: #666; margin: 4px 0;">Code PIN de sécurité</p>
+<p id="admin-modal-sub" style="font-size: 0.75rem; color: #666; margin: 4px 0;">Code PIN de sécurité</p>
 <input type="password" id="adminPin" placeholder="PIN" maxlength="6">
 <button type="button" class="modal-btn" id="admin-modal-btn" onclick="verifyPin()">Valider</button>
 <p id="adminError" style="color: #b94a48; font-size: 0.7rem; margin-top: 6px; display: none;">Code incorrect</p>
@@ -209,14 +209,24 @@ background: white; padding: 20px; border-radius: 12px; width: 85%; max-width: 30
 <script>
 const sheetVoyageursApiUrl = "https://script.google.com/macros/s/AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq/exec";
 const sheetConseilsApiUrl = "https://script.google.com/macros/s/AKfycbzdEv_frdNqscUxHQW6xXpePamOztmC0xLWa5CRMjY4fFsKuMdcvJda7fDkXiWqAYcu1A/exec";
-let cachedAdvices = [];
 let currentGiteKey = 'ptitzabris';
-window.onload = async function() {
+// Données statiques de secours directes (chargées instantanément)
+let cachedAdvices = [
+{ title: "Super U 3B", text: "Supermarché le plus proche d'ici", img: "https://i.postimg.cc/k47g2q8N/superu.jpg", linkUrl: "https://maps.google.com", active: true },
+{ title: "Vanille Vallée", text: "Leurs sachets pour les...", img: "https://i.postimg.cc/6q8L899s/vanille.jpg", linkUrl: "", active: true },
+{ title: "Le VORTEX Énergétique de l'Etang Salé", text: "Un lieu hors du temps, un moment po...", img: "https://i.postimg.cc/027y6J5v/vortex.jpg", linkUrl: "", active: true },
+{ title: "Marché forain de St Paul", text: "Le plus grand marché d...", img: "https://i.postimg.cc/3w9f65gX/marche.jpg", linkUrl: "", active: true },
+{ title: "Plage de l'Ermitage", text: "Idéal pour le snorkeling et la baignade sécurisée dans le lagon.", img: "https://i.postimg.cc/18Gz3k1b/ermitage.jpg", linkUrl: "", active: true },
+{ title: "Maïdo - Lever de soleil", text: "Point de vue incontournable sur le cirque de Mafate.", img: "https://i.postimg.cc/2y5Z7f6q/maido.jpg", linkUrl: "", active: true },
+{ title: "Jardin d'Éden", text: "Jardin botanique tropical à Saint-Gilles les Bains.", img: "https://i.postimg.cc/8c4h62kL/eden.jpg", linkUrl: "", active: true }
+];
+document.addEventListener("DOMContentLoaded", function() {
 const urlParams = new URLSearchParams(window.location.search);
 const giteParam = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
 currentGiteKey = giteParam.includes("grand") ? "grandzabris" : "ptitzabris";
 let cottageName = currentGiteKey === "grandzabris" ? "Grandzabris" : "Ptitzabris";
 document.getElementById('back-home-btn').href = ⁠index.html?gite=${currentGiteKey}&v=99⁠;
+// Masquage strict du bouton Admin pour la TV (.145 et .93)
 const adminContainer = document.getElementById('admin-container');
 const currentHost = window.location.hostname;
 const isTargetTV = currentHost.endsWith(".145") || currentHost.endsWith(".93") ||
@@ -226,17 +236,15 @@ adminContainer.style.display = 'none';
 } else {
 adminContainer.style.display = 'block';
 }
-// SÉCURITÉ ANTI-BLOCAGE : Timeout strict de 2,5 secondes max pour forcer l'affichage
-let dataLoaded = false;
-const safetyTimeout = setTimeout(() => {
-if (!dataLoaded) {
-document.getElementById('page-main-title').innerText = ⁠Recommandations exclusives au ${cottageName}⁠;
-renderDefaultFallback();
-}
-}, 2500);
-// Chargement du voyageur pour le titre
+// Affichage immédiat des cartes en dur pour éviter tout écran de chargement bloqué
+renderActiveAdvices();
+// Tentative asynchrone en arrière-plan pour récupérer les données en ligne du Sheet (sans jamais bloquer la page)
+fetchDataInBackground(cottageName);
+});
+async function fetchDataInBackground(cottageName) {
 try {
-const resV = await fetch(sheetVoyageursApiUrl + "?t=" + new Date().getTime(), {signal: AbortSignal.timeout(2000)});
+// 1. Récupération optionnelle du nom du voyageur
+const resV = await fetch(sheetVoyageursApiUrl + "?t=" + new Date().getTime());
 const voyageurs = await resV.json();
 const today = new Date();
 today.setHours(0,0,0,0);
@@ -257,44 +265,24 @@ return false;
 });
 if (v && v.prenom) {
 document.getElementById('page-main-title').innerText = ⁠Recommandations exclusives pour ${v.prenom}⁠;
-} else {
-document.getElementById('page-main-title').innerText = ⁠Recommandations exclusives au ${cottageName}⁠;
 }
 }
-} catch(e) {
-document.getElementById('page-main-title').innerText = ⁠Recommandations exclusives au ${cottageName}⁠;
-}
-// Chargement dynamique des conseils depuis le Sheet
+} catch(e) {}
 try {
-const response = await fetch(sheetConseilsApiUrl + "?type=conseils&t=" + new Date().getTime(), {signal: AbortSignal.timeout(2000)});
+// 2. Récupération optionnelle des conseils du Sheet
+const response = await fetch(sheetConseilsApiUrl + "?type=conseils&t=" + new Date().getTime());
 const data = await response.json();
-cachedAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || data.data || []);
-dataLoaded = true;
-clearTimeout(safetyTimeout);
+const remoteAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || data.data || []);
+if (remoteAdvices.length > 0) {
+cachedAdvices = remoteAdvices;
 renderActiveAdvices();
-} catch (err) {
-dataLoaded = true;
-clearTimeout(safetyTimeout);
-renderDefaultFallback();
 }
-}
-function renderDefaultFallback() {
-cachedAdvices = [
-{ title: "Super U 3B", text: "Supermarché le plus proche d'ici", img: "https://i.postimg.cc/k47g2q8N/superu.jpg", linkUrl: "https://maps.google.com", active: true },
-{ title: "Vanille Vallée", text: "Leurs sachets pour les...", img: "https://i.postimg.cc/6q8L899s/vanille.jpg", linkUrl: "", active: true },
-{ title: "Le VORTEX Énergétique de l'Etang Salé", text: "Un lieu hors du temps, un moment po...", img: "https://i.postimg.cc/027y6J5v/vortex.jpg", linkUrl: "", active: true },
-{ title: "Marché forain de St Paul", text: "Le plus grand marché d...", img: "https://i.postimg.cc/3w9f65gX/marche.jpg", linkUrl: "", active: true },
-{ title: "Plage de l'Ermitage", text: "Idéal pour le snorkeling et la baignade sécurisée dans le lagon.", img: "https://i.postimg.cc/18Gz3k1b/ermitage.jpg", linkUrl: "", active: true },
-{ title: "Maïdo - Lever de soleil", text: "Point de vue incontournable sur le cirque de Mafate.", img: "https://i.postimg.cc/2y5Z7f6q/maido.jpg", linkUrl: "", active: true },
-{ title: "Jardin d'Éden", text: "Jardin botanique tropical à Saint-Gilles les Bains.", img: "https://i.postimg.cc/8c4h62kL/eden.jpg", linkUrl: "", active: true }
-];
-renderActiveAdvices();
+} catch (err) {}
 }
 function renderActiveAdvices() {
 const container = document.getElementById('advice-grid-container');
 container.innerHTML = "";
 let activeCount = 0;
-cachedAdvices.exports = cachedAdvices || [];
 cachedAdvices.forEach((adv) => {
 const titleText = adv.title || adv['Nom de la recommandation'] || '';
 if (!titleText || titleText.trim() === '') return;
