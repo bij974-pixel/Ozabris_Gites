@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conseils Personnalisés | Les Ozabris</title>
+    <title id="page-title-meta">Conseils Personnalisés | Les Ozabris</title>
+    <!-- Inclusion de la bibliothèque qrcode.js pour générer les QR codes -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root { --primary: #12263a; --accent: #c5a880; --text-dark: #2c3e50; --white: #ffffff; }
@@ -190,6 +191,7 @@
             <p id="page-main-sub" class="welcome-sub">✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.</p>
         </div>
 
+        <!-- Structure d'origine en dur identique à ton code fonctionnel d'avant -->
         <div class="advice-grid" id="advice-grid-container">
             <div class="advice-box" tabindex="0" onclick="openFullscreen('Super U 3B', 'Supermarché le plus proche d\'ici', 'https://i.postimg.cc/k47g2q8N/superu.jpg', 'https://maps.google.com')">
                 <div class="advice-content-area"><h3>Super U 3B</h3><p>Supermarché le plus proche d'ici</p></div>
@@ -216,7 +218,7 @@
                 <img src="https://i.postimg.cc/2y5Z7f6q/maido.jpg" class="advice-thumb" alt="Maïdo">
             </div>
             <div class="advice-box" tabindex="0" onclick="openFullscreen('Jardin d\'Éden', 'Jardin botanique tropical à Saint-Gilles les Bains.', 'https://i.postimg.cc/8c4h62kL/eden.jpg', '')">
-                <div class="advice-content-area"><h3>Jardin d'Éden</h3><p>Jardin botanique tropical à Saint-Gilles les Bains.</p></div>
+                <div class="advice-content-area"><h3>Jardin d\'Éden</h3><p>Jardin botanique tropical à Saint-Gilles les Bains.</p></div>
                 <img src="https://i.postimg.cc/8c4h62kL/eden.jpg" class="advice-thumb" alt="Eden">
             </div>
         </div>
@@ -226,6 +228,7 @@
         </div>
     </div>
 
+    <!-- Mode Plein Écran -->
     <div id="fullscreen-view">
         <div class="fullscreen-card">
             <div>
@@ -237,19 +240,21 @@
         </div>
     </div>
 
+    <!-- Modale PIN Admin -->
     <div id="admin-modal">
         <div class="modal-content">
             <button type="button" onclick="closePinModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
-            <h3>🔒 Accès Admin</h3>
-            <p style="font-size: 0.8rem; color: #666; margin: 4px 0;">Code PIN de sécurité</p>
+            <h3 id="admin-modal-title">🔒 Accès Admin</h3>
+            <p id="admin-modal-sub" style="font-size: 0.8rem; color: #666; margin: 4px 0;">Code PIN de sécurité</p>
             <input type="password" id="adminPin" placeholder="PIN" maxlength="6">
-            <button type="button" class="modal-btn" onclick="verifyPin()">Valider</button>
+            <button type="button" class="modal-btn" id="admin-modal-btn" onclick="verifyPin()">Valider</button>
             <p id="adminError" style="color: #b94a48; font-size: 0.7rem; margin-top: 6px; display: none;">Code incorrect</p>
         </div>
     </div>
 
     <script>
         const sheetVoyageursApiUrl = "https://script.google.com/macros/s/AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq/exec";
+
         let currentGiteKey = 'ptitzabris';
 
         document.addEventListener("DOMContentLoaded", function() {
@@ -265,7 +270,9 @@
             const currentHost = window.location.hostname;
             const isTargetTV = currentHost.endsWith(".145") || currentHost.endsWith(".93") || 
                                currentHost === "192.168.1.145" || currentHost === "192.168.1.93";
-            if (adminContainer) adminContainer.style.display = isTargetTV ? 'none' : 'block';
+            if (adminContainer) {
+                adminContainer.style.display = isTargetTV ? 'none' : 'block';
+            }
 
             fetchVoyageurName(cottageName);
         });
@@ -332,7 +339,9 @@
             }
 
             document.getElementById('fullscreen-view').style.display = 'flex';
-            setTimeout(() => { document.getElementById('close-fs-btn').focus(); }, 100);
+            setTimeout(() => {
+                document.getElementById('close-fs-btn').focus();
+            }, 100);
         }
 
         function closeFullscreen() {
