@@ -125,12 +125,10 @@
             height: 75px;
             flex-shrink: 0;
             border-radius: 6px;
-            border: 1px solid var(--accent);
-            background: #12263a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
+            border: 1px solid #ddd;
+            object-fit: cover;
+            background: #fcfbfa;
+            padding: 2px;
         }
 
         .footer-actions { display: flex; justify-content: center; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 8px; font-family: 'Segoe UI', sans-serif; flex-shrink: 0; }
@@ -192,7 +190,6 @@
             <p id="page-main-sub" class="welcome-sub">✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.</p>
         </div>
 
-        <!-- Grille avec cartes stables et icônes garanties sans erreur 404/image not found -->
         <div class="advice-grid" id="advice-grid-container">
             
             <div class="advice-box" tabindex="0" onfocus="this.scrollIntoView({behavior: 'smooth', block: 'nearest'});" onclick="openFullscreen('Super U 3B', 'Supermarché le plus proche d\'ici', 'https://i.postimg.cc/k47g2q8N/superu.jpg', 'https://maps.google.com')">
@@ -200,7 +197,7 @@
                     <h3>Super U 3B</h3>
                     <p>Supermarché le plus proche d'ici</p>
                 </div>
-                <div class="advice-thumb">🛒</div>
+                <img src="https://i.postimg.cc/k47g2q8N/superu.jpg" class="advice-thumb" alt="Super U 3B">
             </div>
 
             <div class="advice-box" tabindex="0" onfocus="this.scrollIntoView({behavior: 'smooth', block: 'nearest'});" onclick="openFullscreen('Vanille Vallée', 'Leurs sachets pour les...', 'https://i.postimg.cc/6q8L899s/vanille.jpg', '')">
@@ -208,7 +205,7 @@
                     <h3>Vanille Vallée</h3>
                     <p>Leurs sachets pour les...</p>
                 </div>
-                <div class="advice-thumb">🌿</div>
+                <img src="https://i.postimg.cc/6q8L899s/vanille.jpg" class="advice-thumb" alt="Vanille Vallée">
             </div>
 
             <div class="advice-box" tabindex="0" onfocus="this.scrollIntoView({behavior: 'smooth', block: 'nearest'});" onclick="openFullscreen('Le VORTEX Énergétique de l\'Etang Salé', 'Un lieu hors du temps, un moment po...', 'https://i.postimg.cc/027y6J5v/vortex.jpg', '')">
@@ -216,7 +213,7 @@
                     <h3>Le VORTEX Énergétique de l'Etang Salé</h3>
                     <p>Un lieu hors du temps, un moment po...</p>
                 </div>
-                <div class="advice-thumb">✨</div>
+                <img src="https://i.postimg.cc/027y6J5v/vortex.jpg" class="advice-thumb" alt="Vortex">
             </div>
 
             <div class="advice-box" tabindex="0" onfocus="this.scrollIntoView({behavior: 'smooth', block: 'nearest'});" onclick="openFullscreen('Marché forain de St Paul', 'Le plus grand marché d...', 'https://i.postimg.cc/3w9f65gX/marche.jpg', '')">
@@ -224,7 +221,7 @@
                     <h3>Marché forain de St Paul</h3>
                     <p>Le plus grand marché d...</p>
                 </div>
-                <div class="advice-thumb">🍍</div>
+                <img src="https://i.postimg.cc/3w9f65gX/marche.jpg" class="advice-thumb" alt="Marché">
             </div>
 
             <div class="advice-box" tabindex="0" onfocus="this.scrollIntoView({behavior: 'smooth', block: 'nearest'});" onclick="openFullscreen('Plage de l\'Ermitage', 'Idéal pour le snorkeling et la baignade sécurisée dans le lagon.', 'https://i.postimg.cc/18Gz3k1b/ermitage.jpg', '')">
@@ -232,7 +229,7 @@
                     <h3>Plage de l'Ermitage</h3>
                     <p>Idéal pour le snorkeling et la baignade sécurisée dans le lagon.</p>
                 </div>
-                <div class="advice-thumb">🏖️</div>
+                <img src="https://i.postimg.cc/18Gz3k1b/ermitage.jpg" class="advice-thumb" alt="Ermitage">
             </div>
 
             <div class="advice-box" tabindex="0" onfocus="this.scrollIntoView({behavior: 'smooth', block: 'nearest'});" onclick="openFullscreen('Maïdo - Lever de soleil', 'Point de vue incontournable sur le cirque de Mafate.', 'https://i.postimg.cc/2y5Z7f6q/maido.jpg', '')">
@@ -240,7 +237,7 @@
                     <h3>Maïdo - Lever de soleil</h3>
                     <p>Point de vue incontournable sur le cirque de Mafate.</p>
                 </div>
-                <div class="advice-thumb">🌄</div>
+                <img src="https://i.postimg.cc/2y5Z7f6q/maido.jpg" class="advice-thumb" alt="Maïdo">
             </div>
 
             <div class="advice-box" tabindex="0" onfocus="this.scrollIntoView({behavior: 'smooth', block: 'nearest'});" onclick="openFullscreen('Jardin d\'Éden', 'Jardin botanique tropical à Saint-Gilles les Bains.', 'https://i.postimg.cc/8c4h62kL/eden.jpg', '')">
@@ -248,7 +245,7 @@
                     <h3>Jardin d'Éden</h3>
                     <p>Jardin botanique tropical à Saint-Gilles les Bains.</p>
                 </div>
-                <div class="advice-thumb">🌺</div>
+                <img src="https://i.postimg.cc/8c4h62kL/eden.jpg" class="advice-thumb" alt="Eden">
             </div>
 
         </div>
@@ -364,7 +361,7 @@
                 } catch(err) {
                     document.getElementById("qrcode-box").innerText = linkUrl.trim();
                 }
-            } else if (imageUrl && imageUrl.trim() !== "" && imageUrl.startsWith("http")) {
+            } else if (imageUrl && imageUrl.trim() !== "") {
                 mediaContainer.innerHTML = `<img src="${imageUrl.trim()}" alt="${title}" class="fullscreen-img">`;
             }
 
@@ -385,7 +382,7 @@
         function closePinModal() {
             document.getElementById('admin-modal').style.display = 'none';
             document.getElementById('adminError').style.display = 'none';
-            document.getElementById('adminPin').value = '';
+            document.getElementById('adminPin'].value = '';
         }
         function verifyPin() {
             const pin = document.getElementById('adminPin').value.trim();
@@ -393,7 +390,7 @@
                 window.location.href = `admin.html?gite=${currentGiteKey}`;
             } else {
                 document.getElementById('adminError').style.display = 'block';
-                document.getElementById('adminPin').value = '';
+                document.getElementById('adminPin'].value = '';
             }
         }
     </script>
