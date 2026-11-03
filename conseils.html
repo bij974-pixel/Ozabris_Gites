@@ -192,21 +192,21 @@
         </div>
 
         <div class="advice-grid" id="advice-grid-container">
-            <div class="advice-box" tabindex="0" onclick="openFullscreen('Super U 3B', 'Supermarché le plus proche d\'ici', 'https://postimg.cc/k47g2q8N', 'https://maps.google.com')">
+            <div class="advice-box" tabindex="0" onclick="openFullscreen('Super U 3B', 'Supermarché le plus proche d\'ici', 'https://i.postimg.cc/k47g2q8N/superu.jpg', 'https://maps.google.com')">
                 <div class="advice-content-area"><h3>Super U 3B</h3><p>Supermarché le plus proche d'ici</p></div>
-                <img src="https://i.postimg.cc/k47g2q8N/image.jpg" class="advice-thumb" alt="Super U">
+                <img src="https://i.postimg.cc/k47g2q8N/superu.jpg" class="advice-thumb img-fix" alt="Super U">
             </div>
-            <div class="advice-box" tabindex="0" onclick="openFullscreen('Vanille Vallée', 'Leurs sachets pour les...', 'https://postimg.cc/6q8L899s', '')">
+            <div class="advice-box" tabindex="0" onclick="openFullscreen('Vanille Vallée', 'Leurs sachets pour les...', 'https://i.postimg.cc/6q8L899s/vanille.jpg', '')">
                 <div class="advice-content-area"><h3>Vanille Vallée</h3><p>Leurs sachets pour les...</p></div>
-                <img src="https://i.postimg.cc/6q8L899s/image.jpg" class="advice-thumb" alt="Vanille">
+                <img src="https://i.postimg.cc/6q8L899s/vanille.jpg" class="advice-thumb img-fix" alt="Vanille">
             </div>
-            <div class="advice-box" tabindex="0" onclick="openFullscreen('Le VORTEX Énergétique de l\'Etang Salé', 'Un lieu hors du temps, un moment po...', 'https://postimg.cc/027y6J5v', '')">
+            <div class="advice-box" tabindex="0" onclick="openFullscreen('Le VORTEX Énergétique de l\'Etang Salé', 'Un lieu hors du temps, un moment po...', 'https://i.postimg.cc/027y6J5v/vortex.jpg', '')">
                 <div class="advice-content-area"><h3>Le VORTEX Énergétique de l'Etang Salé</h3><p>Un lieu hors du temps, un moment po...</p></div>
-                <img src="https://i.postimg.cc/027y6J5v/image.jpg" class="advice-thumb" alt="Vortex">
+                <img src="https://i.postimg.cc/027y6J5v/vortex.jpg" class="advice-thumb img-fix" alt="Vortex">
             </div>
-            <div class="advice-box" tabindex="0" onclick="openFullscreen('Marché forain de St Paul', 'Le plus grand marché d...', 'https://postimg.cc/3w9f65gX', '')">
+            <div class="advice-box" tabindex="0" onclick="openFullscreen('Marché forain de St Paul', 'Le plus grand marché d...', 'https://i.postimg.cc/3w9f65gX/marche.jpg', '')">
                 <div class="advice-content-area"><h3>Marché forain de St Paul</h3><p>Le plus grand marché d...</p></div>
-                <img src="https://i.postimg.cc/3w9f65gX/image.jpg" class="advice-thumb" alt="Marché">
+                <img src="https://i.postimg.cc/3w9f65gX/marche.jpg" class="advice-thumb img-fix" alt="Marché">
             </div>
         </div>
         
@@ -260,6 +260,21 @@
             if (adminContainer) {
                 adminContainer.style.display = isTargetTV ? 'none' : 'block';
             }
+
+            // CORRECTION AUTOMATIQUE ROBUSTE DES LIENS POSTIMAGE POUR ÉVITER LES ERREURS DE FORMAT
+            document.querySelectorAll('.img-fix').forEach(img => {
+                let src = img.getAttribute('src');
+                if (src && src.includes('postimg.cc')) {
+                    // Extrait l'ID unique de l'image (ex: k47g2q8N)
+                    let parts = src.split('/');
+                    let idIndex = parts.findIndex(p => p.length >= 8);
+                    if (idIndex !== -1) {
+                        let imgId = parts[idIndex];
+                        // Force l'URL directe universelle de Postimage qui fonctionne toujours
+                        img.src = `https://i.postimg.cc/${imgId}/image.jpg`;
+                    }
+                }
+            });
 
             fetchVoyageurName(cottageName);
         });
@@ -323,10 +338,13 @@
                 }
             } else if (imageUrl && imageUrl.trim() !== "") {
                 let finalImgUrl = imageUrl.trim();
-                if (finalImgUrl.includes("postimg.cc/") && !finalImgUrl.endsWith(".jpg") && !finalImgUrl.endsWith(".png")) {
-                    const parts = finalImgUrl.split('/');
-                    const id = parts[parts.length - 1];
-                    finalImgUrl = `https://i.postimg.cc/${id}/image.jpg`;
+                if (finalImgUrl.includes("postimg.cc/")) {
+                    let parts = finalImgUrl.split('/');
+                    let idIndex = parts.findIndex(p => p.length >= 8);
+                    if (idIndex !== -1) {
+                        let imgId = parts[idIndex];
+                        finalImgUrl = `https://i.postimg.cc/${imgId}/image.jpg`;
+                    }
                 }
                 mediaContainer.innerHTML = `<img src="${finalImgUrl}" alt="${title}" class="fullscreen-img">`;
             }
