@@ -220,53 +220,52 @@
     </div>
 
     <script>
-        // Données en dur intégrées pour un affichage instantané sans aucune attente réseau
+        // Remplace ici les liens par tes vrais liens directs d'images Postimage (bouton "Lien direct" / direct link)
         const staticAdvices = [
             {
                 title: "Super U 3B",
                 text: "Supermarché le plus proche d'ici",
-                img: "https://i.postimg.cc/k47g2q8N/superu.jpg",
+                img: "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg",
                 linkUrl: "https://maps.google.com"
             },
             {
                 title: "Vanille Vallée",
                 text: "Leurs sachets pour les...",
-                img: "https://i.postimg.cc/6q8L899s/vanille.jpg",
+                img: "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg",
                 linkUrl: ""
             },
             {
                 title: "Le VORTEX Énergétique de l'Etang Salé",
                 text: "Un lieu hors du temps, un moment po...",
-                img: "https://i.postimg.cc/027y6J5v/vortex.jpg",
+                img: "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg",
                 linkUrl: ""
             },
             {
                 title: "Marché forain de St Paul",
                 text: "Le plus grand marché d...",
-                img: "https://i.postimg.cc/3w9f65gX/marche.jpg",
+                img: "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg",
                 linkUrl: ""
             },
             {
                 title: "Plage de l'Ermitage",
                 text: "Idéal pour le snorkeling et la baignade sécurisée dans le lagon.",
-                img: "https://i.postimg.cc/18Gz3k1b/ermitage.jpg",
+                img: "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg",
                 linkUrl: ""
             },
             {
                 title: "Maïdo - Lever de soleil",
                 text: "Point de vue incontournable sur le cirque de Mafate.",
-                img: "https://i.postimg.cc/2y5Z7f6q/maido.jpg",
+                img: "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg",
                 linkUrl: ""
             },
             {
                 title: "Jardin d'Éden",
                 text: "Jardin botanique tropical à Saint-Gilles les Bains.",
-                img: "https://i.postimg.cc/8c4h62kL/eden.jpg",
+                img: "https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg",
                 linkUrl: ""
             }
         ];
 
-        // Exécution immédiate au chargement du DOM sans fonction asynchrone bloquante
         document.addEventListener("DOMContentLoaded", function() {
             const urlParams = new URLSearchParams(window.location.search);
             const giteParam = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
