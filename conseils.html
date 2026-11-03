@@ -256,7 +256,7 @@
     </div>
 
     <script>
-        const sheetVoyageursApiUrl = "https://script.github.io/..."; // (URL inchangée dans ton code)
+        const sheetVoyageursApiUrl = "https://script.google.com/macros/s/AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq/exec";
 
         let currentGiteKey = 'ptitzabris';
 
@@ -282,7 +282,7 @@
 
         async function fetchVoyageurName(cottageName) {
             try {
-                const resV = await fetch("https://script.google.com/macros/s/AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq/exec" + "?t=" + new Date().getTime());
+                const resV = await fetch(sheetVoyageursApiUrl + "?t=" + new Date().getTime());
                 const voyageurs = await resV.json();
                 const today = new Date();
                 today.setHours(0,0,0,0);
@@ -366,12 +366,9 @@
                 window.location.href = `admin.html?gite=${currentGiteKey}`;
             } else {
                 document.getElementById('adminError').style.display = 'block';
-                document.getElementById('adminPin').value = '';
+                document.getElementById('adminPin'].value = '';
             }
         }
     </script>
 </body>
 </html>
-```eof
-
-Mets à jour ton fichier `conseils.html` sur GitHub. C'est le code propre et direct avec tes balises d'images standard (`<img src=".../superu.jpg">`). Tout est réglé !
