@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title-meta">Conseils Personnalisés | Les Ozabris</title>
-    <!-- Inclusion de la bibliothèque qrcode.js pour générer les QR codes -->
+    <title>Conseils Personnalisés | Les Ozabris</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root { --primary: #12263a; --accent: #c5a880; --text-dark: #2c3e50; --white: #ffffff; }
@@ -191,65 +190,35 @@
             <p id="page-main-sub" class="welcome-sub">✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.</p>
         </div>
 
-        <!-- Grille avec cartes en dur pour garantir la sélection native de la télécommande TV -->
         <div class="advice-grid" id="advice-grid-container">
-            
             <div class="advice-box" tabindex="0" onclick="openFullscreen('Super U 3B', 'Supermarché le plus proche d\'ici', 'https://i.postimg.cc/k47g2q8N/superu.jpg', 'https://maps.google.com')">
-                <div class="advice-content-area">
-                    <h3>Super U 3B</h3>
-                    <p>Supermarché le plus proche d'ici</p>
-                </div>
-                <img src="https://i.postimg.cc/k47g2q8N/superu.jpg" class="advice-thumb" alt="Super U 3B">
+                <div class="advice-content-area"><h3>Super U 3B</h3><p>Supermarché le plus proche d'ici</p></div>
+                <img src="https://i.postimg.cc/k47g2q8N/superu.jpg" class="advice-thumb" alt="Super U">
             </div>
-
             <div class="advice-box" tabindex="0" onclick="openFullscreen('Vanille Vallée', 'Leurs sachets pour les...', 'https://i.postimg.cc/6q8L899s/vanille.jpg', '')">
-                <div class="advice-content-area">
-                    <h3>Vanille Vallée</h3>
-                    <p>Leurs sachets pour les...</p>
-                </div>
-                <img src="https://i.postimg.cc/6q8L899s/vanille.jpg" class="advice-thumb" alt="Vanille Vallée">
+                <div class="advice-content-area"><h3>Vanille Vallée</h3><p>Leurs sachets pour les...</p></div>
+                <img src="https://i.postimg.cc/6q8L899s/vanille.jpg" class="advice-thumb" alt="Vanille">
             </div>
-
             <div class="advice-box" tabindex="0" onclick="openFullscreen('Le VORTEX Énergétique de l\'Etang Salé', 'Un lieu hors du temps, un moment po...', 'https://i.postimg.cc/027y6J5v/vortex.jpg', '')">
-                <div class="advice-content-area">
-                    <h3>Le VORTEX Énergétique de l'Etang Salé</h3>
-                    <p>Un lieu hors du temps, un moment po...</p>
-                </div>
+                <div class="advice-content-area"><h3>Le VORTEX Énergétique de l'Etang Salé</h3><p>Un lieu hors du temps, un moment po...</p></div>
                 <img src="https://i.postimg.cc/027y6J5v/vortex.jpg" class="advice-thumb" alt="Vortex">
             </div>
-
             <div class="advice-box" tabindex="0" onclick="openFullscreen('Marché forain de St Paul', 'Le plus grand marché d...', 'https://i.postimg.cc/3w9f65gX/marche.jpg', '')">
-                <div class="advice-content-area">
-                    <h3>Marché forain de St Paul</h3>
-                    <p>Le plus grand marché d...</p>
-                </div>
+                <div class="advice-content-area"><h3>Marché forain de St Paul</h3><p>Le plus grand marché d...</p></div>
                 <img src="https://i.postimg.cc/3w9f65gX/marche.jpg" class="advice-thumb" alt="Marché">
             </div>
-
             <div class="advice-box" tabindex="0" onclick="openFullscreen('Plage de l\'Ermitage', 'Idéal pour le snorkeling et la baignade sécurisée dans le lagon.', 'https://i.postimg.cc/18Gz3k1b/ermitage.jpg', '')">
-                <div class="advice-content-area">
-                    <h3>Plage de l'Ermitage</h3>
-                    <p>Idéal pour le snorkeling et la baignade sécurisée dans le lagon.</p>
-                </div>
+                <div class="advice-content-area"><h3>Plage de l'Ermitage</h3><p>Idéal pour le snorkeling et la baignade sécurisée dans le lagon.</p></div>
                 <img src="https://i.postimg.cc/18Gz3k1b/ermitage.jpg" class="advice-thumb" alt="Ermitage">
             </div>
-
             <div class="advice-box" tabindex="0" onclick="openFullscreen('Maïdo - Lever de soleil', 'Point de vue incontournable sur le cirque de Mafate.', 'https://i.postimg.cc/2y5Z7f6q/maido.jpg', '')">
-                <div class="advice-content-area">
-                    <h3>Maïdo - Lever de soleil</h3>
-                    <p>Point de vue incontournable sur le cirque de Mafate.</p>
-                </div>
+                <div class="advice-content-area"><h3>Maïdo - Lever de soleil</h3><p>Point de vue incontournable sur le cirque de Mafate.</p></div>
                 <img src="https://i.postimg.cc/2y5Z7f6q/maido.jpg" class="advice-thumb" alt="Maïdo">
             </div>
-
             <div class="advice-box" tabindex="0" onclick="openFullscreen('Jardin d\'Éden', 'Jardin botanique tropical à Saint-Gilles les Bains.', 'https://i.postimg.cc/8c4h62kL/eden.jpg', '')">
-                <div class="advice-content-area">
-                    <h3>Jardin d'Éden</h3>
-                    <p>Jardin botanique tropical à Saint-Gilles les Bains.</p>
-                </div>
+                <div class="advice-content-area"><h3>Jardin d'Éden</h3><p>Jardin botanique tropical à Saint-Gilles les Bains.</p></div>
                 <img src="https://i.postimg.cc/8c4h62kL/eden.jpg" class="advice-thumb" alt="Eden">
             </div>
-
         </div>
         
         <div class="footer-actions">
@@ -257,7 +226,6 @@
         </div>
     </div>
 
-    <!-- Mode Plein Écran -->
     <div id="fullscreen-view">
         <div class="fullscreen-card">
             <div>
@@ -269,21 +237,19 @@
         </div>
     </div>
 
-    <!-- Modale PIN Admin -->
     <div id="admin-modal">
         <div class="modal-content">
             <button type="button" onclick="closePinModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
-            <h3 id="admin-modal-title">🔒 Accès Admin</h3>
-            <p id="admin-modal-sub" style="font-size: 0.8rem; color: #666; margin: 4px 0;">Code PIN de sécurité</p>
+            <h3>🔒 Accès Admin</h3>
+            <p style="font-size: 0.8rem; color: #666; margin: 4px 0;">Code PIN de sécurité</p>
             <input type="password" id="adminPin" placeholder="PIN" maxlength="6">
-            <button type="button" class="modal-btn" id="admin-modal-btn" onclick="verifyPin()">Valider</button>
+            <button type="button" class="modal-btn" onclick="verifyPin()">Valider</button>
             <p id="adminError" style="color: #b94a48; font-size: 0.7rem; margin-top: 6px; display: none;">Code incorrect</p>
         </div>
     </div>
 
     <script>
         const sheetVoyageursApiUrl = "https://script.google.com/macros/s/AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq/exec";
-
         let currentGiteKey = 'ptitzabris';
 
         document.addEventListener("DOMContentLoaded", function() {
@@ -299,11 +265,8 @@
             const currentHost = window.location.hostname;
             const isTargetTV = currentHost.endsWith(".145") || currentHost.endsWith(".93") || 
                                currentHost === "192.168.1.145" || currentHost === "192.168.1.93";
-            if (adminContainer) {
-                adminContainer.style.display = isTargetTV ? 'none' : 'block';
-            }
+            if (adminContainer) adminContainer.style.display = isTargetTV ? 'none' : 'block';
 
-            // Récupération optionnelle du prénom du voyageur en arrière-plan
             fetchVoyageurName(cottageName);
         });
 
@@ -369,9 +332,7 @@
             }
 
             document.getElementById('fullscreen-view').style.display = 'flex';
-            setTimeout(() => {
-                document.getElementById('close-fs-btn').focus();
-            }, 100);
+            setTimeout(() => { document.getElementById('close-fs-btn').focus(); }, 100);
         }
 
         function closeFullscreen() {
@@ -388,7 +349,7 @@
             document.getElementById('adminPin').value = '';
         }
         function verifyPin() {
-            const pin = document.getElementById('adminPin'].value.trim();
+            const pin = document.getElementById('adminPin').value.trim();
             if (pin === '140769') {
                 window.location.href = `admin.html?gite=${currentGiteKey}`;
             } else {
