@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title-meta">Conseils Personnalisés | Les Ozabris</title>
-    <!-- Inclusion de la bibliothèque qrcode.js pour générer les QR codes dynamiquement -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root { --primary: #12263a; --accent: #c5a880; --text-dark: #2c3e50; --white: #ffffff; }
@@ -80,7 +79,6 @@
         h2 { color: var(--primary); font-size: 1.2rem; font-weight: 400; margin-bottom: 2px; }
         .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.68rem; color: #555; font-style: italic; }
 
-        /* Grille scrollable sans chevauchement */
         .advice-grid { 
             display: grid; 
             grid-template-columns: repeat(2, minmax(0, 1fr)); 
@@ -193,7 +191,7 @@
         </div>
 
         <div class="advice-grid" id="advice-grid-container">
-            <!-- Injecté dynamiquement -->
+            <!-- Rendu synchrone immédiat -->
         </div>
         
         <div class="footer-actions">
@@ -233,54 +231,21 @@
         let currentLang = 'fr';
 
         const translations = {
-            fr: {
-                titleFor: "Recommandations exclusives pour {name}",
-                titleAt: "Recommandations exclusives au {cottage}",
-                subText: "✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.",
-                backHome: "🏠 Retour à l'accueil",
-                closeBtn: "✕ Quitter et revenir",
-                qrText: "📱 Pour accéder à la recommandation en ligne depuis votre téléphone, scannez ce QR code :",
-                adminTitle: "🔒 Accès Admin",
-                adminSub: "Code PIN de sécurité",
-                adminBtn: "Valider",
-                adminErr: "Code incorrect"
-            },
-            en: {
-                titleFor: "Exclusive recommendations for {name}",
-                titleAt: "Exclusive recommendations at {cottage}",
-                subText: "✨ Use your remote control to scroll and select a card.",
-                backHome: "🏠 Back to Home",
-                closeBtn: "✕ Exit and Return",
-                qrText: "📱 To access the online recommendation from your phone, scan this QR code:",
-                adminTitle: "🔒 Admin Access",
-                adminSub: "Security PIN code",
-                adminBtn: "Validate",
-                adminErr: "Incorrect code"
-            },
-            de: {
-                titleFor: "Exklusive Empfehlungen für {name}",
-                titleAt: "Exklusive Empfehlungen im {cottage}",
-                subText: "✨ Verwenden Sie Ihre Fernbedienung, um durch Karten zu blättern und eine auszuwählen.",
-                backHome: "🏠 Zur Startseite",
-                closeBtn: "✕ Schließen und Zurück",
-                qrText: "📱 Um auf die Empfehlung online von Ihrem Telefon aus zuzugreifen, scannen Sie diesen QR-Code:",
-                adminTitle: "🔒 Admin-Zugang",
-                adminSub: "Sicherheits-PIN-Code",
-                adminBtn: "Bestätigen",
-                adminErr: "Falscher Code"
-            }
+            fr: { titleFor: "Recommandations exclusives pour {name}", titleAt: "Recommandations exclusives", subText: "✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.", backHome: "🏠 Retour à l'accueil" },
+            en: { titleFor: "Exclusive recommendations for {name}", titleAt: "Exclusive recommendations", subText: "✨ Use your remote control to scroll and select a card.", backHome: "🏠 Back to Home" },
+            de: { titleFor: "Exklusive Empfehlungen für {name}", titleAt: "Exklusive Empfehlungen", subText: "✨ Verwenden Sie Ihre Fernbedienung, um durch Karten zu blättern.", backHome: "🏠 Zur Startseite" }
         };
 
         function t(key, replacements = {}) {
-            let langDict = translations[currentLang] || translations['fr'];
-            let text = langDict[key] || translations['fr'][key] || key;
+            let dict = translations[currentLang] || translations['fr'];
+            let text = dict[key] || translations['fr'][key] || key;
             for (const [k, v] of Object.entries(replacements)) {
                 text = text.replace(new RegExp(`{${k}}`, 'g'), v);
             }
             return text;
         }
 
-        let cachedAdvices = [
+        let defaultAdvices = [
             { title: "Super U 3B", text: "Supermarché le plus proche d'ici", img: "https://i.postimg.cc/k47g2q8N/superu.jpg", linkUrl: "https://maps.google.com" },
             { title: "Vanille Vallée", text: "Leurs sachets pour les...", img: "https://i.postimg.cc/6q8L899s/vanille.jpg", linkUrl: "" },
             { title: "Le VORTEX Énergétique de l'Etang Salé", text: "Un lieu hors du temps, un moment po...", img: "https://i.postimg.cc/027y6J5v/vortex.jpg", linkUrl: "" },
@@ -290,13 +255,14 @@
             { title: "Jardin d'Éden", text: "Jardin botanique tropical à Saint-Gilles les Bains.", img: "https://i.postimg.cc/8c4h62kL/eden.jpg", linkUrl: "" }
         ];
 
-        window.onload = async function() {
+        document.addEventListener("DOMContentLoaded", function() {
             const urlParams = new URLSearchParams(window.location.search);
             const giteParam = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
             currentGiteKey = giteParam.includes("grand") ? "grandzabris" : "ptitzabris";
             let cottageName = currentGiteKey === "grandzabris" ? "Grandzabris" : "Ptitzabris";
 
-            document.getElementById('back-home-btn').href = `index.html?gite=${currentGiteKey}&v=99`;
+            const backBtn = document.getElementById('back-home-btn');
+            if (backBtn) backBtn.href = `index.html?gite=${currentGiteKey}&v=99`;
 
             const adminContainer = document.getElementById('admin-container');
             const currentHost = window.location.hostname;
@@ -306,69 +272,23 @@
                 adminContainer.style.display = isTargetTV ? 'none' : 'block';
             }
 
-            // Chargement des voyageurs pour la langue et le nom
-            try {
-                const resV = await fetch(sheetVoyageursApiUrl + "?t=" + new Date().getTime());
-                const voyageurs = await resV.json();
-                const today = new Date();
-                today.setHours(0,0,0,0);
-                
-                let voyageurActuel = null;
-                if (Array.isArray(voyageurs) && voyageurs.length > 0) {
-                    voyageurActuel = voyageurs.find(item => {
-                        const cStr = String(item.cottage || '').toLowerCase();
-                        const matchC = currentGiteKey === 'grandzabris' ? cStr.includes('grand') : (cStr.includes('ptit') || cStr.includes('petit'));
-                        const arr = item.dateArrivee || item.arrivee;
-                        const dep = item.dateDepart || item.depart;
-                        if (matchC && arr && dep) {
-                            const dArr = new Date(arr);
-                            const dDep = new Date(dep);
-                            dArr.setHours(0,0,0,0);
-                            dDep.setHours(0,0,0,0);
-                            return today >= dArr && today <= dDep;
-                        }
-                        return false;
-                    });
-                }
+            // RENDU IMMÉDIAT GARANTI DE LA GRILLE (Zéro écran blanc)
+            renderGrid(defaultAdvices);
 
-                if (voyageurActuel) {
-                    if (voyageurActuel.langue) {
-                        const l = voyageurActuel.langue.toLowerCase().trim();
-                        if (['fr', 'en', 'de'].includes(l)) {
-                            currentLang = l;
-                        }
-                    }
-                    if (voyageurActuel.prenom) {
-                        document.getElementById('page-main-title').innerText = t('titleFor', { name: voyageurActuel.prenom });
-                    } else {
-                        document.getElementById('page-main-title').innerText = t('titleAt', { cottage: cottageName });
-                    }
-                } else {
-                    document.getElementById('page-main-title').innerText = t('titleAt', { cottage: cottageName });
-                }
-            } catch(e) {
-                document.getElementById('page-main-title').innerText = t('titleAt', { cottage: cottageName });
-            }
+            // Charger les données distantes en arrière-plan (sans bloquer ni effacer si échec)
+            fetchBackgroundData(cottageName);
+        });
 
-            document.getElementById('page-main-sub').innerText = t('subText');
-            document.getElementById('back-home-btn').innerText = t('backHome');
-            document.getElementById('close-fs-btn').innerText = t('closeBtn');
-            document.getElementById('admin-modal-title').innerText = t('adminTitle');
-            document.getElementById('admin-modal-sub').innerText = t('adminSub');
-            document.getElementById('admin-modal-btn').innerText = t('adminBtn');
-
-            renderGrid();
-            fetchRemoteConseils();
-        }
-
-        function renderGrid() {
+        function renderGrid(list) {
             const container = document.getElementById('advice-grid-container');
             if (!container) return;
             container.innerHTML = "";
 
-            cachedAdvices.forEach((adv) => {
+            if (!list || list.length === 0) return;
+
+            list.forEach((adv) => {
                 const titleText = adv.title || '';
-                if (!titleText) return;
+                if (!titleText.trim()) return;
 
                 const descText = adv.text || '';
                 const imageUrl = adv.img || '';
@@ -376,7 +296,7 @@
 
                 const box = document.createElement('div');
                 box.className = 'advice-box';
-                // Attribut essentiel pour la sélection par télécommande TV
+                // Attribut indispensable pour la sélection de la télécommande TV
                 box.setAttribute('tabindex', '0');
 
                 const triggerAction = function(e) {
@@ -393,7 +313,7 @@
                 };
 
                 let imgTag = "";
-                if (imageUrl && imageUrl.startsWith("http")) {
+                if (imageUrl && imageUrl.trim().startsWith("http")) {
                     imgTag = `<img src="${imageUrl.trim()}" class="advice-thumb" alt="${titleText}">`;
                 }
 
@@ -408,19 +328,56 @@
             });
         }
 
-        async function fetchRemoteConseils() {
+        async function fetchBackgroundData(cottageName) {
+            try {
+                const resV = await fetch(sheetVoyageursApiUrl + "?t=" + new Date().getTime());
+                const voyageurs = await resV.json();
+                const today = new Date();
+                today.setHours(0,0,0,0);
+                if (Array.isArray(voyageurs) && voyageurs.length > 0) {
+                    const v = voyageurs.find(item => {
+                        const cStr = String(item.cottage || '').toLowerCase();
+                        const matchC = currentGiteKey === 'grandzabris' ? cStr.includes('grand') : (cStr.includes('ptit') || cStr.includes('petit'));
+                        const arr = item.dateArrivee || item.arrivee;
+                        const dep = item.dateDepart || item.depart;
+                        if (matchC && arr && dep) {
+                            const dArr = new Date(arr);
+                            const dDep = new Date(dep);
+                            dArr.setHours(0,0,0,0);
+                            dDep.setHours(0,0,0,0);
+                            return today >= dArr && today <= dDep;
+                        }
+                        return false;
+                    });
+                    if (v) {
+                        if (v.langue) {
+                            const l = v.langue.toLowerCase().trim();
+                            if (['fr', 'en', 'de'].includes(l)) currentLang = l;
+                        }
+                        if (v.prenom) {
+                            document.getElementById('page-main-title').innerText = t('titleFor', { name: v.prenom });
+                        }
+                    }
+                }
+            } catch(e) {}
+
+            document.getElementById('page-main-sub').innerText = t('subText');
+            document.getElementById('back-home-btn').innerText = t('backHome');
+
             try {
                 const response = await fetch(sheetConseilsApiUrl + "?type=conseils&t=" + new Date().getTime());
                 const data = await response.json();
                 const remoteAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || data.data || []);
                 if (remoteAdvices.length > 0) {
-                    cachedAdvices = remoteAdvices.map(adv => ({
+                    const formatted = remoteAdvices.map(adv => ({
                         title: adv.title || adv['Nom de la recommandation'] || '',
                         text: adv.text || adv['Commentaire sur la recommandation'] || adv['Commentaire'] || adv['Description'] || '',
                         img: adv.img || adv['Lien postimage'] || '',
                         linkUrl: adv.linkUrl || adv['Lien web'] || ''
                     })).filter(x => x.title !== '');
-                    renderGrid();
+                    if (formatted.length > 0) {
+                        renderGrid(formatted);
+                    }
                 }
             } catch (err) {}
         }
@@ -436,7 +393,7 @@
                 const qrWrapper = document.createElement('div');
                 qrWrapper.className = 'qr-container';
                 qrWrapper.innerHTML = `
-                    <p>${t('qrText')}</p>
+                    <p>📱 Pour accéder à la recommandation en ligne depuis votre téléphone, scannez ce QR code :</p>
                     <div id="qrcode-box"></div>
                 `;
                 mediaContainer.appendChild(qrWrapper);
@@ -481,7 +438,6 @@
             if (pin === '140769') {
                 window.location.href = `admin.html?gite=${currentGiteKey}`;
             } else {
-                document.getElementById('adminError').innerText = t('adminErr');
                 document.getElementById('adminError').style.display = 'block';
                 document.getElementById('adminPin').value = '';
             }
