@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title-meta">Conseils Personnalisés | Les Ozabris</title>
-    <!-- Inclusion de la bibliothèque qrcode.js pour générer les QR codes -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root { --primary: #12263a; --accent: #c5a880; --text-dark: #2c3e50; --white: #ffffff; }
@@ -191,7 +190,6 @@
             <p id="page-main-sub" class="welcome-sub">✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.</p>
         </div>
 
-        <!-- Structure d'origine en dur identique à ton code fonctionnel d'avant -->
         <div class="advice-grid" id="advice-grid-container">
             <div class="advice-box" tabindex="0" onclick="openFullscreen('Super U 3B', 'Supermarché le plus proche d\'ici', 'https://i.postimg.cc/k47g2q8N/superu.jpg', 'https://maps.google.com')">
                 <div class="advice-content-area"><h3>Super U 3B</h3><p>Supermarché le plus proche d'ici</p></div>
@@ -334,7 +332,7 @@
                 } catch(err) {
                     document.getElementById("qrcode-box").innerText = linkUrl.trim();
                 }
-            } else if (imageUrl && imageUrl.trim() !== "" && imageUrl.startsWith("http")) {
+            } else if (imageUrl && imageUrl.trim() !== "") {
                 mediaContainer.innerHTML = `<img src="${imageUrl.trim()}" alt="${title}" class="fullscreen-img">`;
             }
 
