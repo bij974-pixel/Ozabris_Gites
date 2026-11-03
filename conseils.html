@@ -184,7 +184,7 @@
             <img src="https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg" alt="Les Ozabris Logo">
         </div>
         <h1 class="logo-text">Les Ozabris</h1>
-        <span class="subtitle">Cottages de Prestige & Perles Rares • La Réunion</span>
+        <span class="subtitle" id="sub-brand-title">Cottages de Prestige & Perles Rares • La Réunion</span>
     </header>
 
     <div class="tv-card">
@@ -219,10 +219,10 @@
     <div id="admin-modal">
         <div class="modal-content">
             <button type="button" onclick="closePinModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
-            <h3>🔒 Accès Admin</h3>
-            <p style="font-size: 0.8rem; color: #666; margin: 4px 0;">Code PIN de sécurité</p>
+            <h3 id="admin-modal-title">🔒 Accès Admin</h3>
+            <p id="admin-modal-sub" style="font-size: 0.8rem; color: #666; margin: 4px 0;">Code PIN de sécurité</p>
             <input type="password" id="adminPin" placeholder="PIN" maxlength="6">
-            <button type="button" class="modal-btn" onclick="verifyPin()">Valider</button>
+            <button type="button" class="modal-btn" id="admin-modal-btn" onclick="verifyPin()">Valider</button>
             <p id="adminError" style="color: #b94a48; font-size: 0.7rem; margin-top: 6px; display: none;">Code incorrect</p>
         </div>
     </div>
@@ -233,6 +233,58 @@
 
         let cachedAdvices = [];
         let currentGiteKey = 'ptitzabris';
+        let currentLang = 'fr';
+
+        const translations = {
+            fr: {
+                titleFor: "Recommandations exclusives pour {name}",
+                titleAt: "Recommandations exclusives au {cottage}",
+                subText: "✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.",
+                backHome: "🏠 Retour à l'accueil",
+                closeBtn: "✕ Quitter et revenir",
+                qrText: "📱 Pour accéder à la recommandation en ligne depuis votre téléphone, scannez ce QR code :",
+                noAdvice: "Conseils et recommandations à venir.",
+                adminTitle: "🔒 Accès Admin",
+                adminSub: "Code PIN de sécurité",
+                adminBtn: "Valider",
+                adminErr: "Code incorrect"
+            },
+            en: {
+                titleFor: "Exclusive recommendations for {name}",
+                titleAt: "Exclusive recommendations at {cottage}",
+                subText: "✨ Use your remote control to scroll and select a card.",
+                backHome: "🏠 Back to Home",
+                closeBtn: "✕ Exit and Return",
+                qrText: "📱 To access the recommendation online from your phone, scan this QR code:",
+                noAdvice: "Advice and recommendations coming soon.",
+                adminTitle: "🔒 Admin Access",
+                adminSub: "Security PIN code",
+                adminBtn: "Validate",
+                adminErr: "Incorrect code"
+            },
+            de: {
+                titleFor: "Exklusive Empfehlungen für {name}",
+                titleAt: "Exklusive Empfehlungen im {cottage}",
+                subText: "✨ Nutzen Sie Ihre Fernbedienung zum Scrollen und Auswählen.",
+                backHome: "🏠 Zur Startseite",
+                closeBtn: "✕ Schließen und Zurück",
+                qrText: "📱 Um online von Ihrem Telefon aus auf die Empfehlung zuzugreifen, scannen Sie diesen QR-Code:",
+                noAdvice: "Tipps und Empfehlungen demnächst verfügbar.",
+                adminTitle: "🔒 Admin-Zugang",
+                adminSub: "Sicherheits-PIN-Code",
+                adminBtn: "Bestätigen",
+                adminErr: "Falscher Code"
+            }
+        };
+
+        function t(key, replacements = {}) {
+            let langDict = translations[currentLang] || translations['fr'];
+            let text = langDict[key] || translations['fr'][key] || key;
+            for (const [k, v] of Object.entries(replacements)) {
+                text = text.replace(new RegExp(`{${k}}`, 'g'), v);
+            }
+            return text;
+        }
 
         window.onload = async function() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -242,25 +294,26 @@
 
             document.getElementById('back-home-btn').href = `index.html?gite=${currentGiteKey}&v=99`;
 
-            const isFullyKiosk = typeof window.fully !== 'undefined' || navigator.userAgent.includes("Fully");
             const adminContainer = document.getElementById('admin-container');
             const currentHost = window.location.hostname;
-            const isBoxTV = currentHost.endsWith(".93") || currentHost.endsWith(".145") || currentHost === "192.168.1.93" || currentHost === "192.168.1.145";
+            const isTargetTV = currentHost.endsWith(".145") || currentHost.endsWith(".93") || 
+                               currentHost === "192.168.1.145" || currentHost === "192.168.1.93";
 
-            if (isFullyKiosk || isBoxTV) {
+            if (isTargetTV) {
                 adminContainer.style.display = 'none';
             } else {
                 adminContainer.style.display = 'block';
             }
 
-            // Chargement du voyageur pour le titre
             try {
                 const resV = await fetch(sheetVoyageursApiUrl + "?t=" + new Date().getTime());
                 const voyageurs = await resV.json();
                 const today = new Date();
                 today.setHours(0,0,0,0);
+                
+                let voyageurActuel = null;
                 if (Array.isArray(voyageurs) && voyageurs.length > 0) {
-                    const v = voyageurs.find(item => {
+                    voyageurActuel = voyageurs.find(item => {
                         const cStr = String(item.cottage || '').toLowerCase();
                         const matchC = currentGiteKey === 'grandzabris' ? cStr.includes('grand') : (cStr.includes('ptit') || cStr.includes('petit'));
                         const arr = item.dateArrivee || item.arrivee;
@@ -274,26 +327,41 @@
                         }
                         return false;
                     });
-                    if (v && v.prenom) {
-                        document.getElementById('page-main-title').innerText = `Recommandations exclusives pour ${v.prenom}`;
-                    } else {
-                        document.getElementById('page-main-title').innerText = `Recommandations exclusives au ${cottageName}`;
+                }
+
+                if (voyageurActuel) {
+                    if (voyageurActuel.langue) {
+                        const l = voyageurActuel.langue.toLowerCase().trim();
+                        if (['fr', 'en', 'de'].includes(l)) {
+                            currentLang = l;
+                        }
                     }
+                    if (voyageurActuel.prenom) {
+                        document.getElementById('page-main-title').innerText = t('titleFor', { name: voyageurActuel.prenom });
+                    } else {
+                        document.getElementById('page-main-title').innerText = t('titleAt', { cottage: cottageName });
+                    }
+                } else {
+                    document.getElementById('page-main-title').innerText = t('titleAt', { cottage: cottageName });
                 }
             } catch(e) {
-                document.getElementById('page-main-title').innerText = `Recommandations exclusives au ${cottageName}`;
+                document.getElementById('page-main-title').innerText = t('titleAt', { cottage: cottageName });
             }
 
-            document.getElementById('page-main-sub').innerText = "✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.";
+            document.getElementById('page-main-sub').innerText = t('subText');
+            document.getElementById('back-home-btn').innerText = t('backHome');
+            document.getElementById('close-fs-btn').innerText = t('closeBtn');
+            document.getElementById('admin-modal-title').innerText = t('adminTitle');
+            document.getElementById('admin-modal-sub').innerText = t('adminSub');
+            document.getElementById('admin-modal-btn').innerText = t('adminBtn');
 
-            // Chargement dynamique des conseils depuis le Sheet
             try {
                 const response = await fetch(sheetConseilsApiUrl + "?type=conseils&t=" + new Date().getTime());
                 const data = await response.json();
                 cachedAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || data.data || []);
                 renderActiveAdvices();
             } catch (err) {
-                document.getElementById('advice-grid-container').innerHTML = `<p style="text-align: center; color: #b94a48; grid-column: span 2; padding: 20px;">Erreur de chargement des recommandations.</p>`;
+                document.getElementById('advice-grid-container').innerHTML = `<p style="text-align: center; color: #b94a48; grid-column: span 2; padding: 20px;">${t('noAdvice')}</p>`;
             }
         }
 
@@ -307,17 +375,47 @@
                 const titleText = adv.title || adv['Nom de la recommandation'] || '';
                 if (!titleText || titleText.trim() === '') return;
 
+                // CORRECTION : On vérifie par gîte (ex: ptitzabris_advice_active_X ou grandzabris_advice_active_X)
                 const localState = localStorage.getItem(`${currentGiteKey}_advice_active_${index}`);
                 let isActive = true;
                 if (localState !== null) {
                     isActive = (localState === 'true');
-                } else if (adv.active !== undefined) {
-                    isActive = (adv.active === true || adv.active === "true");
+                } else {
+                    // Vérification robuste de la colonne active spécifique au gîte ou globale
+                    let activeVal = adv.active;
+                    if (currentGiteKey === 'grandzabris') {
+                        activeVal = adv.active_grandzabris !== undefined ? adv.active_grandzabris : adv.active;
+                    } else {
+                        activeVal = adv.active_ptitzabris !== undefined ? adv.active_ptitzabris : adv.active;
+                    }
+
+                    if (activeVal !== undefined) {
+                        isActive = (activeVal === true || activeVal === "true" || activeVal === "1" || activeVal === 1);
+                    }
                 }
 
                 if (isActive) {
                     activeCount++;
-                    const descText = adv.text || adv['Commentaire sur la recommandation'] || '';
+                    
+                    let descText = "";
+                    const langKey = currentLang;
+                    
+                    if (langKey !== 'fr') {
+                        for (let key in adv) {
+                            let lowerKey = key.toLowerCase();
+                            if ((lowerKey.includes('en') || lowerKey.includes('de')) && lowerKey.includes(langKey)) {
+                                if (adv[key] && String(adv[key]).trim() !== "") {
+                                    descText = adv[key];
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (!descText || descText.trim() === "") {
+                        descText = adv.text || adv['Commentaire sur la recommandation'] || adv['Commentaire'] || adv['Description'] || '';
+                    }
+
                     const imageUrl = adv.img || adv['Lien postimage'] || '';
                     const linkUrl = adv.linkUrl || adv['Lien web'] || '';
 
@@ -353,7 +451,7 @@
             });
 
             if (activeCount === 0) {
-                container.innerHTML = `<p style="text-align: center; color: #666; grid-column: span 2; padding: 20px;">Conseils et recommandations à venir.</p>`;
+                container.innerHTML = `<p style="text-align: center; color: #666; grid-column: span 2; padding: 20px;">${t('noAdvice')}</p>`;
             }
         }
 
@@ -365,11 +463,10 @@
             mediaContainer.innerHTML = "";
 
             if (linkUrl && linkUrl.trim() !== "" && linkUrl.startsWith("http")) {
-                // S'il y a un lien web : on affiche le QR code
                 const qrWrapper = document.createElement('div');
                 qrWrapper.className = 'qr-container';
                 qrWrapper.innerHTML = `
-                    <p>📱 Pour accéder à la recommandation en ligne depuis votre téléphone, scannez ce QR code :</p>
+                    <p>${t('qrText')}</p>
                     <div id="qrcode-box"></div>
                 `;
                 mediaContainer.appendChild(qrWrapper);
@@ -387,7 +484,6 @@
                     document.getElementById("qrcode-box").innerText = linkUrl.trim();
                 }
             } else if (imageUrl && imageUrl.trim() !== "" && imageUrl.startsWith("http")) {
-                // S'il n'y a pas de lien web : on affiche l'image Postimage en grand format confortable
                 mediaContainer.innerHTML = `<img src="${imageUrl.trim()}" alt="${title}" class="fullscreen-img">`;
             }
 
@@ -415,6 +511,7 @@
             if (pin === '140769') {
                 window.location.href = `admin.html?gite=${currentGiteKey}`;
             } else {
+                document.getElementById('adminError').innerText = t('adminErr');
                 document.getElementById('adminError').style.display = 'block';
                 document.getElementById('adminPin').value = '';
             }
