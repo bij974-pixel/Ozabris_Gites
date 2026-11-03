@@ -1,374 +1,1483 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title-meta">Conseils Personnalisés | Les Ozabris</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <style>
-        :root { --primary: #12263a; --accent: #c5a880; --text-dark: #2c3e50; --white: #ffffff; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Playfair Display', 'Georgia', serif; }
-        
-        body {
-            width: 100vw;
-            min-height: 100vh;
-            margin: 0;
-            padding: 10px;
-            background: linear-gradient(rgba(18, 38, 58, 0.75), rgba(18, 38, 58, 0.85)), url('fond_page.png') no-repeat center center fixed;
-            background-size: cover;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#12263a">
 
-        header { 
-            background: var(--primary);
-            text-align: center; 
-            padding: 12px 20px; 
-            position: relative; 
-            color: var(--white);
-            width: 100%;
-            max-width: 950px;
-            border-top-left-radius: 16px;
-            border-top-right-radius: 16px;
-            border: 2px solid var(--accent);
-            border-bottom: none;
-            flex-shrink: 0;
-        }
+<title>Les conseils — Les Ozabris</title>
 
-        .header-top-controls { position: absolute; top: 8px; right: 15px; display: block; z-index: 10; }
-        .btn-admin {
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 0.75rem;
-            background: var(--accent);
-            border: 1px solid var(--accent);
-            color: var(--primary);
-            padding: 5px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 700;
-        }
+<style>
+:root {
+  --navy: #12263a;
+  --navy2: #203c55;
+  --gold: #c5a880;
+  --cream: #f5f0e7;
+  --white: #ffffff;
+}
 
-        .brand-logo-container { max-width: 75px; margin: 0 auto 2px auto; overflow: hidden; display: flex; align-items: center; justify-content: center; border-radius: 6px; border: 2px solid var(--accent); }
-        .brand-logo-container img { width: 100%; height: auto; object-fit: contain; display: block; }
-        
-        .logo-text { font-size: 1.2rem; font-weight: 300; letter-spacing: 2px; color: var(--white); text-transform: uppercase; margin-bottom: 0px; }
-        .subtitle { font-family: 'Segoe UI', sans-serif; font-size: 0.55rem; letter-spacing: 1px; color: var(--accent); text-transform: uppercase; display: block; }
+* {
+  box-sizing: border-box;
+}
 
-        .tv-card {
-            background: rgba(255, 255, 255, 0.98);
-            width: 100%;
-            max-width: 950px;
-            height: 75vh;
-            border-bottom-left-radius: 16px;
-            border-bottom-right-radius: 16px;
-            padding: 15px 25px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            border: 2px solid var(--accent);
-            border-top: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            text-align: center;
-            margin: auto;
-            position: relative;
-        }
+html {
+  scroll-behavior: smooth;
+}
 
-        .card-header { margin-bottom: 6px; flex-shrink: 0; }
-        h2 { color: var(--primary); font-size: 1.2rem; font-weight: 400; margin-bottom: 2px; }
-        .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.68rem; color: #555; font-style: italic; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--navy);
+  background:
+    linear-gradient(
+      rgba(245,240,231,.91),
+      rgba(245,240,231,.95)
+    ),
+    url("fond_page.png") center / cover fixed;
+}
 
-        .advice-grid { 
-            display: grid; 
-            grid-template-columns: repeat(2, minmax(0, 1fr)); 
-            gap: 12px; 
-            overflow-y: auto; 
-            padding: 5px; 
-            flex-grow: 1;
-            align-content: start;
-        }
-        .advice-grid::-webkit-scrollbar { width: 8px; }
-        .advice-grid::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
-        
-        .advice-box { 
-            background: var(--white); 
-            border: 2px solid var(--accent); 
-            border-radius: 10px; 
-            padding: 12px; 
-            text-align: left; 
-            font-family: 'Segoe UI', sans-serif; 
-            display: flex; 
-            flex-direction: row; 
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            min-height: 105px;
-            width: 100%;
-            overflow: hidden;
-        }
-        .advice-box:focus, .advice-box:hover {
-            border-color: #12263a;
-            box-shadow: 0 0 12px rgba(18, 38, 58, 0.4);
-            outline: none;
-            transform: scale(1.01);
-            background: #fffdf9;
-        }
+button, a {
+  -webkit-tap-highlight-color: transparent;
+}
 
-        .advice-content-area { flex-grow: 1; min-width: 0; overflow: hidden; }
-        .advice-box h3 { font-size: 0.85rem; color: var(--primary); margin-bottom: 3px; font-family: 'Playfair Display', serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .advice-box p { font-size: 0.72rem; color: #555; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+button:focus-visible,
+a:focus-visible,
+select:focus-visible {
+  outline: 4px solid #e8ae40;
+  outline-offset: 4px;
+}
 
-        .advice-thumb {
-            width: 75px;
-            height: 75px;
-            flex-shrink: 0;
-            border-radius: 6px;
-            border: 1px solid #ddd;
-            object-fit: cover;
-            background: #fcfbfa;
-            padding: 2px;
-        }
+header {
+  background:
+    linear-gradient(
+      135deg,
+      #12263a,
+      #23435c
+    );
+  border-bottom: 5px solid var(--gold);
+  color: white;
+  text-align: center;
+  padding: 20px 16px 24px;
+}
 
-        .footer-actions { display: flex; justify-content: center; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 8px; font-family: 'Segoe UI', sans-serif; flex-shrink: 0; }
-        .btn-action { background-color: var(--primary); color: white; padding: 6px 18px; border-radius: 8px; font-weight: 600; font-size: 0.72rem; cursor: pointer; text-decoration: none; display: inline-block; }
-        .btn-action:focus { outline: 3px solid var(--accent); }
+.logo {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--gold);
+  background: white;
+}
 
-        #fullscreen-view {
-            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(18, 38, 58, 0.96); z-index: 5000; justify-content: center; align-items: center; padding: 20px; font-family: 'Segoe UI', sans-serif;
-        }
-        .fullscreen-card {
-            background: white; width: 100%; max-width: 820px; max-height: 92vh; border-radius: 16px; padding: 25px; border: 3px solid var(--accent); box-shadow: 0 25px 50px rgba(0,0,0,0.6); display: flex; flex-direction: column; justify-content: space-between; overflow-y: auto; text-align: center;
-        }
-        .fullscreen-card h3 { font-family: 'Playfair Display', serif; color: var(--primary); font-size: 1.5rem; margin-bottom: 8px; text-align: left; }
-        .fullscreen-card p.fs-desc { font-size: 0.95rem; color: #333; line-height: 1.5; margin-bottom: 15px; text-align: left; }
-        
-        .fullscreen-img { width: 100%; max-height: 420px; object-fit: contain; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 15px; background: #fcfbfa; }
-        
-        .qr-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: #fdfcfb;
-            border: 1px solid var(--accent);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-        .qr-container p { font-size: 0.85rem; color: var(--primary); font-weight: 600; margin-bottom: 10px; font-family: 'Segoe UI', sans-serif; text-align: center; }
-        #qrcode-box { background: white; padding: 10px; border-radius: 6px; border: 1px solid #eee; display: inline-block; }
+header h1 {
+  margin: 12px 0 6px;
+  font-size: clamp(27px, 4vw, 43px);
+}
 
-        .btn-close-fullscreen { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; cursor: pointer; align-self: center; }
-        .btn-close-fullscreen:hover, .btn-close-fullscreen:focus { background: var(--accent); color: var(--primary); outline: none; }
+header p {
+  margin: 6px 0;
+  color: #e8dbc9;
+}
 
-        #admin-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(18, 38, 58, 0.9); justify-content: center; align-items: center; z-index: 10000; font-family: 'Segoe UI', sans-serif;
-        }
-        .modal-content {
-            background: white; padding: 20px; border-radius: 12px; width: 85%; max-width: 300px; text-align: center; border: 2px solid var(--accent);
-        }
-        .modal-content input { width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 0.85rem; text-align: center; }
-        .modal-btn { background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 8px; font-size: 0.8rem; }
-    </style>
+.welcome {
+  font-size: clamp(17px, 2.2vw, 24px);
+}
+
+.top-actions {
+  max-width: 1100px;
+  margin: 16px auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.top-actions a,
+.top-actions button {
+  display: inline-block;
+  padding: 12px 18px;
+  border: 1px solid var(--gold);
+  border-radius: 12px;
+  color: white;
+  background: rgba(255,255,255,.09);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.top-actions a:hover,
+.top-actions button:hover {
+  background: var(--gold);
+  color: var(--navy);
+}
+
+main {
+  max-width: 1350px;
+  margin: 0 auto;
+  padding: 25px 18px 50px;
+}
+
+.intro {
+  text-align: center;
+  max-width: 850px;
+  margin: 0 auto 28px;
+}
+
+.intro h2 {
+  font-size: clamp(23px, 3vw, 34px);
+  margin: 0 0 10px;
+}
+
+.intro p {
+  font-size: 17px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.status {
+  margin: 20px auto;
+  padding: 15px;
+  max-width: 850px;
+  border-radius: 12px;
+  background: white;
+  text-align: center;
+  box-shadow: 0 3px 14px rgba(0,0,0,.06);
+}
+
+.status.error {
+  background: #fff0f0;
+  color: #9c3030;
+}
+
+.status:empty {
+  display: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(270px, 1fr));
+  gap: 23px;
+}
+
+.card {
+  background: white;
+  border-radius: 19px;
+  overflow: hidden;
+  box-shadow: 0 7px 24px rgba(0,0,0,.12);
+  border: 1px solid rgba(197,168,128,.45);
+  display: flex;
+  flex-direction: column;
+  transition: transform .2s, box-shadow .2s;
+}
+
+.card:hover,
+.card:focus-within {
+  transform: translateY(-4px);
+  box-shadow: 0 11px 28px rgba(0,0,0,.17);
+}
+
+.card-image-button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  background: #e4e0d8;
+}
+
+.card-image {
+  width: 100%;
+  height: 235px;
+  object-fit: cover;
+  display: block;
+}
+
+.card-body {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card h3 {
+  font-size: 21px;
+  margin: 0 0 11px;
+  color: var(--navy);
+}
+
+.card p {
+  font-size: 16px;
+  line-height: 1.55;
+  margin: 0 0 18px;
+  white-space: pre-line;
+  flex: 1;
+}
+
+.card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: 0;
+  background: var(--navy);
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  flex: 1;
+}
+
+.btn.gold {
+  background: var(--gold);
+  color: var(--navy);
+}
+
+.btn:hover {
+  filter: brightness(1.12);
+}
+
+.qr-panel {
+  max-width: 700px;
+  margin: 40px auto 0;
+  background: white;
+  border-radius: 18px;
+  padding: 25px;
+  text-align: center;
+  border: 2px solid var(--gold);
+  box-shadow: 0 5px 20px rgba(0,0,0,.09);
+}
+
+.qr-panel h2 {
+  margin: 0 0 10px;
+}
+
+.qr-panel p {
+  line-height: 1.5;
+}
+
+.qr-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 15px auto;
+  min-height: 170px;
+}
+
+.qr-box img,
+.qr-box canvas {
+  max-width: 100%;
+}
+
+footer {
+  background: var(--navy);
+  color: #eadbc7;
+  text-align: center;
+  padding: 23px 15px;
+  font-size: 14px;
+}
+
+/* Fenêtre plein écran */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(8,18,30,.96);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal.open {
+  display: flex;
+}
+
+.modal-content {
+  position: relative;
+  width: min(1100px, 100%);
+  max-height: 94vh;
+  overflow: auto;
+  border-radius: 20px;
+  background: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.modal-close {
+  position: sticky;
+  top: 0;
+  float: right;
+  z-index: 2;
+  background: var(--navy);
+  color: white;
+  border: 0;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.modal-photo {
+  display: block;
+  max-width: 100%;
+  max-height: 52vh;
+  object-fit: contain;
+  margin: 0 auto 16px;
+  border-radius: 12px;
+}
+
+.modal-title {
+  font-size: clamp(22px, 3vw, 32px);
+  margin: 12px 0;
+}
+
+.modal-text {
+  font-size: 17px;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.modal-qr {
+  display: flex;
+  justify-content: center;
+  margin: 15px auto;
+}
+
+.modal-qr:empty {
+  display: none;
+}
+
+.modal-link {
+  display: inline-block;
+  margin: 10px;
+  padding: 13px 22px;
+  background: var(--gold);
+  color: var(--navy);
+  border-radius: 10px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@media (min-width: 1300px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .card-image {
+    height: 270px;
+  }
+
+  .card h3 {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  main {
+    padding: 20px 12px 40px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card-image {
+    height: 225px;
+  }
+
+  .modal {
+    padding: 8px;
+  }
+
+  .modal-content {
+    padding: 12px;
+  }
+}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 </head>
+
 <body>
-    <header>
-        <div class="header-top-controls" id="admin-container">
-            <button type="button" class="btn-admin" onclick="openPinModal()">⚙️ Admin</button>
-        </div>
-        <div class="brand-logo-container">
-            <img src="https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg" alt="Les Ozabris Logo">
-        </div>
-        <h1 class="logo-text">Les Ozabris</h1>
-        <span class="subtitle">Cottages de Prestige & Perles Rares • La Réunion</span>
-    </header>
 
-    <div class="tv-card">
-        <div class="card-header">
-            <h2 id="page-main-title">Recommandations exclusives</h2>
-            <p id="page-main-sub" class="welcome-sub">✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.</p>
-        </div>
+<header>
+  <img
+    class="logo"
+    src="images/logo.jpeg"
+    alt="Les Ozabris"
+    onerror="this.style.display='none'"
+  >
 
-        <div class="advice-grid" id="advice-grid-container">
-            
-            <div class="advice-box" tabindex="0" onfocus="this.scrollIntoView({behavior: 'smooth', block: 'nearest'});" onclick="openFullscreen('Super U 3B', 'Supermarché le plus proche d\'ici', 'https://i.postimg.cc/k47g2q8N/superu.jpg', 'https://maps.google.com')">
-                <div class="advice-content-area">
-                    <h3>Super U 3B</h3>
-                    <p>Supermarché le plus proche d'ici</p>
-                </div>
-                <img src="https://i.postimg.cc/k47g2q8N/superu.jpg" class="advice-thumb" alt="Super U 3B">
-            </div>
+  <h1 id="pageTitle">Nos bonnes adresses</h1>
 
-            <div class="advice-box" tabindex="0" onfocus="this.scrollIntoView({behavior: 'smooth', block: 'nearest'});" onclick="openFullscreen('Vanille Vallée', 'Leurs sachets pour les...', 'https://i.postimg.cc/6q8L899s/vanille.jpg', '')">
-                <div class="advice-content-area">
-                    <h3>Vanille Vallée</h3>
-                    <p>Leurs sachets pour les...</p>
-                </div>
-                <img src="https://i.postimg.cc/6q8L899s/vanille.jpg" class="advice-thumb" alt="Vanille Vallée">
-            </div>
+  <p id="cottageName"></p>
+  <p class="welcome" id="welcomeText"></p>
 
-            <div class="advice-box" tabindex="0" onfocus="this.scrollIntoView({behavior: 'smooth', block: 'nearest'});" onclick="openFullscreen('Le VORTEX Énergétique de l\'Etang Salé', 'Un lieu hors du temps, un moment po...', 'https://i.postimg.cc/027y6J5v/vortex.jpg', '')">
-                <div class="advice-content-area">
-                    <h3>Le VORTEX Énergétique de l'Etang Salé</h3>
-                    <p>Un lieu hors du temps, un moment po...</p>
-                </div>
-                <img src="https://i.postimg.cc/027y6J5v/vortex.jpg" class="advice-thumb" alt="Vortex">
-            </div>
+  <nav class="top-actions">
+    <a id="homeLink"
+       href="index.html"
+       data-i18n="home">
+      ← Accueil
+    </a>
 
-            <div class="advice-box" tabindex="0" onfocus="this.scrollIntoView({behavior: 'smooth', block: 'nearest'});" onclick="openFullscreen('Marché forain de St Paul', 'Le plus grand marché d...', 'https://i.postimg.cc/3w9f65gX/marche.jpg', '')">
-                <div class="advice-content-area">
-                    <h3>Marché forain de St Paul</h3>
-                    <p>Le plus grand marché d...</p>
-                </div>
-                <img src="https://i.postimg.cc/3w9f65gX/marche.jpg" class="advice-thumb" alt="Marché">
-            </div>
+    <a id="guideLink"
+       href="guide.html"
+       data-i18n="guide">
+      Guide du gîte
+    </a>
 
-        </div>
-        
-        <div class="footer-actions">
-            <a id="back-home-btn" href="index.html" class="btn-action" tabindex="0" onfocus="this.scrollIntoView({behavior: 'smooth', block: 'nearest'});">🏠 Retour à l'accueil</a>
-        </div>
-    </div>
+    <a id="adminLink"
+       href="admin.html"
+       data-i18n="admin">
+      Administration
+    </a>
 
-    <!-- Mode Plein Écran -->
-    <div id="fullscreen-view">
-        <div class="fullscreen-card">
-            <div>
-                <h3 id="fs-title">Titre</h3>
-                <p id="fs-text" class="fs-desc">Description...</p>
-                <div id="fs-media-container" style="text-align: center;"></div>
-            </div>
-            <button type="button" class="btn-close-fullscreen" id="close-fs-btn" onclick="closeFullscreen()" tabindex="0">✕ Quitter et revenir</button>
-        </div>
-    </div>
+    <button id="refreshButton"
+            type="button"
+            data-i18n="refresh">
+      ↻ Actualiser
+    </button>
+  </nav>
+</header>
 
-    <!-- Modale PIN Admin -->
-    <div id="admin-modal">
-        <div class="modal-content">
-            <button type="button" onclick="closePinModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
-            <h3 id="admin-modal-title">🔒 Accès Admin</h3>
-            <p id="admin-modal-sub" style="font-size: 0.8rem; color: #666; margin: 4px 0;">Code PIN de sécurité</p>
-            <input type="password" id="adminPin" placeholder="PIN" maxlength="6">
-            <button type="button" class="modal-btn" id="admin-modal-btn" onclick="verifyPin()">Valider</button>
-            <p id="adminError" style="color: #b94a48; font-size: 0.7rem; margin-top: 6px; display: none;">Code incorrect</p>
-        </div>
-    </div>
+<main>
 
-    <script>
-        const sheetVoyageursApiUrl = "https://script.google.com/macros/s/AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq/exec";
+  <section class="intro">
+    <h2 id="introTitle">
+      Découvrez La Réunion
+    </h2>
 
-        let currentGiteKey = 'ptitzabris';
+    <p id="introText">
+      Nos coups de cœur pour profiter
+      pleinement de votre séjour.
+    </p>
+  </section>
 
-        document.addEventListener("DOMContentLoaded", function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const giteParam = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
-            currentGiteKey = giteParam.includes("grand") ? "grandzabris" : "ptitzabris";
-            let cottageName = currentGiteKey === "grandzabris" ? "Grandzabris" : "Ptitzabris";
+  <div
+    id="status"
+    class="status"
+    role="status"
+    aria-live="polite">
+    Chargement des recommandations…
+  </div>
 
-            const backBtn = document.getElementById('back-home-btn');
-            if (backBtn) backBtn.href = `index.html?gite=${currentGiteKey}&v=99`;
+  <section
+    id="adviceGrid"
+    class="grid"
+    aria-label="Recommandations">
+  </section>
 
-            const adminContainer = document.getElementById('admin-container');
-            const currentHost = window.location.hostname;
-            const isTargetTV = currentHost.endsWith(".145") || currentHost.endsWith(".93") || 
-                               currentHost === "192.168.1.145" || currentHost === "192.168.1.93";
-            if (adminContainer) {
-                adminContainer.style.display = isTargetTV ? 'none' : 'block';
-            }
+  <section class="qr-panel">
+    <h2 id="qrTitle">
+      Retrouvez nos conseils sur votre téléphone
+    </h2>
 
-            fetchVoyageurName(cottageName);
+    <p id="qrText">
+      Scannez ce QR code pour ouvrir
+      cette page sur votre téléphone.
+    </p>
+
+    <div class="qr-box" id="pageQr"></div>
+  </section>
+
+</main>
+
+<footer>
+  Les Ozabris — La Réunion 🌴
+</footer>
+
+<div
+  id="adviceModal"
+  class="modal"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="modalTitle"
+  aria-hidden="true">
+
+  <div class="modal-content">
+    <button
+      id="modalClose"
+      class="modal-close"
+      type="button"
+      aria-label="Fermer">
+      ×
+    </button>
+
+    <img
+      id="modalPhoto"
+      class="modal-photo"
+      alt="">
+
+    <h2 id="modalTitle"
+        class="modal-title"></h2>
+
+    <p id="modalText"
+       class="modal-text"></p>
+
+    <div id="modalQr"
+         class="modal-qr"></div>
+
+    <a
+      id="modalLink"
+      class="modal-link"
+      target="_blank"
+      rel="noopener noreferrer">
+      En savoir plus
+    </a>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /*
+   * LES OZABRIS
+   * CONSEILS CONNECTÉS À GOOGLE SHEETS
+   */
+
+  const CONSEILS_API =
+    'https://script.google.com/macros/s/' +
+    'AKfycbxS9JcDvy7gGhPFXE3z1a4DVC3pvq-j2MTSbaxDuz3Z6z80AkS3GP5mNpZyibillwDVFg' +
+    '/exec';
+
+  const VOYAGEURS_API =
+    'https://script.google.com/macros/s/' +
+    'AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq' +
+    '/exec';
+
+  const REFRESH_MS = 30000;
+
+  const params =
+    new URLSearchParams(location.search);
+
+  const gite =
+    params.get('gite') === 'grandzabris'
+      ? 'grandzabris'
+      : 'ptitzabris';
+
+  /*
+   * Pour les télévisions :
+   * ajouter &tv=1 à l'adresse de la page.
+   *
+   * Exemple :
+   * conseils.html?gite=ptitzabris&tv=1
+   */
+  const isTV = params.get('tv') === '1';
+
+  const translations = {
+    fr: {
+      title: 'Nos bonnes adresses',
+      home: '← Accueil',
+      guide: 'Guide du gîte',
+      admin: 'Administration',
+      refresh: '↻ Actualiser',
+      introTitle: 'Découvrez La Réunion',
+      introText:
+        'Nos coups de cœur pour profiter pleinement de votre séjour.',
+      loading: 'Chargement des recommandations…',
+      empty:
+        'Aucune recommandation active pour ce gîte actuellement.',
+      error:
+        'Impossible de récupérer les recommandations. Nouvelle tentative automatique dans 30 secondes.',
+      photo: 'Voir la photo',
+      details: 'En savoir plus',
+      qrTitle:
+        'Retrouvez nos conseils sur votre téléphone',
+      qrText:
+        'Scannez ce QR code pour ouvrir cette page sur votre téléphone.',
+      welcome: 'Bienvenue',
+      cottagePtit: 'Ptitzabris',
+      cottageGrand: 'Grandzabris'
+    },
+
+    en: {
+      title: 'Our local recommendations',
+      home: '← Home',
+      guide: 'Cottage guide',
+      admin: 'Administration',
+      refresh: '↻ Refresh',
+      introTitle: 'Discover Réunion Island',
+      introText:
+        'Our favourite places and activities to enjoy your stay.',
+      loading: 'Loading recommendations…',
+      empty:
+        'There are currently no active recommendations for this cottage.',
+      error:
+        'Unable to load recommendations. We will try again automatically in 30 seconds.',
+      photo: 'View photo',
+      details: 'Learn more',
+      qrTitle:
+        'Take our recommendations with you',
+      qrText:
+        'Scan this QR code to open this page on your phone.',
+      welcome: 'Welcome',
+      cottagePtit: 'Ptitzabris',
+      cottageGrand: 'Grandzabris'
+    },
+
+    de: {
+      title: 'Unsere Empfehlungen',
+      home: '← Startseite',
+      guide: 'Hausinformationen',
+      admin: 'Verwaltung',
+      refresh: '↻ Aktualisieren',
+      introTitle: 'Entdecken Sie La Réunion',
+      introText:
+        'Unsere Lieblingsorte und Aktivitäten für Ihren Aufenthalt.',
+      loading: 'Empfehlungen werden geladen…',
+      empty:
+        'Derzeit sind keine Empfehlungen für diese Unterkunft aktiv.',
+      error:
+        'Empfehlungen konnten nicht geladen werden. Neuer Versuch in 30 Sekunden.',
+      photo: 'Foto ansehen',
+      details: 'Mehr erfahren',
+      qrTitle:
+        'Empfehlungen auf Ihrem Smartphone',
+      qrText:
+        'Scannen Sie den QR-Code, um diese Seite auf Ihrem Smartphone zu öffnen.',
+      welcome: 'Willkommen',
+      cottagePtit: 'Ptitzabris',
+      cottageGrand: 'Grandzabris'
+    }
+  };
+
+  let language = 'fr';
+  let conseils = [];
+  let modalAdvice = null;
+  let lastFocus = null;
+  let loading = false;
+  let loadSequence = 0;
+
+  const $ = id =>
+    document.getElementById(id);
+
+  function t(key) {
+    return translations[language][key] ||
+      translations.fr[key] ||
+      key;
+  }
+
+  function setText(id, value) {
+    const element = $(id);
+
+    if (element) {
+      element.textContent = value;
+    }
+  }
+
+  /*
+   * PHOTOS LOCALES GITHUB
+   *
+   * Les photos définies dans Google Sheets
+   * sont remplacées par les fichiers locaux
+   * lorsqu'un lieu connu est reconnu.
+   *
+   * Pour les nouveaux lieux, l'image fournie
+   * dans Google Sheets est conservée.
+   */
+  function localImage(advice) {
+    const title = String(
+      advice.title || ''
+    ).toLowerCase();
+
+    const normal = title
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
+    if (
+      normal.includes('super u') ||
+      normal.includes('superu')
+    ) {
+      return 'images/super u.jpeg';
+    }
+
+    if (normal.includes('vanille')) {
+      return 'images/vanille vallee.jpeg';
+    }
+
+    if (normal.includes('vortex')) {
+      return 'images/vortex.jpeg';
+    }
+
+    if (
+      normal.includes('marche') &&
+      normal.includes('paul')
+    ) {
+      return 'images/marche st paul.jpeg';
+    }
+
+    if (
+      normal.includes('ermitage') ||
+      normal.includes('hermitage')
+    ) {
+      return 'images/plage hermitage.jpeg';
+    }
+
+    if (normal.includes('maido')) {
+      return 'images/maido.jpeg';
+    }
+
+    if (normal.includes('anse des cascades')) {
+      return 'images/ansedescascade.jpeg';
+    }
+
+    if (normal.includes('volcan')) {
+      return 'images/volcan.jpeg';
+    }
+
+    if (normal.includes('salazie')) {
+      return 'images/salazie.jpeg';
+    }
+
+    if (normal.includes('papangue')) {
+      return 'images/papangue.jpeg';
+    }
+
+    if (normal.includes('bassin la bert')) {
+      return 'images/bassinlabert.jpeg';
+    }
+
+    return String(advice.img || '').trim() ||
+      'images/logo.jpeg';
+  }
+
+  /*
+   * LIENS DES PAGES
+   */
+  function configureLinks() {
+    const suffix =
+      '?gite=' + encodeURIComponent(gite) +
+      (isTV ? '&tv=1' : '');
+
+    $('homeLink').href =
+      'index.html' + suffix;
+
+    $('guideLink').href =
+      'guide.html' + suffix;
+
+    $('adminLink').href =
+      'admin.html?gite=' +
+      encodeURIComponent(gite);
+
+    if (isTV) {
+      $('adminLink').classList.add('hidden');
+    }
+  }
+
+  /*
+   * TRADUCTION INTERFACE
+   */
+  function translatePage() {
+    document.documentElement.lang = language;
+
+    setText('pageTitle', t('title'));
+    setText('introTitle', t('introTitle'));
+    setText('introText', t('introText'));
+    setText('qrTitle', t('qrTitle'));
+    setText('qrText', t('qrText'));
+
+    setText(
+      'cottageName',
+      gite === 'grandzabris'
+        ? t('cottageGrand')
+        : t('cottagePtit')
+    );
+
+    document.querySelectorAll(
+      '[data-i18n]'
+    ).forEach(function (el) {
+      el.textContent = t(
+        el.getAttribute('data-i18n')
+      );
+    });
+
+    if (conseils.length) {
+      renderConseils();
+    }
+  }
+
+  /*
+   * PERSONNALISATION VOYAGEURS
+   */
+  function dateValue(value) {
+    if (!value) {
+      return null;
+    }
+
+    const str = String(value).trim();
+
+    const match = str.match(
+      /^(\d{4})-(\d{2})-(\d{2})/
+    );
+
+    if (match) {
+      return new Date(
+        Number(match[1]),
+        Number(match[2]) - 1,
+        Number(match[3])
+      );
+    }
+
+    const d = new Date(str);
+
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  function sameCottage(value) {
+    const str = String(
+      value || ''
+    ).toLowerCase()
+     .replace(/\s+/g, '');
+
+    return str.includes(gite);
+  }
+
+  async function loadVoyageur() {
+    try {
+      const response = await fetch(
+        VOYAGEURS_API + '?t=' + Date.now(),
+        { cache: 'no-store' }
+      );
+
+      if (!response.ok) {
+        return;
+      }
+
+      const data = await response.json();
+
+      const voyageurs =
+        Array.isArray(data)
+          ? data
+          : Array.isArray(data.rows)
+            ? data.rows
+            : Array.isArray(data.data)
+              ? data.data
+              : [];
+
+      const now = new Date();
+
+      now.setHours(0, 0, 0, 0);
+
+      const voyageursActifs =
+        voyageurs.filter(function (v) {
+          if (!sameCottage(v.cottage)) {
+            return false;
+          }
+
+          const arrivee = dateValue(
+            v.arrivee || v.dateArrivee
+          );
+
+          const depart = dateValue(
+            v.depart || v.dateDepart
+          );
+
+          return (
+            arrivee &&
+            depart &&
+            arrivee <= now &&
+            now <= depart
+          );
         });
 
-        async function fetchVoyageurName(cottageName) {
-            try {
-                const resV = await fetch(sheetVoyageursApiUrl + "?t=" + new Date().getTime());
-                const voyageurs = await resV.json();
-                const today = new Date();
-                today.setHours(0,0,0,0);
-                if (Array.isArray(voyageurs) && voyageurs.length > 0) {
-                    const v = voyageurs.find(item => {
-                        const cStr = String(item.cottage || '').toLowerCase();
-                        const matchC = currentGiteKey === 'grandzabris' ? cStr.includes('grand') : (cStr.includes('ptit') || cStr.includes('petit'));
-                        const arr = item.dateArrivee || item.arrivee;
-                        const dep = item.dateDepart || item.depart;
-                        if (matchC && arr && dep) {
-                            const dArr = new Date(arr);
-                            const dDep = new Date(dep);
-                            dArr.setHours(0,0,0,0);
-                            dDep.setHours(0,0,0,0);
-                            return today >= dArr && today <= dDep;
-                        }
-                        return false;
-                    });
-                    if (v && v.prenom) {
-                        const titleEl = document.getElementById('page-main-title');
-                        if (titleEl) titleEl.innerText = `Recommandations exclusives pour ${v.prenom}`;
-                    }
-                }
-            } catch(e) {}
+      if (!voyageursActifs.length) {
+        return;
+      }
+
+      const voyageur =
+        voyageursActifs[voyageursActifs.length - 1];
+
+      const lang = String(
+        voyageur.langue || 'fr'
+      ).toLowerCase().substring(0, 2);
+
+      language =
+        translations[lang] ? lang : 'fr';
+
+      translatePage();
+
+      const prenom = String(
+        voyageur.prenom || ''
+      ).trim();
+
+      if (prenom) {
+        setText(
+          'welcomeText',
+          t('welcome') + ' ' + prenom + ' !'
+        );
+      }
+
+    } catch (error) {
+      // La page reste utilisable sans
+      // personnalisation des voyageurs.
+    }
+  }
+
+  /*
+   * QR CODES
+   */
+  function createQr(container, url, size) {
+    container.innerHTML = '';
+
+    if (!url) {
+      return;
+    }
+
+    if (typeof QRCode === 'undefined') {
+      const a = document.createElement('a');
+
+      a.href = url;
+      a.textContent = url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+
+      container.appendChild(a);
+      return;
+    }
+
+    new QRCode(container, {
+      text: url,
+      width: size,
+      height: size,
+      colorDark: '#12263a',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  }
+
+  function createPageQr() {
+    const url =
+      location.origin +
+      location.pathname +
+      '?gite=' + encodeURIComponent(gite);
+
+    createQr($('pageQr'), url, 160);
+  }
+
+  /*
+   * FILTRAGE PAR GITE
+   */
+  function isActiveForGite(advice) {
+    const target = String(
+      advice.target || 'both'
+    ).toLowerCase();
+
+    if (
+      target !== 'both' &&
+      target !== gite
+    ) {
+      return false;
+    }
+
+    if (gite === 'ptitzabris') {
+      return advice.activePtit === true;
+    }
+
+    return advice.activeGrand === true;
+  }
+
+  /*
+   * CARTE D'UNE RECOMMANDATION
+   */
+  function createCard(advice) {
+    const article =
+      document.createElement('article');
+
+    article.className = 'card';
+
+    const imageButton =
+      document.createElement('button');
+
+    imageButton.type = 'button';
+    imageButton.className =
+      'card-image-button';
+
+    imageButton.setAttribute(
+      'aria-label',
+      t('photo') + ' : ' + advice.title
+    );
+
+    const img =
+      document.createElement('img');
+
+    img.className = 'card-image';
+    img.alt = advice.title;
+    img.loading = 'lazy';
+
+    img.src = localImage(advice);
+
+    img.onerror = function () {
+      img.onerror = null;
+      img.src = String(advice.img || '').trim() ||
+        'images/logo.jpeg';
+    };
+
+    imageButton.appendChild(img);
+
+    imageButton.addEventListener(
+      'click',
+      function () {
+        openModal(advice);
+      }
+    );
+
+    const body =
+      document.createElement('div');
+
+    body.className = 'card-body';
+
+    const h3 =
+      document.createElement('h3');
+
+    h3.textContent = advice.title;
+
+    const p =
+      document.createElement('p');
+
+    p.textContent = advice.text || '';
+
+    const actions =
+      document.createElement('div');
+
+    actions.className = 'card-actions';
+
+    const photoButton =
+      document.createElement('button');
+
+    photoButton.type = 'button';
+    photoButton.className = 'btn gold';
+    photoButton.textContent = t('photo');
+
+    photoButton.addEventListener(
+      'click',
+      function () {
+        openModal(advice);
+      }
+    );
+
+    actions.appendChild(photoButton);
+
+    if (advice.linkUrl) {
+      const detailsButton =
+        document.createElement('button');
+
+      detailsButton.type = 'button';
+      detailsButton.className = 'btn';
+      detailsButton.textContent =
+        t('details');
+
+      detailsButton.addEventListener(
+        'click',
+        function () {
+          openModal(advice);
         }
+      );
 
-        function openFullscreen(title, text, imageUrl, linkUrl) {
-            document.getElementById('fs-title').innerText = title;
-            document.getElementById('fs-text').innerText = text;
-            
-            const mediaContainer = document.getElementById('fs-media-container');
-            mediaContainer.innerHTML = "";
+      actions.appendChild(detailsButton);
+    }
 
-            if (linkUrl && linkUrl.trim() !== "" && linkUrl.startsWith("http")) {
-                const qrWrapper = document.createElement('div');
-                qrWrapper.className = 'qr-container';
-                qrWrapper.innerHTML = `
-                    <p>📱 Pour accéder à la recommandation en ligne depuis votre téléphone, scannez ce QR code :</p>
-                    <div id="qrcode-box"></div>
-                `;
-                mediaContainer.appendChild(qrWrapper);
+    body.appendChild(h3);
+    body.appendChild(p);
+    body.appendChild(actions);
 
-                try {
-                    new QRCode(document.getElementById("qrcode-box"), {
-                        text: linkUrl.trim(),
-                        width: 150,
-                        height: 150,
-                        colorDark: "#12263a",
-                        colorLight: "#ffffff",
-                        correctLevel: QRCode.CorrectLevel.H
-                    });
-                } catch(err) {
-                    document.getElementById("qrcode-box").innerText = linkUrl.trim();
-                }
-            } else if (imageUrl && imageUrl.trim() !== "") {
-                mediaContainer.innerHTML = `<img src="${imageUrl.trim()}" alt="${title}" class="fullscreen-img">`;
+    article.appendChild(imageButton);
+    article.appendChild(body);
+
+    return article;
+  }
+
+  /*
+   * AFFICHAGE DES CONSEILS
+   */
+  function renderConseils() {
+    const grid = $('adviceGrid');
+
+    const focusedIndex =
+      document.activeElement &&
+      document.activeElement.closest('.card')
+        ? Array.from(
+            grid.querySelectorAll('.card')
+          ).indexOf(
+            document.activeElement.closest('.card')
+          )
+        : -1;
+
+    grid.innerHTML = '';
+
+    const actifs = conseils.filter(
+      isActiveForGite
+    );
+
+    if (!actifs.length) {
+      $('status').textContent = t('empty');
+      return;
+    }
+
+    $('status').textContent = '';
+
+    actifs.forEach(function (advice) {
+      grid.appendChild(
+        createCard(advice)
+      );
+    });
+
+    if (
+      focusedIndex >= 0 &&
+      isTV
+    ) {
+      const cards =
+        grid.querySelectorAll('.card');
+
+      const card =
+        cards[Math.min(
+          focusedIndex,
+          cards.length - 1
+        )];
+
+      if (card) {
+        const button =
+          card.querySelector('button');
+
+        if (button) {
+          button.focus();
+        }
+      }
+    }
+  }
+
+  /*
+   * LECTURE GOOGLE SHEETS
+   */
+  async function loadConseils() {
+    if (loading) {
+      return;
+    }
+
+    loading = true;
+
+    const sequence = ++loadSequence;
+
+    try {
+      const url =
+        CONSEILS_API +
+        '?type=conseils' +
+        '&gite=' +
+        encodeURIComponent(gite) +
+        '&t=' +
+        Date.now();
+
+      const response = await fetch(
+        url,
+        {
+          method: 'GET',
+          cache: 'no-store'
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          'HTTP ' + response.status
+        );
+      }
+
+      const data = await response.json();
+
+      if (sequence !== loadSequence) {
+        return;
+      }
+
+      if (Array.isArray(data)) {
+        conseils = data;
+      } else if (
+        data &&
+        Array.isArray(data.conseils)
+      ) {
+        conseils = data.conseils;
+      } else {
+        throw new Error(
+          'Format de données incorrect'
+        );
+      }
+
+      renderConseils();
+
+    } catch (error) {
+      if (!conseils.length) {
+        $('status').textContent = t('error');
+        $('status').className =
+          'status error';
+      }
+
+      console.warn(
+        'Chargement conseils :',
+        error
+      );
+
+    } finally {
+      loading = false;
+    }
+  }
+
+  /*
+   * FENETRE PHOTO + QR CODE
+   */
+  function openModal(advice) {
+    modalAdvice = advice;
+    lastFocus = document.activeElement;
+
+    const modal = $('adviceModal');
+
+    $('modalTitle').textContent =
+      advice.title || '';
+
+    $('modalText').textContent =
+      advice.text || '';
+
+    const photo = $('modalPhoto');
+
+    photo.src = localImage(advice);
+    photo.alt = advice.title || '';
+
+    photo.onerror = function () {
+      photo.onerror = null;
+      photo.src =
+        String(advice.img || '').trim() ||
+        'images/logo.jpeg';
+    };
+
+    const link = $('modalLink');
+
+    if (advice.linkUrl) {
+      link.href = advice.linkUrl;
+      link.textContent = t('details');
+      link.classList.remove('hidden');
+    } else {
+      link.removeAttribute('href');
+      link.classList.add('hidden');
+    }
+
+    createQr(
+      $('modalQr'),
+      advice.linkUrl || '',
+      170
+    );
+
+    modal.classList.add('open');
+
+    modal.setAttribute(
+      'aria-hidden',
+      'false'
+    );
+
+    document.body.style.overflow =
+      'hidden';
+
+    $('modalClose').focus();
+  }
+
+  function closeModal() {
+    const modal = $('adviceModal');
+
+    modal.classList.remove('open');
+
+    modal.setAttribute(
+      'aria-hidden',
+      'true'
+    );
+
+    document.body.style.overflow = '';
+
+    modalAdvice = null;
+
+    if (
+      lastFocus &&
+      document.contains(lastFocus)
+    ) {
+      lastFocus.focus();
+    }
+  }
+
+  $('modalClose').addEventListener(
+    'click',
+    closeModal
+  );
+
+  $('adviceModal').addEventListener(
+    'click',
+    function (event) {
+      if (
+        event.target === $('adviceModal')
+      ) {
+        closeModal();
+      }
+    }
+  );
+
+  /*
+   * NAVIGATION TELECOMMANDE XIAOMI
+   */
+  document.addEventListener(
+    'keydown',
+    function (event) {
+      const modalOpen =
+        $('adviceModal').classList.contains(
+          'open'
+        );
+
+      if (
+        event.key === 'Escape' ||
+        event.key === 'Backspace'
+      ) {
+        if (modalOpen) {
+          event.preventDefault();
+          closeModal();
+          return;
+        }
+      }
+
+      if (modalOpen) {
+        if (event.key === 'Tab') {
+          const focusables =
+            Array.from(
+              $('adviceModal').querySelectorAll(
+                'button, a[href]'
+              )
+            ).filter(
+              el => !el.classList.contains(
+                'hidden'
+              )
+            );
+
+          if (focusables.length) {
+            const first = focusables[0];
+            const last =
+              focusables[focusables.length - 1];
+
+            if (
+              event.shiftKey &&
+              document.activeElement === first
+            ) {
+              event.preventDefault();
+              last.focus();
+            } else if (
+              !event.shiftKey &&
+              document.activeElement === last
+            ) {
+              event.preventDefault();
+              first.focus();
             }
-
-            document.getElementById('fullscreen-view').style.display = 'flex';
-            setTimeout(() => {
-                document.getElementById('close-fs-btn').focus();
-            }, 100);
+          }
         }
 
-        function closeFullscreen() {
-            document.getElementById('fullscreen-view').style.display = 'none';
-        }
+        return;
+      }
 
-        function openPinModal() {
-            document.getElementById('admin-modal').style.display = 'flex';
-            document.getElementById('adminPin').focus();
-        }
-        function closePinModal() {
-            document.getElementById('admin-modal').style.display = 'none';
-            document.getElementById('adminError').style.display = 'none';
-            document.getElementById('adminPin').value = '';
-        }
-        function verifyPin() {
-            const pin = document.getElementById('adminPin').value.trim();
-            if (pin === '140769') {
-                window.location.href = `admin.html?gite=${currentGiteKey}`;
-            } else {
-                document.getElementById('adminError').style.display = 'block';
-                document.getElementById('adminPin'].value = '';
-            }
-        }
-    </script>
+      if (
+        ![
+          'ArrowLeft',
+          'ArrowRight',
+          'ArrowUp',
+          'ArrowDown'
+        ].includes(event.key)
+      ) {
+        return;
+      }
+
+      const buttons = Array.from(
+        document.querySelectorAll(
+          '.top-actions a:not(.hidden), ' +
+          '.top-actions button, ' +
+          '.card button'
+        )
+      );
+
+      if (!buttons.length) {
+        return;
+      }
+
+      const current =
+        buttons.indexOf(
+          document.activeElement
+        );
+
+      if (current < 0) {
+        event.preventDefault();
+        buttons[0].focus();
+        return;
+      }
+
+      const step =
+        event.key === 'ArrowLeft' ||
+        event.key === 'ArrowUp'
+          ? -1 : 1;
+
+      const next =
+        (current + step + buttons.length) %
+        buttons.length;
+
+      event.preventDefault();
+      buttons[next].focus();
+    }
+  );
+
+  /*
+   * BOUTON ACTUALISER
+   */
+  $('refreshButton').addEventListener(
+    'click',
+    function () {
+      loadConseils();
+      loadVoyageur();
+    }
+  );
+
+  /*
+   * DEMARRAGE
+   */
+  configureLinks();
+  translatePage();
+  createPageQr();
+  loadConseils();
+  loadVoyageur();
+
+  /*
+   * ACTUALISATION AUTOMATIQUE
+   * TOUTES LES 30 SECONDES
+   */
+  setInterval(function () {
+    loadConseils();
+  }, REFRESH_MS);
+
+  /*
+   * ACTUALISATION VOYAGEURS
+   * TOUTES LES 10 MINUTES
+   */
+  setInterval(function () {
+    loadVoyageur();
+  }, 600000);
+
+})();
+</script>
+
 </body>
 </html>
