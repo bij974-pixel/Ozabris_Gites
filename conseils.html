@@ -174,11 +174,11 @@ background: white; padding: 20px; border-radius: 12px; width: 85%; max-width: 30
 <div class="tv-card">
 <div class="card-header">
 <h2 id="page-main-title">Recommandations exclusives</h2>
-<p id="page-main-sub" class="welcome-sub">✨ Météo, adresses et coups de cœur.</p>
+<p id="page-main-sub" class="welcome-sub">✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.</p>
 </div>
-<!-- Grille scrollable dynamique -->
+<!-- Grille scrollable affichant directement les recommandations -->
 <div class="advice-grid" id="advice-grid-container">
-<!-- Chargement immédiat par défaut pour garantir l'affichage sans attente -->
+<!-- Rempli instantanément -->
 </div>
 <div class="footer-actions">
 <a id="back-home-btn" href="index.html" class="btn-action">🏠 Retour à l'accueil</a>
@@ -200,7 +200,7 @@ background: white; padding: 20px; border-radius: 12px; width: 85%; max-width: 30
 <div class="modal-content">
 <button type="button" onclick="closePinModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
 <h3 id="admin-modal-title">🔒 Accès Admin</h3>
-<p id="admin-modal-sub" style="font-size: 0.75rem; color: #666; margin: 4px 0;">Code PIN de sécurité</p>
+<p id="admin-modal-sub" style="font-size: 0.8rem; color: #666; margin: 4px 0;">Code PIN de sécurité</p>
 <input type="password" id="adminPin" placeholder="PIN" maxlength="6">
 <button type="button" class="modal-btn" id="admin-modal-btn" onclick="verifyPin()">Valider</button>
 <p id="adminError" style="color: #b94a48; font-size: 0.7rem; margin-top: 6px; display: none;">Code incorrect</p>
@@ -210,6 +210,7 @@ background: white; padding: 20px; border-radius: 12px; width: 85%; max-width: 30
 const sheetVoyageursApiUrl = "https://script.google.com/macros/s/AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq/exec";
 const sheetConseilsApiUrl = "https://script.google.com/macros/s/AKfycbzdEv_frdNqscUxHQW6xXpePamOztmC0xLWa5CRMjY4fFsKuMdcvJda7fDkXiWqAYcu1A/exec";
 let currentGiteKey = 'ptitzabris';
+// Données en dur par défaut (avec tes vraies images Postimage) garantissant l'affichage instantané
 let cachedAdvices = [
 { title: "Super U 3B", text: "Supermarché le plus proche d'ici", img: "https://i.postimg.cc/k47g2q8N/superu.jpg", linkUrl: "https://maps.google.com", active: true },
 { title: "Vanille Vallée", text: "Leurs sachets pour les...", img: "https://i.postimg.cc/6q8L899s/vanille.jpg", linkUrl: "", active: true },
@@ -234,9 +235,9 @@ adminContainer.style.display = 'none';
 } else {
 adminContainer.style.display = 'block';
 }
-// RENDU IMMÉDIAT SYNCHRONE DES CARTES
+// 1. AFFICHAGE IMMÉDIAT (zéro attente)
 renderActiveAdvices();
-// TENTATIVE DE MISE À JOUR EN ARRIÈRE-PLAN
+// 2. MISE À JOUR EN ARRIÈRE-PLAN (Silencieuse)
 fetchDataInBackground(cottageName);
 });
 function renderActiveAdvices() {
@@ -329,6 +330,7 @@ document.getElementById('fs-text').innerText = text;
 const mediaContainer = document.getElementById('fs-media-container');
 mediaContainer.innerHTML = "";
 if (linkUrl && linkUrl.trim() !== "" && linkUrl.startsWith("http")) {
+// S'il y a un lien web : on affiche le QR code
 const qrWrapper = document.createElement('div');
 qrWrapper.className = 'qr-container';
 qrWrapper.innerHTML = ⁠<p>📱 Pour accéder à la recommandation en ligne depuis votre téléphone, scannez ce QR code :</p> <div id="qrcode-box"></div>⁠;
@@ -346,6 +348,7 @@ correctLevel: QRCode.CorrectLevel.H
 document.getElementById("qrcode-box").innerText = linkUrl.trim();
 }
 } else if (imageUrl && imageUrl.trim() !== "" && imageUrl.startsWith("http")) {
+// S'il n'y a pas de lien web : on affiche l'image Postimage en grand format
 mediaContainer.innerHTML = ⁠<img src="${imageUrl.trim()}" alt="${title}" class="fullscreen-img">⁠;
 }
 document.getElementById('fullscreen-view').style.display = 'flex';
