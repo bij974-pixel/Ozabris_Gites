@@ -332,7 +332,7 @@
                 } catch(err) {
                     document.getElementById("qrcode-box").innerText = linkUrl.trim();
                 }
-            } else if (imageUrl && imageUrl.trim() !== "") {
+            } else if (imageUrl && imageUrl.trim() !== "" && imageUrl.startsWith("http")) {
                 mediaContainer.innerHTML = `<img src="${imageUrl.trim()}" alt="${title}" class="fullscreen-img">`;
             }
 
