@@ -1,329 +1,378 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Conseils Personnalisés | Les Ozabris</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<style>
-:root { --primary: #12263a; --accent: #c5a880; --text-dark: #2c3e50; --white: #ffffff; }
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Playfair Display', 'Georgia', serif; }
-body {
-width: 100vw;
-min-height: 100vh;
-margin: 0;
-padding: 10px;
-background: linear-gradient(rgba(18, 38, 58, 0.75), rgba(18, 38, 58, 0.85)), url('fond_page.png') no-repeat center center fixed;
-background-size: cover;
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-}
-header {
-background: var(--primary);
-text-align: center;
-padding: 12px 20px;
-position: relative;
-color: var(--white);
-width: 100%;
-max-width: 950px;
-border-top-left-radius: 16px;
-border-top-right-radius: 16px;
-border: 2px solid var(--accent);
-border-bottom: none;
-flex-shrink: 0;
-}
-.header-top-controls { position: absolute; top: 8px; right: 15px; display: block; z-index: 10; }
-.btn-admin {
-font-family: 'Segoe UI', sans-serif;
-font-size: 0.75rem;
-background: var(--accent);
-border: 1px solid var(--accent);
-color: var(--primary);
-padding: 5px 12px;
-border-radius: 20px;
-cursor: pointer;
-font-weight: 700;
-}
-.brand-logo-container { max-width: 75px; margin: 0 auto 2px auto; overflow: hidden; display: flex; align-items: center; justify-content: center; border-radius: 6px; border: 2px solid var(--accent); }
-.brand-logo-container img { width: 100%; height: auto; object-fit: contain; display: block; }
-.logo-text { font-size: 1.2rem; font-weight: 300; letter-spacing: 2px; color: var(--white); text-transform: uppercase; margin-bottom: 0px; }
-.subtitle { font-family: 'Segoe UI', sans-serif; font-size: 0.55rem; letter-spacing: 1px; color: var(--accent); text-transform: uppercase; display: block; }
-.tv-card {
-background: rgba(255, 255, 255, 0.98);
-width: 100%;
-max-width: 950px;
-max-height: 82vh;
-border-bottom-left-radius: 16px;
-border-bottom-right-radius: 16px;
-padding: 15px 25px;
-box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-border: 2px solid var(--accent);
-border-top: none;
-display: flex;
-flex-direction: column;
-text-align: center;
-margin: auto;
-position: relative;
-}
-.card-header { margin-bottom: 6px; flex-shrink: 0; }
-h2 { color: var(--primary); font-size: 1.2rem; font-weight: 400; margin-bottom: 2px; }
-.welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.68rem; color: #555; font-style: italic; }
-.advice-grid {
-display: grid;
-grid-template-columns: repeat(2, 1fr);
-gap: 12px;
-overflow-y: auto;
-max-height: 55vh;
-padding: 5px;
-flex-grow: 1;
-align-content: start;
-}
-.advice-grid::-webkit-scrollbar { width: 8px; }
-.advice-grid::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
-.advice-box {
-background: var(--white);
-border: 2px solid var(--accent);
-border-radius: 10px;
-padding: 12px;
-text-align: left;
-font-family: 'Segoe UI', sans-serif;
-display: flex;
-flex-direction: row;
-align-items: center;
-gap: 10px;
-cursor: pointer;
-transition: all 0.2s ease;
-min-height: 105px;
-}
-.advice-box:focus, .advice-box:hover {
-border-color: #12263a;
-box-shadow: 0 0 12px rgba(18, 38, 58, 0.4);
-outline: none;
-transform: scale(1.01);
-background: #fffdf9;
-}
-.advice-content-area { flex-grow: 1; overflow: hidden; }
-.advice-box h3 { font-size: 0.85rem; color: var(--primary); margin-bottom: 3px; font-family: 'Playfair Display', serif; }
-.advice-box p { font-size: 0.72rem; color: #555; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.advice-thumb {
-width: 75px;
-height: 75px;
-flex-shrink: 0;
-border-radius: 6px;
-border: 1px solid #ddd;
-object-fit: cover;
-background: #fcfbfa;
-padding: 2px;
-}
-.footer-actions { display: flex; justify-content: center; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 8px; margin-top: 8px; font-family: 'Segoe UI', sans-serif; flex-shrink: 0; }
-.btn-action { background-color: var(--primary); color: white; padding: 6px 18px; border-radius: 8px; font-weight: 600; font-size: 0.72rem; cursor: pointer; text-decoration: none; display: inline-block; }
-.btn-action:focus { outline: 3px solid var(--accent); }
-#fullscreen-view {
-display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(18, 38, 58, 0.96); z-index: 5000; justify-content: center; align-items: center; padding: 20px; font-family: 'Segoe UI', sans-serif;
-}
-.fullscreen-card {
-background: white; width: 100%; max-width: 820px; max-height: 92vh; border-radius: 16px; padding: 25px; border: 3px solid var(--accent); box-shadow: 0 25px 50px rgba(0,0,0,0.6); display: flex; flex-direction: column; justify-content: space-between; overflow-y: auto; text-align: center;
-}
-.fullscreen-card h3 { font-family: 'Playfair Display', serif; color: var(--primary); font-size: 1.5rem; margin-bottom: 8px; text-align: left; }
-.fullscreen-card p.fs-desc { font-size: 0.95rem; color: #333; line-height: 1.5; margin-bottom: 15px; text-align: left; }
-.fullscreen-img { width: 100%; max-height: 420px; object-fit: contain; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 15px; background: #fcfbfa; }
-.qr-container {
-display: flex;
-flex-direction: column;
-align-items: center;
-background: #fdfcfb;
-border: 1px solid var(--accent);
-padding: 15px;
-border-radius: 10px;
-margin-bottom: 15px;
-}
-.qr-container p { font-size: 0.85rem; color: var(--primary); font-weight: 600; margin-bottom: 10px; font-family: 'Segoe UI', sans-serif; text-align: center; }
-#qrcode-box { background: white; padding: 10px; border-radius: 6px; border: 1px solid #eee; display: inline-block; }
-.btn-close-fullscreen { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; cursor: pointer; align-self: center; }
-.btn-close-fullscreen:hover, .btn-close-fullscreen:focus { background: var(--accent); color: var(--primary); outline: none; }
-#admin-modal {
-display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(18, 38, 58, 0.9); justify-content: center; align-items: center; z-index: 10000; font-family: 'Segoe UI', sans-serif;
-}
-.modal-content {
-background: white; padding: 20px; border-radius: 12px; width: 85%; max-width: 300px; text-align: center; border: 2px solid var(--accent);
-}
-.modal-content input { width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 0.85rem; text-align: center; }
-.modal-btn { background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 8px; font-size: 0.8rem; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conseils Personnalisés | Les Ozabris</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root { --primary: #12263a; --accent: #c5a880; --text-dark: #2c3e50; --white: #ffffff; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Playfair Display', 'Georgia', serif; }
+        
+        body {
+            width: 100vw;
+            min-height: 100vh;
+            margin: 0;
+            padding: 10px;
+            background: linear-gradient(rgba(18, 38, 58, 0.75), rgba(18, 38, 58, 0.85)), url('fond_page.png') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        header { 
+            background: var(--primary);
+            text-align: center; 
+            padding: 12px 20px; 
+            position: relative; 
+            color: var(--white);
+            width: 100%;
+            max-width: 950px;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            border: 2px solid var(--accent);
+            border-bottom: none;
+            flex-shrink: 0;
+        }
+
+        .header-top-controls { position: absolute; top: 8px; right: 15px; display: block; z-index: 10; }
+        .btn-admin {
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 0.75rem;
+            background: var(--accent);
+            border: 1px solid var(--accent);
+            color: var(--primary);
+            padding: 5px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .brand-logo-container { max-width: 75px; margin: 0 auto 2px auto; overflow: hidden; display: flex; align-items: center; justify-content: center; border-radius: 6px; border: 2px solid var(--accent); }
+        .brand-logo-container img { width: 100%; height: auto; object-fit: contain; display: block; }
+        
+        .logo-text { font-size: 1.2rem; font-weight: 300; letter-spacing: 2px; color: var(--white); text-transform: uppercase; margin-bottom: 0px; }
+        .subtitle { font-family: 'Segoe UI', sans-serif; font-size: 0.55rem; letter-spacing: 1px; color: var(--accent); text-transform: uppercase; display: block; }
+
+        .tv-card {
+            background: rgba(255, 255, 255, 0.98);
+            width: 100%;
+            max-width: 950px;
+            max-height: 82vh;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            padding: 15px 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border: 2px solid var(--accent);
+            border-top: none;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            margin: auto;
+            position: relative;
+        }
+
+        .card-header { margin-bottom: 6px; flex-shrink: 0; }
+        h2 { color: var(--primary); font-size: 1.2rem; font-weight: 400; margin-bottom: 2px; }
+        .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.68rem; color: #555; font-style: italic; }
+
+        .advice-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 12px; 
+            overflow-y: auto; 
+            max-height: 55vh; 
+            padding: 5px; 
+            flex-grow: 1;
+            align-content: start;
+        }
+        .advice-grid::-webkit-scrollbar { width: 8px; }
+        .advice-grid::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+        
+        .advice-box { 
+            background: var(--white); 
+            border: 2px solid var(--accent); 
+            border-radius: 10px; 
+            padding: 12px; 
+            text-align: left; 
+            font-family: 'Segoe UI', sans-serif; 
+            display: flex; 
+            flex-direction: row; 
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 105px;
+        }
+        .advice-box:focus, .advice-box:hover {
+            border-color: #12263a;
+            box-shadow: 0 0 12px rgba(18, 38, 58, 0.4);
+            outline: none;
+            transform: scale(1.01);
+            background: #fffdf9;
+        }
+
+        .advice-content-area { flex-grow: 1; overflow: hidden; }
+        .advice-box h3 { font-size: 0.85rem; color: var(--primary); margin-bottom: 3px; font-family: 'Playfair Display', serif; }
+        .advice-box p { font-size: 0.72rem; color: #555; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+        .advice-thumb {
+            width: 75px;
+            height: 75px;
+            flex-shrink: 0;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            object-fit: cover;
+            background: #fcfbfa;
+            padding: 2px;
+        }
+
+        .footer-actions { display: flex; justify-content: center; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 8px; margin-top: 8px; font-family: 'Segoe UI', sans-serif; flex-shrink: 0; }
+        .btn-action { background-color: var(--primary); color: white; padding: 6px 18px; border-radius: 8px; font-weight: 600; font-size: 0.72rem; cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn-action:focus { outline: 3px solid var(--accent); }
+
+        #fullscreen-view {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(18, 38, 58, 0.96); z-index: 5000; justify-content: center; align-items: center; padding: 20px; font-family: 'Segoe UI', sans-serif;
+        }
+        .fullscreen-card {
+            background: white; width: 100%; max-width: 820px; max-height: 92vh; border-radius: 16px; padding: 25px; border: 3px solid var(--accent); box-shadow: 0 25px 50px rgba(0,0,0,0.6); display: flex; flex-direction: column; justify-content: space-between; overflow-y: auto; text-align: center;
+        }
+        .fullscreen-card h3 { font-family: 'Playfair Display', serif; color: var(--primary); font-size: 1.5rem; margin-bottom: 8px; text-align: left; }
+        .fullscreen-card p.fs-desc { font-size: 0.95rem; color: #333; line-height: 1.5; margin-bottom: 15px; text-align: left; }
+        
+        .fullscreen-img { width: 100%; max-height: 420px; object-fit: contain; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 15px; background: #fcfbfa; }
+        
+        .qr-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fdfcfb;
+            border: 1px solid var(--accent);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .qr-container p { font-size: 0.85rem; color: var(--primary); font-weight: 600; margin-bottom: 10px; font-family: 'Segoe UI', sans-serif; text-align: center; }
+        #qrcode-box { background: white; padding: 10px; border-radius: 6px; border: 1px solid #eee; display: inline-block; }
+
+        .btn-close-fullscreen { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; cursor: pointer; align-self: center; }
+        .btn-close-fullscreen:hover, .btn-close-fullscreen:focus { background: var(--accent); color: var(--primary); outline: none; }
+
+        #admin-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(18, 38, 58, 0.9); justify-content: center; align-items: center; z-index: 10000; font-family: 'Segoe UI', sans-serif;
+        }
+        .modal-content {
+            background: white; padding: 20px; border-radius: 12px; width: 85%; max-width: 300px; text-align: center; border: 2px solid var(--accent);
+        }
+        .modal-content input { width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 0.85rem; text-align: center; }
+        .modal-btn { background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 8px; font-size: 0.8rem; }
+    </style>
 </head>
 <body>
-<header>
-<div class="header-top-controls" id="admin-container">
-<button type="button" class="btn-admin" onclick="openPinModal()">⚙️ Admin</button>
-</div>
-<div class="brand-logo-container">
-<img src="https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg" alt="Les Ozabris Logo">
-</div>
-<h1 class="logo-text">Les Ozabris</h1>
-<span class="subtitle">Cottages de Prestige & Perles Rares • La Réunion</span>
-</header>
-<div class="tv-card">
-<div class="card-header">
-<h2 id="page-main-title">Recommandations exclusives</h2>
-<p class="welcome-sub">✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.</p>
-</div>
-<div class="advice-grid" id="advice-grid-container">
-<p style="text-align: center; color: #666; grid-column: span 2; padding: 20px;">Chargement...</p>
-</div>
-<div class="footer-actions">
-<a id="back-home-btn" href="index.html" class="btn-action">🏠 Retour à l'accueil</a>
-</div>
-</div>
-<div id="fullscreen-view">
-<div class="fullscreen-card">
-<div>
-<h3 id="fs-title">Titre</h3>
-<p id="fs-text" class="fs-desc">Description...</p>
-<div id="fs-media-container" style="text-align: center;"></div>
-</div>
-<button type="button" class="btn-close-fullscreen" id="close-fs-btn" onclick="closeFullscreen()">✕ Quitter et revenir</button>
-</div>
-</div>
-<div id="admin-modal">
-<div class="modal-content">
-<button type="button" onclick="closePinModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
-<h3>🔒 Accès Admin</h3>
-<p style="font-size: 0.8rem; color: #666; margin: 4px 0;">Code PIN de sécurité</p>
-<input type="password" id="adminPin" placeholder="PIN" maxlength="6">
-<button type="button" class="modal-btn" onclick="verifyPin()">Valider</button>
-<p id="adminError" style="color: #b94a48; font-size: 0.7rem; margin-top: 6px; display: none;">Code incorrect</p>
-</div>
-</div>
-<script>
-const staticAdvices = [
-{
-title: "Super U 3B",
-text: "Supermarché le plus proche d'ici",
-img: "https://i.postimg.cc/k47g2q8N/superu.jpg",
-linkUrl: "https://maps.google.com"
-},
-{
-title: "Vanille Vallée",
-text: "Leurs sachets pour les...",
-img: "https://i.postimg.cc/6q8L899s/vanille.jpg",
-linkUrl: ""
-},
-{
-title: "Le VORTEX Énergétique de l'Etang Salé",
-text: "Un lieu hors du temps, un moment po...",
-img: "https://i.postimg.cc/027y6J5v/vortex.jpg",
-linkUrl: ""
-},
-{
-title: "Marché forain de St Paul",
-text: "Le plus grand marché d...",
-img: "https://i.postimg.cc/3w9f65gX/marche.jpg",
-linkUrl: ""
-},
-{
-title: "Plage de l'Ermitage",
-text: "Idéal pour le snorkeling et la baignade sécurisée dans le lagon.",
-img: "https://i.postimg.cc/18Gz3k1b/ermitage.jpg",
-linkUrl: ""
-},
-{
-title: "Maïdo - Lever de soleil",
-text: "Point de vue incontournable sur le cirque de Mafate.",
-img: "https://i.postimg.cc/2y5Z7f6q/maido.jpg",
-linkUrl: ""
-},
-{
-title: "Jardin d'Éden",
-text: "Jardin botanique tropical à Saint-Gilles les Bains.",
-img: "https://i.postimg.cc/8c4h62kL/eden.jpg",
-linkUrl: ""
-}
-];
-window.onload = function() {
-const urlParams = new URLSearchParams(window.location.search);
-const giteParam = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
-let currentGiteKey = giteParam.includes("grand") ? "grandzabris" : "ptitzabris";
-document.getElementById('back-home-btn').href = ⁠index.html?gite=${currentGiteKey}&v=99⁠;
-const container = document.getElementById('advice-grid-container');
-container.innerHTML = "";
-if (staticAdvices.length === 0) {
-container.innerHTML = ⁠<p style="text-align: center; color: #666; grid-column: span 2; padding: 20px;">Aucune recommandation disponible.</p>⁠;
-return;
-}
-staticAdvices.forEach((adv) => {
-const box = document.createElement('div');
-box.className = 'advice-box';
-box.setAttribute('tabindex', '0');
-const triggerAction = function(e) {
-e.preventDefault();
-openFullscreen(adv.title, adv.text, adv.img, adv.linkUrl);
-};
-box.onclick = triggerAction;
-box.ontouchend = triggerAction;
-box.onkeydown = function(e) {
-if (e.key === 'Enter' || e.keyCode === 13) triggerAction(e);
-};
-let imgTag = "";
-if (adv.img && adv.img.trim() !== "" && adv.img.startsWith("http")) {
-imgTag = ⁠<img src="${adv.img.trim()}" class="advice-thumb" alt="${adv.title}">⁠;
-}
-box.innerHTML = ⁠<div class="advice-content-area"> <h3>${adv.title}</h3> <p>${adv.text}</p> </div> ${imgTag}⁠;
-container.appendChild(box);
-});
-}
-function openFullscreen(title, text, imageUrl, linkUrl) {
-document.getElementById('fs-title').innerText = title;
-document.getElementById('fs-text').innerText = text;
-const mediaContainer = document.getElementById('fs-media-container');
-mediaContainer.innerHTML = "";
-if (linkUrl && linkUrl.trim() !== "" && linkUrl.startsWith("http")) {
-const qrWrapper = document.createElement('div');
-qrWrapper.className = 'qr-container';
-qrWrapper.innerHTML = ⁠<p>📱 Pour accéder à la recommandation en ligne depuis votre téléphone, scannez ce QR code :</p> <div id="qrcode-box"></div>⁠;
-mediaContainer.appendChild(qrWrapper);
-try {
-new QRCode(document.getElementById("qrcode-box"), {
-text: linkUrl.trim(),
-width: 150,
-height: 150,
-colorDark: "#12263a",
-colorLight: "#ffffff",
-correctLevel: QRCode.CorrectLevel.H
-});
-} catch(err) {
-document.getElementById("qrcode-box").innerText = linkUrl.trim();
-}
-} else if (imageUrl && imageUrl.trim() !== "" && imageUrl.startsWith("http")) {
-mediaContainer.innerHTML = ⁠<img src="${imageUrl.trim()}" alt="${title}" class="fullscreen-img">⁠;
-}
-document.getElementById('fullscreen-view').style.display = 'flex';
-setTimeout(() => {
-document.getElementById('close-fs-btn').focus();
-}, 100);
-}
-function closeFullscreen() {
-document.getElementById('fullscreen-view').style.display = 'none';
-}
-function openPinModal() {
-document.getElementById('admin-modal').style.display = 'flex';
-document.getElementById('adminPin').focus();
-}
-function closePinModal() {
-document.getElementById('admin-modal').style.display = 'none';
-document.getElementById('adminError').style.display = 'none';
-document.getElementById('adminPin').value = '';
-}
-function verifyPin() {
-const pin = document.getElementById('adminPin').value.trim();
-if (pin === '140769') {
-window.location.href = ⁠admin.html?gite=ptitzabris⁠;
-} else {
-document.getElementById('adminError').style.display = 'block';
-document.getElementById('adminPin').value = '';
-}
-}
-</script>
+    <header>
+        <div class="header-top-controls" id="admin-container">
+            <button type="button" class="btn-admin" onclick="openPinModal()">⚙️ Admin</button>
+        </div>
+        <div class="brand-logo-container">
+            <img src="https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg" alt="Les Ozabris Logo">
+        </div>
+        <h1 class="logo-text">Les Ozabris</h1>
+        <span class="subtitle">Cottages de Prestige & Perles Rares • La Réunion</span>
+    </header>
+
+    <div class="tv-card">
+        <div class="card-header">
+            <h2 id="page-main-title">Recommandations exclusives</h2>
+            <p class="welcome-sub">✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.</p>
+        </div>
+
+        <div class="advice-grid" id="advice-grid-container">
+            <!-- Rempli instantanément par le script -->
+        </div>
+        
+        <div class="footer-actions">
+            <a id="back-home-btn" href="index.html" class="btn-action">🏠 Retour à l'accueil</a>
+        </div>
+    </div>
+
+    <div id="fullscreen-view">
+        <div class="fullscreen-card">
+            <div>
+                <h3 id="fs-title">Titre</h3>
+                <p id="fs-text" class="fs-desc">Description...</p>
+                <div id="fs-media-container" style="text-align: center;"></div>
+            </div>
+            <button type="button" class="btn-close-fullscreen" id="close-fs-btn" onclick="closeFullscreen()">✕ Quitter et revenir</button>
+        </div>
+    </div>
+
+    <div id="admin-modal">
+        <div class="modal-content">
+            <button type="button" onclick="closePinModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
+            <h3>🔒 Accès Admin</h3>
+            <p style="font-size: 0.8rem; color: #666; margin: 4px 0;">Code PIN de sécurité</p>
+            <input type="password" id="adminPin" placeholder="PIN" maxlength="6">
+            <button type="button" class="modal-btn" onclick="verifyPin()">Valider</button>
+            <p id="adminError" style="color: #b94a48; font-size: 0.7rem; margin-top: 6px; display: none;">Code incorrect</p>
+        </div>
+    </div>
+
+    <script>
+        // Données en dur intégrées pour un affichage instantané sans aucune attente réseau
+        const staticAdvices = [
+            {
+                title: "Super U 3B",
+                text: "Supermarché le plus proche d'ici",
+                img: "https://i.postimg.cc/k47g2q8N/superu.jpg",
+                linkUrl: "https://maps.google.com"
+            },
+            {
+                title: "Vanille Vallée",
+                text: "Leurs sachets pour les...",
+                img: "https://i.postimg.cc/6q8L899s/vanille.jpg",
+                linkUrl: ""
+            },
+            {
+                title: "Le VORTEX Énergétique de l'Etang Salé",
+                text: "Un lieu hors du temps, un moment po...",
+                img: "https://i.postimg.cc/027y6J5v/vortex.jpg",
+                linkUrl: ""
+            },
+            {
+                title: "Marché forain de St Paul",
+                text: "Le plus grand marché d...",
+                img: "https://i.postimg.cc/3w9f65gX/marche.jpg",
+                linkUrl: ""
+            },
+            {
+                title: "Plage de l'Ermitage",
+                text: "Idéal pour le snorkeling et la baignade sécurisée dans le lagon.",
+                img: "https://i.postimg.cc/18Gz3k1b/ermitage.jpg",
+                linkUrl: ""
+            },
+            {
+                title: "Maïdo - Lever de soleil",
+                text: "Point de vue incontournable sur le cirque de Mafate.",
+                img: "https://i.postimg.cc/2y5Z7f6q/maido.jpg",
+                linkUrl: ""
+            },
+            {
+                title: "Jardin d'Éden",
+                text: "Jardin botanique tropical à Saint-Gilles les Bains.",
+                img: "https://i.postimg.cc/8c4h62kL/eden.jpg",
+                linkUrl: ""
+            }
+        ];
+
+        // Exécution immédiate au chargement du DOM sans fonction asynchrone bloquante
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const giteParam = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
+            let currentGiteKey = giteParam.includes("grand") ? "grandzabris" : "ptitzabris";
+            document.getElementById('back-home-btn').href = `index.html?gite=${currentGiteKey}&v=99`;
+
+            const container = document.getElementById('advice-grid-container');
+            container.innerHTML = "";
+
+            if (staticAdvices.length === 0) {
+                container.innerHTML = `<p style="text-align: center; color: #666; grid-column: span 2; padding: 20px;">Aucune recommandation disponible.</p>`;
+                return;
+            }
+
+            staticAdvices.forEach((adv) => {
+                const box = document.createElement('div');
+                box.className = 'advice-box';
+                box.setAttribute('tabindex', '0');
+
+                const triggerAction = function(e) {
+                    e.preventDefault();
+                    openFullscreen(adv.title, adv.text, adv.img, adv.linkUrl);
+                };
+
+                box.onclick = triggerAction;
+                box.ontouchend = triggerAction;
+                box.onkeydown = function(e) {
+                    if (e.key === 'Enter' || e.keyCode === 13) triggerAction(e);
+                };
+
+                let imgTag = "";
+                if (adv.img && adv.img.trim() !== "" && adv.img.startsWith("http")) {
+                    imgTag = `<img src="${adv.img.trim()}" class="advice-thumb" alt="${adv.title}">`;
+                }
+
+                box.innerHTML = `
+                    <div class="advice-content-area">
+                        <h3>${adv.title}</h3>
+                        <p>${adv.text}</p>
+                    </div>
+                    ${imgTag}
+                `;
+                container.appendChild(box);
+            });
+        });
+
+        function openFullscreen(title, text, imageUrl, linkUrl) {
+            document.getElementById('fs-title').innerText = title;
+            document.getElementById('fs-text').innerText = text;
+            
+            const mediaContainer = document.getElementById('fs-media-container');
+            mediaContainer.innerHTML = "";
+
+            if (linkUrl && linkUrl.trim() !== "" && linkUrl.startsWith("http")) {
+                const qrWrapper = document.createElement('div');
+                qrWrapper.className = 'qr-container';
+                qrWrapper.innerHTML = `
+                    <p>📱 Pour accéder à la recommandation en ligne depuis votre téléphone, scannez ce QR code :</p>
+                    <div id="qrcode-box"></div>
+                `;
+                mediaContainer.appendChild(qrWrapper);
+
+                try {
+                    new QRCode(document.getElementById("qrcode-box"), {
+                        text: linkUrl.trim(),
+                        width: 150,
+                        height: 150,
+                        colorDark: "#12263a",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                } catch(err) {
+                    document.getElementById("qrcode-box").innerText = linkUrl.trim();
+                }
+            } else if (imageUrl && imageUrl.trim() !== "" && imageUrl.startsWith("http")) {
+                mediaContainer.innerHTML = `<img src="${imageUrl.trim()}" alt="${title}" class="fullscreen-img">`;
+            }
+
+            document.getElementById('fullscreen-view').style.display = 'flex';
+            setTimeout(() => {
+                document.getElementById('close-fs-btn').focus();
+            }, 100);
+        }
+
+        function closeFullscreen() {
+            document.getElementById('fullscreen-view').style.display = 'none';
+        }
+
+        function openPinModal() {
+            document.getElementById('admin-modal').style.display = 'flex';
+            document.getElementById('adminPin').focus();
+        }
+        function closePinModal() {
+            document.getElementById('admin-modal').style.display = 'none';
+            document.getElementById('adminError').style.display = 'none';
+            document.getElementById('adminPin').value = '';
+        }
+        function verifyPin() {
+            const pin = document.getElementById('adminPin').value.trim();
+            if (pin === '140769') {
+                window.location.href = `admin.html?gite=ptitzabris`;
+            } else {
+                document.getElementById('adminError').style.display = 'block';
+                document.getElementById('adminPin').value = '';
+            }
+        }
+    </script>
 </body>
 </html>
