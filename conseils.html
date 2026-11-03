@@ -1,546 +1,344 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#12263a">
-
 <title>Les conseils — Les Ozabris</title>
 
 <style>
 :root {
-  --navy: #12263a;
-  --navy2: #203c55;
-  --gold: #c5a880;
-  --cream: #f5f0e7;
-  --white: #ffffff;
+  --bleu: #12263a;
+  --bleu2: #25465f;
+  --or: #c5a880;
+  --creme: #f6f1e8;
 }
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
   margin: 0;
   min-height: 100vh;
   font-family: Arial, Helvetica, sans-serif;
-  color: var(--navy);
+  color: var(--bleu);
   background:
-    linear-gradient(
-      rgba(245,240,231,.91),
-      rgba(245,240,231,.95)
-    ),
+    linear-gradient(rgba(246,241,232,.92),rgba(246,241,232,.95)),
     url("fond_page.png") center / cover fixed;
 }
-
-button, a {
-  -webkit-tap-highlight-color: transparent;
-}
-
-button:focus-visible,
-a:focus-visible,
-select:focus-visible {
-  outline: 4px solid #e8ae40;
+button, a { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible {
+  outline: 4px solid #e9aa31;
   outline-offset: 4px;
 }
-
 header {
-  background:
-    linear-gradient(
-      135deg,
-      #12263a,
-      #23435c
-    );
-  border-bottom: 5px solid var(--gold);
-  color: white;
+  padding: 22px 15px;
   text-align: center;
-  padding: 20px 16px 24px;
+  background: linear-gradient(135deg,var(--bleu),var(--bleu2));
+  border-bottom: 5px solid var(--or);
+  color: white;
 }
-
 .logo {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
+  width: 95px;
+  height: 95px;
   border-radius: 50%;
-  border: 3px solid var(--gold);
-  background: white;
-}
-
-header h1 {
-  margin: 12px 0 6px;
-  font-size: clamp(27px, 4vw, 43px);
-}
-
-header p {
-  margin: 6px 0;
-  color: #e8dbc9;
-}
-
-.welcome {
-  font-size: clamp(17px, 2.2vw, 24px);
-}
-
-.top-actions {
-  max-width: 1100px;
-  margin: 16px auto 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-}
-
-.top-actions a,
-.top-actions button {
-  display: inline-block;
-  padding: 12px 18px;
-  border: 1px solid var(--gold);
-  border-radius: 12px;
-  color: white;
-  background: rgba(255,255,255,.09);
-  text-decoration: none;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.top-actions a:hover,
-.top-actions button:hover {
-  background: var(--gold);
-  color: var(--navy);
-}
-
-main {
-  max-width: 1350px;
-  margin: 0 auto;
-  padding: 25px 18px 50px;
-}
-
-.intro {
-  text-align: center;
-  max-width: 850px;
-  margin: 0 auto 28px;
-}
-
-.intro h2 {
-  font-size: clamp(23px, 3vw, 34px);
-  margin: 0 0 10px;
-}
-
-.intro p {
-  font-size: 17px;
-  line-height: 1.6;
-  margin: 0;
-}
-
-.status {
-  margin: 20px auto;
-  padding: 15px;
-  max-width: 850px;
-  border-radius: 12px;
-  background: white;
-  text-align: center;
-  box-shadow: 0 3px 14px rgba(0,0,0,.06);
-}
-
-.status.error {
-  background: #fff0f0;
-  color: #9c3030;
-}
-
-.status:empty {
-  display: none;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns:
-    repeat(auto-fit, minmax(270px, 1fr));
-  gap: 23px;
-}
-
-.card {
-  background: white;
-  border-radius: 19px;
-  overflow: hidden;
-  box-shadow: 0 7px 24px rgba(0,0,0,.12);
-  border: 1px solid rgba(197,168,128,.45);
-  display: flex;
-  flex-direction: column;
-  transition: transform .2s, box-shadow .2s;
-}
-
-.card:hover,
-.card:focus-within {
-  transform: translateY(-4px);
-  box-shadow: 0 11px 28px rgba(0,0,0,.17);
-}
-
-.card-image-button {
-  display: block;
-  width: 100%;
-  padding: 0;
-  border: 0;
-  cursor: pointer;
-  background: #e4e0d8;
-}
-
-.card-image {
-  width: 100%;
-  height: 235px;
+  border: 3px solid var(--or);
   object-fit: cover;
-  display: block;
+  background: white;
 }
-
-.card-body {
-  padding: 20px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+h1 {
+  font-size: clamp(27px,4vw,42px);
+  margin: 12px 0 6px;
 }
-
-.card h3 {
-  font-size: 21px;
-  margin: 0 0 11px;
-  color: var(--navy);
-}
-
-.card p {
-  font-size: 16px;
-  line-height: 1.55;
-  margin: 0 0 18px;
-  white-space: pre-line;
-  flex: 1;
-}
-
-.card-actions {
+header p { color: #e9dac5; }
+nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 9px;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 18px;
 }
-
-.btn {
-  display: inline-block;
-  padding: 12px 15px;
-  border-radius: 10px;
-  border: 0;
-  background: var(--navy);
+nav a, nav button {
+  padding: 12px 17px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid var(--or);
+  border-radius: 11px;
   color: white;
   font-size: 15px;
   font-weight: bold;
   text-decoration: none;
-  text-align: center;
   cursor: pointer;
-  flex: 1;
 }
-
-.btn.gold {
-  background: var(--gold);
-  color: var(--navy);
+nav a:hover, nav button:hover {
+  background: var(--or);
+  color: var(--bleu);
 }
-
-.btn:hover {
-  filter: brightness(1.12);
+main {
+  max-width: 1350px;
+  margin: auto;
+  padding: 28px 16px 45px;
 }
-
-.qr-panel {
-  max-width: 700px;
-  margin: 40px auto 0;
-  background: white;
-  border-radius: 18px;
-  padding: 25px;
+.intro {
   text-align: center;
-  border: 2px solid var(--gold);
-  box-shadow: 0 5px 20px rgba(0,0,0,.09);
+  margin-bottom: 27px;
 }
-
-.qr-panel h2 {
+.intro h2 {
+  font-size: clamp(24px,3vw,34px);
   margin: 0 0 10px;
 }
-
-.qr-panel p {
+.intro p {
+  font-size: 17px;
   line-height: 1.5;
 }
-
-.qr-box {
+.status {
+  max-width: 850px;
+  margin: 15px auto;
+  padding: 15px;
+  background: white;
+  border-radius: 12px;
+  text-align: center;
+}
+.status:empty { display: none; }
+.status.error {
+  background: #fff0f0;
+  color: #a13535;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(270px,1fr));
+  gap: 22px;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: white;
+  border-radius: 18px;
+  border: 1px solid rgba(197,168,128,.5);
+  box-shadow: 0 7px 22px rgba(0,0,0,.11);
+}
+.card-photo {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: #e8e2d9;
+  cursor: pointer;
+}
+.card-photo img {
+  width: 100%;
+  height: 235px;
+  display: block;
+  object-fit: cover;
+}
+.card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.card h3 {
+  font-size: 21px;
+  margin: 0 0 12px;
+}
+.card p {
+  margin: 0 0 18px;
+  line-height: 1.55;
+  font-size: 16px;
+  white-space: pre-line;
+  flex: 1;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+.btn {
+  flex: 1 1 auto;
+  padding: 12px 14px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--bleu);
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn.gold {
+  background: var(--or);
+  color: var(--bleu);
+}
+.btn:hover { filter: brightness(1.1); }
+.qr-panel {
+  max-width: 720px;
+  margin: 40px auto 0;
+  padding: 25px;
+  background: white;
+  border: 2px solid var(--or);
+  border-radius: 18px;
+  text-align: center;
+}
+.qr-holder {
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin: 15px auto;
-  min-height: 170px;
+  margin: 16px auto;
+  min-height: 160px;
 }
-
-.qr-box img,
-.qr-box canvas {
-  max-width: 100%;
-}
-
+.qr-holder img, .qr-holder canvas { max-width: 100%; }
 footer {
-  background: var(--navy);
-  color: #eadbc7;
+  background: var(--bleu);
+  color: #e9dac5;
   text-align: center;
-  padding: 23px 15px;
-  font-size: 14px;
+  padding: 24px 15px;
 }
-
-/* Fenêtre plein écran */
-
 .modal {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: rgba(8,18,30,.96);
   display: none;
-  align-items: center;
   justify-content: center;
-  padding: 20px;
+  align-items: center;
+  padding: 14px;
+  background: rgba(9,19,30,.96);
 }
-
-.modal.open {
-  display: flex;
-}
-
-.modal-content {
-  position: relative;
-  width: min(1100px, 100%);
-  max-height: 94vh;
+.modal.open { display: flex; }
+.modal-box {
+  width: min(1050px,100%);
+  max-height: 95vh;
   overflow: auto;
-  border-radius: 20px;
-  background: white;
   padding: 20px;
+  border-radius: 18px;
+  background: white;
   text-align: center;
 }
-
-.modal-close {
+.close {
   position: sticky;
   top: 0;
   float: right;
-  z-index: 2;
-  background: var(--navy);
-  color: white;
+  width: 49px;
+  height: 49px;
   border: 0;
   border-radius: 50%;
-  width: 48px;
-  height: 48px;
-  font-size: 26px;
+  background: var(--bleu);
+  color: white;
+  font-size: 27px;
   cursor: pointer;
 }
-
-.modal-photo {
+.modal-image {
   display: block;
   max-width: 100%;
-  max-height: 52vh;
+  max-height: 49vh;
+  margin: 10px auto;
   object-fit: contain;
-  margin: 0 auto 16px;
   border-radius: 12px;
 }
-
-.modal-title {
-  font-size: clamp(22px, 3vw, 32px);
-  margin: 12px 0;
-}
-
-.modal-text {
-  font-size: 17px;
-  line-height: 1.6;
+.modal-description {
   white-space: pre-line;
+  line-height: 1.55;
 }
-
 .modal-qr {
   display: flex;
   justify-content: center;
-  margin: 15px auto;
+  margin: 14px auto;
 }
-
-.modal-qr:empty {
-  display: none;
-}
-
-.modal-link {
+.modal-qr:empty { display: none; }
+.modal-website {
   display: inline-block;
-  margin: 10px;
-  padding: 13px 22px;
-  background: var(--gold);
-  color: var(--navy);
+  margin: 10px auto;
+  padding: 14px 24px;
   border-radius: 10px;
+  background: var(--or);
+  color: var(--bleu);
   font-weight: bold;
   text-decoration: none;
 }
-
-.hidden {
-  display: none !important;
+.hidden { display: none !important; }
+@media (min-width:1300px) {
+  .grid { grid-template-columns: repeat(3,1fr); }
+  .card-photo img { height: 270px; }
 }
-
-@media (min-width: 1300px) {
-  .grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .card-image {
-    height: 270px;
-  }
-
-  .card h3 {
-    font-size: 24px;
-  }
-}
-
-@media (max-width: 600px) {
-  main {
-    padding: 20px 12px 40px;
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  .card-image {
-    height: 225px;
-  }
-
-  .modal {
-    padding: 8px;
-  }
-
-  .modal-content {
-    padding: 12px;
-  }
+@media (max-width:600px) {
+  .grid { grid-template-columns: 1fr; }
+  main { padding: 20px 12px 35px; }
+  .modal-box { padding: 12px; }
 }
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
 </head>
 
 <body>
 
 <header>
-  <img
-    class="logo"
-    src="images/logo.jpeg"
-    alt="Les Ozabris"
-    onerror="this.style.display='none'"
-  >
+  <img class="logo" src="images/logo.jpeg"
+       alt="Les Ozabris"
+       onerror="this.style.display='none'">
 
-  <h1 id="pageTitle">Nos bonnes adresses</h1>
+  <h1 id="title">Nos bonnes adresses</h1>
+  <p id="cottage"></p>
+  <p id="welcome"></p>
 
-  <p id="cottageName"></p>
-  <p class="welcome" id="welcomeText"></p>
-
-  <nav class="top-actions">
-    <a id="homeLink"
-       href="index.html"
-       data-i18n="home">
-      ← Accueil
-    </a>
-
-    <a id="guideLink"
-       href="guide.html"
-       data-i18n="guide">
-      Guide du gîte
-    </a>
-
-    <a id="adminLink"
-       href="admin.html"
-       data-i18n="admin">
-      Administration
-    </a>
-
-    <button id="refreshButton"
-            type="button"
-            data-i18n="refresh">
-      ↻ Actualiser
-    </button>
+  <nav>
+    <a id="home" href="index.html">← Accueil</a>
+    <a id="guide" href="guide.html">Guide du gîte</a>
+    <a id="admin" href="admin.html">Administration</a>
+    <button id="refresh" type="button">↻ Actualiser</button>
   </nav>
 </header>
 
 <main>
-
   <section class="intro">
-    <h2 id="introTitle">
-      Découvrez La Réunion
-    </h2>
-
+    <h2 id="introTitle">Découvrez La Réunion</h2>
     <p id="introText">
-      Nos coups de cœur pour profiter
-      pleinement de votre séjour.
+      Nos coups de cœur pour profiter de votre séjour.
     </p>
   </section>
 
-  <div
-    id="status"
-    class="status"
-    role="status"
-    aria-live="polite">
+  <div id="status" class="status"
+       role="status" aria-live="polite">
     Chargement des recommandations…
   </div>
 
-  <section
-    id="adviceGrid"
-    class="grid"
-    aria-label="Recommandations">
-  </section>
+  <section id="cards" class="grid"
+           aria-label="Recommandations"></section>
 
   <section class="qr-panel">
-    <h2 id="qrTitle">
+    <h2 id="pageQrTitle">
       Retrouvez nos conseils sur votre téléphone
     </h2>
-
-    <p id="qrText">
-      Scannez ce QR code pour ouvrir
-      cette page sur votre téléphone.
+    <p id="pageQrText">
+      Scannez ce QR code pour ouvrir cette page.
     </p>
-
-    <div class="qr-box" id="pageQr"></div>
+    <div id="pageQr" class="qr-holder"></div>
   </section>
-
 </main>
 
-<footer>
-  Les Ozabris — La Réunion 🌴
-</footer>
+<footer>Les Ozabris — La Réunion 🌴</footer>
 
-<div
-  id="adviceModal"
-  class="modal"
-  role="dialog"
-  aria-modal="true"
-  aria-labelledby="modalTitle"
-  aria-hidden="true">
+<div id="modal" class="modal"
+     role="dialog" aria-modal="true"
+     aria-hidden="true"
+     aria-labelledby="modalTitle">
+  <div class="modal-box">
+    <button id="closeModal" class="close"
+            type="button" aria-label="Fermer">×</button>
 
-  <div class="modal-content">
-    <button
-      id="modalClose"
-      class="modal-close"
-      type="button"
-      aria-label="Fermer">
-      ×
-    </button>
+    <img id="modalImage" class="modal-image" alt="">
+    <h2 id="modalTitle"></h2>
+    <p id="modalDescription" class="modal-description"></p>
 
-    <img
-      id="modalPhoto"
-      class="modal-photo"
-      alt="">
+    <p id="modalQrLabel" class="hidden">
+      Scannez pour visiter le site sur votre téléphone
+    </p>
 
-    <h2 id="modalTitle"
-        class="modal-title"></h2>
+    <div id="modalQr" class="modal-qr"></div>
 
-    <p id="modalText"
-       class="modal-text"></p>
-
-    <div id="modalQr"
-         class="modal-qr"></div>
-
-    <a
-      id="modalLink"
-      class="modal-link"
-      target="_blank"
-      rel="noopener noreferrer">
-      En savoir plus
+    <a id="modalWebsite"
+       class="modal-website hidden"
+       target="_blank"
+       rel="noopener noreferrer">
+      🌐 Visiter le site
     </a>
   </div>
 </div>
@@ -548,11 +346,6 @@ footer {
 <script>
 (function () {
   'use strict';
-
-  /*
-   * LES OZABRIS
-   * CONSEILS CONNECTÉS À GOOGLE SHEETS
-   */
 
   const CONSEILS_API =
     'https://script.google.com/macros/s/' +
@@ -564,24 +357,15 @@ footer {
     'AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq' +
     '/exec';
 
-  const REFRESH_MS = 30000;
-
-  const params =
-    new URLSearchParams(location.search);
+  const params = new URLSearchParams(location.search);
 
   const gite =
     params.get('gite') === 'grandzabris'
-      ? 'grandzabris'
-      : 'ptitzabris';
+      ? 'grandzabris' : 'ptitzabris';
 
-  /*
-   * Pour les télévisions :
-   * ajouter &tv=1 à l'adresse de la page.
-   *
-   * Exemple :
-   * conseils.html?gite=ptitzabris&tv=1
-   */
   const isTV = params.get('tv') === '1';
+
+  const $ = id => document.getElementById(id);
 
   const translations = {
     fr: {
@@ -591,24 +375,17 @@ footer {
       admin: 'Administration',
       refresh: '↻ Actualiser',
       introTitle: 'Découvrez La Réunion',
-      introText:
-        'Nos coups de cœur pour profiter pleinement de votre séjour.',
+      introText: 'Nos coups de cœur pour profiter de votre séjour.',
       loading: 'Chargement des recommandations…',
-      empty:
-        'Aucune recommandation active pour ce gîte actuellement.',
-      error:
-        'Impossible de récupérer les recommandations. Nouvelle tentative automatique dans 30 secondes.',
+      empty: 'Aucune recommandation active pour ce gîte actuellement.',
+      error: 'Impossible de récupérer les recommandations.',
       photo: 'Voir la photo',
-      details: 'En savoir plus',
-      qrTitle:
-        'Retrouvez nos conseils sur votre téléphone',
-      qrText:
-        'Scannez ce QR code pour ouvrir cette page sur votre téléphone.',
-      welcome: 'Bienvenue',
-      cottagePtit: 'Ptitzabris',
-      cottageGrand: 'Grandzabris'
+      website: '🌐 Visiter le site',
+      qrTitle: 'Retrouvez nos conseils sur votre téléphone',
+      qrText: 'Scannez ce QR code pour ouvrir cette page.',
+      qrWebsite: 'Scannez pour visiter le site sur votre téléphone',
+      welcome: 'Bienvenue'
     },
-
     en: {
       title: 'Our local recommendations',
       home: '← Home',
@@ -616,24 +393,17 @@ footer {
       admin: 'Administration',
       refresh: '↻ Refresh',
       introTitle: 'Discover Réunion Island',
-      introText:
-        'Our favourite places and activities to enjoy your stay.',
+      introText: 'Our favourite places and activities for your stay.',
       loading: 'Loading recommendations…',
-      empty:
-        'There are currently no active recommendations for this cottage.',
-      error:
-        'Unable to load recommendations. We will try again automatically in 30 seconds.',
+      empty: 'No active recommendations for this cottage.',
+      error: 'Unable to load recommendations.',
       photo: 'View photo',
-      details: 'Learn more',
-      qrTitle:
-        'Take our recommendations with you',
-      qrText:
-        'Scan this QR code to open this page on your phone.',
-      welcome: 'Welcome',
-      cottagePtit: 'Ptitzabris',
-      cottageGrand: 'Grandzabris'
+      website: '🌐 Visit website',
+      qrTitle: 'Take our recommendations with you',
+      qrText: 'Scan this QR code to open this page.',
+      qrWebsite: 'Scan to open the website on your phone',
+      welcome: 'Welcome'
     },
-
     de: {
       title: 'Unsere Empfehlungen',
       home: '← Startseite',
@@ -641,316 +411,84 @@ footer {
       admin: 'Verwaltung',
       refresh: '↻ Aktualisieren',
       introTitle: 'Entdecken Sie La Réunion',
-      introText:
-        'Unsere Lieblingsorte und Aktivitäten für Ihren Aufenthalt.',
+      introText: 'Unsere Lieblingsorte und Aktivitäten für Ihren Aufenthalt.',
       loading: 'Empfehlungen werden geladen…',
-      empty:
-        'Derzeit sind keine Empfehlungen für diese Unterkunft aktiv.',
-      error:
-        'Empfehlungen konnten nicht geladen werden. Neuer Versuch in 30 Sekunden.',
+      empty: 'Keine aktiven Empfehlungen für diese Unterkunft.',
+      error: 'Empfehlungen konnten nicht geladen werden.',
       photo: 'Foto ansehen',
-      details: 'Mehr erfahren',
-      qrTitle:
-        'Empfehlungen auf Ihrem Smartphone',
-      qrText:
-        'Scannen Sie den QR-Code, um diese Seite auf Ihrem Smartphone zu öffnen.',
-      welcome: 'Willkommen',
-      cottagePtit: 'Ptitzabris',
-      cottageGrand: 'Grandzabris'
+      website: '🌐 Website besuchen',
+      qrTitle: 'Empfehlungen auf Ihrem Smartphone',
+      qrText: 'Scannen Sie diesen QR-Code.',
+      qrWebsite: 'Scannen Sie, um die Website zu öffnen',
+      welcome: 'Willkommen'
     }
   };
 
   let language = 'fr';
   let conseils = [];
-  let modalAdvice = null;
-  let lastFocus = null;
   let loading = false;
-  let loadSequence = 0;
-
-  const $ = id =>
-    document.getElementById(id);
+  let lastFocus = null;
 
   function t(key) {
     return translations[language][key] ||
-      translations.fr[key] ||
-      key;
+           translations.fr[key] || key;
   }
 
   function setText(id, value) {
-    const element = $(id);
-
-    if (element) {
-      element.textContent = value;
-    }
+    $(id).textContent = value;
   }
 
-  /*
-   * PHOTOS LOCALES GITHUB
-   *
-   * Les photos définies dans Google Sheets
-   * sont remplacées par les fichiers locaux
-   * lorsqu'un lieu connu est reconnu.
-   *
-   * Pour les nouveaux lieux, l'image fournie
-   * dans Google Sheets est conservée.
-   */
-  function localImage(advice) {
-    const title = String(
-      advice.title || ''
-    ).toLowerCase();
-
-    const normal = title
+  function normalized(text) {
+    return String(text || '')
+      .toLowerCase()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '');
+  }
 
-    if (
-      normal.includes('super u') ||
-      normal.includes('superu')
-    ) {
-      return 'images/super u.jpeg';
-    }
+  function localImage(advice) {
+    const title = normalized(advice.title);
 
-    if (normal.includes('vanille')) {
-      return 'images/vanille vallee.jpeg';
-    }
-
-    if (normal.includes('vortex')) {
-      return 'images/vortex.jpeg';
-    }
-
-    if (
-      normal.includes('marche') &&
-      normal.includes('paul')
-    ) {
+    if (title.includes('super u')) return 'images/super u.jpeg';
+    if (title.includes('vanille')) return 'images/vanille vallee.jpeg';
+    if (title.includes('vortex')) return 'images/vortex.jpeg';
+    if (title.includes('marche') && title.includes('paul'))
       return 'images/marche st paul.jpeg';
-    }
-
-    if (
-      normal.includes('ermitage') ||
-      normal.includes('hermitage')
-    ) {
+    if (title.includes('ermitage') || title.includes('hermitage'))
       return 'images/plage hermitage.jpeg';
-    }
-
-    if (normal.includes('maido')) {
-      return 'images/maido.jpeg';
-    }
-
-    if (normal.includes('anse des cascades')) {
+    if (title.includes('maido')) return 'images/maido.jpeg';
+    if (title.includes('anse des cascades'))
       return 'images/ansedescascade.jpeg';
-    }
+    if (title.includes('volcan')) return 'images/volcan.jpeg';
+    if (title.includes('salazie')) return 'images/salazie.jpeg';
+    if (title.includes('papangue')) return 'images/papangue.jpeg';
 
-    if (normal.includes('volcan')) {
-      return 'images/volcan.jpeg';
-    }
-
-    if (normal.includes('salazie')) {
-      return 'images/salazie.jpeg';
-    }
-
-    if (normal.includes('papangue')) {
-      return 'images/papangue.jpeg';
-    }
-
-    if (normal.includes('bassin la bert')) {
-      return 'images/bassinlabert.jpeg';
-    }
-
-    return String(advice.img || '').trim() ||
-      'images/logo.jpeg';
+    return String(advice.img || '').trim() || 'images/logo.jpeg';
   }
 
-  /*
-   * LIENS DES PAGES
-   */
-  function configureLinks() {
-    const suffix =
-      '?gite=' + encodeURIComponent(gite) +
-      (isTV ? '&tv=1' : '');
+  function validWebsite(value) {
+    const raw = String(value || '').trim();
+    if (!raw) return '';
 
-    $('homeLink').href =
-      'index.html' + suffix;
-
-    $('guideLink').href =
-      'guide.html' + suffix;
-
-    $('adminLink').href =
-      'admin.html?gite=' +
-      encodeURIComponent(gite);
-
-    if (isTV) {
-      $('adminLink').classList.add('hidden');
-    }
-  }
-
-  /*
-   * TRADUCTION INTERFACE
-   */
-  function translatePage() {
-    document.documentElement.lang = language;
-
-    setText('pageTitle', t('title'));
-    setText('introTitle', t('introTitle'));
-    setText('introText', t('introText'));
-    setText('qrTitle', t('qrTitle'));
-    setText('qrText', t('qrText'));
-
-    setText(
-      'cottageName',
-      gite === 'grandzabris'
-        ? t('cottageGrand')
-        : t('cottagePtit')
-    );
-
-    document.querySelectorAll(
-      '[data-i18n]'
-    ).forEach(function (el) {
-      el.textContent = t(
-        el.getAttribute('data-i18n')
-      );
-    });
-
-    if (conseils.length) {
-      renderConseils();
-    }
-  }
-
-  /*
-   * PERSONNALISATION VOYAGEURS
-   */
-  function dateValue(value) {
-    if (!value) {
-      return null;
-    }
-
-    const str = String(value).trim();
-
-    const match = str.match(
-      /^(\d{4})-(\d{2})-(\d{2})/
-    );
-
-    if (match) {
-      return new Date(
-        Number(match[1]),
-        Number(match[2]) - 1,
-        Number(match[3])
-      );
-    }
-
-    const d = new Date(str);
-
-    return isNaN(d.getTime()) ? null : d;
-  }
-
-  function sameCottage(value) {
-    const str = String(
-      value || ''
-    ).toLowerCase()
-     .replace(/\s+/g, '');
-
-    return str.includes(gite);
-  }
-
-  async function loadVoyageur() {
     try {
-      const response = await fetch(
-        VOYAGEURS_API + '?t=' + Date.now(),
-        { cache: 'no-store' }
-      );
-
-      if (!response.ok) {
-        return;
-      }
-
-      const data = await response.json();
-
-      const voyageurs =
-        Array.isArray(data)
-          ? data
-          : Array.isArray(data.rows)
-            ? data.rows
-            : Array.isArray(data.data)
-              ? data.data
-              : [];
-
-      const now = new Date();
-
-      now.setHours(0, 0, 0, 0);
-
-      const voyageursActifs =
-        voyageurs.filter(function (v) {
-          if (!sameCottage(v.cottage)) {
-            return false;
-          }
-
-          const arrivee = dateValue(
-            v.arrivee || v.dateArrivee
-          );
-
-          const depart = dateValue(
-            v.depart || v.dateDepart
-          );
-
-          return (
-            arrivee &&
-            depart &&
-            arrivee <= now &&
-            now <= depart
-          );
-        });
-
-      if (!voyageursActifs.length) {
-        return;
-      }
-
-      const voyageur =
-        voyageursActifs[voyageursActifs.length - 1];
-
-      const lang = String(
-        voyageur.langue || 'fr'
-      ).toLowerCase().substring(0, 2);
-
-      language =
-        translations[lang] ? lang : 'fr';
-
-      translatePage();
-
-      const prenom = String(
-        voyageur.prenom || ''
-      ).trim();
-
-      if (prenom) {
-        setText(
-          'welcomeText',
-          t('welcome') + ' ' + prenom + ' !'
-        );
-      }
-
-    } catch (error) {
-      // La page reste utilisable sans
-      // personnalisation des voyageurs.
+      const url = new URL(raw);
+      return ['http:', 'https:'].includes(url.protocol)
+        ? url.href : '';
+    } catch (_) {
+      return '';
     }
   }
 
-  /*
-   * QR CODES
-   */
   function createQr(container, url, size) {
     container.innerHTML = '';
-
-    if (!url) {
-      return;
-    }
+    if (!url) return;
 
     if (typeof QRCode === 'undefined') {
-      const a = document.createElement('a');
-
-      a.href = url;
-      a.textContent = url;
-      a.target = '_blank';
-      a.rel = 'noopener noreferrer';
-
-      container.appendChild(a);
+      const link = document.createElement('a');
+      link.href = url;
+      link.textContent = url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      container.appendChild(link);
       return;
     }
 
@@ -964,516 +502,382 @@ footer {
     });
   }
 
-  function createPageQr() {
-    const url =
-      location.origin +
-      location.pathname +
-      '?gite=' + encodeURIComponent(gite);
+  function configureLinks() {
+    const suffix =
+      '?gite=' + encodeURIComponent(gite) +
+      (isTV ? '&tv=1' : '');
 
-    createQr($('pageQr'), url, 160);
+    $('home').href = 'index.html' + suffix;
+    $('guide').href = 'guide.html' + suffix;
+    $('admin').href = 'admin.html?gite=' + gite;
+
+    if (isTV) $('admin').classList.add('hidden');
+
+    createQr(
+      $('pageQr'),
+      location.origin + location.pathname +
+        '?gite=' + encodeURIComponent(gite),
+      160
+    );
   }
 
-  /*
-   * FILTRAGE PAR GITE
-   */
-  function isActiveForGite(advice) {
-    const target = String(
-      advice.target || 'both'
-    ).toLowerCase();
+  function translatePage() {
+    document.documentElement.lang = language;
 
-    if (
-      target !== 'both' &&
-      target !== gite
-    ) {
-      return false;
-    }
+    setText('title', t('title'));
+    setText('home', t('home'));
+    setText('guide', t('guide'));
+    setText('admin', t('admin'));
+    setText('refresh', t('refresh'));
+    setText('introTitle', t('introTitle'));
+    setText('introText', t('introText'));
+    setText('pageQrTitle', t('qrTitle'));
+    setText('pageQrText', t('qrText'));
 
-    if (gite === 'ptitzabris') {
-      return advice.activePtit === true;
-    }
+    setText(
+      'cottage',
+      gite === 'grandzabris' ? 'Grandzabris' : 'Ptitzabris'
+    );
 
-    return advice.activeGrand === true;
+    if (conseils.length) renderConseils();
   }
 
-  /*
-   * CARTE D'UNE RECOMMANDATION
-   */
+  function dateValue(value) {
+    if (!value) return null;
+
+    const match = String(value).match(
+      /^(\d{4})-(\d{2})-(\d{2})/
+    );
+
+    if (match) {
+      return new Date(
+        Number(match[1]),
+        Number(match[2]) - 1,
+        Number(match[3])
+      );
+    }
+
+    const d = new Date(value);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  async function loadVoyageur() {
+    try {
+      const response = await fetch(
+        VOYAGEURS_API + '?t=' + Date.now(),
+        { cache: 'no-store' }
+      );
+
+      if (!response.ok) return;
+
+      const data = await response.json();
+
+      const voyageurs = Array.isArray(data)
+        ? data
+        : Array.isArray(data.rows)
+          ? data.rows
+          : Array.isArray(data.data)
+            ? data.data : [];
+
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+
+      const actifs = voyageurs.filter(function (v) {
+        const cottage = normalized(v.cottage).replace(/\s+/g, '');
+
+        if (!cottage.includes(gite)) return false;
+
+        const arrivee = dateValue(v.arrivee || v.dateArrivee);
+        const depart = dateValue(v.depart || v.dateDepart);
+
+        return arrivee && depart &&
+               arrivee <= now && now <= depart;
+      });
+
+      if (!actifs.length) return;
+
+      const voyageur = actifs[actifs.length - 1];
+      const lang = String(voyageur.langue || 'fr')
+        .toLowerCase().substring(0, 2);
+
+      language = translations[lang] ? lang : 'fr';
+      translatePage();
+
+      if (voyageur.prenom) {
+        setText(
+          'welcome',
+          t('welcome') + ' ' +
+          String(voyageur.prenom).trim() + ' !'
+        );
+      }
+
+    } catch (_) {
+      // La page reste accessible sans personnalisation.
+    }
+  }
+
+  function activeForGite(advice) {
+    const target = String(advice.target || 'both')
+      .toLowerCase();
+
+    if (target !== 'both' && target !== gite) return false;
+
+    return gite === 'ptitzabris'
+      ? advice.activePtit === true
+      : advice.activeGrand === true;
+  }
+
   function createCard(advice) {
-    const article =
-      document.createElement('article');
+    const card = document.createElement('article');
+    card.className = 'card';
 
-    article.className = 'card';
-
-    const imageButton =
-      document.createElement('button');
-
+    const imageButton = document.createElement('button');
     imageButton.type = 'button';
-    imageButton.className =
-      'card-image-button';
-
+    imageButton.className = 'card-photo';
     imageButton.setAttribute(
       'aria-label',
       t('photo') + ' : ' + advice.title
     );
 
-    const img =
-      document.createElement('img');
-
-    img.className = 'card-image';
+    const img = document.createElement('img');
+    img.src = localImage(advice);
     img.alt = advice.title;
     img.loading = 'lazy';
-
-    img.src = localImage(advice);
 
     img.onerror = function () {
       img.onerror = null;
       img.src = String(advice.img || '').trim() ||
-        'images/logo.jpeg';
+                'images/logo.jpeg';
     };
 
     imageButton.appendChild(img);
+    imageButton.addEventListener('click', function () {
+      openModal(advice);
+    });
 
-    imageButton.addEventListener(
-      'click',
-      function () {
-        openModal(advice);
-      }
-    );
-
-    const body =
-      document.createElement('div');
-
+    const body = document.createElement('div');
     body.className = 'card-body';
 
-    const h3 =
-      document.createElement('h3');
+    const title = document.createElement('h3');
+    title.textContent = advice.title || '';
 
-    h3.textContent = advice.title;
+    const description = document.createElement('p');
+    description.textContent = advice.text || '';
 
-    const p =
-      document.createElement('p');
+    const actions = document.createElement('div');
+    actions.className = 'actions';
 
-    p.textContent = advice.text || '';
-
-    const actions =
-      document.createElement('div');
-
-    actions.className = 'card-actions';
-
-    const photoButton =
-      document.createElement('button');
-
+    const photoButton = document.createElement('button');
     photoButton.type = 'button';
     photoButton.className = 'btn gold';
     photoButton.textContent = t('photo');
-
-    photoButton.addEventListener(
-      'click',
-      function () {
-        openModal(advice);
-      }
-    );
+    photoButton.addEventListener('click', function () {
+      openModal(advice);
+    });
 
     actions.appendChild(photoButton);
 
-    if (advice.linkUrl) {
-      const detailsButton =
-        document.createElement('button');
+    const website = validWebsite(advice.linkUrl);
 
-      detailsButton.type = 'button';
-      detailsButton.className = 'btn';
-      detailsButton.textContent =
-        t('details');
+    if (website) {
+      const websiteLink = document.createElement('a');
+      websiteLink.className = 'btn';
+      websiteLink.href = website;
+      websiteLink.target = '_blank';
+      websiteLink.rel = 'noopener noreferrer';
+      websiteLink.textContent = t('website');
 
-      detailsButton.addEventListener(
-        'click',
-        function () {
-          openModal(advice);
-        }
-      );
-
-      actions.appendChild(detailsButton);
+      actions.appendChild(websiteLink);
     }
 
-    body.appendChild(h3);
-    body.appendChild(p);
+    body.appendChild(title);
+    body.appendChild(description);
     body.appendChild(actions);
 
-    article.appendChild(imageButton);
-    article.appendChild(body);
+    card.appendChild(imageButton);
+    card.appendChild(body);
 
-    return article;
+    return card;
   }
 
-  /*
-   * AFFICHAGE DES CONSEILS
-   */
   function renderConseils() {
-    const grid = $('adviceGrid');
+    const container = $('cards');
+    container.innerHTML = '';
 
-    const focusedIndex =
-      document.activeElement &&
-      document.activeElement.closest('.card')
-        ? Array.from(
-            grid.querySelectorAll('.card')
-          ).indexOf(
-            document.activeElement.closest('.card')
-          )
-        : -1;
-
-    grid.innerHTML = '';
-
-    const actifs = conseils.filter(
-      isActiveForGite
-    );
+    const actifs = conseils.filter(activeForGite);
 
     if (!actifs.length) {
-      $('status').textContent = t('empty');
+      setText('status', t('empty'));
+      $('status').className = 'status';
       return;
     }
 
-    $('status').textContent = '';
+    setText('status', '');
+    $('status').className = 'status';
 
     actifs.forEach(function (advice) {
-      grid.appendChild(
-        createCard(advice)
-      );
+      container.appendChild(createCard(advice));
     });
-
-    if (
-      focusedIndex >= 0 &&
-      isTV
-    ) {
-      const cards =
-        grid.querySelectorAll('.card');
-
-      const card =
-        cards[Math.min(
-          focusedIndex,
-          cards.length - 1
-        )];
-
-      if (card) {
-        const button =
-          card.querySelector('button');
-
-        if (button) {
-          button.focus();
-        }
-      }
-    }
   }
 
-  /*
-   * LECTURE GOOGLE SHEETS
-   */
   async function loadConseils() {
-    if (loading) {
-      return;
-    }
-
+    if (loading) return;
     loading = true;
 
-    const sequence = ++loadSequence;
+    if (!conseils.length) {
+      setText('status', t('loading'));
+      $('status').className = 'status';
+    }
 
     try {
       const url =
         CONSEILS_API +
-        '?type=conseils' +
-        '&gite=' +
+        '?type=conseils&gite=' +
         encodeURIComponent(gite) +
-        '&t=' +
-        Date.now();
+        '&t=' + Date.now();
 
-      const response = await fetch(
-        url,
-        {
-          method: 'GET',
-          cache: 'no-store'
-        }
-      );
+      const response = await fetch(url, {
+        cache: 'no-store'
+      });
 
       if (!response.ok) {
-        throw new Error(
-          'HTTP ' + response.status
-        );
+        throw new Error('HTTP ' + response.status);
       }
 
       const data = await response.json();
 
-      if (sequence !== loadSequence) {
-        return;
+      if (!Array.isArray(data)) {
+        throw new Error('Format de données incorrect');
       }
 
-      if (Array.isArray(data)) {
-        conseils = data;
-      } else if (
-        data &&
-        Array.isArray(data.conseils)
-      ) {
-        conseils = data.conseils;
-      } else {
-        throw new Error(
-          'Format de données incorrect'
-        );
-      }
-
+      conseils = data;
       renderConseils();
 
     } catch (error) {
       if (!conseils.length) {
-        $('status').textContent = t('error');
-        $('status').className =
-          'status error';
+        setText('status', t('error'));
+        $('status').className = 'status error';
       }
-
-      console.warn(
-        'Chargement conseils :',
-        error
-      );
+      console.warn('Conseils :', error);
 
     } finally {
       loading = false;
     }
   }
 
-  /*
-   * FENETRE PHOTO + QR CODE
-   */
   function openModal(advice) {
-    modalAdvice = advice;
     lastFocus = document.activeElement;
 
-    const modal = $('adviceModal');
+    setText('modalTitle', advice.title || '');
+    setText('modalDescription', advice.text || '');
 
-    $('modalTitle').textContent =
-      advice.title || '';
+    const img = $('modalImage');
+    img.src = localImage(advice);
+    img.alt = advice.title || '';
 
-    $('modalText').textContent =
-      advice.text || '';
-
-    const photo = $('modalPhoto');
-
-    photo.src = localImage(advice);
-    photo.alt = advice.title || '';
-
-    photo.onerror = function () {
-      photo.onerror = null;
-      photo.src =
-        String(advice.img || '').trim() ||
-        'images/logo.jpeg';
+    img.onerror = function () {
+      img.onerror = null;
+      img.src = String(advice.img || '').trim() ||
+                'images/logo.jpeg';
     };
 
-    const link = $('modalLink');
+    const website = validWebsite(advice.linkUrl);
 
-    if (advice.linkUrl) {
-      link.href = advice.linkUrl;
-      link.textContent = t('details');
+    const link = $('modalWebsite');
+    const qrLabel = $('modalQrLabel');
+
+    if (website) {
+      link.href = website;
+      link.textContent = t('website');
       link.classList.remove('hidden');
+
+      qrLabel.textContent = t('qrWebsite');
+      qrLabel.classList.remove('hidden');
+
+      createQr($('modalQr'), website, 170);
     } else {
       link.removeAttribute('href');
       link.classList.add('hidden');
+      qrLabel.classList.add('hidden');
+      $('modalQr').innerHTML = '';
     }
 
-    createQr(
-      $('modalQr'),
-      advice.linkUrl || '',
-      170
-    );
-
-    modal.classList.add('open');
-
-    modal.setAttribute(
-      'aria-hidden',
-      'false'
-    );
-
-    document.body.style.overflow =
-      'hidden';
-
-    $('modalClose').focus();
+    $('modal').classList.add('open');
+    $('modal').setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    $('closeModal').focus();
   }
 
   function closeModal() {
-    const modal = $('adviceModal');
-
-    modal.classList.remove('open');
-
-    modal.setAttribute(
-      'aria-hidden',
-      'true'
-    );
-
+    $('modal').classList.remove('open');
+    $('modal').setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
 
-    modalAdvice = null;
-
-    if (
-      lastFocus &&
-      document.contains(lastFocus)
-    ) {
+    if (lastFocus && document.contains(lastFocus)) {
       lastFocus.focus();
     }
   }
 
-  $('modalClose').addEventListener(
-    'click',
-    closeModal
-  );
+  $('closeModal').addEventListener('click', closeModal);
 
-  $('adviceModal').addEventListener(
-    'click',
-    function (event) {
-      if (
-        event.target === $('adviceModal')
-      ) {
+  $('modal').addEventListener('click', function (event) {
+    if (event.target === $('modal')) closeModal();
+  });
+
+  document.addEventListener('keydown', function (event) {
+    const modalOpen = $('modal').classList.contains('open');
+
+    if (modalOpen) {
+      if (event.key === 'Escape' ||
+          event.key === 'Backspace') {
+        event.preventDefault();
         closeModal();
       }
+      return;
     }
-  );
 
-  /*
-   * NAVIGATION TELECOMMANDE XIAOMI
-   */
-  document.addEventListener(
-    'keydown',
-    function (event) {
-      const modalOpen =
-        $('adviceModal').classList.contains(
-          'open'
-        );
+    if (![
+      'ArrowLeft','ArrowRight','ArrowUp','ArrowDown'
+    ].includes(event.key)) return;
 
-      if (
-        event.key === 'Escape' ||
-        event.key === 'Backspace'
-      ) {
-        if (modalOpen) {
-          event.preventDefault();
-          closeModal();
-          return;
-        }
-      }
+    const controls = Array.from(
+      document.querySelectorAll(
+        'nav a:not(.hidden), nav button, ' +
+        '.card button, .card a'
+      )
+    );
 
-      if (modalOpen) {
-        if (event.key === 'Tab') {
-          const focusables =
-            Array.from(
-              $('adviceModal').querySelectorAll(
-                'button, a[href]'
-              )
-            ).filter(
-              el => !el.classList.contains(
-                'hidden'
-              )
-            );
+    if (!controls.length) return;
 
-          if (focusables.length) {
-            const first = focusables[0];
-            const last =
-              focusables[focusables.length - 1];
+    const current = controls.indexOf(document.activeElement);
 
-            if (
-              event.shiftKey &&
-              document.activeElement === first
-            ) {
-              event.preventDefault();
-              last.focus();
-            } else if (
-              !event.shiftKey &&
-              document.activeElement === last
-            ) {
-              event.preventDefault();
-              first.focus();
-            }
-          }
-        }
-
-        return;
-      }
-
-      if (
-        ![
-          'ArrowLeft',
-          'ArrowRight',
-          'ArrowUp',
-          'ArrowDown'
-        ].includes(event.key)
-      ) {
-        return;
-      }
-
-      const buttons = Array.from(
-        document.querySelectorAll(
-          '.top-actions a:not(.hidden), ' +
-          '.top-actions button, ' +
-          '.card button'
-        )
-      );
-
-      if (!buttons.length) {
-        return;
-      }
-
-      const current =
-        buttons.indexOf(
-          document.activeElement
-        );
-
-      if (current < 0) {
-        event.preventDefault();
-        buttons[0].focus();
-        return;
-      }
-
-      const step =
-        event.key === 'ArrowLeft' ||
-        event.key === 'ArrowUp'
-          ? -1 : 1;
-
-      const next =
-        (current + step + buttons.length) %
-        buttons.length;
-
+    if (current < 0) {
       event.preventDefault();
-      buttons[next].focus();
+      controls[0].focus();
+      return;
     }
-  );
 
-  /*
-   * BOUTON ACTUALISER
-   */
-  $('refreshButton').addEventListener(
-    'click',
-    function () {
-      loadConseils();
-      loadVoyageur();
-    }
-  );
+    const step =
+      event.key === 'ArrowLeft' ||
+      event.key === 'ArrowUp' ? -1 : 1;
 
-  /*
-   * DEMARRAGE
-   */
+    event.preventDefault();
+
+    controls[
+      (current + step + controls.length) % controls.length
+    ].focus();
+  });
+
+  $('refresh').addEventListener('click', function () {
+    loadConseils();
+  });
+
+  // Chargement unique à l'ouverture de la page.
+  // Aucun setInterval : aucun rafraîchissement périodique.
   configureLinks();
   translatePage();
-  createPageQr();
   loadConseils();
   loadVoyageur();
-
-  /*
-   * ACTUALISATION AUTOMATIQUE
-   * TOUTES LES 30 SECONDES
-   */
-  setInterval(function () {
-    loadConseils();
-  }, REFRESH_MS);
-
-  /*
-   * ACTUALISATION VOYAGEURS
-   * TOUTES LES 10 MINUTES
-   */
-  setInterval(function () {
-    loadVoyageur();
-  }, 600000);
 
 })();
 </script>
