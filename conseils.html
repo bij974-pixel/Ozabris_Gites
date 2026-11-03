@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title-meta">Conseils Personnalisés | Les Ozabris</title>
-    <!-- Inclusion de la bibliothèque qrcode.js pour générer les QR codes dynamiquement -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root { --primary: #12263a; --accent: #c5a880; --text-dark: #2c3e50; --white: #ffffff; }
@@ -80,7 +79,6 @@
         h2 { color: var(--primary); font-size: 1.2rem; font-weight: 400; margin-bottom: 2px; }
         .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.68rem; color: #555; font-style: italic; }
 
-        /* Grille scrollable sans chevauchement avec défilement automatique au focus TV */
         .advice-grid { 
             display: grid; 
             grid-template-columns: repeat(2, minmax(0, 1fr)); 
@@ -127,10 +125,12 @@
             height: 75px;
             flex-shrink: 0;
             border-radius: 6px;
-            border: 1px solid #ddd;
-            object-fit: cover;
-            background: #fcfbfa;
-            padding: 2px;
+            border: 1px solid var(--accent);
+            background: #12263a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
         }
 
         .footer-actions { display: flex; justify-content: center; align-items: center; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 8px; font-family: 'Segoe UI', sans-serif; flex-shrink: 0; }
@@ -192,7 +192,7 @@
             <p id="page-main-sub" class="welcome-sub">✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.</p>
         </div>
 
-        <!-- Grille avec tes 7 cartes, tes liens d'images directs Postimage et défilement auto au focus TV -->
+        <!-- Grille avec cartes stables et icônes garanties sans erreur 404/image not found -->
         <div class="advice-grid" id="advice-grid-container">
             
             <div class="advice-box" tabindex="0" onfocus="this.scrollIntoView({behavior: 'smooth', block: 'nearest'});" onclick="openFullscreen('Super U 3B', 'Supermarché le plus proche d\'ici', 'https://i.postimg.cc/k47g2q8N/superu.jpg', 'https://maps.google.com')">
@@ -200,7 +200,7 @@
                     <h3>Super U 3B</h3>
                     <p>Supermarché le plus proche d'ici</p>
                 </div>
-                <img src="https://i.postimg.cc/k47g2q8N/superu.jpg" class="advice-thumb" alt="Super U 3B">
+                <div class="advice-thumb">🛒</div>
             </div>
 
             <div class="advice-box" tabindex="0" onfocus="this.scrollIntoView({behavior: 'smooth', block: 'nearest'});" onclick="openFullscreen('Vanille Vallée', 'Leurs sachets pour les...', 'https://i.postimg.cc/6q8L899s/vanille.jpg', '')">
@@ -208,7 +208,7 @@
                     <h3>Vanille Vallée</h3>
                     <p>Leurs sachets pour les...</p>
                 </div>
-                <img src="https://i.postimg.cc/6q8L899s/vanille.jpg" class="advice-thumb" alt="Vanille Vallée">
+                <div class="advice-thumb">🌿</div>
             </div>
 
             <div class="advice-box" tabindex="0" onfocus="this.scrollIntoView({behavior: 'smooth', block: 'nearest'});" onclick="openFullscreen('Le VORTEX Énergétique de l\'Etang Salé', 'Un lieu hors du temps, un moment po...', 'https://i.postimg.cc/027y6J5v/vortex.jpg', '')">
@@ -216,7 +216,7 @@
                     <h3>Le VORTEX Énergétique de l'Etang Salé</h3>
                     <p>Un lieu hors du temps, un moment po...</p>
                 </div>
-                <img src="https://i.postimg.cc/027y6J5v/vortex.jpg" class="advice-thumb" alt="Vortex">
+                <div class="advice-thumb">✨</div>
             </div>
 
             <div class="advice-box" tabindex="0" onfocus="this.scrollIntoView({behavior: 'smooth', block: 'nearest'});" onclick="openFullscreen('Marché forain de St Paul', 'Le plus grand marché d...', 'https://i.postimg.cc/3w9f65gX/marche.jpg', '')">
@@ -224,7 +224,7 @@
                     <h3>Marché forain de St Paul</h3>
                     <p>Le plus grand marché d...</p>
                 </div>
-                <img src="https://i.postimg.cc/3w9f65gX/marche.jpg" class="advice-thumb" alt="Marché">
+                <div class="advice-thumb">🍍</div>
             </div>
 
             <div class="advice-box" tabindex="0" onfocus="this.scrollIntoView({behavior: 'smooth', block: 'nearest'});" onclick="openFullscreen('Plage de l\'Ermitage', 'Idéal pour le snorkeling et la baignade sécurisée dans le lagon.', 'https://i.postimg.cc/18Gz3k1b/ermitage.jpg', '')">
@@ -232,7 +232,7 @@
                     <h3>Plage de l'Ermitage</h3>
                     <p>Idéal pour le snorkeling et la baignade sécurisée dans le lagon.</p>
                 </div>
-                <img src="https://i.postimg.cc/18Gz3k1b/ermitage.jpg" class="advice-thumb" alt="Ermitage">
+                <div class="advice-thumb">🏖️</div>
             </div>
 
             <div class="advice-box" tabindex="0" onfocus="this.scrollIntoView({behavior: 'smooth', block: 'nearest'});" onclick="openFullscreen('Maïdo - Lever de soleil', 'Point de vue incontournable sur le cirque de Mafate.', 'https://i.postimg.cc/2y5Z7f6q/maido.jpg', '')">
@@ -240,7 +240,7 @@
                     <h3>Maïdo - Lever de soleil</h3>
                     <p>Point de vue incontournable sur le cirque de Mafate.</p>
                 </div>
-                <img src="https://i.postimg.cc/2y5Z7f6q/maido.jpg" class="advice-thumb" alt="Maïdo">
+                <div class="advice-thumb">🌄</div>
             </div>
 
             <div class="advice-box" tabindex="0" onfocus="this.scrollIntoView({behavior: 'smooth', block: 'nearest'});" onclick="openFullscreen('Jardin d\'Éden', 'Jardin botanique tropical à Saint-Gilles les Bains.', 'https://i.postimg.cc/8c4h62kL/eden.jpg', '')">
@@ -248,7 +248,7 @@
                     <h3>Jardin d'Éden</h3>
                     <p>Jardin botanique tropical à Saint-Gilles les Bains.</p>
                 </div>
-                <img src="https://i.postimg.cc/8c4h62kL/eden.jpg" class="advice-thumb" alt="Eden">
+                <div class="advice-thumb">🌺</div>
             </div>
 
         </div>
