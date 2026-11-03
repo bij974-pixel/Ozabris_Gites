@@ -1,427 +1,2106 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title-meta">Accueil | Les Ozabris</title>
-    <!-- Inclusion de la bibliothèque qrcode.js pour afficher les 5 QR codes -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <style>
-        :root { --primary: #12263a; --accent: #c5a880; --text-dark: #2c3e50; --white: #ffffff; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Playfair Display', 'Georgia', serif; }
-        
-        body {
-            width: 100vw;
-            min-height: 100vh;
-            margin: 0;
-            padding: 10px;
-            background: linear-gradient(rgba(18, 38, 58, 0.75), rgba(18, 38, 58, 0.85)), url('fond_page.png') no-repeat center center fixed;
-            background-size: cover;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#12263a">
+<title>Les Ozabris — Bienvenue à La Réunion</title>
 
-        header { 
-            background: var(--primary);
-            text-align: center; 
-            padding: 12px 20px; 
-            position: relative; 
-            color: var(--white);
-            width: 100%;
-            max-width: 950px;
-            border-top-left-radius: 16px;
-            border-top-right-radius: 16px;
-            border: 2px solid var(--accent);
-            border-bottom: none;
-            flex-shrink: 0;
-        }
+<style>
+:root {
+  --navy: #12263a;
+  --navy-light: #203d55;
+  --gold: #c5a880;
+  --gold-light: #e9d8b9;
+  --cream: #f7f4ee;
+  --white: #ffffff;
+  --text: #263747;
+  --muted: #697986;
+  --shadow: 0 14px 40px rgba(18,38,58,.12);
+}
 
-        .header-top-controls { position: absolute; top: 8px; right: 15px; display: block; z-index: 10; }
-        .btn-admin {
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 0.75rem;
-            background: var(--accent);
-            border: 1px solid var(--accent);
-            color: var(--primary);
-            padding: 5px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: 700;
-        }
+* { box-sizing: border-box; }
 
-        .brand-logo-container { max-width: 70px; margin: 0 auto 2px auto; overflow: hidden; display: flex; align-items: center; justify-content: center; border-radius: 6px; border: 2px solid var(--accent); }
-        .brand-logo-container img { width: 100%; height: auto; object-fit: contain; display: block; }
-        
-        .logo-text { font-size: 1.2rem; font-weight: 300; letter-spacing: 2px; color: var(--white); text-transform: uppercase; margin-bottom: 0px; }
-        .subtitle { font-family: 'Segoe UI', sans-serif; font-size: 0.55rem; letter-spacing: 1px; color: var(--accent); text-transform: uppercase; display: block; }
+html { scroll-behavior: smooth; }
 
-        .tv-card {
-            background: rgba(255, 255, 255, 0.98);
-            width: 100%;
-            max-width: 950px;
-            border-bottom-left-radius: 16px;
-            border-bottom-right-radius: 16px;
-            padding: 15px 25px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            border: 2px solid var(--accent);
-            border-top: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            text-align: center;
-            margin: auto;
-            position: relative;
-        }
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  min-height: 100vh;
+}
 
-        .card-header { margin-bottom: 8px; }
-        h2 { color: var(--primary); font-size: 1.3rem; font-weight: 400; margin-bottom: 3px; }
-        .welcome-sub { font-family: 'Segoe UI', sans-serif; font-size: 0.75rem; color: #555; font-style: italic; }
+button, a {
+  -webkit-tap-highlight-color: transparent;
+}
 
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-bottom: 10px;
-        }
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 4px solid #f3b94b;
+  outline-offset: 4px;
+}
 
-        .menu-box {
-            background: var(--white);
-            border: 2px solid var(--accent);
-            border-radius: 10px;
-            padding: 12px;
-            text-align: center;
-            font-family: 'Segoe UI', sans-serif;
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-        .menu-box:focus, .menu-box:hover {
-            border-color: #12263a;
-            box-shadow: 0 0 12px rgba(18, 38, 58, 0.4);
-            outline: none;
-            transform: scale(1.01);
-            background: #fffdf9;
-        }
+.hidden { display: none !important; }
 
-        .menu-box span.icon { font-size: 1.5rem; margin-bottom: 4px; display: block; }
-        .menu-box h3 { font-family: 'Playfair Display', serif; color: var(--primary); font-size: 0.95rem; margin-bottom: 2px; }
-        .menu-box p { font-size: 0.7rem; color: #666; }
+/* HERO */
 
-        /* Section des 5 QR Codes sur l'accueil */
-        .qrcodes-section {
-            border-top: 1px solid rgba(197, 168, 128, 0.4);
-            padding-top: 10px;
-            margin-top: 5px;
-        }
-        .qrcodes-title {
-            font-family: 'Playfair Display', serif;
-            color: var(--primary);
-            font-size: 0.85rem;
-            margin-bottom: 6px;
-        }
-        .qrcodes-row {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        .qr-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: #fdfcfb;
-            border: 1px solid var(--accent);
-            padding: 6px;
-            border-radius: 6px;
-        }
-        .qr-item span {
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 0.6rem;
-            color: var(--primary);
-            font-weight: 600;
-            margin-top: 4px;
-        }
-        .qr-box {
-            width: 55px;
-            height: 55px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+.hero {
+  position: relative;
+  min-height: 510px;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(11,28,44,.91),
+      rgba(11,28,44,.62),
+      rgba(11,28,44,.36)
+    ),
+    url("images/volcan.jpeg") center / cover;
+  color: white;
+  overflow: hidden;
+}
 
-        .footer-info { font-family: 'Segoe UI', sans-serif; font-size: 0.7rem; color: #777; border-top: 1px solid rgba(197,168,128,0.4); padding-top: 8px; margin-top: 8px; }
+.hero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 5px;
+  background: linear-gradient(
+    90deg,
+    var(--gold),
+    #f1dfbd,
+    var(--gold)
+  );
+}
 
-        #admin-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(18, 38, 58, 0.9); justify-content: center; align-items: center; z-index: 10000; font-family: 'Segoe UI', sans-serif;
-        }
-        .modal-content {
-            background: white; padding: 20px; border-radius: 12px; width: 85%; max-width: 300px; text-align: center; border: 2px solid var(--accent);
-        }
-        .modal-content input { width: 100%; padding: 8px; margin: 8px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 0.85rem; text-align: center; }
-        .modal-btn { background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 8px; font-size: 0.8rem; }
-    </style>
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1320px;
+  margin: auto;
+  padding: 25px 28px 70px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo {
+  width: 88px;
+  height: 88px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--gold);
+  background: white;
+  box-shadow: 0 5px 20px rgba(0,0,0,.2);
+}
+
+.brand-name {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 29px;
+  letter-spacing: .5px;
+  font-weight: bold;
+}
+
+.brand-subtitle {
+  color: var(--gold-light);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 5px;
+}
+
+.top-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.top-links a,
+.top-links button {
+  border: 1px solid rgba(233,216,185,.65);
+  color: white;
+  background: rgba(255,255,255,.08);
+  border-radius: 10px;
+  padding: 11px 16px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.top-links a:hover,
+.top-links button:hover {
+  background: var(--gold);
+  color: var(--navy);
+}
+
+.hero-content {
+  max-width: 850px;
+  padding-top: 85px;
+}
+
+.eyebrow {
+  color: var(--gold-light);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 18px;
+}
+
+.hero h1 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: normal;
+  font-size: clamp(43px, 6vw, 78px);
+  line-height: 1.08;
+  margin: 0 0 22px;
+}
+
+.hero h1 em {
+  color: var(--gold-light);
+  font-style: italic;
+}
+
+.hero-description {
+  font-size: clamp(17px, 2vw, 23px);
+  line-height: 1.6;
+  color: #f3ede4;
+  max-width: 730px;
+  margin: 0;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 13px;
+  flex-wrap: wrap;
+  margin-top: 29px;
+}
+
+.hero-button {
+  display: inline-block;
+  padding: 15px 23px;
+  border-radius: 11px;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  background: var(--gold);
+  color: var(--navy);
+  border: 1px solid var(--gold);
+}
+
+.hero-button.secondary {
+  background: rgba(255,255,255,.08);
+  color: white;
+  border-color: rgba(255,255,255,.7);
+}
+
+.hero-button:hover {
+  filter: brightness(1.12);
+}
+
+/* MAIN */
+
+main {
+  max-width: 1320px;
+  margin: auto;
+  padding: 0 22px 55px;
+}
+
+.dashboard {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 17px;
+  margin-top: -39px;
+}
+
+.info-card {
+  background: white;
+  border: 1px solid #ece3d6;
+  border-radius: 17px;
+  box-shadow: var(--shadow);
+  padding: 23px;
+  min-height: 145px;
+}
+
+.info-label {
+  color: var(--muted);
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  font-weight: bold;
+  margin-bottom: 13px;
+}
+
+.info-value {
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--navy);
+  font-size: clamp(23px, 3vw, 34px);
+  line-height: 1.2;
+}
+
+.info-detail {
+  color: var(--muted);
+  font-size: 14px;
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+.weather-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.weather-icon {
+  font-size: 43px;
+  line-height: 1;
+}
+
+.section {
+  margin-top: 48px;
+}
+
+.section-heading {
+  text-align: center;
+  margin-bottom: 26px;
+}
+
+.section-kicker {
+  color: #9c7b50;
+  text-transform: uppercase;
+  letter-spacing: 2.4px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.section-heading h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: normal;
+  font-size: clamp(30px, 4vw, 43px);
+  margin: 12px 0;
+  color: var(--navy);
+}
+
+.section-heading p {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 700px;
+  margin: auto;
+}
+
+/* MAIN CARDS */
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 23px;
+}
+
+.feature-card {
+  position: relative;
+  min-height: 390px;
+  overflow: hidden;
+  border-radius: 21px;
+  box-shadow: var(--shadow);
+  text-decoration: none;
+  color: white;
+  display: flex;
+  align-items: flex-end;
+  background-color: var(--navy);
+  isolation: isolate;
+}
+
+.feature-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform .35s ease;
+  z-index: -2;
+}
+
+.feature-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    0deg,
+    rgba(8,23,37,.95),
+    rgba(8,23,37,.25) 70%
+  );
+  z-index: -1;
+}
+
+.feature-card:hover::before,
+.feature-card:focus::before {
+  transform: scale(1.05);
+}
+
+.feature-card.conseils::before {
+  background-image: url("images/plage hermitage.jpeg");
+}
+
+.feature-card.guide::before {
+  background-image: url("images/ansedescascade.jpeg");
+}
+
+.feature-content {
+  padding: 29px;
+  width: 100%;
+}
+
+.feature-tag {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--navy);
+  border-radius: 20px;
+  padding: 7px 12px;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.feature-card h3 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: normal;
+  font-size: clamp(28px, 3vw, 39px);
+  margin: 15px 0 9px;
+}
+
+.feature-card p {
+  color: #f2e9dc;
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 490px;
+}
+
+.feature-arrow {
+  display: inline-block;
+  margin-top: 12px;
+  font-weight: bold;
+  color: var(--gold-light);
+}
+
+/* USEFUL INFORMATION */
+
+.useful-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 17px;
+}
+
+.useful-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px 18px;
+  text-align: center;
+  border: 1px solid #e9e1d7;
+  box-shadow: 0 6px 20px rgba(18,38,58,.06);
+}
+
+.useful-icon {
+  font-size: 34px;
+  margin-bottom: 14px;
+}
+
+.useful-card h3 {
+  font-size: 18px;
+  margin: 0 0 10px;
+  color: var(--navy);
+}
+
+.useful-card p {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--muted);
+  margin: 0;
+}
+
+.useful-card a {
+  display: inline-block;
+  margin-top: 14px;
+  color: #87683e;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+/* QR */
+
+.qr-section {
+  background: linear-gradient(
+    135deg,
+    #12263a,
+    #27475e
+  );
+  color: white;
+  border-radius: 22px;
+  padding: 36px 25px;
+  margin-top: 50px;
+}
+
+.qr-section h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: normal;
+  font-size: 34px;
+  text-align: center;
+  margin: 0 0 10px;
+}
+
+.qr-intro {
+  text-align: center;
+  color: #e9d9c3;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.qr-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 15px;
+}
+
+.qr-card {
+  background: white;
+  color: var(--navy);
+  border-radius: 14px;
+  padding: 17px 10px;
+  text-align: center;
+}
+
+.qr-card h3 {
+  font-size: 14px;
+  margin: 0 0 14px;
+  min-height: 34px;
+}
+
+.qr-code {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+}
+
+.qr-code img,
+.qr-code canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+.qr-card a {
+  color: var(--navy);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+/* FOOTER */
+
+footer {
+  background: var(--navy);
+  color: #e7d7bf;
+  text-align: center;
+  padding: 32px 20px;
+}
+
+.footer-brand {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 25px;
+  color: white;
+  margin-bottom: 9px;
+}
+
+footer p {
+  margin: 6px 0;
+  line-height: 1.5;
+}
+
+/* ADMIN MODAL */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(6,18,29,.9);
+  padding: 18px;
+}
+
+.modal.open {
+  display: flex;
+}
+
+.modal-box {
+  width: min(420px, 100%);
+  background: white;
+  border-radius: 20px;
+  padding: 29px;
+  text-align: center;
+  box-shadow: 0 15px 60px rgba(0,0,0,.3);
+}
+
+.modal-box h2 {
+  color: var(--navy);
+  margin-top: 0;
+}
+
+.modal-box p {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.modal-box input {
+  width: 100%;
+  padding: 15px;
+  font-size: 21px;
+  text-align: center;
+  letter-spacing: 5px;
+  border: 2px solid #d7d7d7;
+  border-radius: 10px;
+  margin: 13px 0;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.modal-buttons button {
+  flex: 1;
+  padding: 13px;
+  border: 0;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.confirm {
+  background: var(--navy);
+  color: white;
+}
+
+.cancel {
+  background: #e9e9e9;
+  color: var(--navy);
+}
+
+.pin-error {
+  color: #b03737;
+  font-size: 14px;
+  min-height: 20px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1000px) {
+  .useful-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .qr-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .hero {
+    min-height: 540px;
+  }
+
+  .hero-inner {
+    padding: 20px 17px 65px;
+  }
+
+  .hero-content {
+    padding-top: 65px;
+  }
+
+  .topbar {
+    align-items: flex-start;
+  }
+
+  .brand-name {
+    font-size: 24px;
+  }
+
+  .logo {
+    width: 72px;
+    height: 72px;
+  }
+
+  main {
+    padding: 0 13px 40px;
+  }
+
+  .dashboard {
+    grid-template-columns: 1fr;
+    margin-top: -26px;
+    gap: 12px;
+  }
+
+  .info-card {
+    min-height: auto;
+    padding: 19px;
+  }
+
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-card {
+    min-height: 340px;
+  }
+
+  .qr-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .qr-section {
+    padding: 28px 15px;
+  }
+}
+
+@media (max-width: 430px) {
+  .useful-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .top-links a,
+  .top-links button {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+  }
+
+  .hero-button {
+    text-align: center;
+  }
+}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
+
 <body>
-    <header>
-        <div class="header-top-controls" id="admin-container">
-            <button type="button" class="btn-admin" onclick="openPinModal()">⚙️ Admin</button>
-        </div>
-        <div class="brand-logo-container">
-            <img src="https://i.postimg.cc/DzsCFbvh/IMG-0798.jpg" alt="Les Ozabris Logo">
-        </div>
-        <h1 class="logo-text">Les Ozabris</h1>
-        <span class="subtitle">Cottages de Prestige & Perles Rares • La Réunion</span>
-    </header>
 
-    <div class="tv-card">
-        <div class="card-header">
-            <h2 id="page-main-title">Bienvenue aux Ozabris</h2>
-            <p id="page-main-sub" class="welcome-sub">✨ Sélectionnez une rubrique avec votre télécommande.</p>
-        </div>
+<header class="hero">
+  <div class="hero-inner">
 
-        <div class="menu-grid">
-            <a id="link-conseils" href="conseils.html" class="menu-box" tabindex="0">
-                <span class="icon">🌿</span>
-                <h3 id="menu-conseils-title">Recommandations exclusives</h3>
-                <p id="menu-conseils-sub">Nos adresses et coups de cœur</p>
-            </a>
+    <div class="topbar">
+      <div class="brand">
+        <img
+          class="logo"
+          src="images/logo.jpeg"
+          alt="Logo Les Ozabris"
+          onerror="this.style.display='none'"
+        >
 
-            <a id="link-infos" href="guide.html" class="menu-box" tabindex="0">
-                <span class="icon">📖</span>
-                <h3 id="menu-infos-title">Guide du Cottage</h3>
-                <p id="menu-infos-sub">Équipements, Wi-Fi & consignes</p>
-            </a>
+        <div>
+          <div class="brand-name">Les Ozabris</div>
+          <div class="brand-subtitle">
+            La Réunion · Art de vivre
+          </div>
         </div>
-        
-        <!-- Section des 5 QR codes -->
-        <div class="qrcodes-section">
-            <p class="qrcodes-title" id="qr-section-title">📱 Scannez pour emporter nos guides et liens utiles :</p>
-            <div class="qrcodes-row">
-                <div class="qr-item">
-                    <div id="qrcode-1" class="qr-box"></div>
-                    <span id="qr-label-1">Accueil</span>
-                </div>
-                <div class="qr-item">
-                    <div id="qrcode-2" class="qr-box"></div>
-                    <span id="qr-label-2">Guide</span>
-                </div>
-                <div class="qr-item">
-                    <div id="qrcode-3" class="qr-box"></div>
-                    <span id="qr-label-3">Conseils</span>
-                </div>
-                <div class="qr-item">
-                    <div id="qrcode-4" class="qr-box"></div>
-                    <span id="qr-label-4">Sanibroyeur</span>
-                </div>
-                <div class="qr-item">
-                    <div id="qrcode-5" class="qr-box"></div>
-                    <span id="qr-label-5">Déchets</span>
-                </div>
-            </div>
-        </div>
+      </div>
 
-        <div class="footer-info" id="footer-text">
-            Propriété exclusive • La Réunion
-        </div>
+      <nav class="top-links">
+        <a id="topGuide" href="guide.html">
+          Guide pratique
+        </a>
+
+        <a id="topConseils" href="conseils.html">
+          Nos conseils
+        </a>
+
+        <button
+          id="adminButton"
+          type="button">
+          ⚙ Admin
+        </button>
+      </nav>
     </div>
 
-    <!-- Modale PIN Admin -->
-    <div id="admin-modal">
-        <div class="modal-content">
-            <button type="button" onclick="closePinModal()" style="float: right; background: none; border: none; font-size: 1.1rem; cursor: pointer;">✕</button>
-            <h3 id="admin-modal-title">🔒 Accès Admin</h3>
-            <p id="admin-modal-sub" style="font-size: 0.8rem; color: #666; margin: 4px 0;">Code PIN de sécurité</p>
-            <input type="password" id="adminPin" placeholder="PIN" maxlength="6">
-            <button type="button" class="modal-btn" id="admin-modal-btn" onclick="verifyPin()">Valider</button>
-            <p id="adminError" style="color: #b94a48; font-size: 0.7rem; margin-top: 6px; display: none;">Code incorrect</p>
-        </div>
+    <div class="hero-content">
+      <div class="eyebrow" id="heroEyebrow">
+        Votre parenthèse à La Réunion
+      </div>
+
+      <h1 id="heroTitle">
+        Bienvenue<br>
+        <em>aux Ozabris</em>
+      </h1>
+
+      <p
+        class="hero-description"
+        id="heroDescription">
+        Un séjour placé sous le signe
+        de la douceur, de la découverte
+        et de l'art de vivre réunionnais.
+      </p>
+
+      <div class="hero-buttons">
+        <a
+          id="heroGuide"
+          class="hero-button"
+          href="guide.html">
+          🏡 Découvrir votre gîte
+        </a>
+
+        <a
+          id="heroConseils"
+          class="hero-button secondary"
+          href="conseils.html">
+          🌴 Explorer La Réunion
+        </a>
+      </div>
     </div>
 
-    <script>
-        const sheetVoyageursApiUrl = "https://script.google.com/macros/s/AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq/exec";
+  </div>
+</header>
 
-        let currentGiteKey = 'ptitzabris';
-        let currentLang = 'fr';
+<main>
 
-        const translations = {
-            fr: {
-                welcomeFor: "Bienvenue aux Ozabris, {name} !",
-                welcomeAt: "Bienvenue au {cottage}",
-                subText: "✨ Sélectionnez une rubrique avec votre télécommande.",
-                conseilsTitle: "Recommandations exclusives",
-                conseilsSub: "Nos adresses et coups de cœur",
-                infosTitle: "Guide du Cottage",
-                infosSub: "Équipements, Wi-Fi & consignes",
-                footer: "Propriété exclusive • La Réunion",
-                qrTitle: "📱 Scannez pour emporter nos guides et liens utiles :",
-                qr1: "Accueil", qr2: "Guide", qr3: "Conseils", qr4: "Sanibroyeur", qr5: "Déchets",
-                adminTitle: "🔒 Accès Admin",
-                adminSub: "Code PIN de sécurité",
-                adminBtn: "Valider",
-                adminErr: "Code incorrect"
-            },
-            en: {
-                welcomeFor: "Welcome to Les Ozabris, {name}!",
-                welcomeAt: "Welcome to {cottage}",
-                subText: "✨ Select a category with your remote control.",
-                conseilsTitle: "Exclusive recommendations",
-                conseilsSub: "Our favorite spots & addresses",
-                infosTitle: "Cottage Guide",
-                infosSub: "Amenities, Wi-Fi & guidelines",
-                footer: "Exclusive Property • La Réunion",
-                qrTitle: "📱 Scan to take our guides and useful links with you:",
-                qr1: "Home", qr2: "Guide", qr3: "Tips", qr4: "Sanibroyeur", qr5: "Waste",
-                adminTitle: "🔒 Admin Access",
-                adminSub: "Security PIN code",
-                adminBtn: "Validate",
-                adminErr: "Incorrect code"
-            },
-            de: {
-                welcomeFor: "Willkommen in Les Ozabris, {name}!",
-                welcomeAt: "Willkommen im {cottage}",
-                subText: "✨ Wählen Sie eine Kategorie mit Ihrer Fernbedienung.",
-                conseilsTitle: "Exklusive Empfehlungen",
-                conseilsSub: "Unsere Lieblingsorte & Adressen",
-                infosTitle: "Cottage-Leitfaden",
-                infosSub: "Ausstattung, WLAN & Hinweise",
-                footer: "Exklusives Anwesen • La Réunion",
-                qrTitle: "📱 Scannen Sie, um unsere Guides und nützliche Links mitzunehmen:",
-                qr1: "Start", qr2: "Leitfaden", qr3: "Tipps", qr4: "Sanibroyeur", qr5: "Müll",
-                adminTitle: "🔒 Admin-Zugang",
-                adminSub: "Sicherheits-PIN-Code",
-                adminBtn: "Bestätigen",
-                adminErr: "Falscher Code"
-            }
-        };
+  <section class="dashboard">
 
-        function t(key, replacements = {}) {
-            let langDict = translations[currentLang] || translations['fr'];
-            let text = langDict[key] || translations['fr'][key] || key;
-            for (const [k, v] of Object.entries(replacements)) {
-                text = text.replace(new RegExp(`{${k}}`, 'g'), v);
-            }
-            return text;
+    <div class="info-card">
+      <div class="info-label" id="dateLabel">
+        Aujourd'hui à La Réunion
+      </div>
+
+      <div class="info-value" id="localDate">
+        —
+      </div>
+
+      <div class="info-detail" id="localTime">
+        Heure locale
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-label" id="weatherLabel">
+        Météo · Saint-Paul
+      </div>
+
+      <div class="weather-line">
+        <span
+          class="weather-icon"
+          id="weatherIcon">
+          🌤️
+        </span>
+
+        <div>
+          <div
+            class="info-value"
+            id="temperature">
+            —
+          </div>
+
+          <div
+            class="info-detail"
+            id="weatherDescription">
+            Chargement de la météo…
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="info-detail"
+        id="weatherExtra">
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-label" id="stayLabel">
+        Votre séjour
+      </div>
+
+      <div
+        class="info-value"
+        id="cottageName">
+        Les Ozabris
+      </div>
+
+      <div
+        class="info-detail"
+        id="stayMessage">
+        Profitez pleinement de votre séjour.
+      </div>
+    </div>
+
+  </section>
+
+  <section class="section">
+
+    <div class="section-heading">
+      <div class="section-kicker" id="discoverKicker">
+        Votre séjour, en toute simplicité
+      </div>
+
+      <h2 id="discoverTitle">
+        Tout est à portée de main
+      </h2>
+
+      <p id="discoverText">
+        Retrouvez les informations de votre
+        hébergement et nos plus belles
+        recommandations pour découvrir l'île.
+      </p>
+    </div>
+
+    <div class="feature-grid">
+
+      <a
+        id="featureGuide"
+        class="feature-card guide"
+        href="guide.html">
+
+        <div class="feature-content">
+          <span
+            class="feature-tag"
+            id="guideTag">
+            Votre hébergement
+          </span>
+
+          <h3 id="guideTitle">
+            Le guide du gîte
+          </h3>
+
+          <p id="guideDescription">
+            Wi-Fi, équipements, consignes
+            pratiques et informations utiles
+            pour un séjour serein.
+          </p>
+
+          <span
+            class="feature-arrow"
+            id="guideArrow">
+            Découvrir le guide →
+          </span>
+        </div>
+      </a>
+
+      <a
+        id="featureConseils"
+        class="feature-card conseils"
+        href="conseils.html">
+
+        <div class="feature-content">
+          <span
+            class="feature-tag"
+            id="conseilsTag">
+            Nos coups de cœur
+          </span>
+
+          <h3 id="conseilsTitle">
+            Les bonnes adresses
+          </h3>
+
+          <p id="conseilsDescription">
+            Plages, paysages, commerces,
+            balades et expériences à découvrir
+            autour de votre gîte.
+          </p>
+
+          <span
+            class="feature-arrow"
+            id="conseilsArrow">
+            Explorer nos conseils →
+          </span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <section class="section">
+
+    <div class="section-heading">
+      <div class="section-kicker" id="practicalKicker">
+        Les essentiels
+      </div>
+
+      <h2 id="practicalTitle">
+        Pour un séjour sans souci
+      </h2>
+
+      <p id="practicalText">
+        Quelques informations pratiques
+        à retrouver à tout moment.
+      </p>
+    </div>
+
+    <div class="useful-grid">
+
+      <div class="useful-card">
+        <div class="useful-icon">📶</div>
+        <h3 id="wifiTitle">Wi-Fi</h3>
+        <p id="wifiText">
+          Retrouvez les informations
+          de connexion dans le guide du gîte.
+        </p>
+        <a class="guide-shortcut"
+           href="guide.html"
+           id="wifiLink">
+          Voir le guide →
+        </a>
+      </div>
+
+      <div class="useful-card">
+        <div class="useful-icon">🏡</div>
+        <h3 id="rulesTitle">
+          Vie dans le gîte
+        </h3>
+        <p id="rulesText">
+          Équipements, consignes et
+          bonnes pratiques de la maison.
+        </p>
+        <a class="guide-shortcut"
+           href="guide.html"
+           id="rulesLink">
+          Voir les informations →
+        </a>
+      </div>
+
+      <div class="useful-card">
+        <div class="useful-icon">♻️</div>
+        <h3 id="sortingTitle">
+          Tri des déchets
+        </h3>
+        <p id="sortingText">
+          Les consignes pour respecter
+          notre belle île.
+        </p>
+        <a class="guide-shortcut"
+           href="guide.html"
+           id="sortingLink">
+          Voir les consignes →
+        </a>
+      </div>
+
+      <div class="useful-card">
+        <div class="useful-icon">🌋</div>
+        <h3 id="islandTitle">
+          Découvrir l'île
+        </h3>
+        <p id="islandText">
+          Retrouvez les sorties et
+          découvertes sélectionnées pour vous.
+        </p>
+        <a
+          id="islandLink"
+          href="conseils.html">
+          Nos recommandations →
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="qr-section">
+    <h2 id="qrSectionTitle">
+      Emportez votre guide avec vous
+    </h2>
+
+    <p class="qr-intro" id="qrSectionText">
+      Scannez les QR codes avec votre
+      téléphone pour retrouver facilement
+      les informations de votre séjour.
+    </p>
+
+    <div class="qr-grid">
+
+      <div class="qr-card">
+        <h3 id="qrHomeTitle">Accueil</h3>
+        <div id="qrHome" class="qr-code"></div>
+      </div>
+
+      <div class="qr-card">
+        <h3 id="qrGuideTitle">Guide du gîte</h3>
+        <div id="qrGuide" class="qr-code"></div>
+      </div>
+
+      <div class="qr-card">
+        <h3 id="qrConseilsTitle">Nos conseils</h3>
+        <div id="qrConseils" class="qr-code"></div>
+      </div>
+
+      <div class="qr-card">
+        <h3 id="qrSanibroyeurTitle">
+          Sanibroyeur
+        </h3>
+        <div id="qrSanibroyeur" class="qr-code"></div>
+      </div>
+
+      <div class="qr-card">
+        <h3 id="qrTriTitle">
+          Tri des déchets
+        </h3>
+        <div id="qrTri" class="qr-code"></div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-brand">
+    Les Ozabris
+  </div>
+
+  <p id="footerText">
+    Votre maison de vacances à La Réunion
+  </p>
+
+  <p>
+    🌴 La Réunion · Océan Indien
+  </p>
+</footer>
+
+<div
+  id="adminModal"
+  class="modal"
+  role="dialog"
+  aria-modal="true"
+  aria-hidden="true"
+  aria-labelledby="adminModalTitle">
+
+  <div class="modal-box">
+    <h2 id="adminModalTitle">
+      Accès administrateur
+    </h2>
+
+    <p>
+      Saisissez votre code pour accéder
+      à la gestion des recommandations.
+    </p>
+
+    <input
+      id="adminPin"
+      type="password"
+      inputmode="numeric"
+      autocomplete="off"
+      placeholder="Code Admin"
+      aria-label="Code administrateur">
+
+    <div
+      id="pinError"
+      class="pin-error"
+      role="status">
+    </div>
+
+    <div class="modal-buttons">
+      <button
+        id="cancelAdmin"
+        class="cancel"
+        type="button">
+        Annuler
+      </button>
+
+      <button
+        id="confirmAdmin"
+        class="confirm"
+        type="button">
+        Valider
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /*
+   * LES OZABRIS
+   * PAGE D'ACCUEIL
+   */
+
+  const ADMIN_PIN = '140769';
+
+  const VOYAGEURS_API =
+    'https://script.google.com/macros/s/' +
+    'AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq' +
+    '/exec';
+
+  /*
+   * Météo indicative pour Saint-Paul.
+   * Données fournies par Open-Meteo.
+   */
+  const WEATHER_API =
+    'https://api.open-meteo.com/v1/forecast' +
+    '?latitude=-21.01' +
+    '&longitude=55.27' +
+    '&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m' +
+    '&timezone=Indian%2FReunion';
+
+  /*
+   * Si tes PDF sont stockés ailleurs,
+   * remplace leurs adresses ici.
+   * Par défaut, les QR codes renvoient
+   * vers le guide qui contient les consignes.
+   */
+  const params =
+    new URLSearchParams(location.search);
+
+  const gite =
+    params.get('gite') === 'grandzabris'
+      ? 'grandzabris'
+      : 'ptitzabris';
+
+  const isTV =
+    params.get('tv') === '1';
+
+  const $ = id =>
+    document.getElementById(id);
+
+  let language = 'fr';
+  let currentGuest = null;
+  let previousFocus = null;
+
+  const translations = {
+    fr: {
+      heroEyebrow: 'Votre parenthèse à La Réunion',
+      heroTitle: 'Bienvenue',
+      heroSubtitle: 'aux Ozabris',
+      heroDescription:
+        'Un séjour placé sous le signe de la douceur, de la découverte et de l’art de vivre réunionnais.',
+      heroGuide: '🏡 Découvrir votre gîte',
+      heroConseils: '🌴 Explorer La Réunion',
+      topGuide: 'Guide pratique',
+      topConseils: 'Nos conseils',
+      dateLabel: 'Aujourd’hui à La Réunion',
+      weatherLabel: 'Météo · Saint-Paul',
+      weatherLoading: 'Chargement de la météo…',
+      weatherUnavailable: 'Météo indisponible',
+      stayLabel: 'Votre séjour',
+      stayMessage: 'Profitez pleinement de votre séjour.',
+      discoverKicker: 'Votre séjour, en toute simplicité',
+      discoverTitle: 'Tout est à portée de main',
+      discoverText:
+        'Retrouvez les informations de votre hébergement et nos plus belles recommandations pour découvrir l’île.',
+      guideTag: 'Votre hébergement',
+      guideTitle: 'Le guide du gîte',
+      guideDescription:
+        'Wi-Fi, équipements, consignes pratiques et informations utiles pour un séjour serein.',
+      guideArrow: 'Découvrir le guide →',
+      conseilsTag: 'Nos coups de cœur',
+      conseilsTitle: 'Les bonnes adresses',
+      conseilsDescription:
+        'Plages, paysages, commerces, balades et expériences à découvrir autour de votre gîte.',
+      conseilsArrow: 'Explorer nos conseils →',
+      practicalKicker: 'Les essentiels',
+      practicalTitle: 'Pour un séjour sans souci',
+      practicalText:
+        'Quelques informations pratiques à retrouver à tout moment.',
+      wifiTitle: 'Wi-Fi',
+      wifiText:
+        'Retrouvez les informations de connexion dans le guide du gîte.',
+      wifiLink: 'Voir le guide →',
+      rulesTitle: 'Vie dans le gîte',
+      rulesText:
+        'Équipements, consignes et bonnes pratiques de la maison.',
+      rulesLink: 'Voir les informations →',
+      sortingTitle: 'Tri des déchets',
+      sortingText:
+        'Les consignes pour respecter notre belle île.',
+      sortingLink: 'Voir les consignes →',
+      islandTitle: 'Découvrir l’île',
+      islandText:
+        'Retrouvez les sorties et découvertes sélectionnées pour vous.',
+      islandLink: 'Nos recommandations →',
+      qrSectionTitle: 'Emportez votre guide avec vous',
+      qrSectionText:
+        'Scannez les QR codes avec votre téléphone pour retrouver facilement les informations de votre séjour.',
+      qrHomeTitle: 'Accueil',
+      qrGuideTitle: 'Guide du gîte',
+      qrConseilsTitle: 'Nos conseils',
+      qrSanibroyeurTitle: 'Sanibroyeur',
+      qrTriTitle: 'Tri des déchets',
+      footerText: 'Votre maison de vacances à La Réunion',
+      welcome: 'Bienvenue',
+      guestMessage: 'Nous vous souhaitons un merveilleux séjour.',
+      humidity: 'Humidité',
+      wind: 'Vent',
+      weatherClear: 'Ciel dégagé',
+      weatherCloud: 'Partiellement nuageux',
+      weatherRain: 'Pluie',
+      weatherStorm: 'Orages',
+      weatherOther: 'Conditions variables'
+    },
+
+    en: {
+      heroEyebrow: 'Your escape to Réunion Island',
+      heroTitle: 'Welcome',
+      heroSubtitle: 'to Les Ozabris',
+      heroDescription:
+        'A relaxing stay filled with discovery, comfort and the charm of Réunion Island.',
+      heroGuide: '🏡 Explore your cottage',
+      heroConseils: '🌴 Discover Réunion',
+      topGuide: 'Cottage guide',
+      topConseils: 'Our tips',
+      dateLabel: 'Today in Réunion',
+      weatherLabel: 'Weather · Saint-Paul',
+      weatherLoading: 'Loading weather…',
+      weatherUnavailable: 'Weather unavailable',
+      stayLabel: 'Your stay',
+      stayMessage: 'Enjoy every moment of your stay.',
+      discoverKicker: 'Everything you need',
+      discoverTitle: 'Your stay made easy',
+      discoverText:
+        'Find all the useful information about your cottage and our favourite places on the island.',
+      guideTag: 'Your cottage',
+      guideTitle: 'The cottage guide',
+      guideDescription:
+        'Wi-Fi, amenities, house rules and useful information for a relaxing stay.',
+      guideArrow: 'Explore the guide →',
+      conseilsTag: 'Our favourites',
+      conseilsTitle: 'Local recommendations',
+      conseilsDescription:
+        'Beaches, landscapes, shops, walks and experiences around your cottage.',
+      conseilsArrow: 'Discover our tips →',
+      practicalKicker: 'Essentials',
+      practicalTitle: 'Everything for a great stay',
+      practicalText:
+        'Useful information available whenever you need it.',
+      wifiTitle: 'Wi-Fi',
+      wifiText:
+        'Find the connection details in your cottage guide.',
+      wifiLink: 'View guide →',
+      rulesTitle: 'Cottage information',
+      rulesText:
+        'Amenities, house rules and useful instructions.',
+      rulesLink: 'View information →',
+      sortingTitle: 'Waste sorting',
+      sortingText:
+        'Help us protect our beautiful island.',
+      sortingLink: 'View instructions →',
+      islandTitle: 'Discover the island',
+      islandText:
+        'Explore our selection of local activities and places.',
+      islandLink: 'Our recommendations →',
+      qrSectionTitle: 'Take your guide with you',
+      qrSectionText:
+        'Scan these QR codes to access your stay information on your phone.',
+      qrHomeTitle: 'Home',
+      qrGuideTitle: 'Cottage guide',
+      qrConseilsTitle: 'Our tips',
+      qrSanibroyeurTitle: 'Bathroom instructions',
+      qrTriTitle: 'Waste sorting',
+      footerText: 'Your holiday home on Réunion Island',
+      welcome: 'Welcome',
+      guestMessage: 'We wish you a wonderful stay.',
+      humidity: 'Humidity',
+      wind: 'Wind',
+      weatherClear: 'Clear sky',
+      weatherCloud: 'Partly cloudy',
+      weatherRain: 'Rain',
+      weatherStorm: 'Thunderstorms',
+      weatherOther: 'Variable conditions'
+    },
+
+    de: {
+      heroEyebrow: 'Ihre Auszeit auf La Réunion',
+      heroTitle: 'Willkommen',
+      heroSubtitle: 'bei Les Ozabris',
+      heroDescription:
+        'Genießen Sie einen erholsamen Aufenthalt voller Entdeckungen auf La Réunion.',
+      heroGuide: '🏡 Unterkunft entdecken',
+      heroConseils: '🌴 La Réunion entdecken',
+      topGuide: 'Hausinformationen',
+      topConseils: 'Unsere Tipps',
+      dateLabel: 'Heute auf La Réunion',
+      weatherLabel: 'Wetter · Saint-Paul',
+      weatherLoading: 'Wetter wird geladen…',
+      weatherUnavailable: 'Wetter nicht verfügbar',
+      stayLabel: 'Ihr Aufenthalt',
+      stayMessage: 'Genießen Sie Ihren Aufenthalt.',
+      discoverKicker: 'Alles für Ihren Aufenthalt',
+      discoverTitle: 'Alles auf einen Blick',
+      discoverText:
+        'Hier finden Sie Informationen zur Unterkunft und unsere Empfehlungen für die Insel.',
+      guideTag: 'Ihre Unterkunft',
+      guideTitle: 'Hausinformationen',
+      guideDescription:
+        'WLAN, Ausstattung, Hausregeln und wichtige Informationen.',
+      guideArrow: 'Informationen ansehen →',
+      conseilsTag: 'Unsere Favoriten',
+      conseilsTitle: 'Lokale Empfehlungen',
+      conseilsDescription:
+        'Strände, Landschaften, Geschäfte und Ausflüge rund um Ihre Unterkunft.',
+      conseilsArrow: 'Empfehlungen entdecken →',
+      practicalKicker: 'Das Wichtigste',
+      practicalTitle: 'Für einen entspannten Aufenthalt',
+      practicalText:
+        'Nützliche Informationen jederzeit verfügbar.',
+      wifiTitle: 'WLAN',
+      wifiText:
+        'Die Zugangsdaten finden Sie in den Hausinformationen.',
+      wifiLink: 'Informationen ansehen →',
+      rulesTitle: 'Hausregeln',
+      rulesText:
+        'Ausstattung, Hinweise und wichtige Regeln.',
+      rulesLink: 'Informationen ansehen →',
+      sortingTitle: 'Mülltrennung',
+      sortingText:
+        'Helfen Sie uns, unsere schöne Insel zu schützen.',
+      sortingLink: 'Hinweise ansehen →',
+      islandTitle: 'Insel entdecken',
+      islandText:
+        'Entdecken Sie unsere Ausflugs- und Freizeittipps.',
+      islandLink: 'Unsere Empfehlungen →',
+      qrSectionTitle: 'Ihr Reiseführer für unterwegs',
+      qrSectionText:
+        'Scannen Sie die QR-Codes, um die Informationen auf Ihrem Smartphone zu öffnen.',
+      qrHomeTitle: 'Startseite',
+      qrGuideTitle: 'Hausinformationen',
+      qrConseilsTitle: 'Empfehlungen',
+      qrSanibroyeurTitle: 'Badezimmerhinweise',
+      qrTriTitle: 'Mülltrennung',
+      footerText: 'Ihr Ferienhaus auf La Réunion',
+      welcome: 'Willkommen',
+      guestMessage: 'Wir wünschen Ihnen einen schönen Aufenthalt.',
+      humidity: 'Luftfeuchtigkeit',
+      wind: 'Wind',
+      weatherClear: 'Klarer Himmel',
+      weatherCloud: 'Teilweise bewölkt',
+      weatherRain: 'Regen',
+      weatherStorm: 'Gewitter',
+      weatherOther: 'Wechselhaftes Wetter'
+    }
+  };
+
+  function t(key) {
+    return translations[language][key] ||
+           translations.fr[key] ||
+           key;
+  }
+
+  function setText(id, value) {
+    const element = $(id);
+
+    if (element) {
+      element.textContent = value;
+    }
+  }
+
+  function suffix(includeTV) {
+    return '?gite=' +
+      encodeURIComponent(gite) +
+      (includeTV && isTV ? '&tv=1' : '');
+  }
+
+  function configureLinks() {
+    const homeUrl =
+      'index.html' + suffix(true);
+
+    const guideUrl =
+      'guide.html' + suffix(true);
+
+    const conseilsUrl =
+      'conseils.html' + suffix(true);
+
+    ['topGuide', 'heroGuide', 'featureGuide'].forEach(
+      id => $(id).href = guideUrl
+    );
+
+    ['topConseils', 'heroConseils', 'featureConseils', 'islandLink'].forEach(
+      id => $(id).href = conseilsUrl
+    );
+
+    document.querySelectorAll(
+      '.guide-shortcut'
+    ).forEach(function (link) {
+      link.href = guideUrl;
+    });
+
+    if (isTV) {
+      $('adminButton').classList.add('hidden');
+    }
+
+    /*
+     * QR codes pour les téléphones.
+     * Les liens n'incluent pas tv=1.
+     */
+    createQr(
+      'qrHome',
+      location.origin + location.pathname +
+        suffix(false)
+    );
+
+    createQr(
+      'qrGuide',
+      new URL(
+        'guide.html' + suffix(false),
+        location.href
+      ).href
+    );
+
+    createQr(
+      'qrConseils',
+      new URL(
+        'conseils.html' + suffix(false),
+        location.href
+      ).href
+    );
+
+    /*
+     * QR vers les consignes du guide.
+     * Les PDF existants pourront être
+     * rebranchés ici si leurs URL sont connues.
+     */
+    createQr(
+      'qrSanibroyeur',
+      new URL(
+        'guide.html' + suffix(false),
+        location.href
+      ).href
+    );
+
+    createQr(
+      'qrTri',
+      new URL(
+        'guide.html' + suffix(false),
+        location.href
+      ).href
+    );
+  }
+
+  function createQr(id, url) {
+    const container = $(id);
+    container.innerHTML = '';
+
+    if (typeof QRCode === 'undefined') {
+      const link = document.createElement('a');
+      link.href = url;
+      link.textContent = 'Ouvrir';
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      container.appendChild(link);
+      return;
+    }
+
+    new QRCode(container, {
+      text: url,
+      width: 116,
+      height: 116,
+      colorDark: '#12263a',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  }
+
+  /*
+   * HORLOGE DE LA REUNION
+   */
+
+  function updateClock() {
+    const now = new Date();
+
+    const locale =
+      language === 'de' ? 'de-DE' :
+      language === 'en' ? 'en-GB' :
+      'fr-FR';
+
+    const dateText =
+      new Intl.DateTimeFormat(locale, {
+        timeZone: 'Indian/Reunion',
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      }).format(now);
+
+    const timeText =
+      new Intl.DateTimeFormat(locale, {
+        timeZone: 'Indian/Reunion',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      }).format(now);
+
+    setText('localDate', dateText);
+    setText('localTime', timeText + ' · UTC+4');
+  }
+
+  /*
+   * METEO OPEN-METEO
+   */
+
+  function weatherAppearance(code) {
+    if (code === 0) {
+      return ['☀️', t('weatherClear')];
+    }
+
+    if ([1, 2, 3, 45, 48].includes(code)) {
+      return ['🌤️', t('weatherCloud')];
+    }
+
+    if ([95, 96, 99].includes(code)) {
+      return ['⛈️', t('weatherStorm')];
+    }
+
+    if (
+      [51, 53, 55, 56, 57, 61, 63, 65,
+       66, 67, 80, 81, 82].includes(code)
+    ) {
+      return ['🌧️', t('weatherRain')];
+    }
+
+    return ['🌦️', t('weatherOther')];
+  }
+
+  let weatherData = null;
+
+  function renderWeather() {
+    if (!weatherData) {
+      setText(
+        'weatherDescription',
+        t('weatherLoading')
+      );
+      return;
+    }
+
+    const current = weatherData;
+
+    const appearance =
+      weatherAppearance(
+        Number(current.weather_code)
+      );
+
+    setText(
+      'weatherIcon',
+      appearance[0]
+    );
+
+    setText(
+      'temperature',
+      Math.round(current.temperature_2m) + '°C'
+    );
+
+    setText(
+      'weatherDescription',
+      appearance[1]
+    );
+
+    const humidity =
+      current.relative_humidity_2m;
+
+    const wind =
+      current.wind_speed_10m;
+
+    setText(
+      'weatherExtra',
+      t('humidity') + ' : ' + humidity + '% · ' +
+      t('wind') + ' : ' + Math.round(wind) + ' km/h'
+    );
+  }
+
+  async function loadWeather() {
+    try {
+      const response = await fetch(
+        WEATHER_API,
+        { cache: 'no-store' }
+      );
+
+      if (!response.ok) {
+        throw new Error('Weather HTTP error');
+      }
+
+      const data = await response.json();
+
+      if (!data.current) {
+        throw new Error('Missing weather data');
+      }
+
+      weatherData = data.current;
+      renderWeather();
+
+    } catch (error) {
+      if (!weatherData) {
+        setText(
+          'weatherDescription',
+          t('weatherUnavailable')
+        );
+
+        setText('temperature', '—');
+        setText('weatherExtra', '');
+      }
+    }
+  }
+
+  /*
+   * PERSONNALISATION VOYAGEURS
+   */
+
+  function normalize(value) {
+    return String(value || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, '');
+  }
+
+  function sameCottage(value) {
+    return normalize(value).includes(gite);
+  }
+
+  function parseDate(value) {
+    if (!value) {
+      return null;
+    }
+
+    const match = String(value).match(
+      /^(\d{4})-(\d{2})-(\d{2})/
+    );
+
+    if (match) {
+      return new Date(
+        Number(match[1]),
+        Number(match[2]) - 1,
+        Number(match[3])
+      );
+    }
+
+    const date = new Date(value);
+
+    return isNaN(date.getTime())
+      ? null : date;
+  }
+
+  function reunionToday() {
+    const parts =
+      new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Indian/Reunion',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      }).formatToParts(new Date());
+
+    const values = {};
+
+    parts.forEach(function (part) {
+      values[part.type] = part.value;
+    });
+
+    return new Date(
+      Number(values.year),
+      Number(values.month) - 1,
+      Number(values.day)
+    );
+  }
+
+  async function loadVoyageur() {
+    try {
+      const response = await fetch(
+        VOYAGEURS_API + '?t=' + Date.now(),
+        { cache: 'no-store' }
+      );
+
+      if (!response.ok) {
+        return;
+      }
+
+      const data = await response.json();
+
+      const voyageurs =
+        Array.isArray(data)
+          ? data
+          : Array.isArray(data.rows)
+            ? data.rows
+            : Array.isArray(data.data)
+              ? data.data
+              : [];
+
+      const today = reunionToday();
+
+      const actifs = voyageurs.filter(
+        function (voyageur) {
+          if (!sameCottage(voyageur.cottage)) {
+            return false;
+          }
+
+          const arrivee = parseDate(
+            voyageur.arrivee ||
+            voyageur.dateArrivee
+          );
+
+          const depart = parseDate(
+            voyageur.depart ||
+            voyageur.dateDepart
+          );
+
+          return arrivee &&
+                 depart &&
+                 arrivee <= today &&
+                 today <= depart;
+        }
+      );
+
+      if (!actifs.length) {
+        return;
+      }
+
+      currentGuest =
+        actifs[actifs.length - 1];
+
+      const lang = String(
+        currentGuest.langue || 'fr'
+      ).toLowerCase().substring(0, 2);
+
+      language =
+        translations[lang] ? lang : 'fr';
+
+      translatePage();
+
+    } catch (error) {
+      // L'accueil reste fonctionnel
+      // si les voyageurs sont indisponibles.
+    }
+  }
+
+  /*
+   * TRADUCTIONS
+   */
+
+  function translatePage() {
+    document.documentElement.lang = language;
+
+    const ids = [
+      'heroEyebrow',
+      'heroDescription',
+      'heroGuide',
+      'heroConseils',
+      'topGuide',
+      'topConseils',
+      'dateLabel',
+      'weatherLabel',
+      'stayLabel',
+      'discoverKicker',
+      'discoverTitle',
+      'discoverText',
+      'guideTag',
+      'guideTitle',
+      'guideDescription',
+      'guideArrow',
+      'conseilsTag',
+      'conseilsTitle',
+      'conseilsDescription',
+      'conseilsArrow',
+      'practicalKicker',
+      'practicalTitle',
+      'practicalText',
+      'wifiTitle',
+      'wifiText',
+      'wifiLink',
+      'rulesTitle',
+      'rulesText',
+      'rulesLink',
+      'sortingTitle',
+      'sortingText',
+      'sortingLink',
+      'islandTitle',
+      'islandText',
+      'islandLink',
+      'qrSectionTitle',
+      'qrSectionText',
+      'qrHomeTitle',
+      'qrGuideTitle',
+      'qrConseilsTitle',
+      'qrSanibroyeurTitle',
+      'qrTriTitle',
+      'footerText'
+    ];
+
+    ids.forEach(function (id) {
+      setText(id, t(id));
+    });
+
+    const title = $('heroTitle');
+    title.innerHTML = '';
+
+    const firstLine =
+      document.createTextNode(
+        t('heroTitle')
+      );
+
+    const breakLine =
+      document.createElement('br');
+
+    const italic =
+      document.createElement('em');
+
+    italic.textContent =
+      t('heroSubtitle');
+
+    title.appendChild(firstLine);
+    title.appendChild(breakLine);
+    title.appendChild(italic);
+
+    setText(
+      'cottageName',
+      gite === 'grandzabris'
+        ? 'Grandzabris'
+        : 'Ptitzabris'
+    );
+
+    setText(
+      'stayMessage',
+      t('stayMessage')
+    );
+
+    if (currentGuest) {
+      const prenom =
+        String(currentGuest.prenom || '').trim();
+
+      if (prenom) {
+        title.innerHTML = '';
+
+        title.appendChild(
+          document.createTextNode(
+            t('welcome') + ' '
+          )
+        );
+
+        const br =
+          document.createElement('br');
+
+        const name =
+          document.createElement('em');
+
+        name.textContent = prenom;
+
+        title.appendChild(br);
+        title.appendChild(name);
+
+        setText(
+          'stayMessage',
+          t('guestMessage')
+        );
+      }
+    }
+
+    updateClock();
+    renderWeather();
+  }
+
+  /*
+   * ACCES ADMIN
+   */
+
+  function openAdmin() {
+    previousFocus = document.activeElement;
+
+    $('adminPin').value = '';
+    $('pinError').textContent = '';
+
+    $('adminModal').classList.add('open');
+
+    $('adminModal').setAttribute(
+      'aria-hidden',
+      'false'
+    );
+
+    $('adminPin').focus();
+  }
+
+  function closeAdmin() {
+    $('adminModal').classList.remove('open');
+
+    $('adminModal').setAttribute(
+      'aria-hidden',
+      'true'
+    );
+
+    if (
+      previousFocus &&
+      document.contains(previousFocus)
+    ) {
+      previousFocus.focus();
+    }
+  }
+
+  function confirmAdmin() {
+    const pin =
+      $('adminPin').value.trim();
+
+    if (pin !== ADMIN_PIN) {
+      $('pinError').textContent =
+        'Code incorrect.';
+      $('adminPin').value = '';
+      $('adminPin').focus();
+      return;
+    }
+
+    location.href =
+      'admin.html?gite=' +
+      encodeURIComponent(gite);
+  }
+
+  $('adminButton').addEventListener(
+    'click',
+    openAdmin
+  );
+
+  $('cancelAdmin').addEventListener(
+    'click',
+    closeAdmin
+  );
+
+  $('confirmAdmin').addEventListener(
+    'click',
+    confirmAdmin
+  );
+
+  $('adminPin').addEventListener(
+    'keydown',
+    function (event) {
+      if (event.key === 'Enter') {
+        confirmAdmin();
+      }
+    }
+  );
+
+  $('adminModal').addEventListener(
+    'click',
+    function (event) {
+      if (
+        event.target === $('adminModal')
+      ) {
+        closeAdmin();
+      }
+    }
+  );
+
+  /*
+   * NAVIGATION TELECOMMANDE
+   */
+
+  document.addEventListener(
+    'keydown',
+    function (event) {
+      const modalOpen =
+        $('adminModal').classList.contains(
+          'open'
+        );
+
+      if (modalOpen) {
+        if (
+          event.key === 'Escape' ||
+          event.key === 'Backspace'
+        ) {
+          if (
+            event.target.tagName !== 'INPUT' ||
+            event.key === 'Escape'
+          ) {
+            event.preventDefault();
+            closeAdmin();
+          }
         }
 
-        window.onload = async function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const giteParam = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
-            currentGiteKey = giteParam.includes("grand") ? "grandzabris" : "ptitzabris";
-            let cottageName = currentGiteKey === "grandzabris" ? "Grandzabris" : "Ptitzabris";
+        return;
+      }
 
-            document.getElementById('link-conseils').href = `conseils.html?gite=${currentGiteKey}`;
-            document.getElementById('link-infos').href = `guide.html?gite=${currentGiteKey}`;
+      const arrows = [
+        'ArrowUp',
+        'ArrowDown',
+        'ArrowLeft',
+        'ArrowRight'
+      ];
 
-            // SÉCURITÉ : Masquage strict du bouton Admin UNIQUEMENT pour .145 et .93
-            const adminContainer = document.getElementById('admin-container');
-            const currentHost = window.location.hostname;
-            const isTargetTV = currentHost.endsWith(".145") || currentHost.endsWith(".93") || 
-                               currentHost === "192.168.1.145" || currentHost === "192.168.1.93";
+      if (!arrows.includes(event.key)) {
+        return;
+      }
 
-            if (isTargetTV) {
-                adminContainer.style.display = 'none';
-            } else {
-                adminContainer.style.display = 'block';
-            }
+      const controls =
+        Array.from(
+          document.querySelectorAll(
+            '.top-links a, ' +
+            '.top-links button:not(.hidden), ' +
+            '.hero-button, ' +
+            '.feature-card, ' +
+            '.useful-card a'
+          )
+        );
 
-            try {
-                const resV = await fetch(sheetVoyageursApiUrl + "?t=" + new Date().getTime());
-                const voyageurs = await resV.json();
-                const today = new Date();
-                today.setHours(0,0,0,0);
-                
-                let voyageurActuel = null;
-                if (Array.isArray(voyageurs) && voyageurs.length > 0) {
-                    voyageurActuel = voyageurs.find(item => {
-                        const cStr = String(item.cottage || '').toLowerCase();
-                        const matchC = currentGiteKey === 'grandzabris' ? cStr.includes('grand') : (cStr.includes('ptit') || cStr.includes('petit'));
-                        const arr = item.dateArrivee || item.arrivee;
-                        const dep = item.dateDepart || item.depart;
-                        if (matchC && arr && dep) {
-                            const dArr = new Date(arr);
-                            const dDep = new Date(dep);
-                            dArr.setHours(0,0,0,0);
-                            dDep.setHours(0,0,0,0);
-                            return today >= dArr && today <= dDep;
-                        }
-                        return false;
-                    });
-                }
+      if (!controls.length) {
+        return;
+      }
 
-                if (voyageurActuel) {
-                    if (voyageurActuel.langue) {
-                        const l = voyageurActuel.langue.toLowerCase().trim();
-                        if (['fr', 'en', 'de'].includes(l)) {
-                            currentLang = l;
-                        }
-                    }
-                    if (voyageurActuel.prenom) {
-                        document.getElementById('page-main-title').innerText = t('welcomeFor', { name: voyageurActuel.prenom });
-                    } else {
-                        document.getElementById('page-main-title').innerText = t('welcomeAt', { cottage: cottageName });
-                    }
-                } else {
-                    document.getElementById('page-main-title').innerText = t('welcomeAt', { cottage: cottageName });
-                }
-            } catch(e) {
-                document.getElementById('page-main-title').innerText = t('welcomeAt', { cottage: cottageName });
-            }
+      const current =
+        controls.indexOf(
+          document.activeElement
+        );
 
-            document.getElementById('page-main-sub').innerText = t('subText');
-            document.getElementById('menu-conseils-title').innerText = t('conseilsTitle');
-            document.getElementById('menu-conseils-sub').innerText = t('conseilsSub');
-            document.getElementById('menu-infos-title').innerText = t('infosTitle');
-            document.getElementById('menu-infos-sub').innerText = t('infosSub');
-            document.getElementById('footer-text').innerText = t('footer');
-            document.getElementById('qr-section-title').innerText = t('qrTitle');
-            document.getElementById('qr-label-1').innerText = t('qr1');
-            document.getElementById('qr-label-2').innerText = t('qr2');
-            document.getElementById('qr-label-3').innerText = t('qr3');
-            document.getElementById('qr-label-4').innerText = t('qr4');
-            document.getElementById('qr-label-5').innerText = t('qr5');
-            document.getElementById('admin-modal-title').innerText = t('adminTitle');
-            document.getElementById('admin-modal-sub').innerText = t('adminSub');
-            document.getElementById('admin-modal-btn').innerText = t('adminBtn');
+      if (current < 0) {
+        event.preventDefault();
+        controls[0].focus();
+        return;
+      }
 
-            const baseUrl = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
-            
-            try {
-                new QRCode(document.getElementById("qrcode-1"), { text: baseUrl + `index.html?gite=${currentGiteKey}`, width: 50, height: 50, colorDark: "#12263a", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.L });
-                new QRCode(document.getElementById("qrcode-2"), { text: baseUrl + `guide.html?gite=${currentGiteKey}`, width: 50, height: 50, colorDark: "#12263a", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.L });
-                new QRCode(document.getElementById("qrcode-3"), { text: baseUrl + `conseils.html?gite=${currentGiteKey}`, width: 50, height: 50, colorDark: "#12263a", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.L });
-                new QRCode(document.getElementById("qrcode-4"), { text: "https://1drv.ms/b/c/b302293c3a107d46/IQDKMy1gsI-VT57f-TffvFLZAYGZgWF8Su3TW7D9aAyesKE", width: 50, height: 50, colorDark: "#12263a", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.L });
-                new QRCode(document.getElementById("qrcode-5"), { text: "https://1drv.ms/b/c/b302293c3a107d46/IQDZPE7hVWyzR6Je11v5GxJpAQHKVJVyvyy-wpi8A10WimU", width: 50, height: 50, colorDark: "#12263a", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.L });
-            } catch(err) {
-                console.log("Erreur QR codes");
-            }
-        }
+      const step =
+        event.key === 'ArrowUp' ||
+        event.key === 'ArrowLeft'
+          ? -1 : 1;
 
-        function openPinModal() {
-            document.getElementById('admin-modal').style.display = 'flex';
-            document.getElementById('adminPin').focus();
-        }
-        function closePinModal() {
-            document.getElementById('admin-modal').style.display = 'none';
-            document.getElementById('adminError').style.display = 'none';
-            document.getElementById('adminPin').value = '';
-        }
-        function verifyPin() {
-            const pin = document.getElementById('adminPin').value.trim();
-            if (pin === '140769') {
-                window.location.href = `admin.html?gite=${currentGiteKey}`;
-            } else {
-                document.getElementById('adminError').innerText = t('adminErr');
-                document.getElementById('adminError').style.display = 'block';
-                document.getElementById('adminPin').value = '';
-            }
-        }
-    </script>
+      const next =
+        (current + step + controls.length) %
+        controls.length;
+
+      event.preventDefault();
+      controls[next].focus();
+    }
+  );
+
+  /*
+   * DEMARRAGE
+   */
+
+  configureLinks();
+  translatePage();
+  loadWeather();
+  loadVoyageur();
+
+  /*
+   * L'horloge évolue sans recharger
+   * ni faire scintiller la page.
+   */
+  setInterval(updateClock, 30000);
+
+  /*
+   * La météo se met à jour discrètement,
+   * sans reconstruire les cartes.
+   */
+  setInterval(loadWeather, 1800000);
+
+})();
+</script>
+
 </body>
 </html>
