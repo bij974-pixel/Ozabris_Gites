@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title-meta">Conseils Personnalisés | Les Ozabris</title>
+    <!-- Inclusion de la bibliothèque qrcode.js pour générer les QR codes -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root { --primary: #12263a; --accent: #c5a880; --text-dark: #2c3e50; --white: #ffffff; }
@@ -190,8 +191,65 @@
             <p id="page-main-sub" class="welcome-sub">✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.</p>
         </div>
 
+        <!-- Grille avec cartes en dur pour garantir la sélection native de la télécommande TV -->
         <div class="advice-grid" id="advice-grid-container">
-            <!-- Rendu synchrone immédiat -->
+            
+            <div class="advice-box" tabindex="0" onclick="openFullscreen('Super U 3B', 'Supermarché le plus proche d\'ici', 'https://i.postimg.cc/k47g2q8N/superu.jpg', 'https://maps.google.com')">
+                <div class="advice-content-area">
+                    <h3>Super U 3B</h3>
+                    <p>Supermarché le plus proche d'ici</p>
+                </div>
+                <img src="https://i.postimg.cc/k47g2q8N/superu.jpg" class="advice-thumb" alt="Super U 3B">
+            </div>
+
+            <div class="advice-box" tabindex="0" onclick="openFullscreen('Vanille Vallée', 'Leurs sachets pour les...', 'https://i.postimg.cc/6q8L899s/vanille.jpg', '')">
+                <div class="advice-content-area">
+                    <h3>Vanille Vallée</h3>
+                    <p>Leurs sachets pour les...</p>
+                </div>
+                <img src="https://i.postimg.cc/6q8L899s/vanille.jpg" class="advice-thumb" alt="Vanille Vallée">
+            </div>
+
+            <div class="advice-box" tabindex="0" onclick="openFullscreen('Le VORTEX Énergétique de l\'Etang Salé', 'Un lieu hors du temps, un moment po...', 'https://i.postimg.cc/027y6J5v/vortex.jpg', '')">
+                <div class="advice-content-area">
+                    <h3>Le VORTEX Énergétique de l'Etang Salé</h3>
+                    <p>Un lieu hors du temps, un moment po...</p>
+                </div>
+                <img src="https://i.postimg.cc/027y6J5v/vortex.jpg" class="advice-thumb" alt="Vortex">
+            </div>
+
+            <div class="advice-box" tabindex="0" onclick="openFullscreen('Marché forain de St Paul', 'Le plus grand marché d...', 'https://i.postimg.cc/3w9f65gX/marche.jpg', '')">
+                <div class="advice-content-area">
+                    <h3>Marché forain de St Paul</h3>
+                    <p>Le plus grand marché d...</p>
+                </div>
+                <img src="https://i.postimg.cc/3w9f65gX/marche.jpg" class="advice-thumb" alt="Marché">
+            </div>
+
+            <div class="advice-box" tabindex="0" onclick="openFullscreen('Plage de l\'Ermitage', 'Idéal pour le snorkeling et la baignade sécurisée dans le lagon.', 'https://i.postimg.cc/18Gz3k1b/ermitage.jpg', '')">
+                <div class="advice-content-area">
+                    <h3>Plage de l'Ermitage</h3>
+                    <p>Idéal pour le snorkeling et la baignade sécurisée dans le lagon.</p>
+                </div>
+                <img src="https://i.postimg.cc/18Gz3k1b/ermitage.jpg" class="advice-thumb" alt="Ermitage">
+            </div>
+
+            <div class="advice-box" tabindex="0" onclick="openFullscreen('Maïdo - Lever de soleil', 'Point de vue incontournable sur le cirque de Mafate.', 'https://i.postimg.cc/2y5Z7f6q/maido.jpg', '')">
+                <div class="advice-content-area">
+                    <h3>Maïdo - Lever de soleil</h3>
+                    <p>Point de vue incontournable sur le cirque de Mafate.</p>
+                </div>
+                <img src="https://i.postimg.cc/2y5Z7f6q/maido.jpg" class="advice-thumb" alt="Maïdo">
+            </div>
+
+            <div class="advice-box" tabindex="0" onclick="openFullscreen('Jardin d\'Éden', 'Jardin botanique tropical à Saint-Gilles les Bains.', 'https://i.postimg.cc/8c4h62kL/eden.jpg', '')">
+                <div class="advice-content-area">
+                    <h3>Jardin d'Éden</h3>
+                    <p>Jardin botanique tropical à Saint-Gilles les Bains.</p>
+                </div>
+                <img src="https://i.postimg.cc/8c4h62kL/eden.jpg" class="advice-thumb" alt="Eden">
+            </div>
+
         </div>
         
         <div class="footer-actions">
@@ -225,35 +283,8 @@
 
     <script>
         const sheetVoyageursApiUrl = "https://script.google.com/macros/s/AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq/exec";
-        const sheetConseilsApiUrl = "https://script.google.com/macros/s/AKfycbzdEv_frdNqscUxHQW6xXpePamOztmC0xLWa5CRMjY4fFsKuMdcvJda7fDkXiWqAYcu1A/exec";
 
         let currentGiteKey = 'ptitzabris';
-        let currentLang = 'fr';
-
-        const translations = {
-            fr: { titleFor: "Recommandations exclusives pour {name}", titleAt: "Recommandations exclusives", subText: "✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.", backHome: "🏠 Retour à l'accueil" },
-            en: { titleFor: "Exclusive recommendations for {name}", titleAt: "Exclusive recommendations", subText: "✨ Use your remote control to scroll and select a card.", backHome: "🏠 Back to Home" },
-            de: { titleFor: "Exklusive Empfehlungen für {name}", titleAt: "Exklusive Empfehlungen", subText: "✨ Verwenden Sie Ihre Fernbedienung, um durch Karten zu blättern.", backHome: "🏠 Zur Startseite" }
-        };
-
-        function t(key, replacements = {}) {
-            let dict = translations[currentLang] || translations['fr'];
-            let text = dict[key] || translations['fr'][key] || key;
-            for (const [k, v] of Object.entries(replacements)) {
-                text = text.replace(new RegExp(`{${k}}`, 'g'), v);
-            }
-            return text;
-        }
-
-        let defaultAdvices = [
-            { title: "Super U 3B", text: "Supermarché le plus proche d'ici", img: "https://i.postimg.cc/k47g2q8N/superu.jpg", linkUrl: "https://maps.google.com" },
-            { title: "Vanille Vallée", text: "Leurs sachets pour les...", img: "https://i.postimg.cc/6q8L899s/vanille.jpg", linkUrl: "" },
-            { title: "Le VORTEX Énergétique de l'Etang Salé", text: "Un lieu hors du temps, un moment po...", img: "https://i.postimg.cc/027y6J5v/vortex.jpg", linkUrl: "" },
-            { title: "Marché forain de St Paul", text: "Le plus grand marché d...", img: "https://i.postimg.cc/3w9f65gX/marche.jpg", linkUrl: "" },
-            { title: "Plage de l'Ermitage", text: "Idéal pour le snorkeling et la baignade sécurisée dans le lagon.", img: "https://i.postimg.cc/18Gz3k1b/ermitage.jpg", linkUrl: "" },
-            { title: "Maïdo - Lever de soleil", text: "Point de vue incontournable sur le cirque de Mafate.", img: "https://i.postimg.cc/2y5Z7f6q/maido.jpg", linkUrl: "" },
-            { title: "Jardin d'Éden", text: "Jardin botanique tropical à Saint-Gilles les Bains.", img: "https://i.postimg.cc/8c4h62kL/eden.jpg", linkUrl: "" }
-        ];
 
         document.addEventListener("DOMContentLoaded", function() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -272,63 +303,11 @@
                 adminContainer.style.display = isTargetTV ? 'none' : 'block';
             }
 
-            // RENDU IMMÉDIAT GARANTI DE LA GRILLE (Zéro écran blanc)
-            renderGrid(defaultAdvices);
-
-            // Charger les données distantes en arrière-plan (sans bloquer ni effacer si échec)
-            fetchBackgroundData(cottageName);
+            // Récupération optionnelle du prénom du voyageur en arrière-plan
+            fetchVoyageurName(cottageName);
         });
 
-        function renderGrid(list) {
-            const container = document.getElementById('advice-grid-container');
-            if (!container) return;
-            container.innerHTML = "";
-
-            if (!list || list.length === 0) return;
-
-            list.forEach((adv) => {
-                const titleText = adv.title || '';
-                if (!titleText.trim()) return;
-
-                const descText = adv.text || '';
-                const imageUrl = adv.img || '';
-                const linkUrl = adv.linkUrl || '';
-
-                const box = document.createElement('div');
-                box.className = 'advice-box';
-                // Attribut indispensable pour la sélection de la télécommande TV
-                box.setAttribute('tabindex', '0');
-
-                const triggerAction = function(e) {
-                    e.preventDefault();
-                    openFullscreen(titleText, descText, imageUrl, linkUrl);
-                };
-
-                box.onclick = triggerAction;
-                box.ontouchend = triggerAction;
-                box.onkeydown = function(e) {
-                    if (e.key === 'Enter' || e.keyCode === 13) {
-                        triggerAction(e);
-                    }
-                };
-
-                let imgTag = "";
-                if (imageUrl && imageUrl.trim().startsWith("http")) {
-                    imgTag = `<img src="${imageUrl.trim()}" class="advice-thumb" alt="${titleText}">`;
-                }
-
-                box.innerHTML = `
-                    <div class="advice-content-area">
-                        <h3>${titleText}</h3>
-                        <p>${descText}</p>
-                    </div>
-                    ${imgTag}
-                `;
-                container.appendChild(box);
-            });
-        }
-
-        async function fetchBackgroundData(cottageName) {
+        async function fetchVoyageurName(cottageName) {
             try {
                 const resV = await fetch(sheetVoyageursApiUrl + "?t=" + new Date().getTime());
                 const voyageurs = await resV.json();
@@ -349,37 +328,12 @@
                         }
                         return false;
                     });
-                    if (v) {
-                        if (v.langue) {
-                            const l = v.langue.toLowerCase().trim();
-                            if (['fr', 'en', 'de'].includes(l)) currentLang = l;
-                        }
-                        if (v.prenom) {
-                            document.getElementById('page-main-title').innerText = t('titleFor', { name: v.prenom });
-                        }
+                    if (v && v.prenom) {
+                        const titleEl = document.getElementById('page-main-title');
+                        if (titleEl) titleEl.innerText = `Recommandations exclusives pour ${v.prenom}`;
                     }
                 }
             } catch(e) {}
-
-            document.getElementById('page-main-sub').innerText = t('subText');
-            document.getElementById('back-home-btn').innerText = t('backHome');
-
-            try {
-                const response = await fetch(sheetConseilsApiUrl + "?type=conseils&t=" + new Date().getTime());
-                const data = await response.json();
-                const remoteAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || data.data || []);
-                if (remoteAdvices.length > 0) {
-                    const formatted = remoteAdvices.map(adv => ({
-                        title: adv.title || adv['Nom de la recommandation'] || '',
-                        text: adv.text || adv['Commentaire sur la recommandation'] || adv['Commentaire'] || adv['Description'] || '',
-                        img: adv.img || adv['Lien postimage'] || '',
-                        linkUrl: adv.linkUrl || adv['Lien web'] || ''
-                    })).filter(x => x.title !== '');
-                    if (formatted.length > 0) {
-                        renderGrid(formatted);
-                    }
-                }
-            } catch (err) {}
         }
 
         function openFullscreen(title, text, imageUrl, linkUrl) {
@@ -434,7 +388,7 @@
             document.getElementById('adminPin').value = '';
         }
         function verifyPin() {
-            const pin = document.getElementById('adminPin').value.trim();
+            const pin = document.getElementById('adminPin'].value.trim();
             if (pin === '140769') {
                 window.location.href = `admin.html?gite=${currentGiteKey}`;
             } else {
