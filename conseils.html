@@ -174,11 +174,11 @@ background: white; padding: 20px; border-radius: 12px; width: 85%; max-width: 30
 <div class="tv-card">
 <div class="card-header">
 <h2 id="page-main-title">Recommandations exclusives</h2>
-<p id="page-main-sub" class="welcome-sub">✨ Utilisez votre télécommande pour faire défiler et sélectionner une carte.</p>
+<p id="page-main-sub" class="welcome-sub">✨ Météo, adresses et coups de cœur.</p>
 </div>
 <!-- Grille scrollable dynamique -->
 <div class="advice-grid" id="advice-grid-container">
-<!-- Chargement immédiat par défaut en dur pour garantir zéro écran blanc -->
+<!-- Chargement immédiat par défaut pour garantir l'affichage sans attente -->
 </div>
 <div class="footer-actions">
 <a id="back-home-btn" href="index.html" class="btn-action">🏠 Retour à l'accueil</a>
@@ -210,7 +210,6 @@ background: white; padding: 20px; border-radius: 12px; width: 85%; max-width: 30
 const sheetVoyageursApiUrl = "https://script.google.com/macros/s/AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq/exec";
 const sheetConseilsApiUrl = "https://script.google.com/macros/s/AKfycbzdEv_frdNqscUxHQW6xXpePamOztmC0xLWa5CRMjY4fFsKuMdcvJda7fDkXiWqAYcu1A/exec";
 let currentGiteKey = 'ptitzabris';
-// Données statiques de secours directes (chargées instantanément)
 let cachedAdvices = [
 { title: "Super U 3B", text: "Supermarché le plus proche d'ici", img: "https://i.postimg.cc/k47g2q8N/superu.jpg", linkUrl: "https://maps.google.com", active: true },
 { title: "Vanille Vallée", text: "Leurs sachets pour les...", img: "https://i.postimg.cc/6q8L899s/vanille.jpg", linkUrl: "", active: true },
@@ -226,7 +225,6 @@ const giteParam = (urlParams.get('gite') || 'ptitzabris').toLowerCase();
 currentGiteKey = giteParam.includes("grand") ? "grandzabris" : "ptitzabris";
 let cottageName = currentGiteKey === "grandzabris" ? "Grandzabris" : "Ptitzabris";
 document.getElementById('back-home-btn').href = ⁠index.html?gite=${currentGiteKey}&v=99⁠;
-// Masquage strict du bouton Admin pour la TV (.145 et .93)
 const adminContainer = document.getElementById('admin-container');
 const currentHost = window.location.hostname;
 const isTargetTV = currentHost.endsWith(".145") || currentHost.endsWith(".93") ||
@@ -236,51 +234,14 @@ adminContainer.style.display = 'none';
 } else {
 adminContainer.style.display = 'block';
 }
-// Affichage immédiat des cartes en dur pour éviter tout écran de chargement bloqué
+// RENDU IMMÉDIAT SYNCHRONE DES CARTES
 renderActiveAdvices();
-// Tentative asynchrone en arrière-plan pour récupérer les données en ligne du Sheet (sans jamais bloquer la page)
+// TENTATIVE DE MISE À JOUR EN ARRIÈRE-PLAN
 fetchDataInBackground(cottageName);
 });
-async function fetchDataInBackground(cottageName) {
-try {
-// 1. Récupération optionnelle du nom du voyageur
-const resV = await fetch(sheetVoyageursApiUrl + "?t=" + new Date().getTime());
-const voyageurs = await resV.json();
-const today = new Date();
-today.setHours(0,0,0,0);
-if (Array.isArray(voyageurs) && voyageurs.length > 0) {
-const v = voyageurs.find(item => {
-const cStr = String(item.cottage || '').toLowerCase();
-const matchC = currentGiteKey === 'grandzabris' ? cStr.includes('grand') : (cStr.includes('ptit') || cStr.includes('petit'));
-const arr = item.dateArrivee || item.arrivee;
-const dep = item.dateDepart || item.depart;
-if (matchC && arr && dep) {
-const dArr = new Date(arr);
-const dDep = new Date(dep);
-dArr.setHours(0,0,0,0);
-dDep.setHours(0,0,0,0);
-return today >= dArr && today <= dDep;
-}
-return false;
-});
-if (v && v.prenom) {
-document.getElementById('page-main-title').innerText = ⁠Recommandations exclusives pour ${v.prenom}⁠;
-}
-}
-} catch(e) {}
-try {
-// 2. Récupération optionnelle des conseils du Sheet
-const response = await fetch(sheetConseilsApiUrl + "?type=conseils&t=" + new Date().getTime());
-const data = await response.json();
-const remoteAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || data.data || []);
-if (remoteAdvices.length > 0) {
-cachedAdvices = remoteAdvices;
-renderActiveAdvices();
-}
-} catch (err) {}
-}
 function renderActiveAdvices() {
 const container = document.getElementById('advice-grid-container');
+if (!container) return;
 container.innerHTML = "";
 let activeCount = 0;
 cachedAdvices.forEach((adv) => {
@@ -324,6 +285,43 @@ container.appendChild(box);
 if (activeCount === 0) {
 container.innerHTML = ⁠<p style="text-align: center; color: #666; grid-column: span 2; padding: 20px;">Conseils et recommandations à venir.</p>⁠;
 }
+}
+async function fetchDataInBackground(cottageName) {
+try {
+const resV = await fetch(sheetVoyageursApiUrl + "?t=" + new Date().getTime());
+const voyageurs = await resV.json();
+const today = new Date();
+today.setHours(0,0,0,0);
+if (Array.isArray(voyageurs) && voyageurs.length > 0) {
+const v = voyageurs.find(item => {
+const cStr = String(item.cottage || '').toLowerCase();
+const matchC = currentGiteKey === 'grandzabris' ? cStr.includes('grand') : (cStr.includes('ptit') || cStr.includes('petit'));
+const arr = item.dateArrivee || item.arrivee;
+const dep = item.dateDepart || item.depart;
+if (matchC && arr && dep) {
+const dArr = new Date(arr);
+const dDep = new Date(dep);
+dArr.setHours(0,0,0,0);
+dDep.setHours(0,0,0,0);
+return today >= dArr && today <= dDep;
+}
+return false;
+});
+if (v && v.prenom) {
+const titleEl = document.getElementById('page-main-title');
+if (titleEl) titleEl.innerText = ⁠Recommandations exclusives pour ${v.prenom}⁠;
+}
+}
+} catch(e) {}
+try {
+const response = await fetch(sheetConseilsApiUrl + "?type=conseils&t=" + new Date().getTime());
+const data = await response.json();
+const remoteAdvices = Array.isArray(data) ? data : (data.conseils || data.rows || data.data || []);
+if (remoteAdvices.length > 0) {
+cachedAdvices = remoteAdvices;
+renderActiveAdvices();
+}
+} catch (err) {}
 }
 function openFullscreen(title, text, imageUrl, linkUrl) {
 document.getElementById('fs-title').innerText = title;
