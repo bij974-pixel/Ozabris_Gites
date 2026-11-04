@@ -367,6 +367,8 @@ footer {
 
   const $ = id => document.getElementById(id);
 
+  const LOGO = 'images/logo.jpeg';
+
   const translations = {
     fr: {
       title: 'Nos bonnes adresses',
@@ -445,6 +447,12 @@ footer {
       .replace(/[\u0300-\u036f]/g, '');
   }
 
+  /*
+   * PHOTOS HISTORIQUES LOCALES
+   *
+   * On conserve les photos qui étaient
+   * déjà associées aux recommandations.
+   */
   function localImage(advice) {
     const title = normalized(advice.title);
 
@@ -462,7 +470,63 @@ footer {
     if (title.includes('salazie')) return 'images/salazie.jpeg';
     if (title.includes('papangue')) return 'images/papangue.jpeg';
 
-    return String(advice.img || '').trim() || 'images/logo.jpeg';
+    return '';
+  }
+
+  /*
+   * PRIORITE DES PHOTOS
+   *
+   * 1. Nouvelle photo Google Drive
+   * 2. Photo locale historique
+   * 3. Ancienne photo Postimages
+   * 4. Autre image fournie par l'API
+   * 5. Logo Ozabris
+   */
+  function sourcesPhoto(advice) {
+    const sources = [];
+
+    function ajouter(url) {
+      const valeur = String(url || '').trim();
+
+      if (
+        valeur &&
+        valeur !== LOGO &&
+        !sources.includes(valeur)
+      ) {
+        sources.push(valeur);
+      }
+    }
+
+    ajouter(advice.photoDrive);
+    ajouter(localImage(advice));
+    ajouter(advice.imgLegacy);
+    ajouter(advice.img);
+
+    sources.push(LOGO);
+
+    return sources;
+  }
+
+  /*
+   * ESSAIE AUTOMATIQUEMENT CHAQUE SOURCE
+   * SI UNE PHOTO NE CHARGE PAS.
+   */
+  function installerPhoto(element, advice) {
+    const sources = sourcesPhoto(advice);
+    let position = 0;
+
+    element.onerror = function () {
+      position++;
+
+      if (position < sources.length) {
+        element.src = sources[position];
+      } else {
+        element.onerror = null;
+        element.src = LOGO;
+      }
+    };
+
+    element.src = sources[0] || LOGO;
   }
 
   function validWebsite(value) {
@@ -640,15 +704,11 @@ footer {
     );
 
     const img = document.createElement('img');
-    img.src = localImage(advice);
-    img.alt = advice.title;
+
+    img.alt = advice.title || '';
     img.loading = 'lazy';
 
-    img.onerror = function () {
-      img.onerror = null;
-      img.src = String(advice.img || '').trim() ||
-                'images/logo.jpeg';
-    };
+    installerPhoto(img, advice);
 
     imageButton.appendChild(img);
     imageButton.addEventListener('click', function () {
@@ -772,14 +832,10 @@ footer {
     setText('modalDescription', advice.text || '');
 
     const img = $('modalImage');
-    img.src = localImage(advice);
+
     img.alt = advice.title || '';
 
-    img.onerror = function () {
-      img.onerror = null;
-      img.src = String(advice.img || '').trim() ||
-                'images/logo.jpeg';
-    };
+    installerPhoto(img, advice);
 
     const website = validWebsite(advice.linkUrl);
 
@@ -873,7 +929,7 @@ footer {
   });
 
   // Chargement unique à l'ouverture de la page.
-  // Aucun setInterval : aucun rafraîchissement périodique.
+  // Aucun rafraîchissement périodique.
   configureLinks();
   translatePage();
   loadConseils();
