@@ -3,871 +3,685 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#12263a">
 <title>Les Ozabris — Bienvenue à La Réunion</title>
 
 <style>
 :root {
-  --navy: #12263a;
-  --navy-light: #203d55;
-  --gold: #c5a880;
-  --gold-light: #e9d8b9;
-  --cream: #f7f4ee;
-  --white: #ffffff;
-  --text: #263747;
-  --muted: #697986;
-  --shadow: 0 14px 40px rgba(18,38,58,.12);
+  --navy:#12263a;
+  --gold:#c5a880;
+  --gold-light:#e9d8b9;
+  --cream:#f7f4ee;
+  --text:#263747;
+  --muted:#697986;
+  --shadow:0 14px 40px rgba(18,38,58,.12);
 }
-
-* { box-sizing: border-box; }
-
-html { scroll-behavior: smooth; }
-
+* {box-sizing:border-box}
+html {scroll-behavior:smooth}
 body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: var(--cream);
-  color: var(--text);
-  min-height: 100vh;
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--cream);
+  color:var(--text);
 }
-
-button, a {
-  -webkit-tap-highlight-color: transparent;
+button,a {-webkit-tap-highlight-color:transparent}
+button:focus-visible,a:focus-visible,input:focus-visible {
+  outline:4px solid #f3b94b;
+  outline-offset:4px;
 }
+.hidden {display:none!important}
 
-button:focus-visible,
-a:focus-visible,
-input:focus-visible {
-  outline: 4px solid #f3b94b;
-  outline-offset: 4px;
-}
-
-.hidden { display: none !important; }
-
-/* HERO */
-
+/* GRAND BANDEAU ET DIAPORAMA */
 .hero {
-  position: relative;
-  min-height: 510px;
-  background:
-    linear-gradient(
-      90deg,
-      rgba(11,28,44,.91),
-      rgba(11,28,44,.62),
-      rgba(11,28,44,.36)
-    ),
-    url("images/volcan.jpeg") center / cover;
-  color: white;
-  overflow: hidden;
+  position:relative;
+  min-height:510px;
+  background:#12263a;
+  color:white;
+  overflow:hidden;
+  isolation:isolate;
 }
-
-.hero::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 5px;
-  background: linear-gradient(
+.hero-photo {
+  position:absolute;
+  inset:0;
+  z-index:-2;
+  background-position:center;
+  background-size:cover;
+  opacity:0;
+  transition:opacity 2.5s ease-in-out;
+}
+.hero-photo.visible {opacity:1}
+.hero-overlay {
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  background:linear-gradient(
     90deg,
-    var(--gold),
-    #f1dfbd,
-    var(--gold)
+    rgba(11,28,44,.91),
+    rgba(11,28,44,.62),
+    rgba(11,28,44,.36)
+  );
+  pointer-events:none;
+}
+.hero::after {
+  content:"";
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  height:5px;
+  background:linear-gradient(
+    90deg,var(--gold),#f1dfbd,var(--gold)
   );
 }
-
 .hero-inner {
-  position: relative;
-  z-index: 1;
-  max-width: 1320px;
-  margin: auto;
-  padding: 25px 28px 70px;
+  position:relative;
+  z-index:1;
+  max-width:1320px;
+  margin:auto;
+  padding:25px 28px 70px;
 }
-
 .topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:18px;
 }
-
 .brand {
-  display: flex;
-  align-items: center;
-  gap: 14px;
+  display:flex;
+  align-items:center;
+  gap:14px;
 }
-
 .logo {
-  width: 88px;
-  height: 88px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 3px solid var(--gold);
-  background: white;
-  box-shadow: 0 5px 20px rgba(0,0,0,.2);
+  width:88px;
+  height:88px;
+  object-fit:cover;
+  border-radius:50%;
+  border:3px solid var(--gold);
+  background:white;
+  box-shadow:0 5px 20px rgba(0,0,0,.2);
 }
-
 .brand-name {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 29px;
-  letter-spacing: .5px;
-  font-weight: bold;
+  font-family:Georgia,serif;
+  font-size:29px;
+  font-weight:bold;
 }
-
 .brand-subtitle {
-  color: var(--gold-light);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-top: 5px;
+  color:var(--gold-light);
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  margin-top:5px;
 }
-
 .top-links {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
 }
-
-.top-links a,
-.top-links button {
-  border: 1px solid rgba(233,216,185,.65);
-  color: white;
-  background: rgba(255,255,255,.08);
-  border-radius: 10px;
-  padding: 11px 16px;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
+.top-links a,.top-links button {
+  border:1px solid rgba(233,216,185,.65);
+  color:white;
+  background:rgba(255,255,255,.08);
+  border-radius:10px;
+  padding:11px 16px;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
 }
-
-.top-links a:hover,
-.top-links button:hover {
-  background: var(--gold);
-  color: var(--navy);
+.top-links a:hover,.top-links button:hover {
+  background:var(--gold);
+  color:var(--navy);
 }
-
 .hero-content {
-  max-width: 850px;
-  padding-top: 85px;
+  max-width:850px;
+  padding-top:85px;
 }
-
 .eyebrow {
-  color: var(--gold-light);
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  font-size: 13px;
-  font-weight: bold;
-  margin-bottom: 18px;
+  color:var(--gold-light);
+  text-transform:uppercase;
+  letter-spacing:3px;
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:18px;
 }
-
 .hero h1 {
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: normal;
-  font-size: clamp(43px, 6vw, 78px);
-  line-height: 1.08;
-  margin: 0 0 22px;
+  font-family:Georgia,serif;
+  font-weight:normal;
+  font-size:clamp(43px,6vw,78px);
+  line-height:1.08;
+  margin:0 0 22px;
 }
-
 .hero h1 em {
-  color: var(--gold-light);
-  font-style: italic;
+  color:var(--gold-light);
 }
-
 .hero-description {
-  font-size: clamp(17px, 2vw, 23px);
-  line-height: 1.6;
-  color: #f3ede4;
-  max-width: 730px;
-  margin: 0;
+  font-size:clamp(17px,2vw,23px);
+  line-height:1.6;
+  color:#f3ede4;
+  max-width:730px;
+  margin:0;
 }
-
 .hero-buttons {
-  display: flex;
-  gap: 13px;
-  flex-wrap: wrap;
-  margin-top: 29px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:13px;
+  margin-top:29px;
 }
-
 .hero-button {
-  display: inline-block;
-  padding: 15px 23px;
-  border-radius: 11px;
-  text-decoration: none;
-  font-size: 16px;
-  font-weight: bold;
-  background: var(--gold);
-  color: var(--navy);
-  border: 1px solid var(--gold);
+  display:inline-block;
+  padding:15px 23px;
+  border-radius:11px;
+  text-decoration:none;
+  font-size:16px;
+  font-weight:bold;
+  background:var(--gold);
+  color:var(--navy);
+  border:1px solid var(--gold);
 }
-
 .hero-button.secondary {
-  background: rgba(255,255,255,.08);
-  color: white;
-  border-color: rgba(255,255,255,.7);
+  background:rgba(255,255,255,.08);
+  color:white;
+  border-color:rgba(255,255,255,.7);
 }
+.hero-button:hover {filter:brightness(1.12)}
 
-.hero-button:hover { filter: brightness(1.12); }
-
-/* MAIN */
-
+/* CONTENU */
 main {
-  max-width: 1320px;
-  margin: auto;
-  padding: 0 22px 55px;
+  max-width:1320px;
+  margin:auto;
+  padding:0 22px 55px;
 }
-
 .dashboard {
-  position: relative;
-  z-index: 2;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 17px;
-  margin-top: -39px;
+  position:relative;
+  z-index:2;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:17px;
+  margin-top:-39px;
 }
-
 .info-card {
-  background: white;
-  border: 1px solid #ece3d6;
-  border-radius: 17px;
-  box-shadow: var(--shadow);
-  padding: 23px;
-  min-height: 145px;
+  background:white;
+  border:1px solid #ece3d6;
+  border-radius:17px;
+  box-shadow:var(--shadow);
+  padding:23px;
+  min-height:145px;
 }
-
 .info-label {
-  color: var(--muted);
-  text-transform: uppercase;
-  font-size: 12px;
-  letter-spacing: 1.5px;
-  font-weight: bold;
-  margin-bottom: 13px;
+  color:var(--muted);
+  text-transform:uppercase;
+  font-size:12px;
+  letter-spacing:1.5px;
+  font-weight:bold;
+  margin-bottom:13px;
 }
-
 .info-value {
-  font-family: Georgia, "Times New Roman", serif;
-  color: var(--navy);
-  font-size: clamp(23px, 3vw, 34px);
-  line-height: 1.2;
+  font-family:Georgia,serif;
+  color:var(--navy);
+  font-size:clamp(23px,3vw,34px);
+  line-height:1.2;
 }
-
 .info-detail {
-  color: var(--muted);
-  font-size: 14px;
-  margin-top: 10px;
-  line-height: 1.5;
+  color:var(--muted);
+  font-size:14px;
+  margin-top:10px;
+  line-height:1.5;
 }
-
 .weather-line {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  display:flex;
+  align-items:center;
+  gap:12px;
 }
-
-.weather-icon {
-  font-size: 43px;
-  line-height: 1;
-}
-
-.section { margin-top: 48px; }
-
+.weather-icon {font-size:43px}
+.section {margin-top:48px}
 .section-heading {
-  text-align: center;
-  margin-bottom: 26px;
+  text-align:center;
+  margin-bottom:26px;
 }
-
 .section-kicker {
-  color: #9c7b50;
-  text-transform: uppercase;
-  letter-spacing: 2.4px;
-  font-size: 12px;
-  font-weight: bold;
+  color:#9c7b50;
+  text-transform:uppercase;
+  letter-spacing:2.4px;
+  font-size:12px;
+  font-weight:bold;
 }
-
 .section-heading h2 {
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: normal;
-  font-size: clamp(30px, 4vw, 43px);
-  margin: 12px 0;
-  color: var(--navy);
+  font-family:Georgia,serif;
+  font-weight:normal;
+  font-size:clamp(30px,4vw,43px);
+  margin:12px 0;
+  color:var(--navy);
 }
-
 .section-heading p {
-  color: var(--muted);
-  font-size: 16px;
-  line-height: 1.6;
-  max-width: 700px;
-  margin: auto;
+  color:var(--muted);
+  font-size:16px;
+  line-height:1.6;
+  max-width:700px;
+  margin:auto;
 }
 
-/* CARTES AVEC PHOTOS CHANGEANTES */
-
+/* DEUX ENCARTS AVEC DIAPORAMAS */
 .feature-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 23px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:23px;
 }
-
 .feature-card {
-  position: relative;
-  min-height: 390px;
-  overflow: hidden;
-  border-radius: 21px;
-  box-shadow: var(--shadow);
-  text-decoration: none;
-  color: white;
-  display: flex;
-  align-items: flex-end;
-  background-color: var(--navy);
-  isolation: isolate;
+  position:relative;
+  min-height:390px;
+  overflow:hidden;
+  border-radius:21px;
+  box-shadow:var(--shadow);
+  text-decoration:none;
+  color:white;
+  display:flex;
+  align-items:flex-end;
+  background:var(--navy);
+  isolation:isolate;
 }
-
-/*
- * Deux couches photo permettent un fondu
- * sans recharger la page.
- */
 .feature-photo {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  opacity: 0;
-  transition:
-    opacity 2.2s ease-in-out,
-    transform 8s ease;
-  z-index: -2;
-  transform: scale(1.025);
+  position:absolute;
+  inset:0;
+  z-index:-2;
+  background-size:cover;
+  background-position:center;
+  opacity:0;
+  transition:opacity 2.5s ease-in-out;
 }
-
-.feature-photo.visible {
-  opacity: 1;
-  transform: scale(1);
-}
-
+.feature-photo.visible {opacity:1}
 .feature-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  background:linear-gradient(
     0deg,
     rgba(8,23,37,.96),
     rgba(8,23,37,.46) 65%,
     rgba(8,23,37,.18)
   );
-  z-index: -1;
-  pointer-events: none;
+  pointer-events:none;
 }
-
 .feature-content {
-  position: relative;
-  z-index: 1;
-  padding: 29px;
-  width: 100%;
+  position:relative;
+  z-index:1;
+  padding:29px;
+  width:100%;
 }
-
 .feature-tag {
-  display: inline-block;
-  background: var(--gold);
-  color: var(--navy);
-  border-radius: 20px;
-  padding: 7px 12px;
-  font-size: 11px;
-  font-weight: bold;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  display:inline-block;
+  background:var(--gold);
+  color:var(--navy);
+  border-radius:20px;
+  padding:7px 12px;
+  font-size:11px;
+  font-weight:bold;
+  text-transform:uppercase;
+  letter-spacing:1px;
 }
-
 .feature-card h3 {
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: normal;
-  font-size: clamp(28px, 3vw, 39px);
-  margin: 15px 0 9px;
+  font-family:Georgia,serif;
+  font-weight:normal;
+  font-size:clamp(28px,3vw,39px);
+  margin:15px 0 9px;
 }
-
 .feature-card p {
-  color: #f2e9dc;
-  font-size: 16px;
-  line-height: 1.6;
-  max-width: 490px;
+  color:#f2e9dc;
+  font-size:16px;
+  line-height:1.6;
+  max-width:490px;
 }
-
 .feature-arrow {
-  display: inline-block;
-  margin-top: 12px;
-  font-weight: bold;
-  color: var(--gold-light);
+  display:inline-block;
+  margin-top:12px;
+  font-weight:bold;
+  color:var(--gold-light);
 }
 
-/* ESPACE DIVERTISSEMENTS */
-
+/* DIVERTISSEMENTS */
 .entertainment-section {
-  position: relative;
-  overflow: hidden;
-  margin-top: 52px;
-  border-radius: 23px;
-  background:
-    radial-gradient(
-      circle at 90% 10%,
-      rgba(197,168,128,.2),
-      transparent 40%
-    ),
-    linear-gradient(135deg, #12263a, #23445c);
-  color: white;
-  padding: 38px 30px;
-  box-shadow: var(--shadow);
+  margin-top:52px;
+  border-radius:23px;
+  background:linear-gradient(135deg,#12263a,#23445c);
+  color:white;
+  padding:38px 30px;
+  box-shadow:var(--shadow);
 }
-
 .entertainment-heading {
-  text-align: center;
-  margin-bottom: 27px;
+  text-align:center;
+  margin-bottom:27px;
 }
-
 .entertainment-heading .section-kicker {
-  color: var(--gold-light);
+  color:var(--gold-light);
 }
-
 .entertainment-heading h2 {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(30px, 4vw, 43px);
-  font-weight: normal;
-  margin: 12px 0;
+  font-family:Georgia,serif;
+  font-size:clamp(30px,4vw,43px);
+  font-weight:normal;
+  margin:12px 0;
 }
-
 .entertainment-heading p {
-  max-width: 740px;
-  margin: 0 auto;
-  color: #e9dcca;
-  line-height: 1.6;
+  max-width:740px;
+  margin:auto;
+  color:#e9dcca;
+  line-height:1.6;
 }
-
 .entertainment-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
 }
-
 .entertainment-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 180px;
-  padding: 23px 12px;
-  border: 1px solid rgba(233,216,185,.25);
-  border-radius: 17px;
-  background: rgba(255,255,255,.09);
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  cursor: pointer;
-  font-family: inherit;
-  transition:
-    background .2s,
-    transform .2s;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-height:180px;
+  padding:23px 12px;
+  border:1px solid rgba(233,216,185,.25);
+  border-radius:17px;
+  background:rgba(255,255,255,.09);
+  color:white;
+  text-align:center;
+  cursor:pointer;
+  font-family:inherit;
 }
-
 .entertainment-card:hover,
 .entertainment-card:focus-visible {
-  background: rgba(255,255,255,.18);
-  transform: translateY(-3px);
+  background:rgba(255,255,255,.18);
 }
-
 .entertainment-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 78px;
-  height: 78px;
-  border-radius: 18px;
-  margin-bottom: 14px;
-  font-weight: bold;
-  font-size: 35px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:78px;
+  height:78px;
+  border-radius:18px;
+  margin-bottom:14px;
+  font-weight:bold;
+  font-size:35px;
 }
-
 .entertainment-icon.netflix {
-  background: #151515;
-  color: #e50914;
-  font-family: Georgia, serif;
-  font-size: 54px;
+  background:#151515;
+  color:#e50914;
+  font-family:Georgia,serif;
+  font-size:54px;
 }
-
 .entertainment-icon.orange {
-  background: #ff7900;
-  color: white;
-  font-size: 28px;
+  background:#ff7900;
+  color:white;
+  font-size:28px;
 }
-
 .entertainment-icon.prime {
-  background: #102a46;
-  color: #8bd7ff;
-  font-size: 25px;
+  background:#102a46;
+  color:#8bd7ff;
+  font-size:25px;
 }
-
 .entertainment-icon.youtube {
-  background: #ff0033;
-  color: white;
-  font-size: 37px;
+  background:#ff0033;
+  color:white;
+  font-size:37px;
 }
-
 .entertainment-name {
-  font-size: 19px;
-  font-weight: bold;
-  margin-bottom: 7px;
+  font-size:19px;
+  font-weight:bold;
+  margin-bottom:7px;
 }
-
 .entertainment-description {
-  color: #e9dcca;
-  font-size: 13px;
-  line-height: 1.4;
+  color:#e9dcca;
+  font-size:13px;
+  line-height:1.4;
 }
-
 .entertainment-actions {
-  display: flex;
-  justify-content: center;
-  margin-top: 24px;
+  display:flex;
+  justify-content:center;
+  margin-top:24px;
 }
-
 .launcher-button {
-  border: 1px solid var(--gold);
-  border-radius: 12px;
-  background: var(--gold);
-  color: var(--navy);
-  font-size: 17px;
-  font-weight: bold;
-  font-family: inherit;
-  padding: 16px 25px;
-  cursor: pointer;
+  border:1px solid var(--gold);
+  border-radius:12px;
+  background:var(--gold);
+  color:var(--navy);
+  font-size:17px;
+  font-weight:bold;
+  font-family:inherit;
+  padding:16px 25px;
+  cursor:pointer;
 }
-
-.launcher-button:hover {
-  background: var(--gold-light);
-}
-
-.entertainment-note {
-  text-align: center;
-  color: #e9dcca;
-  font-size: 13px;
-  line-height: 1.6;
-  margin: 20px auto 0;
-  max-width: 800px;
-}
-
+.entertainment-note,
 .entertainment-status {
-  min-height: 24px;
-  margin-top: 14px;
-  text-align: center;
-  color: var(--gold-light);
-  font-size: 14px;
-  line-height: 1.5;
+  text-align:center;
+  color:#e9dcca;
+  font-size:13px;
+  line-height:1.6;
+  max-width:800px;
+  margin:20px auto 0;
+}
+.entertainment-status {
+  min-height:24px;
+  color:var(--gold-light);
 }
 
-/* INFORMATIONS UTILES */
-
+/* INFORMATIONS PRATIQUES */
 .useful-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 17px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:17px;
 }
-
 .useful-card {
-  background: white;
-  border-radius: 16px;
-  padding: 24px 18px;
-  text-align: center;
-  border: 1px solid #e9e1d7;
-  box-shadow: 0 6px 20px rgba(18,38,58,.06);
+  background:white;
+  border-radius:16px;
+  padding:24px 18px;
+  text-align:center;
+  border:1px solid #e9e1d7;
+  box-shadow:0 6px 20px rgba(18,38,58,.06);
 }
-
 .useful-icon {
-  font-size: 34px;
-  margin-bottom: 14px;
+  font-size:34px;
+  margin-bottom:14px;
 }
-
 .useful-card h3 {
-  font-size: 18px;
-  margin: 0 0 10px;
-  color: var(--navy);
+  font-size:18px;
+  margin:0 0 10px;
+  color:var(--navy);
 }
-
 .useful-card p {
-  font-size: 14px;
-  line-height: 1.55;
-  color: var(--muted);
-  margin: 0;
+  font-size:14px;
+  line-height:1.55;
+  color:var(--muted);
+  margin:0;
 }
-
 .useful-card a {
-  display: inline-block;
-  margin-top: 14px;
-  color: #87683e;
-  font-weight: bold;
-  text-decoration: none;
-  font-size: 14px;
+  display:inline-block;
+  margin-top:14px;
+  color:#87683e;
+  font-weight:bold;
+  text-decoration:none;
+  font-size:14px;
 }
 
 /* QR CODES */
-
 .qr-section {
-  background: linear-gradient(
-    135deg,
-    #12263a,
-    #27475e
-  );
-  color: white;
-  border-radius: 22px;
-  padding: 36px 25px;
-  margin-top: 50px;
+  background:linear-gradient(135deg,#12263a,#27475e);
+  color:white;
+  border-radius:22px;
+  padding:36px 25px;
+  margin-top:50px;
 }
-
 .qr-section h2 {
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: normal;
-  font-size: 34px;
-  text-align: center;
-  margin: 0 0 10px;
+  font-family:Georgia,serif;
+  font-weight:normal;
+  font-size:34px;
+  text-align:center;
+  margin:0 0 10px;
 }
-
 .qr-intro {
-  text-align: center;
-  color: #e9d9c3;
-  margin-bottom: 30px;
-  line-height: 1.6;
+  text-align:center;
+  color:#e9d9c3;
+  margin-bottom:30px;
+  line-height:1.6;
 }
-
 .qr-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 15px;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:15px;
 }
-
 .qr-card {
-  background: white;
-  color: var(--navy);
-  border-radius: 14px;
-  padding: 17px 10px;
-  text-align: center;
+  background:white;
+  color:var(--navy);
+  border-radius:14px;
+  padding:17px 10px;
+  text-align:center;
 }
-
 .qr-card h3 {
-  font-size: 14px;
-  margin: 0 0 14px;
-  min-height: 34px;
+  font-size:14px;
+  margin:0 0 14px;
+  min-height:34px;
 }
-
 .qr-code {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 120px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:120px;
 }
-
-.qr-code img,
-.qr-code canvas {
-  max-width: 100%;
-  height: auto;
+.qr-code img,.qr-code canvas {
+  max-width:100%;
+  height:auto;
 }
-
 .qr-card a {
-  color: var(--navy);
-  font-size: 12px;
-  overflow-wrap: anywhere;
+  color:var(--navy);
+  font-size:12px;
+  overflow-wrap:anywhere;
 }
 
-/* FOOTER */
-
+/* PIED DE PAGE */
 footer {
-  background: var(--navy);
-  color: #e7d7bf;
-  text-align: center;
-  padding: 32px 20px;
+  background:var(--navy);
+  color:#e7d7bf;
+  text-align:center;
+  padding:32px 20px;
 }
-
 .footer-brand {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 25px;
-  color: white;
-  margin-bottom: 9px;
+  font-family:Georgia,serif;
+  font-size:25px;
+  color:white;
+  margin-bottom:9px;
 }
-
 footer p {
-  margin: 6px 0;
-  line-height: 1.5;
+  margin:6px 0;
+  line-height:1.5;
 }
 
-/* ADMIN MODAL */
-
+/* FENÊTRE ADMIN */
 .modal {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: rgba(6,18,29,.9);
-  padding: 18px;
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(6,18,29,.9);
+  padding:18px;
 }
-
-.modal.open { display: flex; }
-
+.modal.open {display:flex}
 .modal-box {
-  width: min(420px, 100%);
-  background: white;
-  border-radius: 20px;
-  padding: 29px;
-  text-align: center;
-  box-shadow: 0 15px 60px rgba(0,0,0,.3);
+  width:min(420px,100%);
+  background:white;
+  border-radius:20px;
+  padding:29px;
+  text-align:center;
+  box-shadow:0 15px 60px rgba(0,0,0,.3);
 }
-
 .modal-box h2 {
-  color: var(--navy);
-  margin-top: 0;
+  color:var(--navy);
+  margin-top:0;
 }
-
 .modal-box p {
-  color: var(--muted);
-  line-height: 1.5;
+  color:var(--muted);
+  line-height:1.5;
 }
-
 .modal-box input {
-  width: 100%;
-  padding: 15px;
-  font-size: 21px;
-  text-align: center;
-  letter-spacing: 5px;
-  border: 2px solid #d7d7d7;
-  border-radius: 10px;
-  margin: 13px 0;
+  width:100%;
+  padding:15px;
+  font-size:21px;
+  text-align:center;
+  letter-spacing:5px;
+  border:2px solid #d7d7d7;
+  border-radius:10px;
+  margin:13px 0;
 }
-
 .modal-buttons {
-  display: flex;
-  gap: 10px;
+  display:flex;
+  gap:10px;
 }
-
 .modal-buttons button {
-  flex: 1;
-  padding: 13px;
-  border: 0;
-  border-radius: 10px;
-  font-weight: bold;
-  font-size: 15px;
-  cursor: pointer;
+  flex:1;
+  padding:13px;
+  border:0;
+  border-radius:10px;
+  font-weight:bold;
+  font-size:15px;
+  cursor:pointer;
 }
-
 .confirm {
-  background: var(--navy);
-  color: white;
+  background:var(--navy);
+  color:white;
 }
-
 .cancel {
-  background: #e9e9e9;
-  color: var(--navy);
+  background:#e9e9e9;
+  color:var(--navy);
 }
-
 .pin-error {
-  color: #b03737;
-  font-size: 14px;
-  min-height: 20px;
+  color:#b03737;
+  font-size:14px;
+  min-height:20px;
 }
 
-/* RESPONSIVE */
-
-@media (max-width: 1000px) {
-  .useful-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .qr-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .entertainment-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+/* TABLETTES ET TÉLÉPHONES */
+@media(max-width:1000px) {
+  .useful-grid {grid-template-columns:repeat(2,1fr)}
+  .qr-grid {grid-template-columns:repeat(3,1fr)}
+  .entertainment-grid {grid-template-columns:repeat(2,1fr)}
 }
-
-@media (max-width: 720px) {
-  .hero { min-height: 540px; }
-
-  .hero-inner {
-    padding: 20px 17px 65px;
-  }
-
-  .hero-content { padding-top: 65px; }
-
-  .topbar { align-items: flex-start; }
-
-  .brand-name { font-size: 24px; }
-
-  .logo {
-    width: 72px;
-    height: 72px;
-  }
-
-  main { padding: 0 13px 40px; }
-
+@media(max-width:720px) {
+  .hero {min-height:540px}
+  .hero-inner {padding:20px 17px 65px}
+  .hero-content {padding-top:65px}
+  .topbar {align-items:flex-start}
+  .brand-name {font-size:24px}
+  .logo {width:72px;height:72px}
+  main {padding:0 13px 40px}
   .dashboard {
-    grid-template-columns: 1fr;
-    margin-top: -26px;
-    gap: 12px;
+    grid-template-columns:1fr;
+    margin-top:-26px;
+    gap:12px;
   }
-
-  .info-card {
-    min-height: auto;
-    padding: 19px;
-  }
-
-  .feature-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .feature-card { min-height: 340px; }
-
-  .entertainment-section {
-    padding: 30px 16px;
-  }
-
-  .qr-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .qr-section { padding: 28px 15px; }
+  .info-card {min-height:auto;padding:19px}
+  .feature-grid {grid-template-columns:1fr}
+  .feature-card {min-height:340px}
+  .entertainment-section {padding:30px 16px}
+  .qr-grid {grid-template-columns:repeat(2,1fr)}
+  .qr-section {padding:28px 15px}
 }
-
-@media (max-width: 430px) {
-  .useful-grid {
-    grid-template-columns: 1fr;
+@media(max-width:430px) {
+  .useful-grid {grid-template-columns:1fr}
+  .top-links a,.top-links button {
+    padding:10px 12px;
+    font-size:13px;
   }
-
-  .top-links a,
-  .top-links button {
-    padding: 10px 12px;
-    font-size: 13px;
-  }
-
-  .hero-buttons { flex-direction: column; }
-
-  .hero-button { text-align: center; }
-
+  .hero-buttons {flex-direction:column}
+  .hero-button {text-align:center}
   .entertainment-card {
-    min-height: 160px;
-    padding: 16px 8px;
+    min-height:160px;
+    padding:16px 8px;
   }
-
-  .entertainment-icon {
-    width: 66px;
-    height: 66px;
-  }
+  .entertainment-icon {width:66px;height:66px}
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .feature-photo,
-  .entertainment-card {
-    transition: none;
-  }
+@media(prefers-reduced-motion:reduce) {
+  .hero-photo,.feature-photo {transition:none}
 }
 </style>
 
@@ -876,9 +690,12 @@ footer p {
 
 <body>
 
-<header class="hero">
-  <div class="hero-inner">
+<header class="hero" id="hero">
+  <span class="hero-photo" aria-hidden="true"></span>
+  <span class="hero-photo" aria-hidden="true"></span>
+  <div class="hero-overlay"></div>
 
+  <div class="hero-inner">
     <div class="topbar">
       <div class="brand">
         <img
@@ -887,7 +704,6 @@ footer p {
           alt="Logo Les Ozabris"
           onerror="this.style.display='none'"
         >
-
         <div>
           <div class="brand-name">Les Ozabris</div>
           <div class="brand-subtitle">
@@ -900,14 +716,10 @@ footer p {
         <a id="topGuide" href="guide.html">
           Guide pratique
         </a>
-
         <a id="topConseils" href="conseils.html">
           Nos conseils
         </a>
-
-        <button
-          id="adminButton"
-          type="button">
+        <button id="adminButton" type="button">
           ⚙ Admin
         </button>
       </nav>
@@ -917,28 +729,17 @@ footer p {
       <div class="eyebrow" id="heroEyebrow">
         Votre parenthèse à La Réunion
       </div>
-
       <h1 id="heroTitle">
-        Bienvenue<br>
-        <em>aux Ozabris</em>
+        Bienvenue<br><em>aux Ozabris</em>
       </h1>
-
-      <p
-        class="hero-description"
-        id="heroDescription">
-        Un séjour placé sous le signe
-        de la douceur, de la découverte
-        et de l'art de vivre réunionnais.
+      <p class="hero-description" id="heroDescription">
+        Un séjour placé sous le signe de la douceur,
+        de la découverte et de l'art de vivre réunionnais.
       </p>
-
       <div class="hero-buttons">
-        <a
-          id="heroGuide"
-          class="hero-button"
-          href="guide.html">
+        <a id="heroGuide" class="hero-button" href="guide.html">
           🏡 Découvrir votre gîte
         </a>
-
         <a
           id="heroConseils"
           class="hero-button secondary"
@@ -947,23 +748,17 @@ footer p {
         </a>
       </div>
     </div>
-
   </div>
 </header>
 
 <main>
 
   <section class="dashboard">
-
     <div class="info-card">
       <div class="info-label" id="dateLabel">
         Aujourd'hui à La Réunion
       </div>
-
-      <div class="info-value" id="localDate">
-        —
-      </div>
-
+      <div class="info-value" id="localDate">—</div>
       <div class="info-detail" id="localTime">
         Heure locale
       </div>
@@ -973,103 +768,62 @@ footer p {
       <div class="info-label" id="weatherLabel">
         Météo · Saint-Paul
       </div>
-
       <div class="weather-line">
-        <span
-          class="weather-icon"
-          id="weatherIcon">
-          🌤️
-        </span>
-
+        <span class="weather-icon" id="weatherIcon">🌤️</span>
         <div>
-          <div
-            class="info-value"
-            id="temperature">
-            —
-          </div>
-
-          <div
-            class="info-detail"
-            id="weatherDescription">
+          <div class="info-value" id="temperature">—</div>
+          <div class="info-detail" id="weatherDescription">
             Chargement de la météo…
           </div>
         </div>
       </div>
-
-      <div
-        class="info-detail"
-        id="weatherExtra">
-      </div>
+      <div class="info-detail" id="weatherExtra"></div>
     </div>
 
     <div class="info-card">
       <div class="info-label" id="stayLabel">
         Votre séjour
       </div>
-
-      <div
-        class="info-value"
-        id="cottageName">
+      <div class="info-value" id="cottageName">
         Les Ozabris
       </div>
-
-      <div
-        class="info-detail"
-        id="stayMessage">
+      <div class="info-detail" id="stayMessage">
         Profitez pleinement de votre séjour.
       </div>
     </div>
-
   </section>
 
   <section class="section">
-
     <div class="section-heading">
       <div class="section-kicker" id="discoverKicker">
         Votre séjour, en toute simplicité
       </div>
-
       <h2 id="discoverTitle">
         Tout est à portée de main
       </h2>
-
       <p id="discoverText">
-        Retrouvez les informations de votre
-        hébergement et nos plus belles
-        recommandations pour découvrir l'île.
+        Retrouvez les informations de votre hébergement
+        et nos recommandations pour découvrir l'île.
       </p>
     </div>
 
     <div class="feature-grid">
-
       <a
         id="featureGuide"
         class="feature-card guide"
         href="guide.html">
-
-        <span class="feature-photo visible" aria-hidden="true"></span>
         <span class="feature-photo" aria-hidden="true"></span>
-
+        <span class="feature-photo" aria-hidden="true"></span>
         <div class="feature-content">
-          <span
-            class="feature-tag"
-            id="guideTag">
+          <span class="feature-tag" id="guideTag">
             Votre hébergement
           </span>
-
-          <h3 id="guideTitle">
-            Le guide du gîte
-          </h3>
-
+          <h3 id="guideTitle">Le guide du gîte</h3>
           <p id="guideDescription">
-            Wi-Fi, équipements, consignes
-            pratiques et informations utiles
-            pour un séjour serein.
+            Wi-Fi, équipements, consignes pratiques
+            et informations utiles pour un séjour serein.
           </p>
-
-          <span
-            class="feature-arrow"
-            id="guideArrow">
+          <span class="feature-arrow" id="guideArrow">
             Découvrir le guide →
           </span>
         </div>
@@ -1079,76 +833,48 @@ footer p {
         id="featureConseils"
         class="feature-card conseils"
         href="conseils.html">
-
-        <span class="feature-photo visible" aria-hidden="true"></span>
         <span class="feature-photo" aria-hidden="true"></span>
-
+        <span class="feature-photo" aria-hidden="true"></span>
         <div class="feature-content">
-          <span
-            class="feature-tag"
-            id="conseilsTag">
+          <span class="feature-tag" id="conseilsTag">
             Nos coups de cœur
           </span>
-
-          <h3 id="conseilsTitle">
-            Les bonnes adresses
-          </h3>
-
+          <h3 id="conseilsTitle">Les bonnes adresses</h3>
           <p id="conseilsDescription">
-            Plages, paysages, commerces,
-            balades et expériences à découvrir
-            autour de votre gîte.
+            Plages, paysages, commerces, balades
+            et expériences à découvrir autour de votre gîte.
           </p>
-
-          <span
-            class="feature-arrow"
-            id="conseilsArrow">
+          <span class="feature-arrow" id="conseilsArrow">
             Explorer nos conseils →
           </span>
         </div>
       </a>
-
     </div>
   </section>
 
-  <!-- ESPACE TV -->
+  <!-- ESPACE DIVERTISSEMENTS -->
 
-  <section
-    class="entertainment-section"
-    id="divertissements">
-
+  <section class="entertainment-section" id="divertissements">
     <div class="entertainment-heading">
-      <div
-        class="section-kicker"
-        id="entertainmentKicker">
+      <div class="section-kicker" id="entertainmentKicker">
         Votre espace détente
       </div>
-
       <h2 id="entertainmentTitle">
         Vos divertissements
       </h2>
-
       <p id="entertainmentIntro">
-        Installez-vous confortablement et
-        profitez de vos programmes préférés.
+        Installez-vous confortablement et profitez
+        de vos programmes préférés.
       </p>
     </div>
 
     <div class="entertainment-grid">
-
       <button
         class="entertainment-card"
         type="button"
         data-app="netflix">
-
-        <span class="entertainment-icon netflix">
-          N
-        </span>
-
-        <span class="entertainment-name">
-          Netflix
-        </span>
-
+        <span class="entertainment-icon netflix">N</span>
+        <span class="entertainment-name">Netflix</span>
         <span
           class="entertainment-description"
           id="netflixDescription">
@@ -1160,15 +886,8 @@ footer p {
         class="entertainment-card"
         type="button"
         data-app="orange">
-
-        <span class="entertainment-icon orange">
-          TV
-        </span>
-
-        <span class="entertainment-name">
-          Orange TV
-        </span>
-
+        <span class="entertainment-icon orange">TV</span>
+        <span class="entertainment-name">Orange TV</span>
         <span
           class="entertainment-description"
           id="orangeDescription">
@@ -1180,15 +899,8 @@ footer p {
         class="entertainment-card"
         type="button"
         data-app="prime">
-
-        <span class="entertainment-icon prime">
-          prime
-        </span>
-
-        <span class="entertainment-name">
-          Prime Video
-        </span>
-
+        <span class="entertainment-icon prime">prime</span>
+        <span class="entertainment-name">Prime Video</span>
         <span
           class="entertainment-description"
           id="primeDescription">
@@ -1200,22 +912,14 @@ footer p {
         class="entertainment-card"
         type="button"
         data-app="youtube">
-
-        <span class="entertainment-icon youtube">
-          ▶
-        </span>
-
-        <span class="entertainment-name">
-          YouTube
-        </span>
-
+        <span class="entertainment-icon youtube">▶</span>
+        <span class="entertainment-name">YouTube</span>
         <span
           class="entertainment-description"
           id="youtubeDescription">
           Vidéos et découvertes
         </span>
       </button>
-
     </div>
 
     <div class="entertainment-actions">
@@ -1234,30 +938,23 @@ footer p {
       aria-live="polite">
     </div>
 
-    <p
-      class="entertainment-note"
-      id="entertainmentNote">
-      Netflix et Prime Video :
-      utilisez vos propres identifiants
-      et pensez à vous déconnecter avant
-      votre départ.
+    <p class="entertainment-note" id="entertainmentNote">
+      Netflix et Prime Video : utilisez vos propres
+      identifiants et pensez à vous déconnecter
+      avant votre départ.
     </p>
-
   </section>
 
   <!-- INFORMATIONS PRATIQUES -->
 
   <section class="section">
-
     <div class="section-heading">
       <div class="section-kicker" id="practicalKicker">
         Les essentiels
       </div>
-
       <h2 id="practicalTitle">
         Pour un séjour sans souci
       </h2>
-
       <p id="practicalText">
         Quelques informations pratiques
         à retrouver à tout moment.
@@ -1265,72 +962,52 @@ footer p {
     </div>
 
     <div class="useful-grid">
-
       <div class="useful-card">
         <div class="useful-icon">📶</div>
         <h3 id="wifiTitle">Wi-Fi</h3>
         <p id="wifiText">
-          Retrouvez les informations
-          de connexion dans le guide du gîte.
+          Retrouvez les informations de connexion
+          dans le guide du gîte.
         </p>
-        <a
-          class="guide-shortcut"
-          href="guide.html"
-          id="wifiLink">
+        <a class="guide-shortcut" href="guide.html" id="wifiLink">
           Voir le guide →
         </a>
       </div>
 
       <div class="useful-card">
         <div class="useful-icon">🏡</div>
-        <h3 id="rulesTitle">
-          Vie dans le gîte
-        </h3>
+        <h3 id="rulesTitle">Vie dans le gîte</h3>
         <p id="rulesText">
-          Équipements, consignes et
-          bonnes pratiques de la maison.
+          Équipements, consignes et bonnes
+          pratiques de la maison.
         </p>
-        <a
-          class="guide-shortcut"
-          href="guide.html"
-          id="rulesLink">
+        <a class="guide-shortcut" href="guide.html" id="rulesLink">
           Voir les informations →
         </a>
       </div>
 
       <div class="useful-card">
         <div class="useful-icon">♻️</div>
-        <h3 id="sortingTitle">
-          Tri des déchets
-        </h3>
+        <h3 id="sortingTitle">Tri des déchets</h3>
         <p id="sortingText">
-          Les consignes pour respecter
-          notre belle île.
+          Les consignes pour respecter notre belle île.
         </p>
-        <a
-          class="guide-shortcut"
-          href="guide.html"
-          id="sortingLink">
+        <a class="guide-shortcut" href="guide.html" id="sortingLink">
           Voir les consignes →
         </a>
       </div>
 
       <div class="useful-card">
         <div class="useful-icon">🌋</div>
-        <h3 id="islandTitle">
-          Découvrir l'île
-        </h3>
+        <h3 id="islandTitle">Découvrir l'île</h3>
         <p id="islandText">
-          Retrouvez les sorties et
-          découvertes sélectionnées pour vous.
+          Retrouvez les sorties et découvertes
+          sélectionnées pour vous.
         </p>
-        <a
-          id="islandLink"
-          href="conseils.html">
+        <a id="islandLink" href="conseils.html">
           Nos recommandations →
         </a>
       </div>
-
     </div>
   </section>
 
@@ -1340,61 +1017,42 @@ footer p {
     <h2 id="qrSectionTitle">
       Emportez votre guide avec vous
     </h2>
-
     <p class="qr-intro" id="qrSectionText">
-      Scannez les QR codes avec votre
-      téléphone pour retrouver facilement
-      les informations de votre séjour.
+      Scannez les QR codes avec votre téléphone
+      pour retrouver les informations de votre séjour.
     </p>
 
     <div class="qr-grid">
-
       <div class="qr-card">
         <h3 id="qrHomeTitle">Accueil</h3>
         <div id="qrHome" class="qr-code"></div>
       </div>
-
       <div class="qr-card">
         <h3 id="qrGuideTitle">Guide du gîte</h3>
         <div id="qrGuide" class="qr-code"></div>
       </div>
-
       <div class="qr-card">
         <h3 id="qrConseilsTitle">Nos conseils</h3>
         <div id="qrConseils" class="qr-code"></div>
       </div>
-
       <div class="qr-card">
-        <h3 id="qrSanibroyeurTitle">
-          Sanibroyeur
-        </h3>
+        <h3 id="qrSanibroyeurTitle">Sanibroyeur</h3>
         <div id="qrSanibroyeur" class="qr-code"></div>
       </div>
-
       <div class="qr-card">
-        <h3 id="qrTriTitle">
-          Tri des déchets
-        </h3>
+        <h3 id="qrTriTitle">Tri des déchets</h3>
         <div id="qrTri" class="qr-code"></div>
       </div>
-
     </div>
   </section>
-
 </main>
 
 <footer>
-  <div class="footer-brand">
-    Les Ozabris
-  </div>
-
+  <div class="footer-brand">Les Ozabris</div>
   <p id="footerText">
     Votre maison de vacances à La Réunion
   </p>
-
-  <p>
-    🌴 La Réunion · Océan Indien
-  </p>
+  <p>🌴 La Réunion · Océan Indien</p>
 </footer>
 
 <!-- ACCÈS ADMIN -->
@@ -1408,15 +1066,11 @@ footer p {
   aria-labelledby="adminModalTitle">
 
   <div class="modal-box">
-    <h2 id="adminModalTitle">
-      Accès administrateur
-    </h2>
-
+    <h2 id="adminModalTitle">Accès administrateur</h2>
     <p>
       Saisissez votre code pour accéder
       à la gestion des recommandations.
     </p>
-
     <input
       id="adminPin"
       type="password"
@@ -1424,25 +1078,12 @@ footer p {
       autocomplete="off"
       placeholder="Code Admin"
       aria-label="Code administrateur">
-
-    <div
-      id="pinError"
-      class="pin-error"
-      role="status">
-    </div>
-
+    <div id="pinError" class="pin-error" role="status"></div>
     <div class="modal-buttons">
-      <button
-        id="cancelAdmin"
-        class="cancel"
-        type="button">
+      <button id="cancelAdmin" class="cancel" type="button">
         Annuler
       </button>
-
-      <button
-        id="confirmAdmin"
-        class="confirm"
-        type="button">
+      <button id="confirmAdmin" class="confirm" type="button">
         Valider
       </button>
     </div>
@@ -1455,7 +1096,7 @@ footer p {
 
   /*
    * LES OZABRIS
-   * ACCUEIL + DIAPORAMAS + DIVERTISSEMENTS
+   * ACCUEIL + TROIS DIAPORAMAS + TV
    */
 
   const ADMIN_PIN = '140769';
@@ -1472,6 +1113,7 @@ footer p {
     '&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m' +
     '&timezone=Indian%2FReunion';
 
+  // Liens PDF conservés depuis ton code actuel.
   const SANIBROYEUR_PDF =
     'https://1drv.ms/b/c/b302293c3a107d46/' +
     'IQDKMy1gsI-VT57f-TffvFLZAYGZgWF8Su3TW7D9aAyesKE';
@@ -1480,19 +1122,16 @@ footer p {
     'https://1drv.ms/b/c/b302293c3a107d46/' +
     'IQDZPE7hVWyzR6Je11v5GxJpAQHKVJVyvyy-wpi8A10WimU';
 
-  const params =
-    new URLSearchParams(location.search);
+  const params = new URLSearchParams(location.search);
 
   const gite =
     params.get('gite') === 'grandzabris'
       ? 'grandzabris'
       : 'ptitzabris';
 
-  const isTV =
-    params.get('tv') === '1';
+  const isTV = params.get('tv') === '1';
 
-  const $ = id =>
-    document.getElementById(id);
+  const $ = id => document.getElementById(id);
 
   let language = 'fr';
   let currentGuest = null;
@@ -1500,39 +1139,73 @@ footer p {
   let weatherData = null;
 
   /*
-   * PHOTOS CHANGEANTES
+   * PHOTOS DE LA RÉUNION
    *
-   * Ajouter les fichiers dans le dossier images.
+   * Dossier exact : images/fond/
    *
-   * Chaque encadré possède sa propre liste.
-   * Pour ajouter une photo ultérieurement :
-   * ajouter simplement son chemin à la liste.
+   * Toutes les photos valides sont utilisées.
+   * Les noms absents sont ignorés.
    *
-   * Les photos manquantes sont ignorées.
+   * Pour une nouvelle photo, ajouter son
+   * nom dans cette liste.
    */
 
   const PHOTO_INTERVAL = 30000;
+  const PHOTO_FADE = 2500;
 
-  const PHOTO_COLLECTIONS = {
-    guide: [
-      'images/flamboyant.jpeg',
-      'images/jacaranda.jpeg',
-      'images/ansedescascade.jpeg'
-    ],
+  const PHOTO_NAMES = [
+    'flamboyant.jpeg',
+    'jacaranda.jpeg',
+    'ansedescascade.jpeg',
+    'apmechant.jpeg',
+    'baleine2.jpeg',
+    'banian.jpeg',
+    'barachois.jpeg',
+    'brasciloaos.jpeg',
+    'buslontan.jpeg',
+    'cascade.jpeg',
+    'cascadelangevin.jpeg',
+    'casehaut.jpeg',
+    'caselontan.jpeg',
+    'champscanne.jpeg',
+    'crepusculetropical.jpeg',
+    'dolomieu.jpeg',
+    'endormi.jpeg',
+    'flamboyantgros.jpeg',
+    'gouzou.jpeg',
+    'langevin.jpeg',
+    'marchelontan.jpeg',
+    'marchetraditionnel.jpeg',
+    'papangue.jpeg',
+    'pitondesneiges.jpeg',
+    'plainedescafres.jpeg',
+    'plainedespalmistes.jpeg',
+    'reunionnaise.jpeg',
+    'reunionnaise2.jpeg',
+    'salazie.jpeg',
+    'sucrerie.jpeg',
+    'villelontan.jpeg',
+    'volcan.jpeg'
+  ];
 
-    conseils: [
-      'images/jacaranda.jpeg',
-      'images/flamboyant.jpeg',
-      'images/plage hermitage.jpeg'
-    ]
+  const PHOTO_URLS = PHOTO_NAMES.map(
+    name => 'images/fond/' + name
+  );
+
+  /*
+   * Les trois zones utilisent toutes les
+   * photos, mais avec des décalages.
+   */
+
+  const PHOTO_OFFSETS = {
+    hero: 0,
+    guide: 1,
+    conseils: 2
   };
 
   /*
-   * IDENTIFIANTS ANDROID
-   *
-   * Ils correspondent aux applications
-   * visibles dans Universal Launcher
-   * sur la Xiaomi du Grandzabris.
+   * APPLICATIONS CONFIGURÉES DANS
+   * UNIVERSAL LAUNCHER DE FULLY KIOSK
    */
 
   const ANDROID_APPS = {
@@ -1543,278 +1216,233 @@ footer p {
   };
 
   /*
-   * TRADUCTIONS
+   * TRADUCTIONS FR / EN / DE
    */
 
   const translations = {
     fr: {
-      heroEyebrow: 'Votre parenthèse à La Réunion',
-      heroTitle: 'Bienvenue',
-      heroSubtitle: 'aux Ozabris',
-      heroDescription:
-        'Un séjour placé sous le signe de la douceur, de la découverte et de l’art de vivre réunionnais.',
-      heroGuide: '🏡 Découvrir votre gîte',
-      heroConseils: '🌴 Explorer La Réunion',
-      topGuide: 'Guide pratique',
-      topConseils: 'Nos conseils',
-      dateLabel: 'Aujourd’hui à La Réunion',
-      weatherLabel: 'Météo · Saint-Paul',
-      weatherLoading: 'Chargement de la météo…',
-      weatherUnavailable: 'Météo indisponible',
-      stayLabel: 'Votre séjour',
-      stayMessage: 'Profitez pleinement de votre séjour.',
-      discoverKicker: 'Votre séjour, en toute simplicité',
-      discoverTitle: 'Tout est à portée de main',
-      discoverText:
-        'Retrouvez les informations de votre hébergement et nos plus belles recommandations pour découvrir l’île.',
-      guideTag: 'Votre hébergement',
-      guideTitle: 'Le guide du gîte',
-      guideDescription:
-        'Wi-Fi, équipements, consignes pratiques et informations utiles pour un séjour serein.',
-      guideArrow: 'Découvrir le guide →',
-      conseilsTag: 'Nos coups de cœur',
-      conseilsTitle: 'Les bonnes adresses',
-      conseilsDescription:
-        'Plages, paysages, commerces, balades et expériences à découvrir autour de votre gîte.',
-      conseilsArrow: 'Explorer nos conseils →',
-      entertainmentKicker: 'Votre espace détente',
-      entertainmentTitle: 'Vos divertissements',
-      entertainmentIntro:
-        'Installez-vous confortablement et profitez de vos programmes préférés.',
-      netflixDescription: 'Avec votre compte personnel',
-      orangeDescription: 'Vos chaînes de télévision',
-      primeDescription: 'Avec votre compte personnel',
-      youtubeDescription: 'Vidéos et découvertes',
-      openLauncher: '📺 Ouvrir toutes les applications',
-      entertainmentNote:
-        'Netflix et Prime Video : utilisez vos propres identifiants et pensez à vous déconnecter avant votre départ.',
-      launcherUnavailable:
-        'Cette fonction est réservée aux télévisions équipées de Fully Kiosk.',
-      launcherAttempt:
-        'Ouverture demandée. Si rien ne se passe, le lancement des applications devra être autorisé dans Fully Kiosk.',
-      practicalKicker: 'Les essentiels',
-      practicalTitle: 'Pour un séjour sans souci',
-      practicalText:
-        'Quelques informations pratiques à retrouver à tout moment.',
-      wifiTitle: 'Wi-Fi',
-      wifiText:
-        'Retrouvez les informations de connexion dans le guide du gîte.',
-      wifiLink: 'Voir le guide →',
-      rulesTitle: 'Vie dans le gîte',
-      rulesText:
-        'Équipements, consignes et bonnes pratiques de la maison.',
-      rulesLink: 'Voir les informations →',
-      sortingTitle: 'Tri des déchets',
-      sortingText:
-        'Les consignes pour respecter notre belle île.',
-      sortingLink: 'Voir les consignes →',
-      islandTitle: 'Découvrir l’île',
-      islandText:
-        'Retrouvez les sorties et découvertes sélectionnées pour vous.',
-      islandLink: 'Nos recommandations →',
-      qrSectionTitle: 'Emportez votre guide avec vous',
-      qrSectionText:
-        'Scannez les QR codes avec votre téléphone pour retrouver facilement les informations de votre séjour.',
-      qrHomeTitle: 'Accueil',
-      qrGuideTitle: 'Guide du gîte',
-      qrConseilsTitle: 'Nos conseils',
-      qrSanibroyeurTitle: 'Sanibroyeur',
-      qrTriTitle: 'Tri des déchets',
-      footerText: 'Votre maison de vacances à La Réunion',
-      welcome: 'Bienvenue',
-      guestMessage: 'Nous vous souhaitons un merveilleux séjour.',
-      humidity: 'Humidité',
-      wind: 'Vent',
-      weatherClear: 'Ciel dégagé',
-      weatherCloud: 'Partiellement nuageux',
-      weatherRain: 'Pluie',
-      weatherStorm: 'Orages',
-      weatherOther: 'Conditions variables'
+      heroEyebrow:'Votre parenthèse à La Réunion',
+      heroTitle:'Bienvenue',
+      heroSubtitle:'aux Ozabris',
+      heroDescription:'Un séjour placé sous le signe de la douceur, de la découverte et de l’art de vivre réunionnais.',
+      heroGuide:'🏡 Découvrir votre gîte',
+      heroConseils:'🌴 Explorer La Réunion',
+      topGuide:'Guide pratique',
+      topConseils:'Nos conseils',
+      dateLabel:'Aujourd’hui à La Réunion',
+      weatherLabel:'Météo · Saint-Paul',
+      weatherLoading:'Chargement de la météo…',
+      weatherUnavailable:'Météo indisponible',
+      stayLabel:'Votre séjour',
+      stayMessage:'Profitez pleinement de votre séjour.',
+      discoverKicker:'Votre séjour, en toute simplicité',
+      discoverTitle:'Tout est à portée de main',
+      discoverText:'Retrouvez les informations de votre hébergement et nos plus belles recommandations pour découvrir l’île.',
+      guideTag:'Votre hébergement',
+      guideTitle:'Le guide du gîte',
+      guideDescription:'Wi-Fi, équipements, consignes pratiques et informations utiles pour un séjour serein.',
+      guideArrow:'Découvrir le guide →',
+      conseilsTag:'Nos coups de cœur',
+      conseilsTitle:'Les bonnes adresses',
+      conseilsDescription:'Plages, paysages, commerces, balades et expériences à découvrir autour de votre gîte.',
+      conseilsArrow:'Explorer nos conseils →',
+      entertainmentKicker:'Votre espace détente',
+      entertainmentTitle:'Vos divertissements',
+      entertainmentIntro:'Installez-vous confortablement et profitez de vos programmes préférés.',
+      netflixDescription:'Avec votre compte personnel',
+      orangeDescription:'Vos chaînes de télévision',
+      primeDescription:'Avec votre compte personnel',
+      youtubeDescription:'Vidéos et découvertes',
+      openLauncher:'📺 Ouvrir toutes les applications',
+      entertainmentNote:'Netflix et Prime Video : utilisez vos propres identifiants et pensez à vous déconnecter avant votre départ.',
+      launcherUnavailable:'Cette fonction est réservée aux télévisions équipées de Fully Kiosk.',
+      launcherAttempt:'Ouverture demandée. Si rien ne se passe, nous vérifierons les autorisations de Fully Kiosk.',
+      practicalKicker:'Les essentiels',
+      practicalTitle:'Pour un séjour sans souci',
+      practicalText:'Quelques informations pratiques à retrouver à tout moment.',
+      wifiTitle:'Wi-Fi',
+      wifiText:'Retrouvez les informations de connexion dans le guide du gîte.',
+      wifiLink:'Voir le guide →',
+      rulesTitle:'Vie dans le gîte',
+      rulesText:'Équipements, consignes et bonnes pratiques de la maison.',
+      rulesLink:'Voir les informations →',
+      sortingTitle:'Tri des déchets',
+      sortingText:'Les consignes pour respecter notre belle île.',
+      sortingLink:'Voir les consignes →',
+      islandTitle:'Découvrir l’île',
+      islandText:'Retrouvez les sorties et découvertes sélectionnées pour vous.',
+      islandLink:'Nos recommandations →',
+      qrSectionTitle:'Emportez votre guide avec vous',
+      qrSectionText:'Scannez les QR codes avec votre téléphone pour retrouver facilement les informations de votre séjour.',
+      qrHomeTitle:'Accueil',
+      qrGuideTitle:'Guide du gîte',
+      qrConseilsTitle:'Nos conseils',
+      qrSanibroyeurTitle:'Sanibroyeur',
+      qrTriTitle:'Tri des déchets',
+      footerText:'Votre maison de vacances à La Réunion',
+      welcome:'Bienvenue',
+      guestMessage:'Nous vous souhaitons un merveilleux séjour.',
+      humidity:'Humidité',
+      wind:'Vent',
+      weatherClear:'Ciel dégagé',
+      weatherCloud:'Partiellement nuageux',
+      weatherRain:'Pluie',
+      weatherStorm:'Orages',
+      weatherOther:'Conditions variables'
     },
 
     en: {
-      heroEyebrow: 'Your escape to Réunion Island',
-      heroTitle: 'Welcome',
-      heroSubtitle: 'to Les Ozabris',
-      heroDescription:
-        'A relaxing stay filled with discovery, comfort and the charm of Réunion Island.',
-      heroGuide: '🏡 Explore your cottage',
-      heroConseils: '🌴 Discover Réunion',
-      topGuide: 'Cottage guide',
-      topConseils: 'Our tips',
-      dateLabel: 'Today in Réunion',
-      weatherLabel: 'Weather · Saint-Paul',
-      weatherLoading: 'Loading weather…',
-      weatherUnavailable: 'Weather unavailable',
-      stayLabel: 'Your stay',
-      stayMessage: 'Enjoy every moment of your stay.',
-      discoverKicker: 'Everything you need',
-      discoverTitle: 'Your stay made easy',
-      discoverText:
-        'Find all the useful information about your cottage and our favourite places on the island.',
-      guideTag: 'Your cottage',
-      guideTitle: 'The cottage guide',
-      guideDescription:
-        'Wi-Fi, amenities, house rules and useful information for a relaxing stay.',
-      guideArrow: 'Explore the guide →',
-      conseilsTag: 'Our favourites',
-      conseilsTitle: 'Local recommendations',
-      conseilsDescription:
-        'Beaches, landscapes, shops, walks and experiences around your cottage.',
-      conseilsArrow: 'Discover our tips →',
-      entertainmentKicker: 'Time to relax',
-      entertainmentTitle: 'Your entertainment',
-      entertainmentIntro:
-        'Make yourself comfortable and enjoy your favourite shows.',
-      netflixDescription: 'Use your own account',
-      orangeDescription: 'Live television channels',
-      primeDescription: 'Use your own account',
-      youtubeDescription: 'Videos and discoveries',
-      openLauncher: '📺 Open all TV apps',
-      entertainmentNote:
-        'For Netflix and Prime Video, use your own account and remember to sign out before departure.',
-      launcherUnavailable:
-        'This feature is available on TVs equipped with Fully Kiosk.',
-      launcherAttempt:
-        'Opening requested. If nothing happens, app launching must be enabled in Fully Kiosk.',
-      practicalKicker: 'Essentials',
-      practicalTitle: 'Everything for a great stay',
-      practicalText:
-        'Useful information available whenever you need it.',
-      wifiTitle: 'Wi-Fi',
-      wifiText:
-        'Find the connection details in your cottage guide.',
-      wifiLink: 'View guide →',
-      rulesTitle: 'Cottage information',
-      rulesText:
-        'Amenities, house rules and useful instructions.',
-      rulesLink: 'View information →',
-      sortingTitle: 'Waste sorting',
-      sortingText:
-        'Help us protect our beautiful island.',
-      sortingLink: 'View instructions →',
-      islandTitle: 'Discover the island',
-      islandText:
-        'Explore our selection of local activities and places.',
-      islandLink: 'Our recommendations →',
-      qrSectionTitle: 'Take your guide with you',
-      qrSectionText:
-        'Scan these QR codes to access your stay information on your phone.',
-      qrHomeTitle: 'Home',
-      qrGuideTitle: 'Cottage guide',
-      qrConseilsTitle: 'Our tips',
-      qrSanibroyeurTitle: 'Bathroom instructions',
-      qrTriTitle: 'Waste sorting',
-      footerText: 'Your holiday home on Réunion Island',
-      welcome: 'Welcome',
-      guestMessage: 'We wish you a wonderful stay.',
-      humidity: 'Humidity',
-      wind: 'Wind',
-      weatherClear: 'Clear sky',
-      weatherCloud: 'Partly cloudy',
-      weatherRain: 'Rain',
-      weatherStorm: 'Thunderstorms',
-      weatherOther: 'Variable conditions'
+      heroEyebrow:'Your escape to Réunion Island',
+      heroTitle:'Welcome',
+      heroSubtitle:'to Les Ozabris',
+      heroDescription:'A relaxing stay filled with discovery, comfort and the charm of Réunion Island.',
+      heroGuide:'🏡 Explore your cottage',
+      heroConseils:'🌴 Discover Réunion',
+      topGuide:'Cottage guide',
+      topConseils:'Our tips',
+      dateLabel:'Today in Réunion',
+      weatherLabel:'Weather · Saint-Paul',
+      weatherLoading:'Loading weather…',
+      weatherUnavailable:'Weather unavailable',
+      stayLabel:'Your stay',
+      stayMessage:'Enjoy every moment of your stay.',
+      discoverKicker:'Everything you need',
+      discoverTitle:'Your stay made easy',
+      discoverText:'Find all the useful information about your cottage and our favourite places on the island.',
+      guideTag:'Your cottage',
+      guideTitle:'The cottage guide',
+      guideDescription:'Wi-Fi, amenities, house rules and useful information for a relaxing stay.',
+      guideArrow:'Explore the guide →',
+      conseilsTag:'Our favourites',
+      conseilsTitle:'Local recommendations',
+      conseilsDescription:'Beaches, landscapes, shops, walks and experiences around your cottage.',
+      conseilsArrow:'Discover our tips →',
+      entertainmentKicker:'Time to relax',
+      entertainmentTitle:'Your entertainment',
+      entertainmentIntro:'Make yourself comfortable and enjoy your favourite shows.',
+      netflixDescription:'Use your own account',
+      orangeDescription:'Live television channels',
+      primeDescription:'Use your own account',
+      youtubeDescription:'Videos and discoveries',
+      openLauncher:'📺 Open all TV apps',
+      entertainmentNote:'For Netflix and Prime Video, use your own account and remember to sign out before departure.',
+      launcherUnavailable:'This feature is available on TVs equipped with Fully Kiosk.',
+      launcherAttempt:'Opening requested. If nothing happens, we will check Fully Kiosk permissions.',
+      practicalKicker:'Essentials',
+      practicalTitle:'Everything for a great stay',
+      practicalText:'Useful information available whenever you need it.',
+      wifiTitle:'Wi-Fi',
+      wifiText:'Find the connection details in your cottage guide.',
+      wifiLink:'View guide →',
+      rulesTitle:'Cottage information',
+      rulesText:'Amenities, house rules and useful instructions.',
+      rulesLink:'View information →',
+      sortingTitle:'Waste sorting',
+      sortingText:'Help us protect our beautiful island.',
+      sortingLink:'View instructions →',
+      islandTitle:'Discover the island',
+      islandText:'Explore our selection of local activities and places.',
+      islandLink:'Our recommendations →',
+      qrSectionTitle:'Take your guide with you',
+      qrSectionText:'Scan these QR codes to access your stay information on your phone.',
+      qrHomeTitle:'Home',
+      qrGuideTitle:'Cottage guide',
+      qrConseilsTitle:'Our tips',
+      qrSanibroyeurTitle:'Bathroom instructions',
+      qrTriTitle:'Waste sorting',
+      footerText:'Your holiday home on Réunion Island',
+      welcome:'Welcome',
+      guestMessage:'We wish you a wonderful stay.',
+      humidity:'Humidity',
+      wind:'Wind',
+      weatherClear:'Clear sky',
+      weatherCloud:'Partly cloudy',
+      weatherRain:'Rain',
+      weatherStorm:'Thunderstorms',
+      weatherOther:'Variable conditions'
     },
 
     de: {
-      heroEyebrow: 'Ihre Auszeit auf La Réunion',
-      heroTitle: 'Willkommen',
-      heroSubtitle: 'bei Les Ozabris',
-      heroDescription:
-        'Genießen Sie einen erholsamen Aufenthalt voller Entdeckungen auf La Réunion.',
-      heroGuide: '🏡 Unterkunft entdecken',
-      heroConseils: '🌴 La Réunion entdecken',
-      topGuide: 'Hausinformationen',
-      topConseils: 'Unsere Tipps',
-      dateLabel: 'Heute auf La Réunion',
-      weatherLabel: 'Wetter · Saint-Paul',
-      weatherLoading: 'Wetter wird geladen…',
-      weatherUnavailable: 'Wetter nicht verfügbar',
-      stayLabel: 'Ihr Aufenthalt',
-      stayMessage: 'Genießen Sie Ihren Aufenthalt.',
-      discoverKicker: 'Alles für Ihren Aufenthalt',
-      discoverTitle: 'Alles auf einen Blick',
-      discoverText:
-        'Hier finden Sie Informationen zur Unterkunft und unsere Empfehlungen für die Insel.',
-      guideTag: 'Ihre Unterkunft',
-      guideTitle: 'Hausinformationen',
-      guideDescription:
-        'WLAN, Ausstattung, Hausregeln und wichtige Informationen.',
-      guideArrow: 'Informationen ansehen →',
-      conseilsTag: 'Unsere Favoriten',
-      conseilsTitle: 'Lokale Empfehlungen',
-      conseilsDescription:
-        'Strände, Landschaften, Geschäfte und Ausflüge rund um Ihre Unterkunft.',
-      conseilsArrow: 'Empfehlungen entdecken →',
-      entertainmentKicker: 'Zeit zum Entspannen',
-      entertainmentTitle: 'Ihre Unterhaltung',
-      entertainmentIntro:
-        'Machen Sie es sich bequem und genießen Sie Ihre Lieblingssendungen.',
-      netflixDescription: 'Mit Ihrem eigenen Konto',
-      orangeDescription: 'Fernsehsender',
-      primeDescription: 'Mit Ihrem eigenen Konto',
-      youtubeDescription: 'Videos und Entdeckungen',
-      openLauncher: '📺 Alle TV-Apps öffnen',
-      entertainmentNote:
-        'Bitte verwenden Sie für Netflix und Prime Video Ihr eigenes Konto und melden Sie sich vor der Abreise ab.',
-      launcherUnavailable:
-        'Diese Funktion ist auf Fernsehern mit Fully Kiosk verfügbar.',
-      launcherAttempt:
-        'Öffnen angefordert. Falls nichts passiert, muss der App-Start in Fully Kiosk erlaubt werden.',
-      practicalKicker: 'Das Wichtigste',
-      practicalTitle: 'Für einen entspannten Aufenthalt',
-      practicalText:
-        'Nützliche Informationen jederzeit verfügbar.',
-      wifiTitle: 'WLAN',
-      wifiText:
-        'Die Zugangsdaten finden Sie in den Hausinformationen.',
-      wifiLink: 'Informationen ansehen →',
-      rulesTitle: 'Hausregeln',
-      rulesText:
-        'Ausstattung, Hinweise und wichtige Regeln.',
-      rulesLink: 'Informationen ansehen →',
-      sortingTitle: 'Mülltrennung',
-      sortingText:
-        'Helfen Sie uns, unsere schöne Insel zu schützen.',
-      sortingLink: 'Hinweise ansehen →',
-      islandTitle: 'Insel entdecken',
-      islandText:
-        'Entdecken Sie unsere Ausflugs- und Freizeittipps.',
-      islandLink: 'Unsere Empfehlungen →',
-      qrSectionTitle: 'Ihr Reiseführer für unterwegs',
-      qrSectionText:
-        'Scannen Sie die QR-Codes, um die Informationen auf Ihrem Smartphone zu öffnen.',
-      qrHomeTitle: 'Startseite',
-      qrGuideTitle: 'Hausinformationen',
-      qrConseilsTitle: 'Empfehlungen',
-      qrSanibroyeurTitle: 'Badezimmerhinweise',
-      qrTriTitle: 'Mülltrennung',
-      footerText: 'Ihr Ferienhaus auf La Réunion',
-      welcome: 'Willkommen',
-      guestMessage: 'Wir wünschen Ihnen einen schönen Aufenthalt.',
-      humidity: 'Luftfeuchtigkeit',
-      wind: 'Wind',
-      weatherClear: 'Klarer Himmel',
-      weatherCloud: 'Teilweise bewölkt',
-      weatherRain: 'Regen',
-      weatherStorm: 'Gewitter',
-      weatherOther: 'Wechselhaftes Wetter'
+      heroEyebrow:'Ihre Auszeit auf La Réunion',
+      heroTitle:'Willkommen',
+      heroSubtitle:'bei Les Ozabris',
+      heroDescription:'Genießen Sie einen erholsamen Aufenthalt voller Entdeckungen auf La Réunion.',
+      heroGuide:'🏡 Unterkunft entdecken',
+      heroConseils:'🌴 La Réunion entdecken',
+      topGuide:'Hausinformationen',
+      topConseils:'Unsere Tipps',
+      dateLabel:'Heute auf La Réunion',
+      weatherLabel:'Wetter · Saint-Paul',
+      weatherLoading:'Wetter wird geladen…',
+      weatherUnavailable:'Wetter nicht verfügbar',
+      stayLabel:'Ihr Aufenthalt',
+      stayMessage:'Genießen Sie Ihren Aufenthalt.',
+      discoverKicker:'Alles für Ihren Aufenthalt',
+      discoverTitle:'Alles auf einen Blick',
+      discoverText:'Hier finden Sie Informationen zur Unterkunft und unsere Empfehlungen für die Insel.',
+      guideTag:'Ihre Unterkunft',
+      guideTitle:'Hausinformationen',
+      guideDescription:'WLAN, Ausstattung, Hausregeln und wichtige Informationen.',
+      guideArrow:'Informationen ansehen →',
+      conseilsTag:'Unsere Favoriten',
+      conseilsTitle:'Lokale Empfehlungen',
+      conseilsDescription:'Strände, Landschaften, Geschäfte und Ausflüge rund um Ihre Unterkunft.',
+      conseilsArrow:'Empfehlungen entdecken →',
+      entertainmentKicker:'Zeit zum Entspannen',
+      entertainmentTitle:'Ihre Unterhaltung',
+      entertainmentIntro:'Machen Sie es sich bequem und genießen Sie Ihre Lieblingssendungen.',
+      netflixDescription:'Mit Ihrem eigenen Konto',
+      orangeDescription:'Fernsehsender',
+      primeDescription:'Mit Ihrem eigenen Konto',
+      youtubeDescription:'Videos und Entdeckungen',
+      openLauncher:'📺 Alle TV-Apps öffnen',
+      entertainmentNote:'Bitte verwenden Sie für Netflix und Prime Video Ihr eigenes Konto und melden Sie sich vor der Abreise ab.',
+      launcherUnavailable:'Diese Funktion ist auf Fernsehern mit Fully Kiosk verfügbar.',
+      launcherAttempt:'Öffnen angefordert. Falls nichts passiert, prüfen wir die Fully-Kiosk-Berechtigungen.',
+      practicalKicker:'Das Wichtigste',
+      practicalTitle:'Für einen entspannten Aufenthalt',
+      practicalText:'Nützliche Informationen jederzeit verfügbar.',
+      wifiTitle:'WLAN',
+      wifiText:'Die Zugangsdaten finden Sie in den Hausinformationen.',
+      wifiLink:'Informationen ansehen →',
+      rulesTitle:'Hausregeln',
+      rulesText:'Ausstattung, Hinweise und wichtige Regeln.',
+      rulesLink:'Informationen ansehen →',
+      sortingTitle:'Mülltrennung',
+      sortingText:'Helfen Sie uns, unsere schöne Insel zu schützen.',
+      sortingLink:'Hinweise ansehen →',
+      islandTitle:'Insel entdecken',
+      islandText:'Entdecken Sie unsere Ausflugs- und Freizeittipps.',
+      islandLink:'Unsere Empfehlungen →',
+      qrSectionTitle:'Ihr Reiseführer für unterwegs',
+      qrSectionText:'Scannen Sie die QR-Codes, um die Informationen auf Ihrem Smartphone zu öffnen.',
+      qrHomeTitle:'Startseite',
+      qrGuideTitle:'Hausinformationen',
+      qrConseilsTitle:'Empfehlungen',
+      qrSanibroyeurTitle:'Badezimmerhinweise',
+      qrTriTitle:'Mülltrennung',
+      footerText:'Ihr Ferienhaus auf La Réunion',
+      welcome:'Willkommen',
+      guestMessage:'Wir wünschen Ihnen einen schönen Aufenthalt.',
+      humidity:'Luftfeuchtigkeit',
+      wind:'Wind',
+      weatherClear:'Klarer Himmel',
+      weatherCloud:'Teilweise bewölkt',
+      weatherRain:'Regen',
+      weatherStorm:'Gewitter',
+      weatherOther:'Wechselhaftes Wetter'
     }
   };
 
   function t(key) {
     return translations[language][key] ||
-           translations.fr[key] ||
-           key;
+      translations.fr[key] ||
+      key;
   }
 
   function setText(id, value) {
     const element = $(id);
-
-    if (element) {
-      element.textContent = value;
-    }
+    if (element) element.textContent = value;
   }
 
   function suffix(includeTV) {
@@ -1828,34 +1456,21 @@ footer p {
    */
 
   function configureLinks() {
-    const guideUrl =
-      'guide.html' + suffix(true);
+    const guideUrl = 'guide.html' + suffix(true);
+    const conseilsUrl = 'conseils.html' + suffix(true);
 
-    const conseilsUrl =
-      'conseils.html' + suffix(true);
-
-    [
-      'topGuide',
-      'heroGuide',
-      'featureGuide'
-    ].forEach(function (id) {
-      $(id).href = guideUrl;
-    });
+    ['topGuide','heroGuide','featureGuide']
+      .forEach(id => $(id).href = guideUrl);
 
     [
       'topConseils',
       'heroConseils',
       'featureConseils',
       'islandLink'
-    ].forEach(function (id) {
-      $(id).href = conseilsUrl;
-    });
+    ].forEach(id => $(id).href = conseilsUrl);
 
-    document.querySelectorAll(
-      '.guide-shortcut'
-    ).forEach(function (link) {
-      link.href = guideUrl;
-    });
+    document.querySelectorAll('.guide-shortcut')
+      .forEach(link => link.href = guideUrl);
 
     if (isTV) {
       $('adminButton').classList.add('hidden');
@@ -1863,9 +1478,7 @@ footer p {
 
     createQr(
       'qrHome',
-      location.origin +
-      location.pathname +
-      suffix(false)
+      location.origin + location.pathname + suffix(false)
     );
 
     createQr(
@@ -1884,306 +1497,218 @@ footer p {
       ).href
     );
 
-    createQr(
-      'qrSanibroyeur',
-      SANIBROYEUR_PDF
-    );
-
-    createQr(
-      'qrTri',
-      TRI_PDF
-    );
+    createQr('qrSanibroyeur', SANIBROYEUR_PDF);
+    createQr('qrTri', TRI_PDF);
   }
 
   function createQr(id, url) {
     const container = $(id);
-
     container.innerHTML = '';
 
     if (typeof QRCode === 'undefined') {
       const link = document.createElement('a');
-
       link.href = url;
       link.textContent = 'Ouvrir';
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
-
       container.appendChild(link);
       return;
     }
 
     new QRCode(container, {
-      text: url,
-      width: 116,
-      height: 116,
-      colorDark: '#12263a',
-      colorLight: '#ffffff',
-      correctLevel: QRCode.CorrectLevel.M
+      text:url,
+      width:116,
+      height:116,
+      colorDark:'#12263a',
+      colorLight:'#ffffff',
+      correctLevel:QRCode.CorrectLevel.M
     });
   }
 
   /*
-   * DIAPORAMA DES ENCARTS
+   * DIAPORAMA SANS RECHARGEMENT
    *
-   * Les images sont préchargées avant
-   * chaque transition pour éviter
-   * les flashs sur les télévisions.
+   * 1. Vérifie les photos disponibles.
+   * 2. Affiche une photo initiale.
+   * 3. Précharge la suivante.
+   * 4. Effectue un fondu.
+   * 5. Recommence toutes les 30 secondes.
    *
-   * Aucun rechargement de page.
+   * Les trois zones restent décalées
+   * pour afficher des images différentes.
    */
 
   function preloadPhoto(url) {
-    return new Promise(function (resolve) {
+    return new Promise(resolve => {
       const image = new Image();
-
-      image.onload = function () {
-        resolve(true);
-      };
-
-      image.onerror = function () {
-        resolve(false);
-      };
-
+      image.onload = () => resolve(true);
+      image.onerror = () => resolve(false);
       image.src = url;
     });
   }
 
-  function startPhotoCarousel(cardId, photoList) {
-    const card = $(cardId);
+  async function findAvailablePhotos() {
+    const results = await Promise.all(
+      PHOTO_URLS.map(async url => ({
+        url:url,
+        valid:await preloadPhoto(url)
+      }))
+    );
 
-    if (!card) {
-      return;
-    }
+    return results
+      .filter(result => result.valid)
+      .map(result => result.url);
+  }
 
-    const layers =
-      card.querySelectorAll('.feature-photo');
+  function startPhotoCarousel(
+    containerId,
+    photoClass,
+    availablePhotos,
+    offset
+  ) {
+    const container = $(containerId);
+    if (!container || !availablePhotos.length) return;
 
-    if (layers.length !== 2) {
-      return;
-    }
+    const layers = container.querySelectorAll(
+      '.' + photoClass
+    );
 
+    if (layers.length !== 2) return;
+
+    let currentIndex = offset % availablePhotos.length;
     let activeLayer = 0;
-    let currentIndex = 0;
     let transitioning = false;
 
-    const availablePhotos = [];
-
-    /*
-     * Affichage immédiat d'une photo
-     * déjà présente dans le dépôt.
-     * Elle sert de secours si les
-     * nouvelles images sont absentes.
-     */
-
-    const fallback =
-      cardId === 'featureGuide'
-        ? 'images/ansedescascade.jpeg'
-        : 'images/plage hermitage.jpeg';
-
     layers[0].style.backgroundImage =
-      'url("' + fallback + '")';
+      'url("' + availablePhotos[currentIndex] + '")';
 
     layers[0].classList.add('visible');
 
     layers[1].classList.remove('visible');
 
-    async function preparePhotos() {
-      for (const url of photoList) {
-        const valid = await preloadPhoto(url);
-
-        if (valid) {
-          availablePhotos.push(url);
-        }
-      }
-
-      if (!availablePhotos.length) {
-        return;
-      }
-
-      /*
-       * La première photo de la liste
-       * devient le fond initial.
-       */
-
-      layers[0].style.backgroundImage =
-        'url("' + availablePhotos[0] + '")';
-
-      currentIndex = 0;
-
-      if (availablePhotos.length > 1) {
-        setInterval(
-          nextPhoto,
-          PHOTO_INTERVAL
-        );
-      }
-    }
+    if (availablePhotos.length < 2) return;
 
     async function nextPhoto() {
-      if (
-        transitioning ||
-        document.hidden ||
-        availablePhotos.length < 2
-      ) {
-        return;
-      }
+      if (transitioning || document.hidden) return;
 
       transitioning = true;
 
       const nextIndex =
-        (currentIndex + 1) %
-        availablePhotos.length;
+        (currentIndex + 1) % availablePhotos.length;
 
-      const url =
-        availablePhotos[nextIndex];
+      const nextUrl = availablePhotos[nextIndex];
 
-      const loaded =
-        await preloadPhoto(url);
+      const loaded = await preloadPhoto(nextUrl);
 
       if (!loaded) {
         transitioning = false;
         return;
       }
 
-      const nextLayer =
-        activeLayer === 0 ? 1 : 0;
+      const nextLayer = activeLayer === 0 ? 1 : 0;
+      const oldLayer = activeLayer;
 
       layers[nextLayer].style.backgroundImage =
-        'url("' + url + '")';
+        'url("' + nextUrl + '")';
 
       /*
-       * Déclenchement du fondu
-       * après la mise à jour du fond.
+       * La couche entrante est préparée
+       * avant de devenir visible.
        */
 
-      requestAnimationFrame(function () {
-        requestAnimationFrame(function () {
-          layers[nextLayer].classList.add(
-            'visible'
-          );
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          layers[nextLayer].classList.add('visible');
 
-          layers[activeLayer].classList.remove(
-            'visible'
-          );
-
-          activeLayer = nextLayer;
-          currentIndex = nextIndex;
-          transitioning = false;
+          setTimeout(() => {
+            layers[oldLayer].classList.remove('visible');
+            activeLayer = nextLayer;
+            currentIndex = nextIndex;
+            transitioning = false;
+          }, PHOTO_FADE);
         });
       });
     }
 
-    preparePhotos();
+    setInterval(nextPhoto, PHOTO_INTERVAL);
+  }
+
+  async function startAllSlideshows() {
+    const availablePhotos = await findAvailablePhotos();
+
+    if (!availablePhotos.length) {
+      console.warn(
+        'Aucune photo trouvée dans images/fond/'
+      );
+      return;
+    }
+
+    startPhotoCarousel(
+      'hero',
+      'hero-photo',
+      availablePhotos,
+      PHOTO_OFFSETS.hero
+    );
+
+    startPhotoCarousel(
+      'featureGuide',
+      'feature-photo',
+      availablePhotos,
+      PHOTO_OFFSETS.guide
+    );
+
+    startPhotoCarousel(
+      'featureConseils',
+      'feature-photo',
+      availablePhotos,
+      PHOTO_OFFSETS.conseils
+    );
   }
 
   /*
    * APPLICATIONS TV
    *
-   * Le lanceur est configuré dans
-   * Fully Kiosk sur la box Android.
+   * Les cartes ouvrent actuellement
+   * le lanceur commun de Fully Kiosk.
    *
-   * L'ouverture d'applications via
-   * une page web dépend des autorisations
-   * Android et Fully Kiosk.
-   *
-   * On utilise ici l'adresse interne
-   * fully://launcher, à tester en Kiosk.
+   * L'ouverture directe de chaque app
+   * sera testée séparément sur les box.
    */
 
-  function isLikelyFullyKiosk() {
-    const ua = navigator.userAgent || '';
-
-    return /Fully/i.test(ua) ||
-           /FullyKiosk/i.test(ua);
-  }
-
   function isAndroidDevice() {
-    return /Android/i.test(
-      navigator.userAgent || ''
-    );
+    return /Android/i.test(navigator.userAgent || '');
   }
 
   function setEntertainmentStatus(message) {
-    setText(
-      'entertainmentStatus',
-      message
-    );
+    setText('entertainmentStatus', message);
   }
 
   function openUniversalLauncher() {
-    /*
-     * Sur iPhone et ordinateur,
-     * ne pas tenter de lancer
-     * un protocole Android.
-     */
-
     if (!isAndroidDevice()) {
-      setEntertainmentStatus(
-        t('launcherUnavailable')
-      );
-
+      setEntertainmentStatus(t('launcherUnavailable'));
       return;
     }
 
-    setEntertainmentStatus(
-      t('launcherAttempt')
-    );
-
-    /*
-     * Adresse interne documentée
-     * du lanceur Fully Kiosk.
-     *
-     * Le résultat doit être validé
-     * sur chaque box.
-     */
+    setEntertainmentStatus(t('launcherAttempt'));
 
     try {
-      window.location.href =
-        'fully://launcher';
+      window.location.href = 'fully://launcher';
     } catch (error) {
-      setEntertainmentStatus(
-        t('launcherUnavailable')
-      );
+      setEntertainmentStatus(t('launcherUnavailable'));
     }
-  }
-
-  function openTVApplication(appName) {
-    const packageName =
-      ANDROID_APPS[appName];
-
-    if (!packageName) {
-      return;
-    }
-
-    /*
-     * Pour la première version,
-     * les quatre cartes ouvrent
-     * le lanceur déjà configuré.
-     *
-     * Cela évite de supposer
-     * que Fully Kiosk accepte
-     * les liens Android directs.
-     *
-     * Les identifiants d'applications
-     * sont conservés ci-dessus
-     * pour une évolution future.
-     */
-
-    openUniversalLauncher();
   }
 
   function configureEntertainment() {
-    document.querySelectorAll(
-      '[data-app]'
-    ).forEach(function (button) {
-      button.addEventListener(
-        'click',
-        function () {
-          openTVApplication(
-            button.dataset.app
-          );
-        }
-      );
-    });
+    document.querySelectorAll('[data-app]')
+      .forEach(button => {
+        button.addEventListener('click', () => {
+          const app = button.dataset.app;
+
+          if (ANDROID_APPS[app]) {
+            openUniversalLauncher();
+          }
+        });
+      });
 
     $('openLauncher').addEventListener(
       'click',
@@ -2203,122 +1728,86 @@ footer p {
       language === 'en' ? 'en-GB' :
       'fr-FR';
 
-    const dateText =
-      new Intl.DateTimeFormat(locale, {
-        timeZone: 'Indian/Reunion',
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      }).format(now);
+    const dateText = new Intl.DateTimeFormat(
+      locale,
+      {
+        timeZone:'Indian/Reunion',
+        weekday:'long',
+        day:'numeric',
+        month:'long',
+        year:'numeric'
+      }
+    ).format(now);
 
-    const timeText =
-      new Intl.DateTimeFormat(locale, {
-        timeZone: 'Indian/Reunion',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-      }).format(now);
+    const timeText = new Intl.DateTimeFormat(
+      locale,
+      {
+        timeZone:'Indian/Reunion',
+        hour:'2-digit',
+        minute:'2-digit',
+        hour12:false
+      }
+    ).format(now);
 
     setText('localDate', dateText);
-    setText(
-      'localTime',
-      timeText + ' · UTC+4'
-    );
+    setText('localTime', timeText + ' · UTC+4');
   }
 
   /*
-   * MÉTÉO OPEN-METEO
+   * MÉTÉO
    */
 
   function weatherAppearance(code) {
     if (code === 0) {
-      return [
-        '☀️',
-        t('weatherClear')
-      ];
+      return ['☀️',t('weatherClear')];
     }
 
-    if (
-      [1, 2, 3, 45, 48].includes(code)
-    ) {
-      return [
-        '🌤️',
-        t('weatherCloud')
-      ];
+    if ([1,2,3,45,48].includes(code)) {
+      return ['🌤️',t('weatherCloud')];
     }
 
-    if (
-      [95, 96, 99].includes(code)
-    ) {
-      return [
-        '⛈️',
-        t('weatherStorm')
-      ];
+    if ([95,96,99].includes(code)) {
+      return ['⛈️',t('weatherStorm')];
     }
 
-    if (
-      [
-        51, 53, 55, 56, 57,
-        61, 63, 65, 66, 67,
-        80, 81, 82
-      ].includes(code)
-    ) {
-      return [
-        '🌧️',
-        t('weatherRain')
-      ];
+    if ([
+      51,53,55,56,57,
+      61,63,65,66,67,
+      80,81,82
+    ].includes(code)) {
+      return ['🌧️',t('weatherRain')];
     }
 
-    return [
-      '🌦️',
-      t('weatherOther')
-    ];
+    return ['🌦️',t('weatherOther')];
   }
 
   function renderWeather() {
     if (!weatherData) {
-      setText(
-        'weatherDescription',
-        t('weatherLoading')
-      );
-
+      setText('weatherDescription',t('weatherLoading'));
       return;
     }
 
     const current = weatherData;
 
-    const appearance =
-      weatherAppearance(
-        Number(current.weather_code)
-      );
-
-    setText(
-      'weatherIcon',
-      appearance[0]
+    const appearance = weatherAppearance(
+      Number(current.weather_code)
     );
+
+    setText('weatherIcon',appearance[0]);
 
     setText(
       'temperature',
-      Math.round(
-        current.temperature_2m
-      ) + '°C'
+      Math.round(current.temperature_2m) + '°C'
     );
 
-    setText(
-      'weatherDescription',
-      appearance[1]
-    );
+    setText('weatherDescription',appearance[1]);
 
     setText(
       'weatherExtra',
       t('humidity') + ' : ' +
-      current.relative_humidity_2m +
-      '% · ' +
+      current.relative_humidity_2m + '% · ' +
       t('wind') + ' : ' +
-      Math.round(
-        current.wind_speed_10m
-      ) + ' km/h'
+      Math.round(current.wind_speed_10m) + ' km/h'
     );
   }
 
@@ -2326,26 +1815,20 @@ footer p {
     try {
       const response = await fetch(
         WEATHER_API,
-        { cache: 'no-store' }
+        {cache:'no-store'}
       );
 
       if (!response.ok) {
-        throw new Error(
-          'Weather HTTP error'
-        );
+        throw new Error('Weather HTTP error');
       }
 
-      const data =
-        await response.json();
+      const data = await response.json();
 
       if (!data.current) {
-        throw new Error(
-          'Missing weather data'
-        );
+        throw new Error('Missing weather data');
       }
 
       weatherData = data.current;
-
       renderWeather();
 
     } catch (error) {
@@ -2354,53 +1837,34 @@ footer p {
           'weatherDescription',
           t('weatherUnavailable')
         );
-
-        setText(
-          'temperature',
-          '—'
-        );
-
-        setText(
-          'weatherExtra',
-          ''
-        );
+        setText('temperature','—');
+        setText('weatherExtra','');
       }
     }
   }
 
   /*
-   * PERSONNALISATION VOYAGEURS
+   * ACCUEIL PERSONNALISÉ DES VOYAGEURS
    */
 
   function normalize(value) {
     return String(value || '')
       .toLowerCase()
       .normalize('NFD')
-      .replace(
-        /[\u0300-\u036f]/g,
-        ''
-      )
-      .replace(
-        /\s+/g,
-        ''
-      );
+      .replace(/[\u0300-\u036f]/g,'')
+      .replace(/\s+/g,'');
   }
 
   function sameCottage(value) {
-    return normalize(value).includes(
-      gite
-    );
+    return normalize(value).includes(gite);
   }
 
   function parseDate(value) {
-    if (!value) {
-      return null;
-    }
+    if (!value) return null;
 
-    const match =
-      String(value).match(
-        /^(\d{4})-(\d{2})-(\d{2})/
-      );
+    const match = String(value).match(
+      /^(\d{4})-(\d{2})-(\d{2})/
+    );
 
     if (match) {
       return new Date(
@@ -2412,30 +1876,24 @@ footer p {
 
     const date = new Date(value);
 
-    return isNaN(
-      date.getTime()
-    ) ? null : date;
+    return isNaN(date.getTime()) ? null : date;
   }
 
   function reunionToday() {
-    const parts =
-      new Intl.DateTimeFormat(
-        'en-CA',
-        {
-          timeZone: 'Indian/Reunion',
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit'
-        }
-      ).formatToParts(
-        new Date()
-      );
+    const parts = new Intl.DateTimeFormat(
+      'en-CA',
+      {
+        timeZone:'Indian/Reunion',
+        year:'numeric',
+        month:'2-digit',
+        day:'2-digit'
+      }
+    ).formatToParts(new Date());
 
     const values = {};
 
-    parts.forEach(function (part) {
-      values[part.type] =
-        part.value;
+    parts.forEach(part => {
+      values[part.type] = part.value;
     });
 
     return new Date(
@@ -2448,65 +1906,40 @@ footer p {
   async function loadVoyageur() {
     try {
       const response = await fetch(
-        VOYAGEURS_API +
-        '?t=' +
-        Date.now(),
-        { cache: 'no-store' }
+        VOYAGEURS_API + '?t=' + Date.now(),
+        {cache:'no-store'}
       );
 
-      if (!response.ok) {
-        return;
-      }
+      if (!response.ok) return;
 
-      const data =
-        await response.json();
+      const data = await response.json();
 
       const voyageurs =
-        Array.isArray(data)
-          ? data
-          : Array.isArray(data.rows)
-            ? data.rows
-            : Array.isArray(data.data)
-              ? data.data
-              : [];
+        Array.isArray(data) ? data :
+        Array.isArray(data.rows) ? data.rows :
+        Array.isArray(data.data) ? data.data :
+        [];
 
-      const today =
-        reunionToday();
+      const today = reunionToday();
 
-      const actifs =
-        voyageurs.filter(
-          function (voyageur) {
-            if (
-              !sameCottage(
-                voyageur.cottage
-              )
-            ) {
-              return false;
-            }
+      const actifs = voyageurs.filter(voyageur => {
+        if (!sameCottage(voyageur.cottage)) {
+          return false;
+        }
 
-            const arrivee =
-              parseDate(
-                voyageur.arrivee ||
-                voyageur.dateArrivee
-              );
-
-            const depart =
-              parseDate(
-                voyageur.depart ||
-                voyageur.dateDepart
-              );
-
-            return arrivee &&
-                   depart &&
-                   arrivee <= today &&
-                   today <= depart;
-          }
+        const arrivee = parseDate(
+          voyageur.arrivee || voyageur.dateArrivee
         );
 
-      /*
-       * Si aucun voyageur actif,
-       * rétablir l'accueil générique.
-       */
+        const depart = parseDate(
+          voyageur.depart || voyageur.dateDepart
+        );
+
+        return arrivee &&
+          depart &&
+          arrivee <= today &&
+          today <= depart;
+      });
 
       if (!actifs.length) {
         currentGuest = null;
@@ -2515,39 +1948,27 @@ footer p {
         return;
       }
 
-      currentGuest =
-        actifs[actifs.length - 1];
+      currentGuest = actifs[actifs.length - 1];
 
-      const lang =
-        String(
-          currentGuest.langue ||
-          'fr'
-        )
-        .toLowerCase()
-        .substring(0, 2);
+      const lang = String(
+        currentGuest.langue || 'fr'
+      ).toLowerCase().substring(0,2);
 
-      language =
-        translations[lang]
-          ? lang
-          : 'fr';
+      language = translations[lang] ? lang : 'fr';
 
       translatePage();
 
     } catch (error) {
-      /*
-       * L'accueil reste fonctionnel
-       * si l'API est indisponible.
-       */
+      // Le site continue même si l'API est indisponible.
     }
   }
 
   /*
-   * TRADUCTIONS
+   * TRADUCTION DE LA PAGE
    */
 
   function translatePage() {
-    document.documentElement.lang =
-      language;
+    document.documentElement.lang = language;
 
     const ids = [
       'heroEyebrow',
@@ -2604,31 +2025,22 @@ footer p {
       'footerText'
     ];
 
-    ids.forEach(function (id) {
-      setText(id, t(id));
-    });
+    ids.forEach(id => setText(id,t(id)));
 
-    const title =
-      $('heroTitle');
+    const title = $('heroTitle');
 
     title.innerHTML = '';
 
     title.appendChild(
-      document.createTextNode(
-        t('heroTitle')
-      )
+      document.createTextNode(t('heroTitle'))
     );
 
     title.appendChild(
       document.createElement('br')
     );
 
-    const italic =
-      document.createElement('em');
-
-    italic.textContent =
-      t('heroSubtitle');
-
+    const italic = document.createElement('em');
+    italic.textContent = t('heroSubtitle');
     title.appendChild(italic);
 
     setText(
@@ -2638,43 +2050,29 @@ footer p {
         : 'Ptitzabris'
     );
 
-    setText(
-      'stayMessage',
-      t('stayMessage')
-    );
+    setText('stayMessage',t('stayMessage'));
 
     if (currentGuest) {
-      const prenom =
-        String(
-          currentGuest.prenom ||
-          ''
-        ).trim();
+      const prenom = String(
+        currentGuest.prenom || ''
+      ).trim();
 
       if (prenom) {
         title.innerHTML = '';
 
         title.appendChild(
-          document.createTextNode(
-            t('welcome') + ' '
-          )
+          document.createTextNode(t('welcome') + ' ')
         );
 
         title.appendChild(
           document.createElement('br')
         );
 
-        const name =
-          document.createElement('em');
-
-        name.textContent =
-          prenom;
-
+        const name = document.createElement('em');
+        name.textContent = prenom;
         title.appendChild(name);
 
-        setText(
-          'stayMessage',
-          t('guestMessage')
-        );
+        setText('stayMessage',t('guestMessage'));
       }
     }
 
@@ -2687,16 +2085,12 @@ footer p {
    */
 
   function openAdmin() {
-    previousFocus =
-      document.activeElement;
+    previousFocus = document.activeElement;
 
     $('adminPin').value = '';
-
     $('pinError').textContent = '';
 
-    $('adminModal').classList.add(
-      'open'
-    );
+    $('adminModal').classList.add('open');
 
     $('adminModal').setAttribute(
       'aria-hidden',
@@ -2707,9 +2101,7 @@ footer p {
   }
 
   function closeAdmin() {
-    $('adminModal').classList.remove(
-      'open'
-    );
+    $('adminModal').classList.remove('open');
 
     $('adminModal').setAttribute(
       'aria-hidden',
@@ -2718,32 +2110,24 @@ footer p {
 
     if (
       previousFocus &&
-      document.contains(
-        previousFocus
-      )
+      document.contains(previousFocus)
     ) {
       previousFocus.focus();
     }
   }
 
   function confirmAdmin() {
-    const pin =
-      $('adminPin').value.trim();
+    const pin = $('adminPin').value.trim();
 
     if (pin !== ADMIN_PIN) {
-      $('pinError').textContent =
-        'Code incorrect.';
-
+      $('pinError').textContent = 'Code incorrect.';
       $('adminPin').value = '';
-
       $('adminPin').focus();
-
       return;
     }
 
     location.href =
-      'admin.html?gite=' +
-      encodeURIComponent(gite);
+      'admin.html?gite=' + encodeURIComponent(gite);
   }
 
   $('adminButton').addEventListener(
@@ -2763,7 +2147,7 @@ footer p {
 
   $('adminPin').addEventListener(
     'keydown',
-    function (event) {
+    event => {
       if (event.key === 'Enter') {
         confirmAdmin();
       }
@@ -2772,27 +2156,22 @@ footer p {
 
   $('adminModal').addEventListener(
     'click',
-    function (event) {
-      if (
-        event.target ===
-        $('adminModal')
-      ) {
+    event => {
+      if (event.target === $('adminModal')) {
         closeAdmin();
       }
     }
   );
 
   /*
-   * NAVIGATION TÉLÉCOMMANDE
+   * NAVIGATION AVEC LA TÉLÉCOMMANDE
    */
 
   document.addEventListener(
     'keydown',
-    function (event) {
-      const modalOpen =
-        $('adminModal')
-          .classList
-          .contains('open');
+    event => {
+      const modalOpen = $('adminModal')
+        .classList.contains('open');
 
       if (modalOpen) {
         if (
@@ -2800,15 +2179,13 @@ footer p {
           event.key === 'Backspace'
         ) {
           if (
-            event.target.tagName !==
-              'INPUT' ||
+            event.target.tagName !== 'INPUT' ||
             event.key === 'Escape'
           ) {
             event.preventDefault();
             closeAdmin();
           }
         }
-
         return;
       }
 
@@ -2819,37 +2196,27 @@ footer p {
         'ArrowRight'
       ];
 
-      if (
-        !arrows.includes(
-          event.key
+      if (!arrows.includes(event.key)) return;
+
+      const controls = Array.from(
+        document.querySelectorAll(
+          '.top-links a,' +
+          '.top-links button:not(.hidden),' +
+          '.hero-button,' +
+          '.feature-card,' +
+          '.entertainment-card,' +
+          '.launcher-button,' +
+          '.useful-card a'
         )
-      ) {
-        return;
-      }
+      ).filter(element =>
+        element.getClientRects().length > 0
+      );
 
-      const controls =
-        Array.from(
-          document.querySelectorAll(
-            '.top-links a, ' +
-            '.top-links button:not(.hidden), ' +
-            '.hero-button, ' +
-            '.feature-card, ' +
-            '.entertainment-card, ' +
-            '.launcher-button, ' +
-            '.useful-card a'
-          )
-        ).filter(function (element) {
-          return element.getClientRects().length > 0;
-        });
+      if (!controls.length) return;
 
-      if (!controls.length) {
-        return;
-      }
-
-      const current =
-        controls.indexOf(
-          document.activeElement
-        );
+      const current = controls.indexOf(
+        document.activeElement
+      );
 
       if (current < 0) {
         event.preventDefault();
@@ -2863,20 +2230,17 @@ footer p {
           ? -1
           : 1;
 
-      const next =
-        (
-          current +
-          step +
-          controls.length
-        ) % controls.length;
+      const next = (
+        current + step + controls.length
+      ) % controls.length;
 
       event.preventDefault();
 
       controls[next].focus();
 
       controls[next].scrollIntoView({
-        block: 'nearest',
-        behavior: 'smooth'
+        block:'nearest',
+        behavior:'smooth'
       });
     }
   );
@@ -2886,52 +2250,23 @@ footer p {
    */
 
   configureLinks();
-
   translatePage();
-
   configureEntertainment();
 
-  /*
-   * Les deux diaporamas démarrent
-   * indépendamment.
-   */
-
-  startPhotoCarousel(
-    'featureGuide',
-    PHOTO_COLLECTIONS.guide
-  );
-
-  startPhotoCarousel(
-    'featureConseils',
-    PHOTO_COLLECTIONS.conseils
-  );
+  // Trois diaporamas synchronisés, sans flash.
+  startAllSlideshows();
 
   loadWeather();
-
   loadVoyageur();
 
-  /*
-   * Actualisations discrètes,
-   * sans rechargement de page.
-   */
-
-  setInterval(
-    updateClock,
-    30000
-  );
-
-  setInterval(
-    loadWeather,
-    1800000
-  );
-
-  setInterval(
-    loadVoyageur,
-    300000
-  );
+  // Actualisations sans rechargement de page.
+  setInterval(updateClock,30000);
+  setInterval(loadWeather,1800000);
+  setInterval(loadVoyageur,300000);
 
 })();
 </script>
 
 </body>
 </html>
+
