@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -209,9 +210,7 @@ input:focus-visible {
   border-color: rgba(255,255,255,.7);
 }
 
-.hero-button:hover {
-  filter: brightness(1.12);
-}
+.hero-button:hover { filter: brightness(1.12); }
 
 /* MAIN */
 
@@ -273,9 +272,7 @@ main {
   line-height: 1;
 }
 
-.section {
-  margin-top: 48px;
-}
+.section { margin-top: 48px; }
 
 .section-heading {
   text-align: center;
@@ -306,7 +303,7 @@ main {
   margin: auto;
 }
 
-/* MAIN CARDS */
+/* CARTES AVEC PHOTOS CHANGEANTES */
 
 .feature-grid {
   display: grid;
@@ -328,14 +325,26 @@ main {
   isolation: isolate;
 }
 
-.feature-card::before {
-  content: "";
+/*
+ * Deux couches photo permettent un fondu
+ * sans recharger la page.
+ */
+.feature-photo {
   position: absolute;
   inset: 0;
   background-size: cover;
   background-position: center;
-  transition: transform .35s ease;
+  opacity: 0;
+  transition:
+    opacity 2.2s ease-in-out,
+    transform 8s ease;
   z-index: -2;
+  transform: scale(1.025);
+}
+
+.feature-photo.visible {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .feature-card::after {
@@ -344,26 +353,17 @@ main {
   inset: 0;
   background: linear-gradient(
     0deg,
-    rgba(8,23,37,.95),
-    rgba(8,23,37,.25) 70%
+    rgba(8,23,37,.96),
+    rgba(8,23,37,.46) 65%,
+    rgba(8,23,37,.18)
   );
   z-index: -1;
-}
-
-.feature-card:hover::before,
-.feature-card:focus::before {
-  transform: scale(1.05);
-}
-
-.feature-card.conseils::before {
-  background-image: url("images/plage hermitage.jpeg");
-}
-
-.feature-card.guide::before {
-  background-image: url("images/ansedescascade.jpeg");
+  pointer-events: none;
 }
 
 .feature-content {
+  position: relative;
+  z-index: 1;
   padding: 29px;
   width: 100%;
 }
@@ -401,7 +401,170 @@ main {
   color: var(--gold-light);
 }
 
-/* USEFUL INFORMATION */
+/* ESPACE DIVERTISSEMENTS */
+
+.entertainment-section {
+  position: relative;
+  overflow: hidden;
+  margin-top: 52px;
+  border-radius: 23px;
+  background:
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(197,168,128,.2),
+      transparent 40%
+    ),
+    linear-gradient(135deg, #12263a, #23445c);
+  color: white;
+  padding: 38px 30px;
+  box-shadow: var(--shadow);
+}
+
+.entertainment-heading {
+  text-align: center;
+  margin-bottom: 27px;
+}
+
+.entertainment-heading .section-kicker {
+  color: var(--gold-light);
+}
+
+.entertainment-heading h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(30px, 4vw, 43px);
+  font-weight: normal;
+  margin: 12px 0;
+}
+
+.entertainment-heading p {
+  max-width: 740px;
+  margin: 0 auto;
+  color: #e9dcca;
+  line-height: 1.6;
+}
+
+.entertainment-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.entertainment-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+  padding: 23px 12px;
+  border: 1px solid rgba(233,216,185,.25);
+  border-radius: 17px;
+  background: rgba(255,255,255,.09);
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition:
+    background .2s,
+    transform .2s;
+}
+
+.entertainment-card:hover,
+.entertainment-card:focus-visible {
+  background: rgba(255,255,255,.18);
+  transform: translateY(-3px);
+}
+
+.entertainment-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 78px;
+  height: 78px;
+  border-radius: 18px;
+  margin-bottom: 14px;
+  font-weight: bold;
+  font-size: 35px;
+}
+
+.entertainment-icon.netflix {
+  background: #151515;
+  color: #e50914;
+  font-family: Georgia, serif;
+  font-size: 54px;
+}
+
+.entertainment-icon.orange {
+  background: #ff7900;
+  color: white;
+  font-size: 28px;
+}
+
+.entertainment-icon.prime {
+  background: #102a46;
+  color: #8bd7ff;
+  font-size: 25px;
+}
+
+.entertainment-icon.youtube {
+  background: #ff0033;
+  color: white;
+  font-size: 37px;
+}
+
+.entertainment-name {
+  font-size: 19px;
+  font-weight: bold;
+  margin-bottom: 7px;
+}
+
+.entertainment-description {
+  color: #e9dcca;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.entertainment-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.launcher-button {
+  border: 1px solid var(--gold);
+  border-radius: 12px;
+  background: var(--gold);
+  color: var(--navy);
+  font-size: 17px;
+  font-weight: bold;
+  font-family: inherit;
+  padding: 16px 25px;
+  cursor: pointer;
+}
+
+.launcher-button:hover {
+  background: var(--gold-light);
+}
+
+.entertainment-note {
+  text-align: center;
+  color: #e9dcca;
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 20px auto 0;
+  max-width: 800px;
+}
+
+.entertainment-status {
+  min-height: 24px;
+  margin-top: 14px;
+  text-align: center;
+  color: var(--gold-light);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* INFORMATIONS UTILES */
 
 .useful-grid {
   display: grid;
@@ -445,7 +608,7 @@ main {
   font-size: 14px;
 }
 
-/* QR */
+/* QR CODES */
 
 .qr-section {
   background: linear-gradient(
@@ -547,9 +710,7 @@ footer p {
   padding: 18px;
 }
 
-.modal.open {
-  display: flex;
-}
+.modal.open { display: flex; }
 
 .modal-box {
   width: min(420px, 100%);
@@ -622,37 +783,31 @@ footer p {
   .qr-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+
+  .entertainment-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 720px) {
-  .hero {
-    min-height: 540px;
-  }
+  .hero { min-height: 540px; }
 
   .hero-inner {
     padding: 20px 17px 65px;
   }
 
-  .hero-content {
-    padding-top: 65px;
-  }
+  .hero-content { padding-top: 65px; }
 
-  .topbar {
-    align-items: flex-start;
-  }
+  .topbar { align-items: flex-start; }
 
-  .brand-name {
-    font-size: 24px;
-  }
+  .brand-name { font-size: 24px; }
 
   .logo {
     width: 72px;
     height: 72px;
   }
 
-  main {
-    padding: 0 13px 40px;
-  }
+  main { padding: 0 13px 40px; }
 
   .dashboard {
     grid-template-columns: 1fr;
@@ -669,17 +824,17 @@ footer p {
     grid-template-columns: 1fr;
   }
 
-  .feature-card {
-    min-height: 340px;
+  .feature-card { min-height: 340px; }
+
+  .entertainment-section {
+    padding: 30px 16px;
   }
 
   .qr-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .qr-section {
-    padding: 28px 15px;
-  }
+  .qr-section { padding: 28px 15px; }
 }
 
 @media (max-width: 430px) {
@@ -693,12 +848,25 @@ footer p {
     font-size: 13px;
   }
 
-  .hero-buttons {
-    flex-direction: column;
+  .hero-buttons { flex-direction: column; }
+
+  .hero-button { text-align: center; }
+
+  .entertainment-card {
+    min-height: 160px;
+    padding: 16px 8px;
   }
 
-  .hero-button {
-    text-align: center;
+  .entertainment-icon {
+    width: 66px;
+    height: 66px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feature-photo,
+  .entertainment-card {
+    transition: none;
   }
 }
 </style>
@@ -879,6 +1047,9 @@ footer p {
         class="feature-card guide"
         href="guide.html">
 
+        <span class="feature-photo visible" aria-hidden="true"></span>
+        <span class="feature-photo" aria-hidden="true"></span>
+
         <div class="feature-content">
           <span
             class="feature-tag"
@@ -909,6 +1080,9 @@ footer p {
         class="feature-card conseils"
         href="conseils.html">
 
+        <span class="feature-photo visible" aria-hidden="true"></span>
+        <span class="feature-photo" aria-hidden="true"></span>
+
         <div class="feature-content">
           <span
             class="feature-tag"
@@ -937,6 +1111,142 @@ footer p {
     </div>
   </section>
 
+  <!-- ESPACE TV -->
+
+  <section
+    class="entertainment-section"
+    id="divertissements">
+
+    <div class="entertainment-heading">
+      <div
+        class="section-kicker"
+        id="entertainmentKicker">
+        Votre espace détente
+      </div>
+
+      <h2 id="entertainmentTitle">
+        Vos divertissements
+      </h2>
+
+      <p id="entertainmentIntro">
+        Installez-vous confortablement et
+        profitez de vos programmes préférés.
+      </p>
+    </div>
+
+    <div class="entertainment-grid">
+
+      <button
+        class="entertainment-card"
+        type="button"
+        data-app="netflix">
+
+        <span class="entertainment-icon netflix">
+          N
+        </span>
+
+        <span class="entertainment-name">
+          Netflix
+        </span>
+
+        <span
+          class="entertainment-description"
+          id="netflixDescription">
+          Avec votre compte personnel
+        </span>
+      </button>
+
+      <button
+        class="entertainment-card"
+        type="button"
+        data-app="orange">
+
+        <span class="entertainment-icon orange">
+          TV
+        </span>
+
+        <span class="entertainment-name">
+          Orange TV
+        </span>
+
+        <span
+          class="entertainment-description"
+          id="orangeDescription">
+          Vos chaînes de télévision
+        </span>
+      </button>
+
+      <button
+        class="entertainment-card"
+        type="button"
+        data-app="prime">
+
+        <span class="entertainment-icon prime">
+          prime
+        </span>
+
+        <span class="entertainment-name">
+          Prime Video
+        </span>
+
+        <span
+          class="entertainment-description"
+          id="primeDescription">
+          Avec votre compte personnel
+        </span>
+      </button>
+
+      <button
+        class="entertainment-card"
+        type="button"
+        data-app="youtube">
+
+        <span class="entertainment-icon youtube">
+          ▶
+        </span>
+
+        <span class="entertainment-name">
+          YouTube
+        </span>
+
+        <span
+          class="entertainment-description"
+          id="youtubeDescription">
+          Vidéos et découvertes
+        </span>
+      </button>
+
+    </div>
+
+    <div class="entertainment-actions">
+      <button
+        class="launcher-button"
+        id="openLauncher"
+        type="button">
+        📺 Ouvrir toutes les applications
+      </button>
+    </div>
+
+    <div
+      class="entertainment-status"
+      id="entertainmentStatus"
+      role="status"
+      aria-live="polite">
+    </div>
+
+    <p
+      class="entertainment-note"
+      id="entertainmentNote">
+      Netflix et Prime Video :
+      utilisez vos propres identifiants
+      et pensez à vous déconnecter avant
+      votre départ.
+    </p>
+
+  </section>
+
+  <!-- INFORMATIONS PRATIQUES -->
+
   <section class="section">
 
     <div class="section-heading">
@@ -963,9 +1273,10 @@ footer p {
           Retrouvez les informations
           de connexion dans le guide du gîte.
         </p>
-        <a class="guide-shortcut"
-           href="guide.html"
-           id="wifiLink">
+        <a
+          class="guide-shortcut"
+          href="guide.html"
+          id="wifiLink">
           Voir le guide →
         </a>
       </div>
@@ -979,9 +1290,10 @@ footer p {
           Équipements, consignes et
           bonnes pratiques de la maison.
         </p>
-        <a class="guide-shortcut"
-           href="guide.html"
-           id="rulesLink">
+        <a
+          class="guide-shortcut"
+          href="guide.html"
+          id="rulesLink">
           Voir les informations →
         </a>
       </div>
@@ -995,9 +1307,10 @@ footer p {
           Les consignes pour respecter
           notre belle île.
         </p>
-        <a class="guide-shortcut"
-           href="guide.html"
-           id="sortingLink">
+        <a
+          class="guide-shortcut"
+          href="guide.html"
+          id="sortingLink">
           Voir les consignes →
         </a>
       </div>
@@ -1020,6 +1333,8 @@ footer p {
 
     </div>
   </section>
+
+  <!-- QR CODES -->
 
   <section class="qr-section">
     <h2 id="qrSectionTitle">
@@ -1082,6 +1397,8 @@ footer p {
   </p>
 </footer>
 
+<!-- ACCÈS ADMIN -->
+
 <div
   id="adminModal"
   class="modal"
@@ -1138,7 +1455,7 @@ footer p {
 
   /*
    * LES OZABRIS
-   * PAGE D'ACCUEIL
+   * ACCUEIL + DIAPORAMAS + DIVERTISSEMENTS
    */
 
   const ADMIN_PIN = '140769';
@@ -1148,10 +1465,6 @@ footer p {
     'AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq' +
     '/exec';
 
-  /*
-   * Météo indicative pour Saint-Paul.
-   * Données fournies par Open-Meteo.
-   */
   const WEATHER_API =
     'https://api.open-meteo.com/v1/forecast' +
     '?latitude=-21.01' +
@@ -1159,12 +1472,14 @@ footer p {
     '&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m' +
     '&timezone=Indian%2FReunion';
 
-  /*
-   * Si tes PDF sont stockés ailleurs,
-   * remplace leurs adresses ici.
-   * Par défaut, les QR codes renvoient
-   * vers le guide qui contient les consignes.
-   */
+  const SANIBROYEUR_PDF =
+    'https://1drv.ms/b/c/b302293c3a107d46/' +
+    'IQDKMy1gsI-VT57f-TffvFLZAYGZgWF8Su3TW7D9aAyesKE';
+
+  const TRI_PDF =
+    'https://1drv.ms/b/c/b302293c3a107d46/' +
+    'IQDZPE7hVWyzR6Je11v5GxJpAQHKVJVyvyy-wpi8A10WimU';
+
   const params =
     new URLSearchParams(location.search);
 
@@ -1182,6 +1497,54 @@ footer p {
   let language = 'fr';
   let currentGuest = null;
   let previousFocus = null;
+  let weatherData = null;
+
+  /*
+   * PHOTOS CHANGEANTES
+   *
+   * Ajouter les fichiers dans le dossier images.
+   *
+   * Chaque encadré possède sa propre liste.
+   * Pour ajouter une photo ultérieurement :
+   * ajouter simplement son chemin à la liste.
+   *
+   * Les photos manquantes sont ignorées.
+   */
+
+  const PHOTO_INTERVAL = 30000;
+
+  const PHOTO_COLLECTIONS = {
+    guide: [
+      'images/flamboyant.jpeg',
+      'images/jacaranda.jpeg',
+      'images/ansedescascade.jpeg'
+    ],
+
+    conseils: [
+      'images/jacaranda.jpeg',
+      'images/flamboyant.jpeg',
+      'images/plage hermitage.jpeg'
+    ]
+  };
+
+  /*
+   * IDENTIFIANTS ANDROID
+   *
+   * Ils correspondent aux applications
+   * visibles dans Universal Launcher
+   * sur la Xiaomi du Grandzabris.
+   */
+
+  const ANDROID_APPS = {
+    netflix: 'com.netflix.ninja',
+    orange: 'com.orange.owtv.tv',
+    prime: 'com.amazon.amazonvideo.livingroom',
+    youtube: 'com.google.android.youtube.tv'
+  };
+
+  /*
+   * TRADUCTIONS
+   */
 
   const translations = {
     fr: {
@@ -1214,6 +1577,21 @@ footer p {
       conseilsDescription:
         'Plages, paysages, commerces, balades et expériences à découvrir autour de votre gîte.',
       conseilsArrow: 'Explorer nos conseils →',
+      entertainmentKicker: 'Votre espace détente',
+      entertainmentTitle: 'Vos divertissements',
+      entertainmentIntro:
+        'Installez-vous confortablement et profitez de vos programmes préférés.',
+      netflixDescription: 'Avec votre compte personnel',
+      orangeDescription: 'Vos chaînes de télévision',
+      primeDescription: 'Avec votre compte personnel',
+      youtubeDescription: 'Vidéos et découvertes',
+      openLauncher: '📺 Ouvrir toutes les applications',
+      entertainmentNote:
+        'Netflix et Prime Video : utilisez vos propres identifiants et pensez à vous déconnecter avant votre départ.',
+      launcherUnavailable:
+        'Cette fonction est réservée aux télévisions équipées de Fully Kiosk.',
+      launcherAttempt:
+        'Ouverture demandée. Si rien ne se passe, le lancement des applications devra être autorisé dans Fully Kiosk.',
       practicalKicker: 'Les essentiels',
       practicalTitle: 'Pour un séjour sans souci',
       practicalText:
@@ -1284,6 +1662,21 @@ footer p {
       conseilsDescription:
         'Beaches, landscapes, shops, walks and experiences around your cottage.',
       conseilsArrow: 'Discover our tips →',
+      entertainmentKicker: 'Time to relax',
+      entertainmentTitle: 'Your entertainment',
+      entertainmentIntro:
+        'Make yourself comfortable and enjoy your favourite shows.',
+      netflixDescription: 'Use your own account',
+      orangeDescription: 'Live television channels',
+      primeDescription: 'Use your own account',
+      youtubeDescription: 'Videos and discoveries',
+      openLauncher: '📺 Open all TV apps',
+      entertainmentNote:
+        'For Netflix and Prime Video, use your own account and remember to sign out before departure.',
+      launcherUnavailable:
+        'This feature is available on TVs equipped with Fully Kiosk.',
+      launcherAttempt:
+        'Opening requested. If nothing happens, app launching must be enabled in Fully Kiosk.',
       practicalKicker: 'Essentials',
       practicalTitle: 'Everything for a great stay',
       practicalText:
@@ -1354,6 +1747,21 @@ footer p {
       conseilsDescription:
         'Strände, Landschaften, Geschäfte und Ausflüge rund um Ihre Unterkunft.',
       conseilsArrow: 'Empfehlungen entdecken →',
+      entertainmentKicker: 'Zeit zum Entspannen',
+      entertainmentTitle: 'Ihre Unterhaltung',
+      entertainmentIntro:
+        'Machen Sie es sich bequem und genießen Sie Ihre Lieblingssendungen.',
+      netflixDescription: 'Mit Ihrem eigenen Konto',
+      orangeDescription: 'Fernsehsender',
+      primeDescription: 'Mit Ihrem eigenen Konto',
+      youtubeDescription: 'Videos und Entdeckungen',
+      openLauncher: '📺 Alle TV-Apps öffnen',
+      entertainmentNote:
+        'Bitte verwenden Sie für Netflix und Prime Video Ihr eigenes Konto und melden Sie sich vor der Abreise ab.',
+      launcherUnavailable:
+        'Diese Funktion ist auf Fernsehern mit Fully Kiosk verfügbar.',
+      launcherAttempt:
+        'Öffnen angefordert. Falls nichts passiert, muss der App-Start in Fully Kiosk erlaubt werden.',
       practicalKicker: 'Das Wichtigste',
       practicalTitle: 'Für einen entspannten Aufenthalt',
       practicalText:
@@ -1415,23 +1823,33 @@ footer p {
       (includeTV && isTV ? '&tv=1' : '');
   }
 
-  function configureLinks() {
-    const homeUrl =
-      'index.html' + suffix(true);
+  /*
+   * LIENS ET QR CODES
+   */
 
+  function configureLinks() {
     const guideUrl =
       'guide.html' + suffix(true);
 
     const conseilsUrl =
       'conseils.html' + suffix(true);
 
-    ['topGuide', 'heroGuide', 'featureGuide'].forEach(
-      id => $(id).href = guideUrl
-    );
+    [
+      'topGuide',
+      'heroGuide',
+      'featureGuide'
+    ].forEach(function (id) {
+      $(id).href = guideUrl;
+    });
 
-    ['topConseils', 'heroConseils', 'featureConseils', 'islandLink'].forEach(
-      id => $(id).href = conseilsUrl
-    );
+    [
+      'topConseils',
+      'heroConseils',
+      'featureConseils',
+      'islandLink'
+    ].forEach(function (id) {
+      $(id).href = conseilsUrl;
+    });
 
     document.querySelectorAll(
       '.guide-shortcut'
@@ -1443,14 +1861,11 @@ footer p {
       $('adminButton').classList.add('hidden');
     }
 
-    /*
-     * QR codes pour les téléphones.
-     * Les liens n'incluent pas tv=1.
-     */
     createQr(
       'qrHome',
-      location.origin + location.pathname +
-        suffix(false)
+      location.origin +
+      location.pathname +
+      suffix(false)
     );
 
     createQr(
@@ -1469,38 +1884,30 @@ footer p {
       ).href
     );
 
-    /*
-     * QR vers les consignes du guide.
-     * Les PDF existants pourront être
-     * rebranchés ici si leurs URL sont connues.
-     */
     createQr(
       'qrSanibroyeur',
-      new URL(
-        'guide.html' + suffix(false),
-        location.href
-      ).href
+      SANIBROYEUR_PDF
     );
 
     createQr(
       'qrTri',
-      new URL(
-        'guide.html' + suffix(false),
-        location.href
-      ).href
+      TRI_PDF
     );
   }
 
   function createQr(id, url) {
     const container = $(id);
+
     container.innerHTML = '';
 
     if (typeof QRCode === 'undefined') {
       const link = document.createElement('a');
+
       link.href = url;
       link.textContent = 'Ouvrir';
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
+
       container.appendChild(link);
       return;
     }
@@ -1516,7 +1923,276 @@ footer p {
   }
 
   /*
-   * HORLOGE DE LA REUNION
+   * DIAPORAMA DES ENCARTS
+   *
+   * Les images sont préchargées avant
+   * chaque transition pour éviter
+   * les flashs sur les télévisions.
+   *
+   * Aucun rechargement de page.
+   */
+
+  function preloadPhoto(url) {
+    return new Promise(function (resolve) {
+      const image = new Image();
+
+      image.onload = function () {
+        resolve(true);
+      };
+
+      image.onerror = function () {
+        resolve(false);
+      };
+
+      image.src = url;
+    });
+  }
+
+  function startPhotoCarousel(cardId, photoList) {
+    const card = $(cardId);
+
+    if (!card) {
+      return;
+    }
+
+    const layers =
+      card.querySelectorAll('.feature-photo');
+
+    if (layers.length !== 2) {
+      return;
+    }
+
+    let activeLayer = 0;
+    let currentIndex = 0;
+    let transitioning = false;
+
+    const availablePhotos = [];
+
+    /*
+     * Affichage immédiat d'une photo
+     * déjà présente dans le dépôt.
+     * Elle sert de secours si les
+     * nouvelles images sont absentes.
+     */
+
+    const fallback =
+      cardId === 'featureGuide'
+        ? 'images/ansedescascade.jpeg'
+        : 'images/plage hermitage.jpeg';
+
+    layers[0].style.backgroundImage =
+      'url("' + fallback + '")';
+
+    layers[0].classList.add('visible');
+
+    layers[1].classList.remove('visible');
+
+    async function preparePhotos() {
+      for (const url of photoList) {
+        const valid = await preloadPhoto(url);
+
+        if (valid) {
+          availablePhotos.push(url);
+        }
+      }
+
+      if (!availablePhotos.length) {
+        return;
+      }
+
+      /*
+       * La première photo de la liste
+       * devient le fond initial.
+       */
+
+      layers[0].style.backgroundImage =
+        'url("' + availablePhotos[0] + '")';
+
+      currentIndex = 0;
+
+      if (availablePhotos.length > 1) {
+        setInterval(
+          nextPhoto,
+          PHOTO_INTERVAL
+        );
+      }
+    }
+
+    async function nextPhoto() {
+      if (
+        transitioning ||
+        document.hidden ||
+        availablePhotos.length < 2
+      ) {
+        return;
+      }
+
+      transitioning = true;
+
+      const nextIndex =
+        (currentIndex + 1) %
+        availablePhotos.length;
+
+      const url =
+        availablePhotos[nextIndex];
+
+      const loaded =
+        await preloadPhoto(url);
+
+      if (!loaded) {
+        transitioning = false;
+        return;
+      }
+
+      const nextLayer =
+        activeLayer === 0 ? 1 : 0;
+
+      layers[nextLayer].style.backgroundImage =
+        'url("' + url + '")';
+
+      /*
+       * Déclenchement du fondu
+       * après la mise à jour du fond.
+       */
+
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          layers[nextLayer].classList.add(
+            'visible'
+          );
+
+          layers[activeLayer].classList.remove(
+            'visible'
+          );
+
+          activeLayer = nextLayer;
+          currentIndex = nextIndex;
+          transitioning = false;
+        });
+      });
+    }
+
+    preparePhotos();
+  }
+
+  /*
+   * APPLICATIONS TV
+   *
+   * Le lanceur est configuré dans
+   * Fully Kiosk sur la box Android.
+   *
+   * L'ouverture d'applications via
+   * une page web dépend des autorisations
+   * Android et Fully Kiosk.
+   *
+   * On utilise ici l'adresse interne
+   * fully://launcher, à tester en Kiosk.
+   */
+
+  function isLikelyFullyKiosk() {
+    const ua = navigator.userAgent || '';
+
+    return /Fully/i.test(ua) ||
+           /FullyKiosk/i.test(ua);
+  }
+
+  function isAndroidDevice() {
+    return /Android/i.test(
+      navigator.userAgent || ''
+    );
+  }
+
+  function setEntertainmentStatus(message) {
+    setText(
+      'entertainmentStatus',
+      message
+    );
+  }
+
+  function openUniversalLauncher() {
+    /*
+     * Sur iPhone et ordinateur,
+     * ne pas tenter de lancer
+     * un protocole Android.
+     */
+
+    if (!isAndroidDevice()) {
+      setEntertainmentStatus(
+        t('launcherUnavailable')
+      );
+
+      return;
+    }
+
+    setEntertainmentStatus(
+      t('launcherAttempt')
+    );
+
+    /*
+     * Adresse interne documentée
+     * du lanceur Fully Kiosk.
+     *
+     * Le résultat doit être validé
+     * sur chaque box.
+     */
+
+    try {
+      window.location.href =
+        'fully://launcher';
+    } catch (error) {
+      setEntertainmentStatus(
+        t('launcherUnavailable')
+      );
+    }
+  }
+
+  function openTVApplication(appName) {
+    const packageName =
+      ANDROID_APPS[appName];
+
+    if (!packageName) {
+      return;
+    }
+
+    /*
+     * Pour la première version,
+     * les quatre cartes ouvrent
+     * le lanceur déjà configuré.
+     *
+     * Cela évite de supposer
+     * que Fully Kiosk accepte
+     * les liens Android directs.
+     *
+     * Les identifiants d'applications
+     * sont conservés ci-dessus
+     * pour une évolution future.
+     */
+
+    openUniversalLauncher();
+  }
+
+  function configureEntertainment() {
+    document.querySelectorAll(
+      '[data-app]'
+    ).forEach(function (button) {
+      button.addEventListener(
+        'click',
+        function () {
+          openTVApplication(
+            button.dataset.app
+          );
+        }
+      );
+    });
+
+    $('openLauncher').addEventListener(
+      'click',
+      openUniversalLauncher
+    );
+  }
+
+  /*
+   * HORLOGE DE LA RÉUNION
    */
 
   function updateClock() {
@@ -1545,37 +2221,60 @@ footer p {
       }).format(now);
 
     setText('localDate', dateText);
-    setText('localTime', timeText + ' · UTC+4');
+    setText(
+      'localTime',
+      timeText + ' · UTC+4'
+    );
   }
 
   /*
-   * METEO OPEN-METEO
+   * MÉTÉO OPEN-METEO
    */
 
   function weatherAppearance(code) {
     if (code === 0) {
-      return ['☀️', t('weatherClear')];
-    }
-
-    if ([1, 2, 3, 45, 48].includes(code)) {
-      return ['🌤️', t('weatherCloud')];
-    }
-
-    if ([95, 96, 99].includes(code)) {
-      return ['⛈️', t('weatherStorm')];
+      return [
+        '☀️',
+        t('weatherClear')
+      ];
     }
 
     if (
-      [51, 53, 55, 56, 57, 61, 63, 65,
-       66, 67, 80, 81, 82].includes(code)
+      [1, 2, 3, 45, 48].includes(code)
     ) {
-      return ['🌧️', t('weatherRain')];
+      return [
+        '🌤️',
+        t('weatherCloud')
+      ];
     }
 
-    return ['🌦️', t('weatherOther')];
-  }
+    if (
+      [95, 96, 99].includes(code)
+    ) {
+      return [
+        '⛈️',
+        t('weatherStorm')
+      ];
+    }
 
-  let weatherData = null;
+    if (
+      [
+        51, 53, 55, 56, 57,
+        61, 63, 65, 66, 67,
+        80, 81, 82
+      ].includes(code)
+    ) {
+      return [
+        '🌧️',
+        t('weatherRain')
+      ];
+    }
+
+    return [
+      '🌦️',
+      t('weatherOther')
+    ];
+  }
 
   function renderWeather() {
     if (!weatherData) {
@@ -1583,6 +2282,7 @@ footer p {
         'weatherDescription',
         t('weatherLoading')
       );
+
       return;
     }
 
@@ -1600,7 +2300,9 @@ footer p {
 
     setText(
       'temperature',
-      Math.round(current.temperature_2m) + '°C'
+      Math.round(
+        current.temperature_2m
+      ) + '°C'
     );
 
     setText(
@@ -1608,16 +2310,15 @@ footer p {
       appearance[1]
     );
 
-    const humidity =
-      current.relative_humidity_2m;
-
-    const wind =
-      current.wind_speed_10m;
-
     setText(
       'weatherExtra',
-      t('humidity') + ' : ' + humidity + '% · ' +
-      t('wind') + ' : ' + Math.round(wind) + ' km/h'
+      t('humidity') + ' : ' +
+      current.relative_humidity_2m +
+      '% · ' +
+      t('wind') + ' : ' +
+      Math.round(
+        current.wind_speed_10m
+      ) + ' km/h'
     );
   }
 
@@ -1629,16 +2330,22 @@ footer p {
       );
 
       if (!response.ok) {
-        throw new Error('Weather HTTP error');
+        throw new Error(
+          'Weather HTTP error'
+        );
       }
 
-      const data = await response.json();
+      const data =
+        await response.json();
 
       if (!data.current) {
-        throw new Error('Missing weather data');
+        throw new Error(
+          'Missing weather data'
+        );
       }
 
       weatherData = data.current;
+
       renderWeather();
 
     } catch (error) {
@@ -1648,8 +2355,15 @@ footer p {
           t('weatherUnavailable')
         );
 
-        setText('temperature', '—');
-        setText('weatherExtra', '');
+        setText(
+          'temperature',
+          '—'
+        );
+
+        setText(
+          'weatherExtra',
+          ''
+        );
       }
     }
   }
@@ -1662,12 +2376,20 @@ footer p {
     return String(value || '')
       .toLowerCase()
       .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/\s+/g, '');
+      .replace(
+        /[\u0300-\u036f]/g,
+        ''
+      )
+      .replace(
+        /\s+/g,
+        ''
+      );
   }
 
   function sameCottage(value) {
-    return normalize(value).includes(gite);
+    return normalize(value).includes(
+      gite
+    );
   }
 
   function parseDate(value) {
@@ -1675,9 +2397,10 @@ footer p {
       return null;
     }
 
-    const match = String(value).match(
-      /^(\d{4})-(\d{2})-(\d{2})/
-    );
+    const match =
+      String(value).match(
+        /^(\d{4})-(\d{2})-(\d{2})/
+      );
 
     if (match) {
       return new Date(
@@ -1689,23 +2412,30 @@ footer p {
 
     const date = new Date(value);
 
-    return isNaN(date.getTime())
-      ? null : date;
+    return isNaN(
+      date.getTime()
+    ) ? null : date;
   }
 
   function reunionToday() {
     const parts =
-      new Intl.DateTimeFormat('en-CA', {
-        timeZone: 'Indian/Reunion',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-      }).formatToParts(new Date());
+      new Intl.DateTimeFormat(
+        'en-CA',
+        {
+          timeZone: 'Indian/Reunion',
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit'
+        }
+      ).formatToParts(
+        new Date()
+      );
 
     const values = {};
 
     parts.forEach(function (part) {
-      values[part.type] = part.value;
+      values[part.type] =
+        part.value;
     });
 
     return new Date(
@@ -1718,7 +2448,9 @@ footer p {
   async function loadVoyageur() {
     try {
       const response = await fetch(
-        VOYAGEURS_API + '?t=' + Date.now(),
+        VOYAGEURS_API +
+        '?t=' +
+        Date.now(),
         { cache: 'no-store' }
       );
 
@@ -1726,7 +2458,8 @@ footer p {
         return;
       }
 
-      const data = await response.json();
+      const data =
+        await response.json();
 
       const voyageurs =
         Array.isArray(data)
@@ -1737,50 +2470,74 @@ footer p {
               ? data.data
               : [];
 
-      const today = reunionToday();
+      const today =
+        reunionToday();
 
-      const actifs = voyageurs.filter(
-        function (voyageur) {
-          if (!sameCottage(voyageur.cottage)) {
-            return false;
+      const actifs =
+        voyageurs.filter(
+          function (voyageur) {
+            if (
+              !sameCottage(
+                voyageur.cottage
+              )
+            ) {
+              return false;
+            }
+
+            const arrivee =
+              parseDate(
+                voyageur.arrivee ||
+                voyageur.dateArrivee
+              );
+
+            const depart =
+              parseDate(
+                voyageur.depart ||
+                voyageur.dateDepart
+              );
+
+            return arrivee &&
+                   depart &&
+                   arrivee <= today &&
+                   today <= depart;
           }
+        );
 
-          const arrivee = parseDate(
-            voyageur.arrivee ||
-            voyageur.dateArrivee
-          );
-
-          const depart = parseDate(
-            voyageur.depart ||
-            voyageur.dateDepart
-          );
-
-          return arrivee &&
-                 depart &&
-                 arrivee <= today &&
-                 today <= depart;
-        }
-      );
+      /*
+       * Si aucun voyageur actif,
+       * rétablir l'accueil générique.
+       */
 
       if (!actifs.length) {
+        currentGuest = null;
+        language = 'fr';
+        translatePage();
         return;
       }
 
       currentGuest =
         actifs[actifs.length - 1];
 
-      const lang = String(
-        currentGuest.langue || 'fr'
-      ).toLowerCase().substring(0, 2);
+      const lang =
+        String(
+          currentGuest.langue ||
+          'fr'
+        )
+        .toLowerCase()
+        .substring(0, 2);
 
       language =
-        translations[lang] ? lang : 'fr';
+        translations[lang]
+          ? lang
+          : 'fr';
 
       translatePage();
 
     } catch (error) {
-      // L'accueil reste fonctionnel
-      // si les voyageurs sont indisponibles.
+      /*
+       * L'accueil reste fonctionnel
+       * si l'API est indisponible.
+       */
     }
   }
 
@@ -1789,7 +2546,8 @@ footer p {
    */
 
   function translatePage() {
-    document.documentElement.lang = language;
+    document.documentElement.lang =
+      language;
 
     const ids = [
       'heroEyebrow',
@@ -1812,6 +2570,15 @@ footer p {
       'conseilsTitle',
       'conseilsDescription',
       'conseilsArrow',
+      'entertainmentKicker',
+      'entertainmentTitle',
+      'entertainmentIntro',
+      'netflixDescription',
+      'orangeDescription',
+      'primeDescription',
+      'youtubeDescription',
+      'openLauncher',
+      'entertainmentNote',
       'practicalKicker',
       'practicalTitle',
       'practicalText',
@@ -1841,16 +2608,20 @@ footer p {
       setText(id, t(id));
     });
 
-    const title = $('heroTitle');
+    const title =
+      $('heroTitle');
+
     title.innerHTML = '';
 
-    const firstLine =
+    title.appendChild(
       document.createTextNode(
         t('heroTitle')
-      );
+      )
+    );
 
-    const breakLine =
-      document.createElement('br');
+    title.appendChild(
+      document.createElement('br')
+    );
 
     const italic =
       document.createElement('em');
@@ -1858,8 +2629,6 @@ footer p {
     italic.textContent =
       t('heroSubtitle');
 
-    title.appendChild(firstLine);
-    title.appendChild(breakLine);
     title.appendChild(italic);
 
     setText(
@@ -1876,7 +2645,10 @@ footer p {
 
     if (currentGuest) {
       const prenom =
-        String(currentGuest.prenom || '').trim();
+        String(
+          currentGuest.prenom ||
+          ''
+        ).trim();
 
       if (prenom) {
         title.innerHTML = '';
@@ -1887,15 +2659,16 @@ footer p {
           )
         );
 
-        const br =
-          document.createElement('br');
+        title.appendChild(
+          document.createElement('br')
+        );
 
         const name =
           document.createElement('em');
 
-        name.textContent = prenom;
+        name.textContent =
+          prenom;
 
-        title.appendChild(br);
         title.appendChild(name);
 
         setText(
@@ -1910,16 +2683,20 @@ footer p {
   }
 
   /*
-   * ACCES ADMIN
+   * ACCÈS ADMIN
    */
 
   function openAdmin() {
-    previousFocus = document.activeElement;
+    previousFocus =
+      document.activeElement;
 
     $('adminPin').value = '';
+
     $('pinError').textContent = '';
 
-    $('adminModal').classList.add('open');
+    $('adminModal').classList.add(
+      'open'
+    );
 
     $('adminModal').setAttribute(
       'aria-hidden',
@@ -1930,7 +2707,9 @@ footer p {
   }
 
   function closeAdmin() {
-    $('adminModal').classList.remove('open');
+    $('adminModal').classList.remove(
+      'open'
+    );
 
     $('adminModal').setAttribute(
       'aria-hidden',
@@ -1939,7 +2718,9 @@ footer p {
 
     if (
       previousFocus &&
-      document.contains(previousFocus)
+      document.contains(
+        previousFocus
+      )
     ) {
       previousFocus.focus();
     }
@@ -1952,8 +2733,11 @@ footer p {
     if (pin !== ADMIN_PIN) {
       $('pinError').textContent =
         'Code incorrect.';
+
       $('adminPin').value = '';
+
       $('adminPin').focus();
+
       return;
     }
 
@@ -1990,7 +2774,8 @@ footer p {
     'click',
     function (event) {
       if (
-        event.target === $('adminModal')
+        event.target ===
+        $('adminModal')
       ) {
         closeAdmin();
       }
@@ -1998,16 +2783,16 @@ footer p {
   );
 
   /*
-   * NAVIGATION TELECOMMANDE
+   * NAVIGATION TÉLÉCOMMANDE
    */
 
   document.addEventListener(
     'keydown',
     function (event) {
       const modalOpen =
-        $('adminModal').classList.contains(
-          'open'
-        );
+        $('adminModal')
+          .classList
+          .contains('open');
 
       if (modalOpen) {
         if (
@@ -2015,7 +2800,8 @@ footer p {
           event.key === 'Backspace'
         ) {
           if (
-            event.target.tagName !== 'INPUT' ||
+            event.target.tagName !==
+              'INPUT' ||
             event.key === 'Escape'
           ) {
             event.preventDefault();
@@ -2033,7 +2819,11 @@ footer p {
         'ArrowRight'
       ];
 
-      if (!arrows.includes(event.key)) {
+      if (
+        !arrows.includes(
+          event.key
+        )
+      ) {
         return;
       }
 
@@ -2044,9 +2834,13 @@ footer p {
             '.top-links button:not(.hidden), ' +
             '.hero-button, ' +
             '.feature-card, ' +
+            '.entertainment-card, ' +
+            '.launcher-button, ' +
             '.useful-card a'
           )
-        );
+        ).filter(function (element) {
+          return element.getClientRects().length > 0;
+        });
 
       if (!controls.length) {
         return;
@@ -2066,37 +2860,75 @@ footer p {
       const step =
         event.key === 'ArrowUp' ||
         event.key === 'ArrowLeft'
-          ? -1 : 1;
+          ? -1
+          : 1;
 
       const next =
-        (current + step + controls.length) %
-        controls.length;
+        (
+          current +
+          step +
+          controls.length
+        ) % controls.length;
 
       event.preventDefault();
+
       controls[next].focus();
+
+      controls[next].scrollIntoView({
+        block: 'nearest',
+        behavior: 'smooth'
+      });
     }
   );
 
   /*
-   * DEMARRAGE
+   * DÉMARRAGE
    */
 
   configureLinks();
+
   translatePage();
+
+  configureEntertainment();
+
+  /*
+   * Les deux diaporamas démarrent
+   * indépendamment.
+   */
+
+  startPhotoCarousel(
+    'featureGuide',
+    PHOTO_COLLECTIONS.guide
+  );
+
+  startPhotoCarousel(
+    'featureConseils',
+    PHOTO_COLLECTIONS.conseils
+  );
+
   loadWeather();
+
   loadVoyageur();
 
   /*
-   * L'horloge évolue sans recharger
-   * ni faire scintiller la page.
+   * Actualisations discrètes,
+   * sans rechargement de page.
    */
-  setInterval(updateClock, 30000);
 
-  /*
-   * La météo se met à jour discrètement,
-   * sans reconstruire les cartes.
-   */
-  setInterval(loadWeather, 1800000);
+  setInterval(
+    updateClock,
+    30000
+  );
+
+  setInterval(
+    loadWeather,
+    1800000
+  );
+
+  setInterval(
+    loadVoyageur,
+    300000
+  );
 
 })();
 </script>
