@@ -397,10 +397,6 @@
 (function () {
   'use strict';
 
-  /*
-   * CONFIGURATION OZABRIS
-   * Code Admin intégré directement.
-   */
   const ADMIN_PIN = '140769';
 
   const API_URL =
@@ -412,6 +408,8 @@
     'ptitzabris',
     'grandzabris'
   ];
+
+  const LOGO = 'images/logo.jpeg';
 
   const selectGite =
     document.getElementById('admin-select-gite');
@@ -432,9 +430,6 @@
   let operationEnCours = false;
   let chargementNumero = 0;
 
-  /*
-   * GITE INITIAL
-   */
   const params =
     new URLSearchParams(window.location.search);
 
@@ -469,9 +464,6 @@
     );
   }
 
-  /*
-   * MESSAGES
-   */
   function afficherMessage(texte, type) {
     message.textContent = texte;
 
@@ -496,8 +488,66 @@
   }
 
   /*
+   * PHOTOS
+   *
+   * Ordre de priorité :
+   * 1. Nouvelle photo Google Drive
+   * 2. Ancienne photo Postimages
+   * 3. Logo Ozabris
+   */
+
+  function sourcePhoto(conseil) {
+    const photoDrive =
+      String(conseil.photoDrive || '').trim();
+
+    const anciennePhoto =
+      String(conseil.imgLegacy || '').trim();
+
+    const photoPrincipale =
+      String(conseil.img || '').trim();
+
+    const sources = [];
+
+    function ajouter(url) {
+      if (
+        url &&
+        url !== LOGO &&
+        !sources.includes(url)
+      ) {
+        sources.push(url);
+      }
+    }
+
+    ajouter(photoDrive);
+    ajouter(anciennePhoto);
+    ajouter(photoPrincipale);
+    ajouter(LOGO);
+
+    return sources;
+  }
+
+  function installerPhoto(element, conseil) {
+    const sources = sourcePhoto(conseil);
+    let position = 0;
+
+    element.onerror = function () {
+      position++;
+
+      if (position < sources.length) {
+        element.src = sources[position];
+      } else {
+        element.onerror = null;
+        element.src = LOGO;
+      }
+    };
+
+    element.src = sources[0] || LOGO;
+  }
+
+  /*
    * LECTURE DES CONSEILS
    */
+
   async function chargerConseils(silencieux) {
     if (operationEnCours) {
       return;
@@ -580,9 +630,6 @@
     }
   }
 
-  /*
-   * ETAT D'UNE RECOMMANDATION
-   */
   function estActive(conseil, gite) {
     if (gite === 'ptitzabris') {
       return conseil.activePtit === true;
@@ -605,6 +652,7 @@
   /*
    * CARTES DES RECOMMANDATIONS
    */
+
   function construireListe() {
     liste.innerHTML = '';
 
@@ -653,15 +701,7 @@
         photo.alt = titre;
         photo.loading = 'lazy';
 
-        const source =
-          String(conseil.img || '').trim();
-
-        photo.src = source || 'images/logo.jpeg';
-
-        photo.onerror = function () {
-          photo.onerror = null;
-          photo.src = 'images/logo.jpeg';
-        };
+        installerPhoto(photo, conseil);
 
         const info =
           document.createElement('div');
@@ -760,8 +800,8 @@
 
   /*
    * ENVOI A GOOGLE APPS SCRIPT
-   * Code Admin envoyé automatiquement.
    */
+
   async function envoyerModification(
     action,
     options
@@ -784,11 +824,6 @@
       options.active ? 'true' : 'false'
     );
 
-    /*
-     * La réponse POST peut être inaccessible
-     * à cause des règles CORS du navigateur.
-     * On vérifie donc l'état réel par GET.
-     */
     await fetch(
       API_URL,
       {
@@ -808,6 +843,7 @@
   /*
    * VERIFICATION DANS GOOGLE SHEETS
    */
+
   async function lireEtatServeur() {
     const url =
       API_URL +
@@ -863,6 +899,7 @@
   /*
    * ACTIVER OU DESACTIVER
    */
+
   async function modifierConseil(
     index,
     nouvelEtat,
@@ -948,6 +985,7 @@
   /*
    * TOUT DESACTIVER POUR LE GITE
    */
+
   async function toutDesactiver() {
     if (operationEnCours) {
       return;
@@ -1033,6 +1071,7 @@
   /*
    * EVENEMENTS
    */
+
   selectGite.addEventListener(
     'change',
     function () {
@@ -1064,6 +1103,7 @@
   /*
    * DEMARRAGE
    */
+
   majRetour();
   chargerConseils(false);
 
@@ -1071,6 +1111,7 @@
    * ACTUALISATION AUTOMATIQUE
    * TOUTES LES 30 SECONDES
    */
+
   setInterval(function () {
     if (
       !operationEnCours &&
