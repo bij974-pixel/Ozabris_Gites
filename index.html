@@ -151,7 +151,68 @@ main{padding:0 13px 40px}
 .entertainment-card{min-height:160px;padding:16px 8px}
 .entertainment-icon{width:66px;height:66px}
 }
-  </style>
+  
+/* Tous les éléments de l'accueil sont centrés dans leur encadré fixe. */
+.hero-content{text-align:center}
+.hero-content .hero-description{margin-left:auto;margin-right:auto}
+.hero-content .hero-buttons{justify-content:center}
+
+/* Textes fixes sur panneaux translucides : lecture confortable pendant le défilement */
+.hero-overlay{background:linear-gradient(90deg,rgba(11,28,44,.30),rgba(11,28,44,.08))}
+.hero-content{
+  max-width:760px;
+  margin:65px auto 0;
+  padding:27px 32px 30px;
+  background:rgba(10,28,45,.86);
+  border:1px solid rgba(233,216,185,.38);
+  border-radius:20px;
+  box-shadow:0 12px 36px rgba(0,0,0,.23);
+  -webkit-backdrop-filter:blur(12px);
+  backdrop-filter:blur(12px);
+}
+.feature-card:after{z-index:1;background:linear-gradient(0deg,rgba(8,23,37,.22),transparent 70%)}
+.feature-content{
+  width:calc(100% - 32px);
+  margin:16px;
+  padding:21px 24px;
+  background:rgba(10,28,45,.88);
+  border:1px solid rgba(233,216,185,.30);
+  border-radius:16px;
+  box-shadow:0 8px 26px rgba(0,0,0,.2);
+  -webkit-backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);
+}
+@media(max-width:720px){
+  .hero-content{margin:40px auto 0;padding:23px 20px 26px}
+  .feature-content{padding:19px;margin:12px;width:calc(100% - 24px)}
+}
+
+/* Les deux cartes : une photo entière, fixe pendant deux minutes. */
+.feature-card .feature-slideshow {
+  position:absolute;
+  inset:0;
+  z-index:0;
+  overflow:hidden;
+  background:#203d55;
+  pointer-events:none;
+}
+.feature-card .feature-slide {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:contain;
+  opacity:0;
+  transition:opacity 1.5s ease-in-out;
+  background:transparent;
+}
+.feature-card .feature-slide.is-visible {opacity:1}
+@media(prefers-reduced-motion:reduce) {
+  .feature-card .feature-slide {transition:none}
+}
+
+</style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
   </script>
  </head>
@@ -272,9 +333,9 @@ main{padding:0 13px 40px}
     </div>
     <div class="feature-grid">
      <a class="feature-card guide" href="guide.html" id="featureGuide">
-      <div aria-hidden="true" class="photo-ribbon" id="guideRibbon">
-       <div class="ribbon-track">
-       </div>
+      <div aria-hidden="true" class="feature-slideshow" id="guideSlideshow">
+       <img class="feature-slide is-visible" alt="" decoding="async"/>
+       <img class="feature-slide" alt="" decoding="async"/>
       </div>
       <div class="feature-content">
        <span class="feature-tag" id="guideTag">
@@ -292,9 +353,9 @@ main{padding:0 13px 40px}
       </div>
      </a>
      <a class="feature-card conseils" href="conseils.html" id="featureConseils">
-      <div aria-hidden="true" class="photo-ribbon" id="conseilsRibbon">
-       <div class="ribbon-track">
-       </div>
+      <div aria-hidden="true" class="feature-slideshow" id="conseilsSlideshow">
+       <img class="feature-slide is-visible" alt="" decoding="async"/>
+       <img class="feature-slide" alt="" decoding="async"/>
       </div>
       <div class="feature-content">
        <span class="feature-tag" id="conseilsTag">
@@ -562,7 +623,7 @@ const PHOTO_URLS=PHOTO_NAMES.map(name=>'images/fond/'+name);
 const ANDROID_APPS={netflix:'com.netflix.ninja',orange:'com.orange.owtv.tv',prime:'com.amazon.amazonvideo.livingroom',youtube:'com.google.android.youtube.tv'};
 const translations={
 fr:{
-heroEyebrow:'Votre parenthèse à La Réunion',heroTitle:'Bienvenue',heroSubtitle:'aux Ozabris',heroDescription:'Un séjour placé sous le signe de la douceur, de la découverte et de l’art de vivre réunionnais.',heroGuide:'🏡 Découvrir votre gîte',heroConseils:'🌴 Explorer La Réunion',topGuide:'Guide pratique',topConseils:'Nos conseils',dateLabel:'Aujourd’hui à La Réunion',weatherLabel:'Météo · Saint-Paul',weatherLoading:'Chargement de la météo…',weatherUnavailable:'Météo indisponible',stayLabel:'Votre séjour',stayMessage:'Profitez pleinement de votre séjour.',discoverKicker:'Votre séjour, en toute simplicité',discoverTitle:'Tout est à portée de main',discoverText:'Retrouvez les informations de votre hébergement et nos plus belles recommandations pour découvrir l’île.',guideTag:'Votre hébergement',guideTitle:'Le guide du gîte',guideDescription:'Wi-Fi, équipements, consignes pratiques et informations utiles pour un séjour serein.',guideArrow:'Découvrir le guide →',conseilsTag:'Nos coups de cœur',conseilsTitle:'Les bonnes adresses',conseilsDescription:'Plages, paysages, commerces, balades et expériences à découvrir autour de votre gîte.',conseilsArrow:'Explorer nos conseils →',entertainmentKicker:'Votre espace détente',entertainmentTitle:'Vos divertissements',entertainmentIntro:'Installez-vous confortablement et profitez de vos programmes préférés.',netflixDescription:'Avec votre compte personnel',orangeDescription:'Vos chaînes de télévision',primeDescription:'Avec votre compte personnel',youtubeDescription:'Vidéos et découvertes',openLauncher:'📺 Ouvrir toutes les applications',entertainmentNote:'Netflix et Prime Video : utilisez vos propres identifiants et pensez à vous déconnecter avant votre départ.',launcherUnavailable:'Cette fonction est réservée aux télévisions équipées de Fully Kiosk.',launcherAttempt:'Ouverture demandée. Si rien ne se passe, nous vérifierons les autorisations de Fully Kiosk.',practicalKicker:'Les essentiels',practicalTitle:'Pour un séjour sans souci',practicalText:'Quelques informations pratiques à retrouver à tout moment.',wifiTitle:'Wi-Fi',wifiText:'Retrouvez les informations de connexion dans le guide du gîte.',wifiLink:'Voir le guide →',rulesTitle:'Vie dans le gîte',rulesText:'Équipements, consignes et bonnes pratiques de la maison.',rulesLink:'Voir les informations →',sortingTitle:'Tri des déchets',sortingText:'Les consignes pour respecter notre belle île.',sortingLink:'Voir les consignes →',islandTitle:'Découvrir l’île',islandText:'Retrouvez les sorties et découvertes sélectionnées pour vous.',islandLink:'Nos recommandations →',qrSectionTitle:'Emportez votre guide avec vous',qrSectionText:'Scannez les QR codes avec votre téléphone pour retrouver facilement les informations de votre séjour.',qrHomeTitle:'Accueil',qrGuideTitle:'Guide du gîte',qrConseilsTitle:'Nos conseils',qrSanibroyeurTitle:'Sanibroyeur',qrTriTitle:'Tri des déchets',footerText:'Votre maison de vacances à La Réunion',welcome:'Bienvenue',guestMessage:'Nous vous souhaitons un merveilleux séjour.',humidity:'Humidité',wind:'Vent',weatherClear:'Ciel dégagé',weatherCloud:'Partiellement nuageux',weatherRain:'Pluie',weatherStorm:'Orages',weatherOther:'Conditions variables'},
+heroEyebrow:'Votre parenthèse à La Réunion',heroTitle:'Bienvenue',heroSubtitle:'aux Ozabris',heroDescription:'Un séjour placé sous le signe de la douceur, de la découverte et de l’art de vivre réunionnais.',heroGuide:'🏡 Découvrir votre gîte',heroConseils:'🌴 Explorer La Réunion',topGuide:'Guide pratique',topConseils:'Nos conseils',dateLabel:'Aujourd’hui à La Réunion',weatherLabel:'Météo · Saint-Paul',weatherLoading:'Chargement de la météo…',weatherUnavailable:'Météo indisponible',stayLabel:'Votre séjour',stayMessage:'Profitez pleinement de votre séjour.',discoverKicker:'Votre séjour, en toute simplicité',discoverTitle:'Tout est à portée de main',discoverText:'Retrouvez les informations de votre hébergement et nos plus belles recommandations pour découvrir l’île.',guideTag:'Votre hébergement',guideTitle:'Le guide du gîte',guideDescription:'Wi-Fi, équipements, consignes pratiques et informations utiles pour un séjour serein.',guideArrow:'Découvrir le guide →',conseilsTag:'Nos coups de cœur',conseilsTitle:'Les bonnes adresses',conseilsDescription:'Plages, paysages, commerces, balades et expériences à découvrir autour de votre gîte.',conseilsArrow:'Explorer nos conseils →',entertainmentKicker:'Votre espace détente',entertainmentTitle:'Vos divertissements',entertainmentIntro:'Installez-vous confortablement et profitez de vos programmes préférés.',netflixDescription:'Avec votre compte personnel',orangeDescription:'Vos chaînes de télévision',primeDescription:'Avec votre compte personnel',youtubeDescription:'Vidéos et découvertes',openLauncher:'📺 Ouvrir toutes les applications',entertainmentNote:'Netflix et Prime Video : utilisez vos propres identifiants et pensez à vous déconnecter avant votre départ.',launcherUnavailable:'Cette fonction est réservée aux télévisions équipées de Fully Kiosk.',launcherAttempt:'Ouverture demandée. Si rien ne se passe, nous vérifierons les autorisations de Fully Kiosk.',practicalKicker:'Les essentiels',practicalTitle:'Pour un séjour sans souci',practicalText:'Quelques informations pratiques à retrouver à tout moment.',wifiTitle:'Wi-Fi',wifiText:'Retrouvez les informations de connexion dans le guide du gîte.',wifiLink:'Voir le guide →',rulesTitle:'Vie dans le gîte',rulesText:'Équipements, consignes et bonnes pratiques de la maison.',rulesLink:'Voir les informations →',sortingTitle:'Tri des déchets',sortingText:'Les consignes pour respecter notre belle île.',sortingLink:'Voir les consignes →',islandTitle:'Découvrir l’île',islandText:'Retrouvez les sorties et découvertes sélectionnées pour vous.',islandLink:'Nos recommandations →',qrSectionTitle:'Emportez votre guide avec vous',qrSectionText:'Scannez les QR codes avec votre téléphone pour retrouver facilement les informations de votre séjour.',qrHomeTitle:'Accueil',qrGuideTitle:'Guide du gîte',qrConseilsTitle:'Nos conseils',qrSanibroyeurTitle:'Sanibroyeur',qrTriTitle:'Tri des déchets',footerText:'Votre maison de vacances à La Réunion',welcome:'Bienvenue à Zot !',guestMessage:'Nous vous souhaitons un merveilleux séjour.',humidity:'Humidité',wind:'Vent',weatherClear:'Ciel dégagé',weatherCloud:'Partiellement nuageux',weatherRain:'Pluie',weatherStorm:'Orages',weatherOther:'Conditions variables'},
 en:{
 heroEyebrow:'Your escape to Réunion Island',heroTitle:'Welcome',heroSubtitle:'to Les Ozabris',heroDescription:'A relaxing stay filled with discovery, comfort and the charm of Réunion Island.',heroGuide:'🏡 Explore your cottage',heroConseils:'🌴 Discover Réunion',topGuide:'Cottage guide',topConseils:'Our tips',dateLabel:'Today in Réunion',weatherLabel:'Weather · Saint-Paul',weatherLoading:'Loading weather…',weatherUnavailable:'Weather unavailable',stayLabel:'Your stay',stayMessage:'Enjoy every moment of your stay.',discoverKicker:'Everything you need',discoverTitle:'Your stay made easy',discoverText:'Find all the useful information about your cottage and our favourite places on the island.',guideTag:'Your cottage',guideTitle:'The cottage guide',guideDescription:'Wi-Fi, amenities, house rules and useful information for a relaxing stay.',guideArrow:'Explore the guide →',conseilsTag:'Our favourites',conseilsTitle:'Local recommendations',conseilsDescription:'Beaches, landscapes, shops, walks and experiences around your cottage.',conseilsArrow:'Discover our tips →',entertainmentKicker:'Time to relax',entertainmentTitle:'Your entertainment',entertainmentIntro:'Make yourself comfortable and enjoy your favourite shows.',netflixDescription:'Use your own account',orangeDescription:'Live television channels',primeDescription:'Use your own account',youtubeDescription:'Videos and discoveries',openLauncher:'📺 Open all TV apps',entertainmentNote:'For Netflix and Prime Video, use your own account and remember to sign out before departure.',launcherUnavailable:'This feature is available on TVs equipped with Fully Kiosk.',launcherAttempt:'Opening requested. If nothing happens, we will check Fully Kiosk permissions.',practicalKicker:'Essentials',practicalTitle:'Everything for a great stay',practicalText:'Useful information available whenever you need it.',wifiTitle:'Wi-Fi',wifiText:'Find the connection details in your cottage guide.',wifiLink:'View guide →',rulesTitle:'Cottage information',rulesText:'Amenities, house rules and useful instructions.',rulesLink:'View information →',sortingTitle:'Waste sorting',sortingText:'Help us protect our beautiful island.',sortingLink:'View instructions →',islandTitle:'Discover the island',islandText:'Explore our selection of local activities and places.',islandLink:'Our recommendations →',qrSectionTitle:'Take your guide with you',qrSectionText:'Scan these QR codes to access your stay information on your phone.',qrHomeTitle:'Home',qrGuideTitle:'Cottage guide',qrConseilsTitle:'Our tips',qrSanibroyeurTitle:'Bathroom instructions',qrTriTitle:'Waste sorting',footerText:'Your holiday home on Réunion Island',welcome:'Welcome',guestMessage:'We wish you a wonderful stay.',humidity:'Humidity',wind:'Wind',weatherClear:'Clear sky',weatherCloud:'Partly cloudy',weatherRain:'Rain',weatherStorm:'Thunderstorms',weatherOther:'Variable conditions'},
 de:{
@@ -580,7 +641,50 @@ function configureLinks(){const guide='guide.html'+suffix(true),conseils='consei
 function photoExists(url){return new Promise(resolve=>{const img=new Image();let done=false;const finish=ok=>{if(done)return;done=true;clearTimeout(timeout);resolve(ok)};const timeout=setTimeout(()=>finish(false),6000);img.onload=()=>finish(true);img.onerror=()=>finish(false);img.src=url})}
 async function availablePhotos(){const tests=await Promise.all(PHOTO_URLS.map(async url=>({url,ok:await photoExists(url)})));return tests.filter(x=>x.ok).map(x=>x.url)}
 function createRibbon(id,photos,offset,columns){const host=$(id);if(!host||!photos.length)return;const track=host.querySelector('.ribbon-track');let width=0,position=0,last=0,index=offset,frame=0;const count=columns+3;function nextUrl(){const url=photos[index%photos.length];index++;return url}function tile(url){const div=document.createElement('div');div.className='ribbon-tile';const img=document.createElement('img');img.src=url;img.alt='';img.decoding='async';img.loading='eager';div.appendChild(img);return div}function resize(){const newWidth=host.clientWidth/columns;if(!newWidth)return;if(width){position=position/width*newWidth}width=newWidth;Array.from(track.children).forEach(el=>el.style.width=width+'px');track.style.transform='translate3d('+(-position)+'px,0,0)'}for(let i=0;i<count;i++)track.appendChild(tile(nextUrl()));resize();window.addEventListener('resize',resize,{passive:true});function tick(now){if(last){const dt=Math.min((now-last)/1000,.08);if(!document.hidden&&width){position+=dt*12;while(position>=width){position-=width;track.removeChild(track.firstElementChild);const el=tile(nextUrl());el.style.width=width+'px';track.appendChild(el)}track.style.transform='translate3d('+(-position)+'px,0,0)'}}last=now;frame=requestAnimationFrame(tick)}frame=requestAnimationFrame(tick)}
-async function startRibbons(){const photos=await availablePhotos();if(!photos.length){console.warn('Aucune photo valide dans images/fond/');return}createRibbon('heroRibbon',photos,0,3);createRibbon('guideRibbon',photos,1,2);createRibbon('conseilsRibbon',photos,2,2)}
+function createFeatureSlideshow(id,photos,offset){
+  const host=$(id);
+  if(!host||!photos.length)return;
+  const slides=Array.from(host.querySelectorAll('.feature-slide'));
+  if(slides.length!==2)return;
+  let index=offset%photos.length;
+  let active=0;
+  let busy=false;
+  slides[0].src=photos[index];
+  slides[0].classList.add('is-visible');
+  slides[1].classList.remove('is-visible');
+  if(photos.length<2)return;
+
+  async function changePhoto(){
+    if(busy||document.hidden)return;
+    busy=true;
+    const nextIndex=(index+1)%photos.length;
+    const url=photos[nextIndex];
+    if(!await photoExists(url)){busy=false;return}
+    const incoming=1-active;
+    // La nouvelle photo passe devant l'ancienne et apparaît en fondu.
+    slides[incoming].classList.remove('is-visible');
+    slides[incoming].style.zIndex='2';
+    slides[active].style.zIndex='1';
+    slides[incoming].src=url;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      slides[incoming].classList.add('is-visible');
+      setTimeout(()=>{
+        slides[active].classList.remove('is-visible');
+        active=incoming;
+        index=nextIndex;
+        busy=false;
+      },1600);
+    }));
+  }
+  setInterval(changePhoto,120000);
+}
+async function startRibbons(){
+  const photos=await availablePhotos();
+  if(!photos.length){console.warn('Aucune photo valide dans images/fond/');return}
+  createRibbon('heroRibbon',photos,0,3);
+  createFeatureSlideshow('guideSlideshow',photos,1);
+  createFeatureSlideshow('conseilsSlideshow',photos,2);
+}
 
 function openUniversalLauncher(){if(!/Android/i.test(navigator.userAgent||'')){setText('entertainmentStatus',t('launcherUnavailable'));return}setText('entertainmentStatus',t('launcherAttempt'));try{window.location.href='fully://launcher'}catch(e){setText('entertainmentStatus',t('launcherUnavailable'))}}
 function configureEntertainment(){document.querySelectorAll('[data-app]').forEach(button=>button.addEventListener('click',()=>{if(ANDROID_APPS[button.dataset.app])openUniversalLauncher()}));$('openLauncher').addEventListener('click',openUniversalLauncher)}
