@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#12263a">
 
   <title>Administration — Les Ozabris</title>
 
@@ -19,9 +20,7 @@
       --texte: #253342;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -85,7 +84,7 @@
       margin-bottom: 8px;
     }
 
-    select {
+    select, input {
       width: 100%;
       padding: 13px;
       font-size: 17px;
@@ -96,14 +95,14 @@
     }
 
     select:focus,
+    input:focus,
     button:focus-visible,
     a:focus-visible {
       outline: 3px solid var(--or);
       outline-offset: 3px;
     }
 
-    button,
-    .bouton {
+    button, .bouton {
       display: inline-block;
       padding: 13px 17px;
       border: 0;
@@ -176,7 +175,7 @@
       border-radius: 13px;
       padding: 15px;
       margin-bottom: 14px;
-      background: #fff;
+      background: white;
     }
 
     .conseil-top {
@@ -270,6 +269,50 @@
       font-size: 13px;
     }
 
+    .cache {
+      display: none !important;
+    }
+
+    .connexion {
+      max-width: 440px;
+      margin: 35px auto;
+      text-align: center;
+      border: 2px solid var(--or);
+    }
+
+    .connexion .symbole {
+      font-size: 46px;
+      margin-bottom: 10px;
+    }
+
+    .connexion p {
+      line-height: 1.6;
+    }
+
+    .connexion input {
+      text-align: center;
+      font-size: 26px;
+      letter-spacing: 7px;
+      margin: 12px 0;
+    }
+
+    .connexion button {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .admin-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 15px;
+    }
+
+    .blocage-tv {
+      max-width: 500px;
+      margin: 50px auto;
+      text-align: center;
+    }
+
     @media (max-width: 550px) {
       .conseil img {
         width: 75px;
@@ -300,92 +343,173 @@
   <h1>Administration Les Ozabris</h1>
   <p>Gestion des recommandations des deux gîtes</p>
 
-  <a id="retourAccueil"
-     class="retour"
-     href="index.html">
+  <a
+    id="retourAccueil"
+    class="retour"
+    href="index.html">
     ← Retour à l'accueil
   </a>
 </header>
 
 <main>
 
-  <section class="panel">
-    <h2>Choisir le gîte</h2>
+  <!-- ACCES BLOQUE EN MODE TV -->
 
-    <label for="admin-select-gite">
-      Gîte à administrer
-    </label>
-
-    <select id="admin-select-gite">
-      <option value="ptitzabris">
-        Ptitzabris
-      </option>
-
-      <option value="grandzabris">
-        Grandzabris
-      </option>
-    </select>
-
-    <p class="petit">
-      Les recommandations sont gérées
-      séparément pour chaque gîte.
+  <section id="ecranTV" class="panel blocage-tv cache">
+    <h2>🔒 Administration indisponible</h2>
+    <p>
+      L'administration des Ozabris
+      n'est pas accessible en mode télévision.
     </p>
   </section>
 
-  <section class="panel">
-    <h2>Ajouter une recommandation</h2>
+  <!-- ECRAN DE CONNEXION -->
+
+  <section id="ecranConnexion" class="panel connexion cache">
+
+    <div class="symbole">🔐</div>
+
+    <h2>Accès administrateur</h2>
 
     <p>
-      Pour ajouter un lieu, une activité
-      ou une bonne adresse, utilise le formulaire.
+      Saisis ton code personnel pour accéder
+      aux recommandations des Ozabris.
     </p>
 
-    <a
-      class="bouton btn-or"
-      href="https://forms.gle/w77k6We9HrzRxERy7"
-      target="_blank"
-      rel="noopener noreferrer">
-      + Ajouter une recommandation
-    </a>
+    <form id="formConnexion">
 
-    <p class="petit">
-      Après avoir ajouté une recommandation,
-      reviens ici et actualise la liste.
-    </p>
-  </section>
+      <label for="codeAdmin">
+        Code administrateur
+      </label>
 
-  <section class="panel">
-    <h2>Recommandations</h2>
-
-    <div class="actions">
-      <button
-        id="actualiser"
-        class="btn-bleu"
-        type="button">
-        ↻ Actualiser
-      </button>
+      <input
+        id="codeAdmin"
+        type="password"
+        inputmode="numeric"
+        maxlength="6"
+        pattern="[0-9]{6}"
+        autocomplete="off"
+        placeholder="••••••"
+        required
+      >
 
       <button
-        id="toutDesactiver"
-        class="btn-rouge"
-        type="button">
-        Tout désactiver pour ce gîte
+        id="btnConnexion"
+        class="btn-or"
+        type="submit">
+        🔓 Se connecter
       </button>
-    </div>
+
+    </form>
 
     <div
-      id="message"
-      class="message"
+      id="messageConnexion"
+      class="message cache"
       role="status"
       aria-live="polite">
-      Chargement des recommandations…
     </div>
 
-    <div
-      id="listeConseils"
-      style="margin-top:20px;">
-    </div>
   </section>
+
+  <!-- ADMINISTRATION -->
+
+  <div id="administration" class="cache">
+
+    <div class="admin-actions">
+      <button
+        id="deconnexion"
+        class="btn-rouge"
+        type="button">
+        🔒 Se déconnecter
+      </button>
+    </div>
+
+    <section class="panel">
+
+      <h2>Choisir le gîte</h2>
+
+      <label for="admin-select-gite">
+        Gîte à administrer
+      </label>
+
+      <select id="admin-select-gite">
+        <option value="ptitzabris">
+          Ptitzabris
+        </option>
+        <option value="grandzabris">
+          Grandzabris
+        </option>
+      </select>
+
+      <p class="petit">
+        Les recommandations sont gérées
+        séparément pour chaque gîte.
+      </p>
+
+    </section>
+
+    <section class="panel">
+
+      <h2>Ajouter une recommandation</h2>
+
+      <p>
+        Pour ajouter un lieu, une activité
+        ou une bonne adresse, utilise le formulaire.
+      </p>
+
+      <a
+        class="bouton btn-or"
+        href="https://forms.gle/w77k6We9HrzRxERy7"
+        target="_blank"
+        rel="noopener noreferrer">
+        + Ajouter une recommandation
+      </a>
+
+      <p class="petit">
+        Après avoir ajouté une recommandation,
+        reviens ici et actualise la liste.
+      </p>
+
+    </section>
+
+    <section class="panel">
+
+      <h2>Recommandations</h2>
+
+      <div class="actions">
+
+        <button
+          id="actualiser"
+          class="btn-bleu"
+          type="button">
+          ↻ Actualiser
+        </button>
+
+        <button
+          id="toutDesactiver"
+          class="btn-rouge"
+          type="button">
+          Tout désactiver pour ce gîte
+        </button>
+
+      </div>
+
+      <div
+        id="message"
+        class="message"
+        role="status"
+        aria-live="polite">
+        Chargement des recommandations…
+      </div>
+
+      <div
+        id="listeConseils"
+        style="margin-top:20px;">
+      </div>
+
+    </section>
+
+  </div>
 
 </main>
 
@@ -397,7 +521,9 @@
 (function () {
   'use strict';
 
-  const ADMIN_PIN = '140769';
+  /*
+   * CONFIGURATION
+   */
 
   const API_URL =
     'https://script.google.com/macros/s/' +
@@ -411,27 +537,24 @@
 
   const LOGO = 'images/logo.jpeg';
 
-  const selectGite =
-    document.getElementById('admin-select-gite');
-
-  const liste =
-    document.getElementById('listeConseils');
-
-  const message =
-    document.getElementById('message');
-
-  const btnActualiser =
-    document.getElementById('actualiser');
-
-  const btnToutDesactiver =
-    document.getElementById('toutDesactiver');
-
-  let cachedAdvices = [];
-  let operationEnCours = false;
-  let chargementNumero = 0;
+  const $ = id => document.getElementById(id);
 
   const params =
     new URLSearchParams(window.location.search);
+
+  const isTV = params.get('tv') === '1';
+
+  const selectGite = $('admin-select-gite');
+  const liste = $('listeConseils');
+  const message = $('message');
+  const btnActualiser = $('actualiser');
+  const btnToutDesactiver = $('toutDesactiver');
+
+  let adminPin = '';
+  let connexionEnCours = false;
+  let operationEnCours = false;
+  let cachedAdvices = [];
+  let chargementNumero = 0;
 
   const giteUrl = params.get('gite');
 
@@ -439,16 +562,19 @@
     selectGite.value = giteUrl;
   }
 
+  /*
+   * OUTILS
+   */
+
   function giteActuel() {
     return selectGite.value;
   }
 
   function majRetour() {
-    document.getElementById(
-      'retourAccueil'
-    ).href =
+    $('retourAccueil').href =
       'index.html?gite=' +
-      encodeURIComponent(giteActuel());
+      encodeURIComponent(giteActuel()) +
+      (isTV ? '&tv=1' : '');
 
     const url = new URL(window.location.href);
 
@@ -472,6 +598,16 @@
       (type ? ' ' + type : '');
   }
 
+  function afficherConnexionMessage(texte, type) {
+    const element = $('messageConnexion');
+
+    element.textContent = texte;
+
+    element.className =
+      'message' +
+      (type ? ' ' + type : '');
+  }
+
   function verrouiller(verrou) {
     operationEnCours = verrou;
 
@@ -479,48 +615,220 @@
     btnToutDesactiver.disabled = verrou;
     selectGite.disabled = verrou;
 
-    const boutons =
-      liste.querySelectorAll('button');
+    liste.querySelectorAll('button').forEach(
+      function (bouton) {
+        bouton.disabled = verrou;
+      }
+    );
+  }
 
-    boutons.forEach(function (bouton) {
-      bouton.disabled = verrou;
+  function attendre(ms) {
+    return new Promise(function (resolve) {
+      setTimeout(resolve, ms);
     });
+  }
+
+  /*
+   * CONNEXION
+   *
+   * Le code est envoyé au serveur.
+   * Le résultat est consulté grâce
+   * à un identifiant aléatoire.
+   *
+   * Aucun code administrateur
+   * n'est écrit dans ce HTML.
+   */
+
+  function creerNonce() {
+    if (
+      !window.crypto ||
+      !window.crypto.getRandomValues
+    ) {
+      throw new Error(
+        'Navigateur incompatible avec la connexion sécurisée.'
+      );
+    }
+
+    const bytes = new Uint8Array(32);
+
+    window.crypto.getRandomValues(bytes);
+
+    return Array.from(bytes, function (b) {
+      return b.toString(16).padStart(2, '0');
+    }).join('');
+  }
+
+  async function verifierCodeServeur(pin) {
+    const nonce = creerNonce();
+
+    const donnees = new URLSearchParams();
+
+    donnees.set('action', 'verifierAdmin');
+    donnees.set('pin', pin);
+    donnees.set('nonce', nonce);
+
+    await fetch(
+      API_URL,
+      {
+        method: 'POST',
+        mode: 'no-cors',
+        body: donnees
+      }
+    );
+
+    for (let i = 0; i < 12; i++) {
+      await attendre(700);
+
+      const url =
+        API_URL +
+        '?type=statutAdmin' +
+        '&nonce=' +
+        encodeURIComponent(nonce) +
+        '&t=' +
+        Date.now();
+
+      const response = await fetch(
+        url,
+        {
+          cache: 'no-store'
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          'Impossible de contacter Google Apps Script.'
+        );
+      }
+
+      const resultat = await response.json();
+
+      if (resultat.etat === 'valide') {
+        return true;
+      }
+
+      if (resultat.etat === 'refuse') {
+        return false;
+      }
+
+      if (resultat.etat === 'invalide') {
+        throw new Error(
+          'Identifiant de connexion invalide.'
+        );
+      }
+    }
+
+    throw new Error(
+      'Vérification trop longue. Vérifie le déploiement Apps Script.'
+    );
+  }
+
+  async function connecter(event) {
+    event.preventDefault();
+
+    if (isTV || connexionEnCours) {
+      return;
+    }
+
+    const pin = $('codeAdmin').value.trim();
+
+    if (!/^\d{6}$/.test(pin)) {
+      afficherConnexionMessage(
+        'Saisis un code à six chiffres.',
+        'erreur'
+      );
+      return;
+    }
+
+    connexionEnCours = true;
+    $('btnConnexion').disabled = true;
+
+    afficherConnexionMessage(
+      'Vérification du code auprès de Google…'
+    );
+
+    try {
+      const valide =
+        await verifierCodeServeur(pin);
+
+      if (!valide) {
+        afficherConnexionMessage(
+          'Code administrateur incorrect.',
+          'erreur'
+        );
+
+        $('codeAdmin').value = '';
+        $('codeAdmin').focus();
+
+        return;
+      }
+
+      adminPin = pin;
+
+      $('codeAdmin').value = '';
+
+      $('ecranConnexion').classList.add('cache');
+      $('administration').classList.remove('cache');
+
+      chargerConseils(false);
+
+    } catch (erreur) {
+      afficherConnexionMessage(
+        erreur.message,
+        'erreur'
+      );
+
+    } finally {
+      connexionEnCours = false;
+      $('btnConnexion').disabled = false;
+    }
+  }
+
+  function deconnecter() {
+    if (operationEnCours) {
+      return;
+    }
+
+    adminPin = '';
+    cachedAdvices = [];
+    chargementNumero++;
+
+    liste.innerHTML = '';
+
+    $('administration').classList.add('cache');
+    $('ecranConnexion').classList.remove('cache');
+
+    $('codeAdmin').value = '';
+    $('messageConnexion').classList.add('cache');
+
+    $('codeAdmin').focus();
   }
 
   /*
    * PHOTOS
    *
-   * Ordre de priorité :
-   * 1. Nouvelle photo Google Drive
-   * 2. Ancienne photo Postimages
+   * 1. Google Drive
+   * 2. Postimages
    * 3. Logo Ozabris
    */
 
   function sourcePhoto(conseil) {
-    const photoDrive =
-      String(conseil.photoDrive || '').trim();
-
-    const anciennePhoto =
-      String(conseil.imgLegacy || '').trim();
-
-    const photoPrincipale =
-      String(conseil.img || '').trim();
-
     const sources = [];
 
     function ajouter(url) {
+      const s = String(url || '').trim();
+
       if (
-        url &&
-        url !== LOGO &&
-        !sources.includes(url)
+        s &&
+        s !== LOGO &&
+        !sources.includes(s)
       ) {
-        sources.push(url);
+        sources.push(s);
       }
     }
 
-    ajouter(photoDrive);
-    ajouter(anciennePhoto);
-    ajouter(photoPrincipale);
+    ajouter(conseil.photoDrive);
+    ajouter(conseil.imgLegacy);
+    ajouter(conseil.img);
     ajouter(LOGO);
 
     return sources;
@@ -528,6 +836,7 @@
 
   function installerPhoto(element, conseil) {
     const sources = sourcePhoto(conseil);
+
     let position = 0;
 
     element.onerror = function () {
@@ -545,90 +854,8 @@
   }
 
   /*
-   * LECTURE DES CONSEILS
+   * ETAT DES RECOMMANDATIONS
    */
-
-  async function chargerConseils(silencieux) {
-    if (operationEnCours) {
-      return;
-    }
-
-    const numero = ++chargementNumero;
-    const gite = giteActuel();
-
-    if (!silencieux) {
-      afficherMessage(
-        'Chargement des recommandations…'
-      );
-    }
-
-    try {
-      const url =
-        API_URL +
-        '?type=conseils' +
-        '&gite=' +
-        encodeURIComponent(gite) +
-        '&t=' +
-        Date.now();
-
-      const response = await fetch(
-        url,
-        {
-          method: 'GET',
-          cache: 'no-store'
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(
-          'Erreur HTTP ' + response.status
-        );
-      }
-
-      const data = await response.json();
-
-      if (numero !== chargementNumero) {
-        return;
-      }
-
-      if (Array.isArray(data)) {
-        cachedAdvices = data;
-      } else if (
-        data &&
-        Array.isArray(data.conseils)
-      ) {
-        cachedAdvices = data.conseils;
-      } else {
-        throw new Error(
-          data && data.error
-            ? data.error
-            : 'Réponse inattendue du serveur'
-        );
-      }
-
-      construireListe();
-
-      if (!silencieux) {
-        afficherMessage(
-          cachedAdvices.length +
-          ' recommandation(s) chargée(s) ' +
-          'depuis Google Sheets.',
-          'succes'
-        );
-      }
-
-    } catch (erreur) {
-      if (numero !== chargementNumero) {
-        return;
-      }
-
-      afficherMessage(
-        'Impossible de charger les recommandations : ' +
-        erreur.message,
-        'erreur'
-      );
-    }
-  }
 
   function estActive(conseil, gite) {
     if (gite === 'ptitzabris') {
@@ -650,11 +877,113 @@
   }
 
   /*
+   * LECTURE GOOGLE SHEETS
+   */
+
+  async function lireEtatServeur() {
+    const url =
+      API_URL +
+      '?type=conseils' +
+      '&gite=' +
+      encodeURIComponent(giteActuel()) +
+      '&t=' +
+      Date.now();
+
+    const response = await fetch(
+      url,
+      {
+        cache: 'no-store'
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        'Lecture du serveur impossible.'
+      );
+    }
+
+    const data = await response.json();
+
+    if (Array.isArray(data)) {
+      return data;
+    }
+
+    if (
+      data &&
+      Array.isArray(data.conseils)
+    ) {
+      return data.conseils;
+    }
+
+    throw new Error(
+      data && data.error
+        ? data.error
+        : 'Réponse inattendue du serveur.'
+    );
+  }
+
+  async function chargerConseils(silencieux) {
+    if (
+      operationEnCours ||
+      !adminPin ||
+      isTV
+    ) {
+      return;
+    }
+
+    const numero = ++chargementNumero;
+
+    if (!silencieux) {
+      afficherMessage(
+        'Chargement des recommandations…'
+      );
+    }
+
+    try {
+      const data = await lireEtatServeur();
+
+      if (
+        numero !== chargementNumero ||
+        !adminPin
+      ) {
+        return;
+      }
+
+      cachedAdvices = data;
+
+      construireListe();
+
+      if (!silencieux) {
+        afficherMessage(
+          cachedAdvices.length +
+          ' recommandation(s) chargée(s) depuis Google Sheets.',
+          'succes'
+        );
+      }
+
+    } catch (erreur) {
+      if (numero !== chargementNumero) {
+        return;
+      }
+
+      afficherMessage(
+        'Impossible de charger les recommandations : ' +
+        erreur.message,
+        'erreur'
+      );
+    }
+  }
+
+  /*
    * CARTES DES RECOMMANDATIONS
    */
 
   function construireListe() {
     liste.innerHTML = '';
+
+    if (!adminPin) {
+      return;
+    }
 
     const gite = giteActuel();
 
@@ -799,17 +1128,23 @@
   }
 
   /*
-   * ENVOI A GOOGLE APPS SCRIPT
+   * ENVOI DES MODIFICATIONS
    */
 
   async function envoyerModification(
     action,
     options
   ) {
+    if (!adminPin) {
+      throw new Error(
+        'Connexion administrateur nécessaire.'
+      );
+    }
+
     const donnees = new URLSearchParams();
 
     donnees.set('action', action);
-    donnees.set('pin', ADMIN_PIN);
+    donnees.set('pin', adminPin);
     donnees.set('gite', giteActuel());
 
     if (options.index !== undefined) {
@@ -834,58 +1169,28 @@
     );
   }
 
-  function attendre(ms) {
-    return new Promise(function (resolve) {
-      setTimeout(resolve, ms);
-    });
-  }
-
   /*
-   * VERIFICATION DANS GOOGLE SHEETS
+   * VERIFICATION DES MODIFICATIONS
    */
 
-  async function lireEtatServeur() {
-    const url =
-      API_URL +
-      '?type=conseils' +
-      '&gite=' +
-      encodeURIComponent(giteActuel()) +
-      '&t=' +
-      Date.now();
-
-    const response = await fetch(
-      url,
-      {
-        cache: 'no-store'
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(
-        'Lecture de vérification impossible'
-      );
-    }
-
-    const data = await response.json();
-
-    if (!Array.isArray(data)) {
-      throw new Error(
-        'Réponse de vérification invalide'
-      );
-    }
-
-    return data;
+  function attendreVerification(ms) {
+    return attendre(ms);
   }
 
   async function verifierModification(
     condition
   ) {
-    for (let essai = 0; essai < 5; essai++) {
-      await attendre(
+    for (
+      let essai = 0;
+      essai < 5;
+      essai++
+    ) {
+      await attendreVerification(
         essai === 0 ? 1400 : 1800
       );
 
-      const data = await lireEtatServeur();
+      const data =
+        await lireEtatServeur();
 
       if (condition(data)) {
         cachedAdvices = data;
@@ -905,7 +1210,10 @@
     nouvelEtat,
     titre
   ) {
-    if (operationEnCours) {
+    if (
+      operationEnCours ||
+      !adminPin
+    ) {
       return;
     }
 
@@ -933,21 +1241,25 @@
           function (data) {
             const conseil = data.find(
               function (item) {
-                return Number(item.index) === index;
+                return Number(
+                  item.index
+                ) === index;
               }
             );
 
             return (
               conseil &&
-              estActive(conseil, gite) === nouvelEtat
+              estActive(
+                conseil,
+                gite
+              ) === nouvelEtat
             );
           }
         );
 
       if (!confirme) {
         throw new Error(
-          'Modification non confirmée. ' +
-          'Vérifie le déploiement Apps Script.'
+          'Modification non confirmée. Vérifie Apps Script.'
         );
       }
 
@@ -956,8 +1268,8 @@
       afficherMessage(
         'Modification enregistrée pour ' +
         gite +
-        '. La télévision récupérera le ' +
-        'nouveau réglage lors de sa prochaine actualisation.',
+        '. La télévision récupérera le nouveau réglage ' +
+        'lors de sa prochaine actualisation.',
         'succes'
       );
 
@@ -973,6 +1285,7 @@
           await lireEtatServeur();
 
         construireListe();
+
       } catch (_) {
         // On garde la liste existante.
       }
@@ -983,22 +1296,23 @@
   }
 
   /*
-   * TOUT DESACTIVER POUR LE GITE
+   * TOUT DESACTIVER
    */
 
   async function toutDesactiver() {
-    if (operationEnCours) {
+    if (
+      operationEnCours ||
+      !adminPin
+    ) {
       return;
     }
 
     const gite = giteActuel();
 
-    const confirmation = confirm(
-      'Désactiver toutes les recommandations ' +
-      'pour ' + gite + ' ?'
-    );
-
-    if (!confirmation) {
+    if (!confirm(
+      'Désactiver toutes les recommandations pour ' +
+      gite + ' ?'
+    )) {
       return;
     }
 
@@ -1023,8 +1337,14 @@
             return data.every(
               function (conseil) {
                 return (
-                  !estApplicable(conseil, gite) ||
-                  !estActive(conseil, gite)
+                  !estApplicable(
+                    conseil,
+                    gite
+                  ) ||
+                  !estActive(
+                    conseil,
+                    gite
+                  )
                 );
               }
             );
@@ -1033,8 +1353,7 @@
 
       if (!confirme) {
         throw new Error(
-          'La désactivation totale ' +
-          'n’a pas été confirmée.'
+          'La désactivation totale n’a pas été confirmée.'
         );
       }
 
@@ -1059,6 +1378,7 @@
           await lireEtatServeur();
 
         construireListe();
+
       } catch (_) {
         // On garde la dernière liste.
       }
@@ -1072,10 +1392,21 @@
    * EVENEMENTS
    */
 
+  $('formConnexion').addEventListener(
+    'submit',
+    connecter
+  );
+
+  $('deconnexion').addEventListener(
+    'click',
+    deconnecter
+  );
+
   selectGite.addEventListener(
     'change',
     function () {
       chargementNumero++;
+
       majRetour();
       construireListe();
 
@@ -1105,7 +1436,12 @@
    */
 
   majRetour();
-  chargerConseils(false);
+
+  if (isTV) {
+    $('ecranTV').classList.remove('cache');
+  } else {
+    $('ecranConnexion').classList.remove('cache');
+  }
 
   /*
    * ACTUALISATION AUTOMATIQUE
@@ -1114,7 +1450,9 @@
 
   setInterval(function () {
     if (
+      adminPin &&
       !operationEnCours &&
+      !isTV &&
       document.visibilityState === 'visible'
     ) {
       chargerConseils(true);
