@@ -1,4 +1,790 @@
 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#12263a">
+<title>Les Ozabris — Bienvenue à La Réunion</title>
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Les Ozabris">
+
+<style>
+:root {
+  --navy:#12263a;
+  --gold:#c5a880;
+  --cream:#f7f4ee;
+  --text:#263747;
+  --muted:#697986;
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--cream);
+  color:var(--text);
+}
+.hidden { display:none!important; }
+button,a { -webkit-tap-highlight-color:transparent; }
+button:focus-visible,a:focus-visible {
+  outline:3px solid #f3b94b;
+  outline-offset:3px;
+}
+.hero {
+  position:relative;
+  color:white;
+  background:var(--navy);
+  overflow:hidden;
+  isolation:isolate;
+}
+.photo-ribbon {
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  background:#203d55;
+  pointer-events:none;
+}
+.ribbon-track {
+  position:absolute;
+  left:0;
+  top:0;
+  height:100%;
+  display:flex;
+  will-change:transform;
+}
+.ribbon-tile {
+  height:100%;
+  flex:none;
+  padding:3px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#203d55;
+}
+.ribbon-tile img {
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+.hero-overlay {
+  position:absolute;
+  inset:0;
+  background:rgba(11,28,44,.13);
+  pointer-events:none;
+}
+.hero-inner {
+  position:relative;
+  z-index:2;
+  max-width:1320px;
+  margin:auto;
+  padding:20px 25px 35px;
+}
+.topbar {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.brand {
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.logo {
+  width:78px;
+  height:78px;
+  object-fit:cover;
+  border-radius:50%;
+  border:3px solid var(--gold);
+  background:white;
+}
+.brand-name {
+  font: bold 28px Georgia,serif;
+}
+.brand-subtitle {
+  color:#e9d8b9;
+  font-size:12px;
+  letter-spacing:2px;
+  margin-top:5px;
+}
+.top-links {
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.top-links a,.top-links button {
+  padding:11px 16px;
+  border:1px solid var(--gold);
+  border-radius:10px;
+  background:rgba(18,38,58,.65);
+  color:white;
+  font-weight:bold;
+  text-decoration:none;
+  cursor:pointer;
+}
+.hero-content {
+  max-width:870px;
+  margin:24px auto 0;
+  padding:19px 26px 21px;
+  text-align:center;
+  background:rgba(10,28,45,.68);
+  border:1px solid rgba(233,216,185,.45);
+  border-radius:20px;
+  backdrop-filter:blur(7px);
+  -webkit-backdrop-filter:blur(7px);
+}
+.eyebrow {
+  color:#e9d8b9;
+  font-size:11px;
+  font-weight:bold;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-bottom:9px;
+}
+.hero h1 {
+  font:normal clamp(32px,4vw,53px) Georgia,serif;
+  line-height:1.12;
+  margin:0 0 9px;
+}
+.hero h1 em { color:#e9d8b9; }
+.hero h1 br { display:none; }
+.hero-description {
+  font-size:clamp(14px,1.4vw,17px);
+  line-height:1.4;
+  max-width:730px;
+  margin:auto;
+}
+.hero-buttons {
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:13px;
+  margin-top:14px;
+}
+.hero-button {
+  display:inline-block;
+  padding:10px 17px;
+  border:1px solid var(--gold);
+  border-radius:11px;
+  background:var(--gold);
+  color:var(--navy);
+  text-decoration:none;
+  font-weight:bold;
+}
+.hero-button.secondary {
+  background:rgba(255,255,255,.08);
+  color:white;
+}
+.oz-sommaire {
+  max-width:950px;
+  margin:18px auto 0;
+  padding:15px 18px 18px;
+  background:rgba(10,28,45,.72);
+  border:1px solid rgba(233,216,185,.45);
+  border-radius:19px;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.oz-sommaire-title {
+  font:normal 21px Georgia,serif;
+  text-align:center;
+  color:#f6e8d3;
+  margin:0 0 12px;
+}
+.oz-menu-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+.oz-menu-link {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:64px;
+  padding:10px 13px;
+  border:1px solid rgba(233,216,185,.36);
+  border-radius:12px;
+  background:rgba(255,255,255,.13);
+  color:white;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:bold;
+}
+.oz-menu-link:hover,.oz-menu-link:focus-visible {
+  background:var(--gold);
+  color:var(--navy);
+}
+.oz-menu-icon { font-size:24px; }
+.oz-menu-link small {
+  display:block;
+  font-weight:normal;
+  font-size:11px;
+  margin-top:3px;
+}
+.oz-retour {
+  display:block;
+  width:max-content;
+  margin:17px auto;
+  padding:11px 18px;
+  background:var(--navy);
+  color:white;
+  border:1px solid var(--gold);
+  border-radius:10px;
+  text-decoration:none;
+  font-weight:bold;
+}
+.oz-tv #adminButton {
+  display:none!important;
+}
+@media(max-width:720px) {
+  .hero-inner { padding:18px 14px 28px; }
+  .hero-content { padding:17px 16px; }
+  .hero h1 { font-size:clamp(29px,8vw,41px); }
+  .oz-menu-grid {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .oz-menu-link { padding:10px; }
+  .brand-name { font-size:24px; }
+  .logo { width:70px;height:70px; }
+}
+</style>
+
+<script>
+if(new URLSearchParams(location.search).get('tv')==='1'){
+  document.documentElement.classList.add('oz-tv');
+}
+</script>
+</head>
+<body>
+
+<header class="hero" id="hero">
+  <div class="photo-ribbon" id="heroRibbon" aria-hidden="true">
+    <div class="ribbon-track"></div>
+  </div>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-inner">
+    <div class="topbar">
+      <div class="brand">
+        <img src="images/logo.jpeg"
+             alt="Logo Les Ozabris"
+             class="logo">
+        <div>
+          <div class="brand-name">Les Ozabris</div>
+          <div class="brand-subtitle">
+            LA RÉUNION · ART DE VIVRE
+          </div>
+        </div>
+      </div>
+
+      <nav class="top-links">
+        <a id="topGuide" href="guide.html">Guide pratique</a>
+        <a id="topConseils" href="conseils.html">Nos conseils</a>
+        <button id="adminButton" type="button">
+          ⚙ Admin
+        </button>
+      </nav>
+    </div>
+
+    <div class="hero-content">
+      <div class="eyebrow" id="heroEyebrow">
+        VOTRE PARENTHÈSE À LA RÉUNION
+      </div>
+      <h1 id="heroTitle">
+        Bienvenue <em>aux Ozabris</em>
+      </h1>
+      <p class="hero-description" id="heroDescription">
+        Un séjour placé sous le signe de la douceur,
+        de la découverte et de l'art de vivre réunionnais.
+      </p>
+      <div class="hero-buttons">
+        <a class="hero-button" id="heroGuide" href="guide.html">
+          🏡 Découvrir votre gîte
+        </a>
+        <a class="hero-button secondary"
+           id="heroConseils"
+           href="conseils.html">
+          🌴 Explorer La Réunion
+        </a>
+      </div>
+    </div>
+
+    <nav class="oz-sommaire" id="sommaire"
+         aria-label="Sommaire de votre séjour">
+      <h2 class="oz-sommaire-title">
+        Explorez votre séjour
+      </h2>
+
+      <div class="oz-menu-grid">
+        <a class="oz-menu-link" href="#meteo">
+          <span class="oz-menu-icon">🌤️</span>
+          <span>Météo et séjour
+            <small>Aujourd'hui à La Réunion</small>
+          </span>
+        </a>
+
+        <a class="oz-menu-link" href="#decouvrir">
+          <span class="oz-menu-icon">🏡</span>
+          <span>Tout à portée de main
+            <small>Découvrez votre gîte</small>
+          </span>
+        </a>
+
+        <a class="oz-menu-link" id="menuGuide"
+           href="guide.html">
+          <span class="oz-menu-icon">📖</span>
+          <span>Guide pratique
+            <small>Wi-Fi et équipements</small>
+          </span>
+        </a>
+
+        <a class="oz-menu-link" id="menuConseils"
+           href="conseils.html">
+          <span class="oz-menu-icon">🌴</span>
+          <span>Nos recommandations
+            <small>Les bonnes adresses</small>
+          </span>
+        </a>
+
+        <a class="oz-menu-link" href="#divertissements">
+          <span class="oz-menu-icon">📺</span>
+          <span>Divertissements
+            <small>Vos applications TV</small>
+          </span>
+        </a>
+
+        <a class="oz-menu-link" href="#pratique">
+          <span class="oz-menu-icon">ℹ️</span>
+          <span>Infos pratiques
+            <small>Les essentiels du séjour</small>
+          </span>
+        </a>
+
+        <a class="oz-menu-link" href="#qr-codes">
+          <span class="oz-menu-icon">📱</span>
+          <span>QR codes
+            <small>Votre guide sur mobile</small>
+          </span>
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div id="ozNotification"
+     role="status"
+     aria-live="polite"
+     hidden
+     style="position:fixed;top:15px;left:50%;
+       transform:translateX(-50%);z-index:9998;
+       width:min(90%,600px);padding:18px;
+       background:#12263a;color:white;
+       border:2px solid #c5a880;border-radius:15px;
+       box-shadow:0 10px 35px #0005;text-align:center">
+  <strong id="ozNotificationTitle">
+    🌺 Nouveau conseil de Jean !
+  </strong>
+  <p id="ozNotificationText"></p>
+  <a id="ozNotificationLink"
+     href="conseils.html"
+     style="color:#e9d8b9;font-weight:bold">
+    Voir la recommandation →
+  </a>
+  <button id="ozNotificationClose"
+          type="button"
+          aria-label="Fermer la notification"
+          style="margin-left:15px;padding:8px;
+            border:0;border-radius:8px">
+    ✕
+  </button>
+</div>
+
+<main style="max-width:1320px;margin:auto;padding:20px 18px 50px">
+
+  <section id="meteo" style="scroll-margin-top:20px">
+    <div style="display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:15px">
+
+      <article style="background:white;padding:23px;
+        border-radius:17px">
+        <div id="dateLabel">Aujourd'hui à La Réunion</div>
+        <h2 id="localDate" style="color:#12263a">—</h2>
+        <p id="localTime">Heure locale</p>
+      </article>
+
+      <article style="background:white;padding:23px;
+        border-radius:17px">
+        <div id="weatherLabel">Météo · Saint-Paul</div>
+        <h2>
+          <span id="weatherIcon">🌤️</span>
+          <span id="temperature">—</span>
+        </h2>
+        <p id="weatherDescription">
+          Chargement de la météo…
+        </p>
+        <p id="weatherExtra"></p>
+      </article>
+
+      <article style="background:white;padding:23px;
+        border-radius:17px">
+        <div id="stayLabel">Votre séjour</div>
+        <h2 id="cottageName">Grandzabris</h2>
+        <p id="stayMessage">
+          Profitez pleinement de votre séjour.
+        </p>
+      </article>
+    </div>
+    <a class="oz-retour" href="#sommaire">
+      ↑ Retour au sommaire
+    </a>
+  </section>
+
+  <section id="decouvrir"
+           style="margin-top:35px;scroll-margin-top:20px">
+    <div style="text-align:center;margin-bottom:25px">
+      <div id="discoverKicker">
+        Votre séjour, en toute simplicité
+      </div>
+      <h2 id="discoverTitle"
+          style="font:normal 36px Georgia,serif;color:#12263a">
+        Tout est à portée de main
+      </h2>
+      <p id="discoverText">
+        Retrouvez les informations de votre hébergement
+        et nos recommandations pour découvrir l'île.
+      </p>
+    </div>
+
+    <div style="display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:18px">
+
+      <a id="featureGuide" href="guide.html"
+         style="position:relative;display:flex;
+           align-items:flex-end;min-height:300px;
+           overflow:hidden;border-radius:18px;
+           background:#203d55;color:white;
+           text-decoration:none">
+        <div id="guideSlideshow"
+             style="position:absolute;inset:0">
+          <img class="feature-slide is-visible"
+               alt=""
+               style="position:absolute;width:100%;height:100%;
+                 object-fit:contain">
+        </div>
+        <div style="position:relative;z-index:2;
+          margin:15px;padding:19px;border-radius:14px;
+          background:rgba(10,28,45,.84);width:100%">
+          <small id="guideTag">VOTRE HÉBERGEMENT</small>
+          <h3 id="guideTitle">Le guide du gîte</h3>
+          <p id="guideDescription">
+            Wi-Fi, équipements et informations utiles.
+          </p>
+          <strong id="guideArrow">
+            Découvrir le guide →
+          </strong>
+        </div>
+      </a>
+
+      <a id="featureConseils" href="conseils.html"
+         style="position:relative;display:flex;
+           align-items:flex-end;min-height:300px;
+           overflow:hidden;border-radius:18px;
+           background:#203d55;color:white;
+           text-decoration:none">
+        <div id="conseilsSlideshow"
+             style="position:absolute;inset:0">
+          <img class="feature-slide is-visible"
+               alt=""
+               style="position:absolute;width:100%;height:100%;
+                 object-fit:contain">
+        </div>
+        <div style="position:relative;z-index:2;
+          margin:15px;padding:19px;border-radius:14px;
+          background:rgba(10,28,45,.84);width:100%">
+          <small id="conseilsTag">NOS COUPS DE CŒUR</small>
+          <h3 id="conseilsTitle">Les bonnes adresses</h3>
+          <p id="conseilsDescription">
+            Plages, paysages, commerces et balades.
+          </p>
+          <strong id="conseilsArrow">
+            Explorer nos conseils →
+          </strong>
+        </div>
+      </a>
+    </div>
+
+    <a class="oz-retour" href="#sommaire">
+      ↑ Retour au sommaire
+    </a>
+  </section>
+
+  <section id="divertissements"
+           style="scroll-margin-top:20px;
+             margin-top:35px;padding:30px 20px;
+             border-radius:22px;background:#12263a;
+             color:white;text-align:center">
+    <div id="entertainmentKicker">VOTRE ESPACE DÉTENTE</div>
+    <h2 id="entertainmentTitle"
+        style="font:normal 36px Georgia,serif">
+      Vos divertissements
+    </h2>
+    <p id="entertainmentIntro">
+      Profitez de vos programmes préférés.
+    </p>
+
+    <div style="display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:13px;margin-top:23px">
+
+      <button class="entertainment-card"
+              data-app="netflix" type="button">
+        <span style="font-size:35px;color:#e50914">N</span>
+        <strong>Netflix</strong>
+        <small id="netflixDescription">
+          Avec votre compte personnel
+        </small>
+      </button>
+
+      <button class="entertainment-card"
+              data-app="orange" type="button">
+        <span style="font-size:35px">📺</span>
+        <strong>Orange TV</strong>
+        <small id="orangeDescription">
+          Vos chaînes de télévision
+        </small>
+      </button>
+
+      <button class="entertainment-card"
+              data-app="prime" type="button">
+        <span style="font-size:35px">🎬</span>
+        <strong>Prime Video</strong>
+        <small id="primeDescription">
+          Avec votre compte personnel
+        </small>
+      </button>
+
+      <button class="entertainment-card"
+              data-app="youtube" type="button">
+        <span style="font-size:35px">▶️</span>
+        <strong>YouTube</strong>
+        <small id="youtubeDescription">
+          Vidéos et découvertes
+        </small>
+      </button>
+    </div>
+
+    <button id="openLauncher" type="button"
+            style="margin-top:20px;padding:14px;
+              background:#c5a880;border:0;
+              border-radius:11px;font-weight:bold">
+      📺 Ouvrir toutes les applications
+    </button>
+
+    <p id="entertainmentStatus" role="status"></p>
+    <p id="entertainmentNote">
+      Utilisez vos comptes personnels et déconnectez-vous
+      avant votre départ.
+    </p>
+  </section>
+
+  <a class="oz-retour" href="#sommaire">
+    ↑ Retour au sommaire
+  </a>
+
+  <section id="pratique"
+           style="margin-top:35px;scroll-margin-top:20px">
+    <div style="text-align:center">
+      <div id="practicalKicker">LES ESSENTIELS</div>
+      <h2 id="practicalTitle"
+          style="font:normal 36px Georgia,serif;color:#12263a">
+        Pour un séjour sans souci
+      </h2>
+      <p id="practicalText">
+        Les informations pratiques à tout moment.
+      </p>
+    </div>
+
+    <div style="display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+      gap:14px">
+
+      <article class="oz-info-card">
+        <div>📶</div>
+        <h3 id="wifiTitle">Wi-Fi</h3>
+        <p id="wifiText">
+          Informations de connexion dans le guide.
+        </p>
+        <a class="guide-shortcut" id="wifiLink"
+           href="guide.html">Voir le guide →</a>
+      </article>
+
+      <article class="oz-info-card">
+        <div>🏡</div>
+        <h3 id="rulesTitle">Vie dans le gîte</h3>
+        <p id="rulesText">
+          Équipements, consignes et bonnes pratiques.
+        </p>
+        <a class="guide-shortcut" id="rulesLink"
+           href="guide.html">Voir les informations →</a>
+      </article>
+
+      <article class="oz-info-card">
+        <div>♻️</div>
+        <h3 id="sortingTitle">Tri des déchets</h3>
+        <p id="sortingText">
+          Les consignes pour protéger notre île.
+        </p>
+        <a class="guide-shortcut" id="sortingLink"
+           href="guide.html">Voir les consignes →</a>
+      </article>
+
+      <article class="oz-info-card">
+        <div>🌋</div>
+        <h3 id="islandTitle">Découvrir l'île</h3>
+        <p id="islandText">
+          Retrouvez nos sorties et découvertes.
+        </p>
+        <a id="islandLink"
+           href="conseils.html">Nos recommandations →</a>
+      </article>
+    </div>
+
+    <a class="oz-retour" href="#sommaire">
+      ↑ Retour au sommaire
+    </a>
+  </section>
+
+  <section id="qr-codes"
+           style="margin-top:35px;padding:25px;
+             border-radius:20px;background:#12263a;
+             color:white;text-align:center;
+             scroll-margin-top:20px">
+    <h2 id="qrSectionTitle">
+      Emportez votre guide avec vous
+    </h2>
+    <p id="qrSectionText">
+      Scannez les QR codes avec votre téléphone.
+    </p>
+
+    <div style="display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+      gap:12px">
+      <div class="oz-qr-card">
+        <h3 id="qrHomeTitle">Accueil</h3>
+        <div id="qrHome"></div>
+      </div>
+      <div class="oz-qr-card">
+        <h3 id="qrGuideTitle">Guide du gîte</h3>
+        <div id="qrGuide"></div>
+      </div>
+      <div class="oz-qr-card">
+        <h3 id="qrConseilsTitle">Nos conseils</h3>
+        <div id="qrConseils"></div>
+      </div>
+      <div class="oz-qr-card">
+        <h3 id="qrSanibroyeurTitle">Sanibroyeur</h3>
+        <div id="qrSanibroyeur"></div>
+      </div>
+      <div class="oz-qr-card">
+        <h3 id="qrTriTitle">Tri des déchets</h3>
+        <div id="qrTri"></div>
+      </div>
+    </div>
+  </section>
+
+  <a class="oz-retour" href="#sommaire">
+    ↑ Retour au sommaire
+  </a>
+</main>
+
+<footer style="padding:30px;text-align:center;
+  background:#12263a;color:#e9d8b9">
+  <h2>Les Ozabris</h2>
+  <p id="footerText">
+    Votre maison de vacances à La Réunion
+  </p>
+  <p>🌴 La Réunion · Océan Indien</p>
+</footer>
+
+<div id="adminModal" hidden
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="adminModalTitle"
+     style="position:fixed;inset:0;z-index:9999;
+       background:rgba(0,0,0,.8);
+       align-items:center;justify-content:center;
+       padding:20px">
+  <div style="background:white;padding:28px;
+    border-radius:18px;width:min(400px,100%);
+    text-align:center">
+    <h2 id="adminModalTitle">Accès administrateur</h2>
+    <p>Accéder à la gestion des recommandations.</p>
+    <button id="confirmAdmin" type="button">
+      Ouvrir l'administration
+    </button>
+    <button id="cancelAdmin" type="button">
+      Annuler
+    </button>
+  </div>
+</div>
+
+<style>
+.entertainment-card {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  min-height:135px;
+  padding:15px;
+  border:1px solid rgba(233,216,185,.4);
+  border-radius:15px;
+  background:rgba(255,255,255,.09);
+  color:white;
+  cursor:pointer;
+  font-family:inherit;
+}
+.entertainment-card:focus-visible {
+  background:#c5a880;
+  color:#12263a;
+}
+.oz-info-card {
+  padding:20px;
+  border-radius:15px;
+  background:white;
+  text-align:center;
+  border:1px solid #e9e1d7;
+}
+.oz-info-card > div { font-size:30px; }
+.oz-info-card h3 { color:#12263a; }
+.oz-info-card a {
+  color:#87683e;
+  font-weight:bold;
+}
+.oz-qr-card {
+  padding:14px;
+  border-radius:12px;
+  background:white;
+  color:#12263a;
+  overflow-wrap:anywhere;
+}
+.oz-qr-card > div {
+  display:flex;
+  justify-content:center;
+}
+.oz-qr-card img,.oz-qr-card canvas {
+  max-width:100%;
+  height:auto;
+}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 <script>
 (function () {
   'use strict';
