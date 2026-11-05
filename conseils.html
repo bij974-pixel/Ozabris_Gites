@@ -6,1689 +6,344 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#12263a">
 <title>Les conseils — Les Ozabris</title>
-
 <style>
-:root {
-  --bleu: #12263a;
-  --bleu2: #25465f;
-  --or: #c5a880;
-  --creme: #f6f1e8;
-}
-
-* { box-sizing: border-box; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: Arial, Helvetica, sans-serif;
-  color: var(--bleu);
-  background:
-    linear-gradient(
-      rgba(246,241,232,.92),
-      rgba(246,241,232,.95)
-    ),
-    url("fond_page.png") center / cover fixed;
-}
-
-button, a {
-  -webkit-tap-highlight-color: transparent;
-}
-
-button:focus-visible,
-a:focus-visible {
-  outline: 4px solid #e9aa31;
-  outline-offset: 4px;
-}
-
-header {
-  padding: 22px 15px;
-  text-align: center;
-  background: linear-gradient(
-    135deg,
-    var(--bleu),
-    var(--bleu2)
-  );
-  border-bottom: 5px solid var(--or);
-  color: white;
-}
-
-.logo {
-  width: 95px;
-  height: 95px;
-  border-radius: 50%;
-  border: 3px solid var(--or);
-  object-fit: cover;
-  background: white;
-}
-
-h1 {
-  font-size: clamp(27px,4vw,42px);
-  margin: 12px 0 6px;
-}
-
-header p { color: #e9dac5; }
-
-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  margin-top: 18px;
-}
-
-nav a,
-nav button {
-  padding: 12px 17px;
-  background: rgba(255,255,255,.1);
-  border: 1px solid var(--or);
-  border-radius: 11px;
-  color: white;
-  font-size: 15px;
-  font-weight: bold;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-nav a:hover,
-nav button:hover {
-  background: var(--or);
-  color: var(--bleu);
-}
-
-main {
-  max-width: 1350px;
-  margin: auto;
-  padding: 28px 16px 45px;
-}
-
-.intro {
-  text-align: center;
-  margin-bottom: 27px;
-}
-
-.intro h2 {
-  font-size: clamp(24px,3vw,34px);
-  margin: 0 0 10px;
-}
-
-.intro p {
-  font-size: 17px;
-  line-height: 1.5;
-}
-
-.status {
-  max-width: 850px;
-  margin: 15px auto;
-  padding: 15px;
-  background: white;
-  border-radius: 12px;
-  text-align: center;
-}
-
-.status:empty { display: none; }
-
-.status.error {
-  background: #fff0f0;
-  color: #a13535;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns:
-    repeat(auto-fit,minmax(270px,1fr));
-  gap: 22px;
-}
-
-.card {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background: white;
-  border-radius: 18px;
-  border: 1px solid rgba(197,168,128,.5);
-  box-shadow: 0 7px 22px rgba(0,0,0,.11);
-}
-
-.card-photo {
-  display: block;
-  width: 100%;
-  padding: 0;
-  border: 0;
-  background: #e8e2d9;
-  cursor: pointer;
-}
-
-.card-photo img {
-  width: 100%;
-  height: 235px;
-  display: block;
-  object-fit: cover;
-}
-
-.card-body {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.card h3 {
-  font-size: 21px;
-  margin: 0 0 12px;
-}
-
-.card p {
-  margin: 0 0 18px;
-  line-height: 1.55;
-  font-size: 16px;
-  white-space: pre-line;
-  flex: 1;
-}
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 9px;
-}
-
-.btn {
-  flex: 1 1 auto;
-  padding: 12px 14px;
-  border: 0;
-  border-radius: 10px;
-  background: var(--bleu);
-  color: white;
-  font-weight: bold;
-  font-size: 15px;
-  text-align: center;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.btn.gold {
-  background: var(--or);
-  color: var(--bleu);
-}
-
-.btn:hover { filter: brightness(1.1); }
-
-.qr-panel {
-  max-width: 720px;
-  margin: 40px auto 0;
-  padding: 25px;
-  background: white;
-  border: 2px solid var(--or);
-  border-radius: 18px;
-  text-align: center;
-}
-
-.qr-holder {
-  display: flex;
-  justify-content: center;
-  margin: 16px auto;
-  min-height: 160px;
-}
-
-.qr-holder img,
-.qr-holder canvas {
-  max-width: 100%;
-}
-
-footer {
-  background: var(--bleu);
-  color: #e9dac5;
-  text-align: center;
-  padding: 24px 15px;
-}
-
-.modal {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: none;
-  justify-content: center;
-  align-items: center;
-  padding: 14px;
-  background: rgba(9,19,30,.96);
-}
-
-.modal.open { display: flex; }
-
-.modal-box {
-  width: min(1050px,100%);
-  max-height: 95vh;
-  overflow: auto;
-  padding: 20px;
-  border-radius: 18px;
-  background: white;
-  text-align: center;
-}
-
-.close {
-  position: sticky;
-  top: 0;
-  float: right;
-  width: 49px;
-  height: 49px;
-  border: 0;
-  border-radius: 50%;
-  background: var(--bleu);
-  color: white;
-  font-size: 27px;
-  cursor: pointer;
-}
-
-.modal-image {
-  display: block;
-  max-width: 100%;
-  max-height: 49vh;
-  margin: 10px auto;
-  object-fit: contain;
-  border-radius: 12px;
-}
-
-.modal-description {
-  white-space: pre-line;
-  line-height: 1.55;
-}
-
-.modal-qr {
-  display: flex;
-  justify-content: center;
-  margin: 14px auto;
-}
-
-.modal-qr:empty { display: none; }
-
-.modal-website {
-  display: inline-block;
-  margin: 10px auto;
-  padding: 14px 24px;
-  border-radius: 10px;
-  background: var(--or);
-  color: var(--bleu);
-  font-weight: bold;
-  text-decoration: none;
-}
-
-.hidden { display: none !important; }
-
-@media (min-width:1300px) {
-  .grid {
-    grid-template-columns: repeat(3,1fr);
-  }
-  .card-photo img { height: 270px; }
-}
-
-@media (max-width:600px) {
-  .grid { grid-template-columns: 1fr; }
-  main { padding: 20px 12px 35px; }
-  .modal-box { padding: 12px; }
-}
-
-/* ======================================
-   AFFICHAGE TV : SOMMAIRE + DETAIL
-   ====================================== */
-
-.tv-layout { display: none; }
-
-body.tv-mode {
-  background: var(--creme);
-}
-
-body.tv-mode header {
-  padding: 9px 15px;
-  border-bottom-width: 3px;
-}
-
-body.tv-mode .logo {
-  width: 43px;
-  height: 43px;
-  vertical-align: middle;
-}
-
-body.tv-mode h1 {
-  font-size: clamp(22px,2.3vw,31px);
-  margin: 3px 0;
-}
-
-body.tv-mode header p { margin: 3px; }
-
-body.tv-mode nav {
-  margin-top: 6px;
-  gap: 7px;
-}
-
-body.tv-mode nav a,
-body.tv-mode nav button {
-  padding: 7px 11px;
-  font-size: 13px;
-}
-
-body.tv-mode main {
-  max-width: 1600px;
-  padding: 12px 22px 20px;
-}
-
-body.tv-mode .intro,
-body.tv-mode #cards,
-body.tv-mode .qr-panel,
-body.tv-mode footer {
-  display: none;
-}
-
-body.tv-mode .tv-layout {
-  display: block;
-}
-
-.tv-menu-title {
-  font-size: clamp(17px,2vw,24px);
-  font-weight: bold;
-  margin: 0 0 8px;
-}
-
-.tv-menu {
-  display: flex;
-  gap: 9px;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  padding: 7px 6px 13px;
-  scroll-behavior: smooth;
-  scrollbar-width: thin;
-  scrollbar-color: var(--or) transparent;
-}
-
-.tv-item {
-  flex: 0 0 auto;
-  max-width: 300px;
-  min-width: 145px;
-  min-height: 48px;
-  padding: 10px 17px;
-  border-radius: 11px;
-  border: 2px solid var(--or);
-  background: white;
-  color: var(--bleu);
-  font-size: clamp(15px,1.5vw,19px);
-  font-weight: bold;
-  cursor: pointer;
-  white-space: normal;
-  text-align: center;
-}
-
-.tv-item.selected {
-  background: var(--bleu);
-  color: white;
-}
-
-.tv-item:focus {
-  outline: 4px solid #e9aa31;
-  outline-offset: 2px;
-  background: #d9b675;
-  color: #12263a;
-}
-
-.tv-detail {
-  display: grid;
-  grid-template-columns:
-    minmax(0,1.05fr) minmax(0,1fr);
-  gap: 20px;
-  background: white;
-  border: 2px solid var(--or);
-  border-radius: 18px;
-  padding: 17px;
-  box-shadow: 0 7px 22px rgba(0,0,0,.09);
-  min-height: 340px;
-}
-
-.tv-photo-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 250px;
-  background: #ece8e1;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.tv-photo {
-  width: 100%;
-  height: min(48vh,460px);
-  object-fit: contain;
-}
-
-.tv-detail-body {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.tv-detail h2 {
-  font-size: clamp(23px,2.6vw,37px);
-  margin: 0 0 12px;
-}
-
-.tv-description {
-  font-size: clamp(16px,1.65vw,22px);
-  line-height: 1.5;
-  white-space: pre-line;
-  overflow-y: auto;
-  max-height: 34vh;
-  overscroll-behavior: contain;
-}
-
-.tv-bottom {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-top: auto;
-  padding-top: 12px;
-}
-
-.tv-qr {
-  background: white;
-  padding: 5px;
-  min-width: 110px;
-  min-height: 110px;
-}
-
-.tv-qr img,
-.tv-qr canvas {
-  max-width: 100%;
-}
-
-.tv-qr-label {
-  font-size: 14px;
-  max-width: 190px;
-}
-
-.tv-link {
-  font-size: 15px;
-  color: var(--bleu);
-  font-weight: bold;
-  overflow-wrap: anywhere;
-}
-
-.tv-hint {
-  margin: 8px 0 0;
-  text-align: center;
-  font-size: 14px;
-  color: #4b5862;
-}
-
-@media (max-width:800px) {
-  .tv-detail { grid-template-columns: 1fr; }
-  .tv-photo { height: 30vh; }
-  .tv-description { max-height: 25vh; }
-}
+:root{--bleu:#12263a;--bleu2:#25465f;--or:#c5a880;--creme:#f6f1e8}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;font-family:Arial,Helvetica,sans-serif;color:var(--bleu);background:linear-gradient(rgba(246,241,232,.92),rgba(246,241,232,.95)),url("fond_page.png") center/cover fixed}
+button,a{-webkit-tap-highlight-color:transparent}
+button:focus-visible,a:focus-visible{outline:4px solid #e9aa31;outline-offset:3px}
+header{padding:22px 15px;text-align:center;background:linear-gradient(135deg,var(--bleu),var(--bleu2));border-bottom:5px solid var(--or);color:white}
+.logo{width:95px;height:95px;border-radius:50%;border:3px solid var(--or);object-fit:cover;background:white}
+h1{font-size:clamp(27px,4vw,42px);margin:12px 0 6px}
+header p{color:#e9dac5}
+nav{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:18px}
+nav a,nav button{padding:12px 17px;background:rgba(255,255,255,.1);border:1px solid var(--or);border-radius:11px;color:white;font-size:15px;font-weight:bold;text-decoration:none;cursor:pointer}
+nav a:hover,nav button:hover{background:var(--or);color:var(--bleu)}
+main{max-width:1350px;margin:auto;padding:28px 16px 45px}
+.intro{text-align:center;margin-bottom:27px}
+.intro h2{font-size:clamp(24px,3vw,34px);margin:0 0 10px}
+.intro p{font-size:17px;line-height:1.5}
+.status{max-width:850px;margin:15px auto;padding:15px;background:white;border-radius:12px;text-align:center}
+.status:empty{display:none}
+.status.error{background:#fff0f0;color:#a13535}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:22px}
+.card{display:flex;flex-direction:column;overflow:hidden;background:white;border-radius:18px;border:1px solid rgba(197,168,128,.5);box-shadow:0 7px 22px rgba(0,0,0,.11)}
+.card-photo{display:block;width:100%;padding:0;border:0;background:#e8e2d9;cursor:pointer}
+.card-photo img{width:100%;height:235px;display:block;object-fit:cover}
+.card-body{padding:20px;display:flex;flex-direction:column;flex:1}
+.card h3{font-size:21px;margin:0 0 12px}
+.card p{margin:0 0 18px;line-height:1.55;font-size:16px;white-space:pre-line;flex:1}
+.actions{display:flex;flex-wrap:wrap;gap:9px}
+.btn{flex:1 1 auto;padding:12px 14px;border:0;border-radius:10px;background:var(--bleu);color:white;font-weight:bold;font-size:15px;text-align:center;text-decoration:none;cursor:pointer}
+.btn.gold{background:var(--or);color:var(--bleu)}
+.btn:hover{filter:brightness(1.1)}
+.qr-panel{max-width:720px;margin:40px auto 0;padding:25px;background:white;border:2px solid var(--or);border-radius:18px;text-align:center}
+.qr-holder{display:flex;justify-content:center;margin:16px auto;min-height:160px}
+.qr-holder img,.qr-holder canvas{max-width:100%}
+footer{background:var(--bleu);color:#e9dac5;text-align:center;padding:24px 15px}
+.modal{position:fixed;inset:0;z-index:9999;display:none;justify-content:center;align-items:center;padding:14px;background:rgba(9,19,30,.96)}
+.modal.open{display:flex}
+.modal-box{width:min(1050px,100%);max-height:95vh;overflow:auto;padding:20px;border-radius:18px;background:white;text-align:center}
+.close{position:sticky;top:0;float:right;width:49px;height:49px;border:0;border-radius:50%;background:var(--bleu);color:white;font-size:27px;cursor:pointer}
+.modal-image{display:block;max-width:100%;max-height:49vh;margin:10px auto;object-fit:contain;border-radius:12px}
+.modal-description{white-space:pre-line;line-height:1.55}
+.modal-qr{display:flex;justify-content:center;margin:14px auto}
+.modal-qr:empty{display:none}
+.modal-website{display:inline-block;margin:10px auto;padding:14px 24px;border-radius:10px;background:var(--or);color:var(--bleu);font-weight:bold;text-decoration:none}
+.hidden{display:none!important}
+@media(min-width:1300px){.grid{grid-template-columns:repeat(3,1fr)}.card-photo img{height:270px}}
+@media(max-width:600px){.grid{grid-template-columns:1fr}main{padding:20px 12px 35px}.modal-box{padding:12px}}
+
+/* AFFICHAGE TELEVISION */
+.tv-layout{display:none}
+body.tv-mode{height:100vh;height:100dvh;min-height:0;overflow:hidden;background:var(--creme)}
+body.tv-mode header,body.tv-mode .intro,body.tv-mode #cards,body.tv-mode .qr-panel,body.tv-mode footer{display:none!important}
+body.tv-mode main{width:100%;max-width:none;height:100vh;height:100dvh;padding:0;overflow:hidden}
+body.tv-mode .tv-layout{display:flex}
+.tv-layout{height:100%;flex-direction:column;padding:10px 16px 12px;gap:9px;overflow:hidden}
+.tv-top{display:flex;align-items:center;gap:20px;flex:0 0 auto}
+.tv-home{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;padding:12px 16px;min-height:48px;background:var(--bleu);color:white;border:2px solid var(--or);border-radius:12px;text-decoration:none;font-size:clamp(14px,1.6vw,22px);font-weight:bold}
+.tv-heading{margin:0;text-align:center;flex:1;font-size:clamp(19px,2.5vw,34px);color:var(--bleu)}
+.tv-summary{flex:0 0 auto;min-height:0}
+.tv-summary-label{margin:0 0 6px;font-size:clamp(14px,1.5vw,20px);font-weight:bold}
+.tv-menu{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;padding:3px 3px 7px;scrollbar-width:thin;scroll-behavior:auto}
+.tv-choice{flex:0 0 auto;max-width:min(290px,35vw);min-width:125px;min-height:53px;padding:8px 13px;border:2px solid #c5a880;border-radius:12px;background:white;color:var(--bleu);font-size:clamp(13px,1.25vw,17px);font-weight:bold;cursor:pointer;white-space:normal;text-align:center}
+.tv-choice.selected{background:var(--or);border-color:var(--bleu);box-shadow:inset 0 0 0 2px white}
+.tv-detail{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:minmax(0,43%) minmax(0,57%);overflow:hidden;border:2px solid var(--or);border-radius:17px;background:white;box-shadow:0 5px 18px rgba(0,0,0,.12)}
+.tv-image-area{min-width:0;min-height:0;background:#e9e5de;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.tv-image{width:100%;height:100%;object-fit:contain}
+.tv-info{min-width:0;min-height:0;padding:12px 17px;display:flex;flex-direction:column;overflow:hidden}
+.tv-title{flex:0 0 auto;margin:0 0 8px;font-size:clamp(18px,2vw,29px);line-height:1.15}
+.tv-description{flex:1 1 auto;min-height:0;overflow-y:auto;margin:0 0 8px;padding-right:5px;font-size:clamp(13px,1.4vw,19px);line-height:1.38;white-space:pre-line;scrollbar-width:thin}
+.tv-qr-area{flex:0 0 auto;display:flex;align-items:center;gap:14px;padding-top:8px;border-top:1px solid #e1d6c7}
+.tv-qr{flex:0 0 auto;width:clamp(100px,12.5vh,170px);height:clamp(100px,12.5vh,170px);background:white}
+.tv-qr img,.tv-qr canvas{display:block;width:100%!important;height:100%!important}
+.tv-qr-text{font-size:clamp(13px,1.35vw,19px);line-height:1.35;font-weight:bold}
+.tv-qr-text small{display:block;margin-top:5px;font-size:.8em;font-weight:normal;overflow-wrap:anywhere}
+.tv-status{flex:0 0 auto;margin:0;padding:5px;text-align:center}
+.tv-status:empty{display:none}
+@media(max-height:540px){.tv-layout{padding:5px 10px;gap:4px}.tv-home{min-height:35px;padding:6px 12px}.tv-summary-label{margin-bottom:2px}.tv-choice{min-height:40px;padding:4px 10px}.tv-info{padding:7px 12px}.tv-title{margin-bottom:4px}.tv-description{margin-bottom:4px}.tv-qr-area{padding-top:4px}}
 </style>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
-
 <body>
-
 <header>
-  <img
-    class="logo"
-    src="images/logo.jpeg"
-    alt="Les Ozabris"
-    onerror="this.style.display='none'"
-  >
-
-  <h1 id="title">Nos bonnes adresses</h1>
-  <p id="cottage"></p>
-  <p id="welcome"></p>
-
-  <nav>
-    <a id="home" href="index.html">← Accueil</a>
-    <a id="guide" href="guide.html">Guide du gîte</a>
-    <a id="admin" href="admin.html">Administration</a>
-    <button id="refresh" type="button">↻ Actualiser</button>
-  </nav>
+<img class="logo" src="images/logo.jpeg" alt="Les Ozabris" onerror="this.style.display='none'">
+<h1 id="title">Nos bonnes adresses</h1>
+<p id="cottage"></p>
+<p id="welcome"></p>
+<nav>
+<a id="home" href="index.html">← Accueil</a>
+<a id="guide" href="guide.html">Guide du gîte</a>
+<a id="admin" href="admin.html">Administration</a>
+<button id="refresh" type="button">↻ Actualiser</button>
+</nav>
 </header>
-
 <main>
-
-  <section class="intro">
-    <h2 id="introTitle">Découvrez La Réunion</h2>
-    <p id="introText">
-      Nos coups de cœur pour profiter de votre séjour.
-    </p>
-  </section>
-
-  <div
-    id="status"
-    class="status"
-    role="status"
-    aria-live="polite"
-  >Chargement des recommandations…</div>
-
-  <!-- SOMMAIRE POUR LA TELEVISION -->
-  <section
-    id="tvLayout"
-    class="tv-layout"
-    aria-label="Sommaire des recommandations"
-  >
-    <h2 id="tvMenuTitle" class="tv-menu-title">
-      Choisissez une recommandation :
-    </h2>
-
-    <div
-      id="tvMenu"
-      class="tv-menu"
-      role="group"
-      aria-label="Sommaire"
-    ></div>
-
-    <article
-      id="tvDetail"
-      class="tv-detail hidden"
-    >
-      <div class="tv-photo-wrap">
-        <img
-          id="tvPhoto"
-          class="tv-photo"
-          alt=""
-        >
-      </div>
-
-      <div class="tv-detail-body">
-        <h2 id="tvDetailTitle"></h2>
-
-        <div
-          id="tvDescription"
-          class="tv-description"
-        ></div>
-
-        <div class="tv-bottom">
-          <div id="tvQr" class="tv-qr"></div>
-
-          <div>
-            <p
-              id="tvQrLabel"
-              class="tv-qr-label"
-            ></p>
-
-            <a
-              id="tvWebsite"
-              class="tv-link hidden"
-              target="_blank"
-              rel="noopener noreferrer"
-            ></a>
-          </div>
-        </div>
-      </div>
-    </article>
-
-    <p id="tvHint" class="tv-hint">
-      ◀ ▶ Choisir une recommandation · OK pour afficher
-    </p>
-  </section>
-
-  <!-- CARTES POUR TELEPHONE -->
-  <section
-    id="cards"
-    class="grid"
-    aria-label="Recommandations"
-  ></section>
-
-  <section class="qr-panel">
-    <h2 id="pageQrTitle">
-      Retrouvez nos conseils sur votre téléphone
-    </h2>
-
-    <p id="pageQrText">
-      Scannez ce QR code pour ouvrir cette page.
-    </p>
-
-    <div id="pageQr" class="qr-holder"></div>
-  </section>
-
-</main>
-
-<footer>Les Ozabris — La Réunion 🌴</footer>
-
-<!-- FENETRE PHOTO POUR TELEPHONE -->
-<div
-  id="modal"
-  class="modal"
-  role="dialog"
-  aria-modal="true"
-  aria-hidden="true"
-  aria-labelledby="modalTitle"
->
-  <div class="modal-box">
-
-    <button
-      id="closeModal"
-      class="close"
-      type="button"
-      aria-label="Fermer"
-    >×</button>
-
-    <img
-      id="modalImage"
-      class="modal-image"
-      alt=""
-    >
-
-    <h2 id="modalTitle"></h2>
-
-    <p
-      id="modalDescription"
-      class="modal-description"
-    ></p>
-
-    <p
-      id="modalQrLabel"
-      class="hidden"
-    >
-      Scannez pour visiter le site sur votre téléphone
-    </p>
-
-    <div id="modalQr" class="modal-qr"></div>
-
-    <a
-      id="modalWebsite"
-      class="modal-website hidden"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      🌐 Visiter le site
-    </a>
-  </div>
+<section class="intro">
+<h2 id="introTitle">Découvrez La Réunion</h2>
+<p id="introText">Nos coups de cœur pour profiter de votre séjour.</p>
+</section>
+<div id="status" class="status" role="status" aria-live="polite">Chargement des recommandations…</div>
+<section id="cards" class="grid" aria-label="Recommandations"></section>
+<section class="qr-panel">
+<h2 id="pageQrTitle">Retrouvez nos conseils sur votre téléphone</h2>
+<p id="pageQrText">Scannez ce QR code pour ouvrir cette page.</p>
+<div id="pageQr" class="qr-holder"></div>
+</section>
+<section id="tvLayout" class="tv-layout">
+<div class="tv-top">
+<a id="tvHome" class="tv-home" href="index.html">⌂ Retour à l’accueil</a>
+<h1 id="tvHeading" class="tv-heading">🌴 Nos recommandations 🌴</h1>
 </div>
-
+<div class="tv-summary">
+<p id="tvSummaryLabel" class="tv-summary-label">Choisissez une recommandation :</p>
+<div id="tvMenu" class="tv-menu" aria-label="Sommaire des recommandations"></div>
+</div>
+<div id="tvDetail" class="tv-detail hidden">
+<div class="tv-image-area"><img id="tvImage" class="tv-image" alt=""></div>
+<div class="tv-info">
+<h2 id="tvTitle" class="tv-title"></h2>
+<p id="tvDescription" class="tv-description"></p>
+<div class="tv-qr-area">
+<div id="tvQr" class="tv-qr"></div>
+<div class="tv-qr-text">
+<span id="tvQrText">📱 Scannez ce QR code avec votre téléphone</span>
+<small id="tvQrSub">Retrouvez le site ou nos conseils.</small>
+</div>
+</div>
+</div>
+</div>
+<p id="tvStatus" class="tv-status"></p>
+</section>
+</main>
+<footer>Les Ozabris — La Réunion 🌴</footer>
+<div id="modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalTitle">
+<div class="modal-box">
+<button id="closeModal" class="close" type="button" aria-label="Fermer">×</button>
+<img id="modalImage" class="modal-image" alt="">
+<h2 id="modalTitle"></h2>
+<p id="modalDescription" class="modal-description"></p>
+<p id="modalQrLabel" class="hidden">Scannez pour visiter le site sur votre téléphone</p>
+<div id="modalQr" class="modal-qr"></div>
+<a id="modalWebsite" class="modal-website hidden" target="_blank" rel="noopener noreferrer">🌐 Visiter le site</a>
+</div>
+</div>
 <script>
-(function () {
-  'use strict';
-
-  const CONSEILS_API =
-    'https://script.google.com/macros/s/' +
-    'AKfycbxS9JcDvy7gGhPFXE3z1a4DVC3pvq-j2MTSbaxDuz3Z6z80AkS3GP5mNpZyibillwDVFg' +
-    '/exec';
-
-  const VOYAGEURS_API =
-    'https://script.google.com/macros/s/' +
-    'AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq' +
-    '/exec';
-
-  const params = new URLSearchParams(location.search);
-
-  const gite =
-    params.get('gite') === 'grandzabris'
-      ? 'grandzabris'
-      : 'ptitzabris';
-
-  const isTV = params.get('tv') === '1';
-
-  const $ = id => document.getElementById(id);
-
-  const LOGO = 'images/logo.jpeg';
-
-  const translations = {
-    fr: {
-      title: 'Nos bonnes adresses',
-      home: '← Accueil',
-      guide: 'Guide du gîte',
-      admin: 'Administration',
-      refresh: '↻ Actualiser',
-      introTitle: 'Découvrez La Réunion',
-      introText:
-        'Nos coups de cœur pour profiter de votre séjour.',
-      loading: 'Chargement des recommandations…',
-      empty:
-        'Aucune recommandation active pour ce gîte actuellement.',
-      error: 'Impossible de récupérer les recommandations.',
-      photo: 'Voir la photo',
-      website: '🌐 Visiter le site',
-      qrTitle:
-        'Retrouvez nos conseils sur votre téléphone',
-      qrText:
-        'Scannez ce QR code pour ouvrir cette page.',
-      qrWebsite:
-        'Scannez pour visiter le site sur votre téléphone',
-      welcome: 'Bienvenue',
-      tvMenu: 'Choisissez une recommandation :',
-      tvHint:
-        '◀ ▶ Choisir · OK pour afficher',
-      tvQr:
-        'Scannez pour découvrir cette adresse sur votre téléphone'
-    },
-
-    en: {
-      title: 'Our local recommendations',
-      home: '← Home',
-      guide: 'Cottage guide',
-      admin: 'Administration',
-      refresh: '↻ Refresh',
-      introTitle: 'Discover Réunion Island',
-      introText:
-        'Our favourite places and activities for your stay.',
-      loading: 'Loading recommendations…',
-      empty:
-        'No active recommendations for this cottage.',
-      error: 'Unable to load recommendations.',
-      photo: 'View photo',
-      website: '🌐 Visit website',
-      qrTitle:
-        'Take our recommendations with you',
-      qrText:
-        'Scan this QR code to open this page.',
-      qrWebsite:
-        'Scan to open the website on your phone',
-      welcome: 'Welcome',
-      tvMenu: 'Choose a recommendation:',
-      tvHint:
-        '◀ ▶ Choose · OK to display',
-      tvQr:
-        'Scan to discover this place on your phone'
-    },
-
-    de: {
-      title: 'Unsere Empfehlungen',
-      home: '← Startseite',
-      guide: 'Hausinformationen',
-      admin: 'Verwaltung',
-      refresh: '↻ Aktualisieren',
-      introTitle: 'Entdecken Sie La Réunion',
-      introText:
-        'Unsere Lieblingsorte und Aktivitäten für Ihren Aufenthalt.',
-      loading: 'Empfehlungen werden geladen…',
-      empty:
-        'Keine aktiven Empfehlungen für diese Unterkunft.',
-      error:
-        'Empfehlungen konnten nicht geladen werden.',
-      photo: 'Foto ansehen',
-      website: '🌐 Website besuchen',
-      qrTitle:
-        'Empfehlungen auf Ihrem Smartphone',
-      qrText:
-        'Scannen Sie diesen QR-Code.',
-      qrWebsite:
-        'Scannen Sie, um die Website zu öffnen',
-      welcome: 'Willkommen',
-      tvMenu: 'Wählen Sie eine Empfehlung:',
-      tvHint:
-        '◀ ▶ Auswählen · OK zum Anzeigen',
-      tvQr:
-        'Scannen Sie für weitere Informationen auf Ihrem Handy'
-    }
-  };
-
-  let language = 'fr';
-  let conseils = [];
-  let loading = false;
-  let lastFocus = null;
-  let tvSelected = 0;
-  let tvKey = '';
-
-  if (isTV) {
-    document.body.classList.add('tv-mode');
-  }
-
-  function t(key) {
-    return translations[language][key] ||
-           translations.fr[key] ||
-           key;
-  }
-
-  function setText(id, value) {
-    $(id).textContent = value;
-  }
-
-  function normalized(text) {
-    return String(text || '')
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '');
-  }
-
-  // Photos historiques conservées.
-  function localImage(advice) {
-    const title = normalized(advice.title);
-
-    if (title.includes('super u'))
-      return 'images/super u.jpeg';
-
-    if (title.includes('vanille'))
-      return 'images/vanille vallee.jpeg';
-
-    if (title.includes('vortex'))
-      return 'images/vortex.jpeg';
-
-    if (
-      title.includes('marche') &&
-      title.includes('paul')
-    ) {
-      return 'images/marche st paul.jpeg';
-    }
-
-    if (
-      title.includes('ermitage') ||
-      title.includes('hermitage')
-    ) {
-      return 'images/plage hermitage.jpeg';
-    }
-
-    if (title.includes('maido'))
-      return 'images/maido.jpeg';
-
-    if (title.includes('anse des cascades'))
-      return 'images/ansedescascade.jpeg';
-
-    if (title.includes('volcan'))
-      return 'images/volcan.jpeg';
-
-    if (title.includes('salazie'))
-      return 'images/salazie.jpeg';
-
-    if (title.includes('papangue'))
-      return 'images/papangue.jpeg';
-
-    return '';
-  }
-
-  // Priorité : Drive, local, ancienne, API, logo.
-  function sourcesPhoto(advice) {
-    const sources = [];
-
-    function ajouter(url) {
-      const v = String(url || '').trim();
-
-      if (
-        v &&
-        v !== LOGO &&
-        !sources.includes(v)
-      ) {
-        sources.push(v);
-      }
-    }
-
-    ajouter(advice.photoDrive);
-    ajouter(localImage(advice));
-    ajouter(advice.imgLegacy);
-    ajouter(advice.img);
-
-    sources.push(LOGO);
-
-    return sources;
-  }
-
-  function installerPhoto(element, advice) {
-    const sources = sourcesPhoto(advice);
-    let position = 0;
-
-    element.onerror = function () {
-      position++;
-
-      if (position < sources.length) {
-        element.src = sources[position];
-      } else {
-        element.onerror = null;
-        element.src = LOGO;
-      }
-    };
-
-    element.src = sources[0] || LOGO;
-  }
-
-  function validWebsite(value) {
-    const raw = String(value || '').trim();
-
-    if (!raw) return '';
-
-    try {
-      const url = new URL(raw);
-
-      return ['http:', 'https:'].includes(
-        url.protocol
-      ) ? url.href : '';
-
-    } catch (_) {
-      return '';
-    }
-  }
-
-  function createQr(container, url, size) {
-    container.innerHTML = '';
-
-    if (!url) return;
-
-    if (typeof QRCode === 'undefined') {
-      const link = document.createElement('a');
-
-      link.href = url;
-      link.textContent = url;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-
-      container.appendChild(link);
-      return;
-    }
-
-    new QRCode(container, {
-      text: url,
-      width: size,
-      height: size,
-      colorDark: '#12263a',
-      colorLight: '#ffffff',
-      correctLevel: QRCode.CorrectLevel.M
-    });
-  }
-
-  function configureLinks() {
-    const suffix =
-      '?gite=' + encodeURIComponent(gite) +
-      (isTV ? '&tv=1' : '');
-
-    $('home').href = 'index.html' + suffix;
-    $('guide').href = 'guide.html' + suffix;
-    $('admin').href = 'admin.html?gite=' + gite;
-
-    if (isTV) {
-      $('admin').classList.add('hidden');
-    }
-
-    createQr(
-      $('pageQr'),
-      location.origin +
-      location.pathname +
-      '?gite=' + encodeURIComponent(gite),
-      160
-    );
-  }
-
-  function translatePage() {
-    document.documentElement.lang = language;
-
-    [
-      'title',
-      'home',
-      'guide',
-      'admin',
-      'refresh',
-      'introTitle',
-      'introText'
-    ].forEach(function (id) {
-      setText(id, t(id));
-    });
-
-    setText('pageQrTitle', t('qrTitle'));
-    setText('pageQrText', t('qrText'));
-
-    setText(
-      'cottage',
-      gite === 'grandzabris'
-        ? 'Grandzabris'
-        : 'Ptitzabris'
-    );
-
-    setText('tvMenuTitle', t('tvMenu'));
-    setText('tvHint', t('tvHint'));
-
-    if (conseils.length) {
-      renderConseils();
-    }
-  }
-
-  function dateValue(value) {
-    if (!value) return null;
-
-    const match = String(value).match(
-      /^(\d{4})-(\d{2})-(\d{2})/
-    );
-
-    if (match) {
-      return new Date(
-        Number(match[1]),
-        Number(match[2]) - 1,
-        Number(match[3])
-      );
-    }
-
-    const d = new Date(value);
-
-    return isNaN(d.getTime()) ? null : d;
-  }
-
-  async function loadVoyageur() {
-    try {
-      const response = await fetch(
-        VOYAGEURS_API + '?t=' + Date.now(),
-        { cache: 'no-store' }
-      );
-
-      if (!response.ok) return;
-
-      const data = await response.json();
-
-      const voyageurs = Array.isArray(data)
-        ? data
-        : Array.isArray(data.rows)
-          ? data.rows
-          : Array.isArray(data.data)
-            ? data.data
-            : [];
-
-      const now = new Date();
-      now.setHours(0, 0, 0, 0);
-
-      const actifs = voyageurs.filter(function (v) {
-        const cottage = normalized(
-          v.cottage
-        ).replace(/\s+/g, '');
-
-        if (!cottage.includes(gite)) {
-          return false;
-        }
-
-        const arrivee = dateValue(
-          v.arrivee || v.dateArrivee
-        );
-
-        const depart = dateValue(
-          v.depart || v.dateDepart
-        );
-
-        return arrivee &&
-               depart &&
-               arrivee <= now &&
-               now <= depart;
-      });
-
-      if (!actifs.length) return;
-
-      const voyageur = actifs[actifs.length - 1];
-
-      const lang = String(
-        voyageur.langue || 'fr'
-      ).toLowerCase().substring(0, 2);
-
-      language = translations[lang]
-        ? lang
-        : 'fr';
-
-      translatePage();
-
-      if (voyageur.prenom) {
-        setText(
-          'welcome',
-          t('welcome') + ' ' +
-          String(voyageur.prenom).trim() + ' !'
-        );
-      }
-
-    } catch (_) {
-      // La page reste utilisable.
-    }
-  }
-
-  function activeForGite(advice) {
-    const target = String(
-      advice.target || 'both'
-    ).toLowerCase();
-
-    if (
-      target !== 'both' &&
-      target !== gite
-    ) {
-      return false;
-    }
-
-    return gite === 'ptitzabris'
-      ? advice.activePtit === true
-      : advice.activeGrand === true;
-  }
-
-  // Affichage classique sur téléphone.
-  function createCard(advice) {
-    const card = document.createElement('article');
-    card.className = 'card';
-
-    const imageButton = document.createElement('button');
-    imageButton.type = 'button';
-    imageButton.className = 'card-photo';
-
-    imageButton.setAttribute(
-      'aria-label',
-      t('photo') + ' : ' + advice.title
-    );
-
-    const img = document.createElement('img');
-
-    img.alt = advice.title || '';
-    img.loading = 'lazy';
-
-    installerPhoto(img, advice);
-
-    imageButton.appendChild(img);
-
-    imageButton.addEventListener('click', function () {
-      openModal(advice);
-    });
-
-    const body = document.createElement('div');
-    body.className = 'card-body';
-
-    const title = document.createElement('h3');
-    title.textContent = advice.title || '';
-
-    const description = document.createElement('p');
-    description.textContent = advice.text || '';
-
-    const actions = document.createElement('div');
-    actions.className = 'actions';
-
-    const photoButton = document.createElement('button');
-    photoButton.type = 'button';
-    photoButton.className = 'btn gold';
-    photoButton.textContent = t('photo');
-
-    photoButton.addEventListener('click', function () {
-      openModal(advice);
-    });
-
-    actions.appendChild(photoButton);
-
-    const website = validWebsite(advice.linkUrl);
-
-    if (website) {
-      const link = document.createElement('a');
-
-      link.className = 'btn';
-      link.href = website;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      link.textContent = t('website');
-
-      actions.appendChild(link);
-    }
-
-    body.appendChild(title);
-    body.appendChild(description);
-    body.appendChild(actions);
-
-    card.appendChild(imageButton);
-    card.appendChild(body);
-
-    return card;
-  }
-
-  // Identifiant pour conserver la sélection TV.
-  function adviceKey(advice) {
-    return String(
-      advice.index !== undefined
-        ? advice.index
-        : advice.title || ''
-    );
-  }
-
-  // Affiche la recommandation choisie en grand.
-  function showTvAdvice(advice) {
-    setText(
-      'tvDetailTitle',
-      advice.title || ''
-    );
-
-    setText(
-      'tvDescription',
-      advice.text || ''
-    );
-
-    const img = $('tvPhoto');
-
-    img.alt = advice.title || '';
-
-    installerPhoto(img, advice);
-
-    const website = validWebsite(
-      advice.linkUrl
-    );
-
-    const pageUrl =
-      location.origin +
-      location.pathname +
-      '?gite=' + encodeURIComponent(gite);
-
-    createQr(
-      $('tvQr'),
-      website || pageUrl,
-      120
-    );
-
-    setText(
-      'tvQrLabel',
-      website
-        ? t('tvQr')
-        : t('qrText')
-    );
-
-    const link = $('tvWebsite');
-
-    if (website) {
-      link.href = website;
-      link.textContent = t('website');
-      link.classList.remove('hidden');
-    } else {
-      link.removeAttribute('href');
-      link.classList.add('hidden');
-    }
-
-    $('tvDetail').classList.remove('hidden');
-  }
-
-  // Sélection dans le sommaire.
-  function selectTv(index, focus) {
-    const actifs = conseils.filter(
-      activeForGite
-    );
-
-    if (!actifs.length) return;
-
-    tvSelected =
-      (index + actifs.length) % actifs.length;
-
-    tvKey = adviceKey(
-      actifs[tvSelected]
-    );
-
-    const buttons = Array.from(
-      $('tvMenu').querySelectorAll('button')
-    );
-
-    buttons.forEach(function (button, i) {
-      button.classList.toggle(
-        'selected',
-        i === tvSelected
-      );
-
-      button.setAttribute(
-        'aria-pressed',
-        String(i === tvSelected)
-      );
-    });
-
-    showTvAdvice(actifs[tvSelected]);
-
-    if (buttons[tvSelected]) {
-      buttons[tvSelected].scrollIntoView({
-        block: 'nearest',
-        inline: 'nearest',
-        behavior: 'smooth'
-      });
-
-      if (focus) {
-        buttons[tvSelected].focus({
-          preventScroll: true
-        });
-      }
-    }
-  }
-
-  // Construit le sommaire avec les noms exacts.
-  function renderTv(actifs) {
-    const menu = $('tvMenu');
-    menu.innerHTML = '';
-
-    if (!actifs.length) {
-      $('tvDetail').classList.add('hidden');
-      return;
-    }
-
-    actifs.forEach(function (advice, i) {
-      const button = document.createElement('button');
-
-      button.type = 'button';
-      button.className = 'tv-item';
-
-      button.textContent =
-        advice.title ||
-        ('Recommandation ' + (i + 1));
-
-      button.addEventListener('click', function () {
-        selectTv(i, true);
-      });
-
-      menu.appendChild(button);
-    });
-
-    const previous = actifs.findIndex(
-      function (advice) {
-        return adviceKey(advice) === tvKey;
-      }
-    );
-
-    selectTv(
-      previous >= 0
-        ? previous
-        : Math.min(
-            tvSelected,
-            actifs.length - 1
-          ),
-      false
-    );
-  }
-
-  function renderConseils() {
-    const container = $('cards');
-    container.innerHTML = '';
-
-    const actifs = conseils.filter(
-      activeForGite
-    );
-
-    if (!actifs.length) {
-      setText('status', t('empty'));
-      $('status').className = 'status';
-
-      if (isTV) {
-        renderTv([]);
-      }
-
-      return;
-    }
-
-    setText('status', '');
-    $('status').className = 'status';
-
-    if (isTV) {
-      renderTv(actifs);
-    } else {
-      actifs.forEach(function (advice) {
-        container.appendChild(
-          createCard(advice)
-        );
-      });
-    }
-  }
-
-  async function loadConseils() {
-    if (loading) return;
-
-    loading = true;
-
-    if (!conseils.length) {
-      setText('status', t('loading'));
-      $('status').className = 'status';
-    }
-
-    try {
-      const url =
-        CONSEILS_API +
-        '?type=conseils&gite=' +
-        encodeURIComponent(gite) +
-        '&t=' + Date.now();
-
-      const response = await fetch(
-        url,
-        { cache: 'no-store' }
-      );
-
-      if (!response.ok) {
-        throw new Error(
-          'HTTP ' + response.status
-        );
-      }
-
-      const data = await response.json();
-
-      if (!Array.isArray(data)) {
-        throw new Error(
-          'Format de données incorrect'
-        );
-      }
-
-      conseils = data;
-      renderConseils();
-
-    } catch (error) {
-      if (!conseils.length) {
-        setText('status', t('error'));
-        $('status').className = 'status error';
-      }
-
-      console.warn('Conseils :', error);
-
-    } finally {
-      loading = false;
-    }
-  }
-
-  function openModal(advice) {
-    lastFocus = document.activeElement;
-
-    setText(
-      'modalTitle',
-      advice.title || ''
-    );
-
-    setText(
-      'modalDescription',
-      advice.text || ''
-    );
-
-    const img = $('modalImage');
-
-    img.alt = advice.title || '';
-
-    installerPhoto(img, advice);
-
-    const website = validWebsite(
-      advice.linkUrl
-    );
-
-    const link = $('modalWebsite');
-    const qrLabel = $('modalQrLabel');
-
-    if (website) {
-      link.href = website;
-      link.textContent = t('website');
-      link.classList.remove('hidden');
-
-      qrLabel.textContent = t('qrWebsite');
-      qrLabel.classList.remove('hidden');
-
-      createQr(
-        $('modalQr'),
-        website,
-        170
-      );
-
-    } else {
-      link.removeAttribute('href');
-      link.classList.add('hidden');
-      qrLabel.classList.add('hidden');
-      $('modalQr').innerHTML = '';
-    }
-
-    $('modal').classList.add('open');
-
-    $('modal').setAttribute(
-      'aria-hidden',
-      'false'
-    );
-
-    document.body.style.overflow = 'hidden';
-
-    $('closeModal').focus();
-  }
-
-  function closeModal() {
-    $('modal').classList.remove('open');
-
-    $('modal').setAttribute(
-      'aria-hidden',
-      'true'
-    );
-
-    document.body.style.overflow = '';
-
-    if (
-      lastFocus &&
-      document.contains(lastFocus)
-    ) {
-      lastFocus.focus();
-    }
-  }
-
-  $('closeModal').addEventListener(
-    'click',
-    closeModal
-  );
-
-  $('modal').addEventListener(
-    'click',
-    function (event) {
-      if (event.target === $('modal')) {
-        closeModal();
-      }
-    }
-  );
-
-  // Navigation avec la télécommande Xiaomi.
-  document.addEventListener(
-    'keydown',
-    function (event) {
-
-      if ($('modal').classList.contains('open')) {
-        if (
-          event.key === 'Escape' ||
-          event.key === 'Backspace'
-        ) {
-          event.preventDefault();
-          closeModal();
-        }
-
-        return;
-      }
-
-      if (isTV) {
-        const items = Array.from(
-          $('tvMenu').querySelectorAll('button')
-        );
-
-        const active = document.activeElement;
-        const inMenu = items.includes(active);
-
-        if (
-          inMenu &&
-          [
-            'ArrowLeft',
-            'ArrowRight',
-            'ArrowUp',
-            'ArrowDown'
-          ].includes(event.key)
-        ) {
-          event.preventDefault();
-
-          const step =
-            event.key === 'ArrowLeft' ||
-            event.key === 'ArrowUp'
-              ? -1
-              : 1;
-
-          selectTv(
-            tvSelected + step,
-            true
-          );
-
-          return;
-        }
-
-        if (
-          inMenu &&
-          (
-            event.key === 'Enter' ||
-            event.key === ' '
-          )
-        ) {
-          event.preventDefault();
-
-          selectTv(
-            tvSelected,
-            true
-          );
-
-          return;
-        }
-
-        if (
-          !inMenu &&
-          event.key === 'ArrowDown' &&
-          items.length
-        ) {
-          event.preventDefault();
-
-          items[tvSelected].focus({
-            preventScroll: true
-          });
-
-          return;
-        }
-
-        return;
-      }
-
-      // Navigation habituelle sur les autres appareils.
-      if (![
-        'ArrowLeft',
-        'ArrowRight',
-        'ArrowUp',
-        'ArrowDown'
-      ].includes(event.key)) {
-        return;
-      }
-
-      const controls = Array.from(
-        document.querySelectorAll(
-          'nav a:not(.hidden), nav button, ' +
-          '.card button, .card a'
-        )
-      );
-
-      if (!controls.length) return;
-
-      const current = controls.indexOf(
-        document.activeElement
-      );
-
-      if (current < 0) {
-        event.preventDefault();
-        controls[0].focus();
-        return;
-      }
-
-      const step =
-        event.key === 'ArrowLeft' ||
-        event.key === 'ArrowUp'
-          ? -1
-          : 1;
-
-      event.preventDefault();
-
-      controls[
-        (current + step + controls.length) %
-        controls.length
-      ].focus();
-    }
-  );
-
-  $('refresh').addEventListener(
-    'click',
-    loadConseils
-  );
-
-  configureLinks();
-  translatePage();
-  loadConseils();
-  loadVoyageur();
-
+(function(){
+'use strict';
+const CONSEILS_API='https://script.google.com/macros/s/AKfycbxS9JcDvy7gGhPFXE3z1a4DVC3pvq-j2MTSbaxDuz3Z6z80AkS3GP5mNpZyibillwDVFg/exec';
+const VOYAGEURS_API='https://script.google.com/macros/s/AKfycbx8IpsGljXVcaPPMIU54K9aCsQqdIK_KzsvelChbG4dMUpeVSHaAnKu2Ww8CAsl-2Qq/exec';
+const params=new URLSearchParams(location.search);
+const gite=params.get('gite')==='grandzabris'?'grandzabris':'ptitzabris';
+const isTV=params.get('tv')==='1';
+const $=id=>document.getElementById(id);
+const LOGO='images/logo.jpeg';
+const translations={
+fr:{title:'Nos bonnes adresses',home:'← Accueil',guide:'Guide du gîte',admin:'Administration',refresh:'↻ Actualiser',introTitle:'Découvrez La Réunion',introText:'Nos coups de cœur pour profiter de votre séjour.',loading:'Chargement des recommandations…',empty:'Aucune recommandation active pour ce gîte actuellement.',error:'Impossible de récupérer les recommandations.',photo:'Voir la photo',website:'🌐 Visiter le site',qrTitle:'Retrouvez nos conseils sur votre téléphone',qrText:'Scannez ce QR code pour ouvrir cette page.',qrWebsite:'Scannez pour visiter le site sur votre téléphone',welcome:'Bienvenue',tvHeading:'🌴 Nos recommandations',tvFor:'pour',tvSummary:'Choisissez une recommandation :',tvHome:'⌂ Retour à l’accueil',tvQr:'📱 Scannez ce QR code avec votre téléphone',tvQrSite:'Pour ouvrir le site de cette recommandation.',tvQrPage:'Pour retrouver nos conseils sur votre téléphone.'},
+en:{title:'Our local recommendations',home:'← Home',guide:'Cottage guide',admin:'Administration',refresh:'↻ Refresh',introTitle:'Discover Réunion Island',introText:'Our favourite places and activities for your stay.',loading:'Loading recommendations…',empty:'No active recommendations for this cottage.',error:'Unable to load recommendations.',photo:'View photo',website:'🌐 Visit website',qrTitle:'Take our recommendations with you',qrText:'Scan this QR code to open this page.',qrWebsite:'Scan to open the website on your phone',welcome:'Welcome',tvHeading:'🌴 Our recommendations',tvFor:'for',tvSummary:'Choose a recommendation:',tvHome:'⌂ Back to home',tvQr:'📱 Scan this QR code with your phone',tvQrSite:'To open this recommendation’s website.',tvQrPage:'To see our recommendations on your phone.'},
+de:{title:'Unsere Empfehlungen',home:'← Startseite',guide:'Hausinformationen',admin:'Verwaltung',refresh:'↻ Aktualisieren',introTitle:'Entdecken Sie La Réunion',introText:'Unsere Lieblingsorte und Aktivitäten für Ihren Aufenthalt.',loading:'Empfehlungen werden geladen…',empty:'Keine aktiven Empfehlungen für diese Unterkunft.',error:'Empfehlungen konnten nicht geladen werden.',photo:'Foto ansehen',website:'🌐 Website besuchen',qrTitle:'Empfehlungen auf Ihrem Smartphone',qrText:'Scannen Sie diesen QR-Code.',qrWebsite:'Scannen Sie, um die Website zu öffnen',welcome:'Willkommen',tvHeading:'🌴 Unsere Empfehlungen',tvFor:'für',tvSummary:'Wählen Sie eine Empfehlung:',tvHome:'⌂ Zur Startseite',tvQr:'📱 Scannen Sie diesen QR-Code',tvQrSite:'Zur Website dieser Empfehlung.',tvQrPage:'Zu unseren Empfehlungen auf Ihrem Smartphone.'}
+};
+let language='fr',conseils=[],loading=false,lastFocus=null,voyageurPrenom='',selectedAdviceKey=null;
+function t(key){return translations[language][key]||translations.fr[key]||key}
+function setText(id,value){$(id).textContent=value}
+function normalized(text){return String(text||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
+function localImage(advice){
+const title=normalized(advice.title);
+if(title.includes('super u'))return'images/super u.jpeg';
+if(title.includes('vanille'))return'images/vanille vallee.jpeg';
+if(title.includes('vortex'))return'images/vortex.jpeg';
+if(title.includes('marche')&&title.includes('paul'))return'images/marche st paul.jpeg';
+if(title.includes('ermitage')||title.includes('hermitage'))return'images/plage hermitage.jpeg';
+if(title.includes('maido'))return'images/maido.jpeg';
+if(title.includes('anse des cascades'))return'images/ansedescascade.jpeg';
+if(title.includes('volcan'))return'images/volcan.jpeg';
+if(title.includes('salazie'))return'images/salazie.jpeg';
+if(title.includes('papangue'))return'images/papangue.jpeg';
+return'';
+}
+function sourcesPhoto(advice){
+const sources=[];
+function ajouter(url){const value=String(url||'').trim();if(value&&value!==LOGO&&!sources.includes(value))sources.push(value)}
+ajouter(advice.photoDrive);ajouter(localImage(advice));ajouter(advice.imgLegacy);ajouter(advice.img);sources.push(LOGO);return sources;
+}
+function installerPhoto(element,advice){
+const sources=sourcesPhoto(advice);let position=0;
+element.onerror=function(){position++;if(position<sources.length)element.src=sources[position];else{element.onerror=null;element.src=LOGO}};
+element.src=sources[0]||LOGO;
+}
+function validWebsite(value){
+const raw=String(value||'').trim();if(!raw)return'';
+try{const url=new URL(raw);return['http:','https:'].includes(url.protocol)?url.href:''}catch(_){return''}
+}
+function createQr(container,url,size){
+container.innerHTML='';if(!url)return;
+if(typeof QRCode==='undefined'){const link=document.createElement('a');link.href=url;link.textContent=url;link.target='_blank';link.rel='noopener noreferrer';container.appendChild(link);return}
+new QRCode(container,{text:url,width:size,height:size,colorDark:'#12263a',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+}
+function pageUrl(){return location.origin+location.pathname+'?gite='+encodeURIComponent(gite)}
+function configureLinks(){
+const suffix='?gite='+encodeURIComponent(gite)+(isTV?'&tv=1':'');
+$('home').href='index.html'+suffix;$('guide').href='guide.html'+suffix;$('admin').href='admin.html?gite='+gite;$('tvHome').href='index.html'+suffix;
+if(isTV){document.body.classList.add('tv-mode');$('admin').classList.add('hidden')}
+createQr($('pageQr'),pageUrl(),160);
+}
+function updateTvHeading(){
+setText('tvHeading',t('tvHeading')+(voyageurPrenom?' '+t('tvFor')+' '+voyageurPrenom:'')+' 🌴');
+}
+function translatePage(){
+document.documentElement.lang=language;
+setText('title',t('title'));setText('home',t('home'));setText('guide',t('guide'));setText('admin',t('admin'));setText('refresh',t('refresh'));setText('introTitle',t('introTitle'));setText('introText',t('introText'));setText('pageQrTitle',t('qrTitle'));setText('pageQrText',t('qrText'));setText('tvHome',t('tvHome'));setText('tvSummaryLabel',t('tvSummary'));setText('tvQrText',t('tvQr'));
+setText('cottage',gite==='grandzabris'?'Grandzabris':'Ptitzabris');
+updateTvHeading();if(conseils.length)renderConseils();
+}
+function dateValue(value){
+if(!value)return null;
+const match=String(value).match(/^(\d{4})-(\d{2})-(\d{2})/);
+if(match)return new Date(Number(match[1]),Number(match[2])-1,Number(match[3]));
+const d=new Date(value);return isNaN(d.getTime())?null:d;
+}
+async function loadVoyageur(){
+try{
+const response=await fetch(VOYAGEURS_API+'?t='+Date.now(),{cache:'no-store'});if(!response.ok)return;
+const data=await response.json();
+const voyageurs=Array.isArray(data)?data:Array.isArray(data.rows)?data.rows:Array.isArray(data.data)?data.data:[];
+const now=new Date();now.setHours(0,0,0,0);
+const actifs=voyageurs.filter(function(v){
+const cottage=normalized(v.cottage).replace(/\s+/g,'');if(!cottage.includes(gite))return false;
+const arrivee=dateValue(v.arrivee||v.dateArrivee),depart=dateValue(v.depart||v.dateDepart);
+return arrivee&&depart&&arrivee<=now&&now<=depart;
+});
+if(!actifs.length)return;
+const voyageur=actifs[actifs.length-1];
+const lang=String(voyageur.langue||'fr').toLowerCase().substring(0,2);
+language=translations[lang]?lang:'fr';
+voyageurPrenom=String(voyageur.prenom||'').trim();
+translatePage();
+if(voyageurPrenom)setText('welcome',t('welcome')+' '+voyageurPrenom+' !');
+}catch(_){}
+}
+function activeForGite(advice){
+const target=String(advice.target||'both').toLowerCase();
+if(target!=='both'&&target!==gite)return false;
+return gite==='ptitzabris'?advice.activePtit===true:advice.activeGrand===true;
+}
+function createCard(advice){
+const card=document.createElement('article');card.className='card';
+const imageButton=document.createElement('button');imageButton.type='button';imageButton.className='card-photo';imageButton.setAttribute('aria-label',t('photo')+' : '+advice.title);
+const img=document.createElement('img');img.alt=advice.title||'';img.loading='lazy';installerPhoto(img,advice);imageButton.appendChild(img);imageButton.addEventListener('click',()=>openModal(advice));
+const body=document.createElement('div');body.className='card-body';
+const title=document.createElement('h3');title.textContent=advice.title||'';
+const description=document.createElement('p');description.textContent=advice.text||'';
+const actions=document.createElement('div');actions.className='actions';
+const photoButton=document.createElement('button');photoButton.type='button';photoButton.className='btn gold';photoButton.textContent=t('photo');photoButton.addEventListener('click',()=>openModal(advice));actions.appendChild(photoButton);
+const website=validWebsite(advice.linkUrl);
+if(website){const link=document.createElement('a');link.className='btn';link.href=website;link.target='_blank';link.rel='noopener noreferrer';link.textContent=t('website');actions.appendChild(link)}
+body.appendChild(title);body.appendChild(description);body.appendChild(actions);card.appendChild(imageButton);card.appendChild(body);return card;
+}
+function adviceKey(advice,position){return advice.index!==undefined&&advice.index!==null?String(advice.index):String(position)+':'+String(advice.title||'')}
+function selectTvAdvice(advice,key){
+selectedAdviceKey=key;$('tvDetail').classList.remove('hidden');
+setText('tvTitle',advice.title||'');setText('tvDescription',advice.text||'');$('tvDescription').scrollTop=0;
+const image=$('tvImage');image.alt=advice.title||'';installerPhoto(image,advice);
+const website=validWebsite(advice.linkUrl);
+createQr($('tvQr'),website||pageUrl(),150);
+setText('tvQrText',t('tvQr'));setText('tvQrSub',website?t('tvQrSite'):t('tvQrPage'));
+Array.from($('tvMenu').children).forEach(function(button){const selected=button.dataset.key===key;button.classList.toggle('selected',selected);button.setAttribute('aria-pressed',String(selected))});
+}
+function renderTvConseils(actifs){
+const menu=$('tvMenu');menu.innerHTML='';
+if(!actifs.length){$('tvDetail').classList.add('hidden');setText('tvStatus',t('empty'));return}
+setText('tvStatus','');
+const choices=actifs.map(function(advice,position){return{advice:advice,key:adviceKey(advice,position)}});
+choices.forEach(function(item){
+const button=document.createElement('button');button.type='button';button.className='tv-choice';button.dataset.key=item.key;button.textContent=item.advice.title||'Recommandation';
+button.addEventListener('click',function(){selectTvAdvice(item.advice,item.key)});menu.appendChild(button);
+});
+const selected=choices.find(item=>item.key===selectedAdviceKey)||choices[0];
+selectTvAdvice(selected.advice,selected.key);
+}
+function renderConseils(){
+const actifs=conseils.filter(activeForGite);
+if(isTV){renderTvConseils(actifs);setText('status','');return}
+const container=$('cards');container.innerHTML='';
+if(!actifs.length){setText('status',t('empty'));$('status').className='status';return}
+setText('status','');$('status').className='status';
+actifs.forEach(advice=>container.appendChild(createCard(advice)));
+}
+async function loadConseils(){
+if(loading)return;loading=true;
+if(!conseils.length){setText('status',t('loading'));if(isTV)setText('tvStatus',t('loading'))}
+try{
+const url=CONSEILS_API+'?type=conseils&gite='+encodeURIComponent(gite)+'&t='+Date.now();
+const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw new Error('HTTP '+response.status);
+const data=await response.json();if(!Array.isArray(data))throw new Error('Format de données incorrect');
+conseils=data;renderConseils();
+}catch(error){
+if(!conseils.length){setText('status',t('error'));$('status').className='status error';if(isTV)setText('tvStatus',t('error'))}
+console.warn('Conseils :',error);
+}finally{loading=false}
+}
+function openModal(advice){
+lastFocus=document.activeElement;
+setText('modalTitle',advice.title||'');setText('modalDescription',advice.text||'');
+const img=$('modalImage');img.alt=advice.title||'';installerPhoto(img,advice);
+const website=validWebsite(advice.linkUrl),link=$('modalWebsite'),qrLabel=$('modalQrLabel');
+if(website){link.href=website;link.textContent=t('website');link.classList.remove('hidden');qrLabel.textContent=t('qrWebsite');qrLabel.classList.remove('hidden');createQr($('modalQr'),website,170)}
+else{link.removeAttribute('href');link.classList.add('hidden');qrLabel.classList.add('hidden');$('modalQr').innerHTML=''}
+$('modal').classList.add('open');$('modal').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';$('closeModal').focus();
+}
+function closeModal(){
+$('modal').classList.remove('open');$('modal').setAttribute('aria-hidden','true');document.body.style.overflow='';
+if(lastFocus&&document.contains(lastFocus))lastFocus.focus();
+}
+$('closeModal').addEventListener('click',closeModal);
+$('modal').addEventListener('click',function(event){if(event.target===$('modal'))closeModal()});
+document.addEventListener('keydown',function(event){
+if($('modal').classList.contains('open')){if(event.key==='Escape'||event.key==='Backspace'){event.preventDefault();closeModal()}return}
+if(isTV){
+const keys=['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'];if(!keys.includes(event.key))return;
+const controls=[$('tvHome')].concat(Array.from($('tvMenu').querySelectorAll('button')));
+if(!controls.length)return;
+const current=controls.indexOf(document.activeElement);
+if(current<0){event.preventDefault();const selected=$('tvMenu').querySelector('.selected');(selected||$('tvHome')).focus();return}
+const step=event.key==='ArrowLeft'||event.key==='ArrowUp'?-1:1;
+const next=(current+step+controls.length)%controls.length;event.preventDefault();controls[next].focus();
+if(controls[next].classList.contains('tv-choice'))controls[next].click();
+return;
+}
+if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key))return;
+const controls=Array.from(document.querySelectorAll('nav a:not(.hidden), nav button, .card button, .card a'));
+if(!controls.length)return;
+const current=controls.indexOf(document.activeElement);
+if(current<0){event.preventDefault();controls[0].focus();return}
+const step=event.key==='ArrowLeft'||event.key==='ArrowUp'?-1:1;
+event.preventDefault();controls[(current+step+controls.length)%controls.length].focus();
+});
+$('refresh').addEventListener('click',loadConseils);
+configureLinks();translatePage();loadConseils();loadVoyageur();
 })();
 </script>
-
 </body>
 </html>
