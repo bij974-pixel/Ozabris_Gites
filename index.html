@@ -22,22 +22,22 @@ body{
   margin:0;
   background:var(--cream);
   color:var(--navy);
-  font-family:Arial,sans-serif;
+  font-family:Arial,Helvetica,sans-serif;
 }
 a,button{font:inherit}
-a:focus-visible,button:focus-visible{
-  outline:3px solid #ffc85c;
-  outline-offset:3px;
-}
 button{cursor:pointer}
+a:focus-visible,button:focus-visible{
+  outline:4px solid #ffcb56;
+  outline-offset:4px;
+}
 
-/* PHOTOS FIXES AVEC FONDU */
+/* BANDEAU PHOTOS : DÉFILEMENT CONTINU */
 .hero{
   position:relative;
   isolation:isolate;
+  overflow:hidden;
   background:#203d55;
   color:white;
-  overflow:hidden;
 }
 .ribbon{
   position:absolute;
@@ -48,27 +48,43 @@ button{cursor:pointer}
 }
 .track{
   position:absolute;
-  inset:0;
+  top:0;
+  left:0;
+  height:100%;
+  display:flex;
+  width:max-content;
+  will-change:transform;
 }
-.track img{
-  position:absolute;
-  inset:0;
-  width:100%;
+.photo-strip{
+  height:100%;
+  display:flex;
+  flex:0 0 auto;
+  align-items:stretch;
+}
+.photo-strip img{
+  display:block;
+  flex:0 0 280px;
+  width:280px;
   height:100%;
   object-fit:cover;
-  opacity:0;
-  transition:opacity 3s ease-in-out;
+  object-position:center;
+  background:#203d55;
 }
-.track img.visible{
-  opacity:1;
+.track.ready{
+  animation:slowPhotos 3600s linear infinite;
+}
+@keyframes slowPhotos{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(-50%,0,0)}
 }
 .shade{
   position:absolute;
   inset:0;
   z-index:-1;
-  background:rgba(10,27,48,.34);
+  background:rgba(10,27,48,.48);
 }
 .hero-inner{
+  position:relative;
   max-width:1300px;
   margin:auto;
   padding:20px 20px 32px;
@@ -114,6 +130,7 @@ button{cursor:pointer}
   text-decoration:none;
 }
 .tv #adminButton{display:none!important}
+
 .welcome{
   max-width:830px;
   margin:20px auto 0;
@@ -148,6 +165,7 @@ button{cursor:pointer}
   color:white;
   border:1px solid var(--gold);
 }
+
 .sommaire{
   max-width:980px;
   margin:17px auto 0;
@@ -190,6 +208,7 @@ button{cursor:pointer}
   background:var(--gold);
   color:var(--navy);
 }
+
 main{
   max-width:1250px;
   margin:auto;
@@ -327,28 +346,55 @@ footer{
   color:#e9d8b9;
   padding:25px;
 }
+
+/* NOTIFICATION RECOMMANDATIONS */
 .notice{
   position:fixed;
-  top:15px;
+  top:18px;
   left:50%;
   transform:translateX(-50%);
-  width:min(92vw,580px);
+  width:min(94vw,660px);
   z-index:9999;
-  background:var(--navy);
+  background:#12263a;
   color:white;
-  border:2px solid var(--gold);
-  border-radius:15px;
-  padding:20px;
+  border:3px solid #e6c58d;
+  border-radius:20px;
+  padding:22px;
   text-align:center;
-  box-shadow:0 12px 35px #0006;
+  box-shadow:0 12px 45px #0008;
 }
 .notice[hidden]{display:none}
-.notice a{color:#e9d8b9}
-.notice button{
-  padding:8px;
+.notice strong{
+  display:block;
+  font-size:clamp(22px,3vw,32px);
+  color:#ffe0a0;
+}
+.notice p{
+  font-size:clamp(17px,2vw,23px);
+  line-height:1.5;
+}
+.notice-actions{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:12px;
+}
+.notice-actions a,
+.notice-actions button{
+  display:inline-block;
+  background:var(--gold);
+  color:var(--navy);
   border:0;
-  border-radius:7px;
-  margin-left:12px;
+  border-radius:12px;
+  padding:14px 20px;
+  text-decoration:none;
+  font-weight:bold;
+  font-size:18px;
+}
+.notice-actions button{
+  background:#ffffff25;
+  border:1px solid #e6c58d;
+  color:white;
 }
 @media(max-width:750px){
   .hero-inner{padding:14px 12px 25px}
@@ -359,17 +405,20 @@ footer{
   .brand strong{font-size:24px}
   .welcome{padding:15px}
   .heading h2,.dark h2{font-size:29px}
+  .photo-strip img{
+    flex-basis:220px;
+    width:220px;
+  }
 }
 @media(prefers-reduced-motion:reduce){
-  .track img{transition:none}
   .feature img{transition:none}
   html{scroll-behavior:auto}
 }
 </style>
 
 <script>
-if(new URLSearchParams(location.search).get("tv")==="1"){
-  document.documentElement.classList.add("tv");
+if(new URLSearchParams(location.search).get('tv')==='1'){
+  document.documentElement.classList.add('tv');
 }
 </script>
 </head>
@@ -422,10 +471,12 @@ if(new URLSearchParams(location.search).get("tv")==="1"){
 </header>
 
 <div id="notification" class="notice" role="status" aria-live="polite" hidden>
-<strong>🌺 Nouveau conseil de Jean !</strong>
+<strong id="notificationTitle">🌺 Nouveau conseil de Jean !</strong>
 <p id="notificationText"></p>
-<a class="conseils-link" href="conseils.html">Voir les recommandations</a>
-<button id="closeNotice" type="button">✕</button>
+<div class="notice-actions">
+<a id="notificationLink" class="conseils-link" href="conseils.html">🌴 Voir les recommandations</a>
+<button id="closeNotice" type="button">Fermer ✕</button>
+</div>
 </div>
 
 <main>
@@ -549,6 +600,7 @@ if(new URLSearchParams(location.search).get("tv")==="1"){
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 <script>
 (function(){
 'use strict';
@@ -576,6 +628,7 @@ const names=[
 'reunionnaise.jpeg','reunionnaise2.jpeg','salazie.jpeg',
 'sucrerie.jpeg','villelontan.jpeg','volcan.jpeg'
 ];
+
 const photos=names.map(n=>'images/fond/'+n);
 let language='fr';
 
@@ -624,90 +677,66 @@ qr('qrSanibroyeur',SAN);
 qr('qrTri',TRI);
 }
 
-/* DIAPORAMA FIXE : 30 SECONDES, FONDU 3 SECONDES */
+/* PHOTOS CONTINUES : DEUX BANDES IDENTIQUES */
 function startPhotos(){
-  const track=$('track');
-  if(!track||!photos.length)return;
+const track=$('track');
+if(!track||!photos.length)return;
 
-  const first=document.createElement('img');
-  const second=document.createElement('img');
+track.innerHTML='';
+track.classList.remove('ready');
 
-  first.alt='';
-  second.alt='';
-  first.src=photos[0];
-  second.src=photos[1]||photos[0];
+function makeStrip(){
+const strip=document.createElement('div');
+strip.className='photo-strip';
 
-  first.className='visible';
+photos.forEach(src=>{
+const img=document.createElement('img');
+img.src=src;
+img.alt='';
+img.decoding='async';
+img.loading='eager';
+img.onerror=function(){
+  this.onerror=null;
+  this.src='images/logo.jpeg';
+};
+strip.appendChild(img);
+});
+return strip;
+}
 
-  track.appendChild(first);
-  track.appendChild(second);
+track.appendChild(makeStrip());
+track.appendChild(makeStrip());
 
-  let current=0;
-  let front=first;
-  let back=second;
-  let transitioning=false;
+/*
+ Les deux bandes ont exactement la même largeur.
+ L'animation avance de la largeur d'une seule bande.
+ Le passage de la deuxième à la première est invisible.
+*/
+requestAnimationFrame(()=>{
+  track.classList.add('ready');
+});
 
-  setInterval(()=>{
-    if(document.hidden||transitioning)return;
-
-    transitioning=true;
-    const next=(current+1)%photos.length;
-    const nextPhoto=photos[next];
-    const preload=new Image();
-
-    preload.onload=()=>{
-      back.src=nextPhoto;
-      back.style.opacity='0';
-      back.classList.remove('visible');
-
-      requestAnimationFrame(()=>{
-        requestAnimationFrame(()=>{
-          back.classList.add('visible');
-          front.classList.remove('visible');
-        });
-      });
-
-      setTimeout(()=>{
-        const oldFront=front;
-        front=back;
-        back=oldFront;
-        back.classList.remove('visible');
-        back.style.opacity='';
-        current=next;
-        transitioning=false;
-      },3200);
-    };
-
-    preload.onerror=()=>{
-      current=next;
-      transitioning=false;
-    };
-
-    preload.src=nextPhoto;
-  },30000);
-
-  let featureIndex=0;
-  setInterval(()=>{
-    if(document.hidden)return;
-    featureIndex=(featureIndex+1)%photos.length;
-    changeFeature('guidePhoto',photos[featureIndex]);
-    changeFeature('conseilsPhoto',
-      photos[(featureIndex+9)%photos.length]);
-  },120000);
+let featureIndex=0;
+setInterval(()=>{
+if(document.hidden)return;
+featureIndex=(featureIndex+1)%photos.length;
+changeFeature('guidePhoto',photos[featureIndex]);
+changeFeature('conseilsPhoto',photos[(featureIndex+9)%photos.length]);
+},120000);
 }
 
 function changeFeature(id,src){
-  const img=$(id);
-  if(!img)return;
-  const preload=new Image();
-  preload.onload=()=>{
-    img.style.opacity='0.15';
-    setTimeout(()=>{
-      img.src=src;
-      img.style.opacity='1';
-    },700);
-  };
-  preload.src=src;
+const img=$(id);
+if(!img)return;
+const preload=new Image();
+preload.onload=()=>{
+img.style.opacity='0.15';
+setTimeout(()=>{
+img.src=src;
+img.style.opacity='1';
+},700);
+};
+preload.src=src;
 }
 
 function clock(){
@@ -772,6 +801,44 @@ parts.forEach(a=>x[a.type]=a.value);
 return Number(x.year)*10000+Number(x.month)*100+Number(x.day);
 }
 
+/* UN PRÉNOM : AOU / DEUX PRÉNOMS : À ZOT */
+function extractFirstNames(guest){
+const raw=String(
+guest.prenom||
+guest.firstName||
+guest.prenoms||
+guest.firstNames||
+guest.nom||
+''
+).trim();
+
+if(!raw)return [];
+
+const cleaned=raw
+.replace(/\s+(?:et|and|und)\s+/gi,' & ')
+.replace(/\s*\+\s*/g,' & ')
+.replace(/\s*,\s*/g,' & ')
+.replace(/\s*\/\s*/g,' & ')
+.replace(/\s*&\s*/g,' & ');
+
+const result=cleaned.split(' & ')
+.map(s=>s.trim())
+.filter(Boolean);
+
+const second=String(
+guest.prenom2||
+guest.prenom_2||
+guest.deuxiemePrenom||
+guest.secondFirstName||
+''
+).trim();
+
+if(second&&!result.some(n=>norm(n)===norm(second))){
+result.push(second);
+}
+return result;
+}
+
 async function guests(){
 try{
 const r=await fetch(GUEST_API+'?t='+Date.now(),{cache:'no-store'});
@@ -790,14 +857,26 @@ return cottage.includes(gite)&&start!==null&&end!==null&&
 start<=today&&today<=end;
 });
 if(!guest)return;
+
 language=String(guest.langue||guest.language||'fr')
 .toLowerCase().slice(0,2);
-const first=String(guest.prenom||guest.firstName||guest.nom||'').trim();
-if(first){
-setText('welcomeTitle',
-(language==='de'?'Willkommen, ':
-language==='en'?'Welcome, ':'Bienvenue à Zot, ')+first+' !');
+
+const firstNames=extractFirstNames(guest);
+
+if(firstNames.length){
+let title;
+if(language==='de'){
+title='Willkommen, '+firstNames.join(' & ')+' !';
+}else if(language==='en'){
+title='Welcome, '+firstNames.join(' & ')+' !';
+}else if(firstNames.length>=2){
+title='Bienvenue à Zot, '+firstNames.join(' & ')+' !';
+}else{
+title='Bienvenue aou, '+firstNames[0]+' !';
 }
+setText('welcomeTitle',title);
+}
+
 setText('stayText',
 language==='de'?'Wir wünschen Ihnen einen schönen Aufenthalt.':
 language==='en'?'We wish you a wonderful stay.':
@@ -827,72 +906,159 @@ launcher();
 $('launcher').addEventListener('click',launcher);
 }
 
-const storageKey='ozabris_conseils_actifs_v5_'+gite;
-let previous=null;
+/* NOTIFICATIONS DES RECOMMANDATIONS */
+const stateKey='ozabris_etats_conseils_v6_'+gite;
+const noticeKey='ozabris_notification_v6_'+gite;
+let previousStates=null;
+let adviceBusy=false;
 
 function active(v){
 return v===true||v===1||
-['true','1','oui','yes','actif','active']
-.includes(String(v).toLowerCase());
+['true','1','oui','yes','actif','active','on']
+.includes(String(v).trim().toLowerCase());
 }
 
-function showNotice(title){
-setText('notificationText',
-title+' est maintenant disponible pour '+
-(gite==='grandzabris'?'Grandzabris.':'Ptitzabris.'));
+function readStored(key){
+try{
+const raw=localStorage.getItem(key);
+return raw===null?null:JSON.parse(raw);
+}catch(e){return null;}
+}
+
+function saveStored(key,value){
+try{
+localStorage.setItem(key,JSON.stringify(value));
+}catch(e){}
+}
+
+function showNotice(titles){
+if(!titles||!titles.length)return;
+
+const count=titles.length;
+let heading;
+let message;
+
+if(count===1){
+heading='🌺 Nouveau conseil de Jean !';
+message='Découvrez notre nouvelle recommandation : '+titles[0];
+}else{
+heading='🌺 '+count+' nouvelles recommandations !';
+message='Jean vient d’activer '+count+
+' recommandations pour votre séjour à '+
+(gite==='grandzabris'?'Grandzabris':'Ptitzabris')+'.';
+}
+
+setText('notificationTitle',heading);
+setText('notificationText',message);
+$('notification').hidden=false;
+saveStored(noticeKey,{heading,message});
+}
+
+function restoreNotice(){
+const saved=readStored(noticeKey);
+if(!saved||!saved.heading||!saved.message)return;
+setText('notificationTitle',saved.heading);
+setText('notificationText',saved.message);
 $('notification').hidden=false;
 }
 
+function closeNotice(){
+$('notification').hidden=true;
+try{localStorage.removeItem(noticeKey)}catch(e){}
+}
+
+function recommendationState(row){
+const flag=gite==='grandzabris'?row.activeGrand:row.activePtit;
+return active(flag);
+}
+
 async function advice(){
+if(adviceBusy)return;
+adviceBusy=true;
+
 try{
-const r=await fetch(
-ADVICE_API+'?type=conseils&gite='+gite+'&t='+Date.now(),
-{cache:'no-store'}
-);
-if(!r.ok)return;
+const url=ADVICE_API+
+'?type=conseils&gite='+encodeURIComponent(gite)+
+'&t='+Date.now();
+
+const r=await fetch(url,{cache:'no-store'});
+if(!r.ok)throw Error('Erreur de chargement');
+
 const data=await r.json();
 const arr=Array.isArray(data)?data:
 Array.isArray(data.conseils)?data.conseils:
-Array.isArray(data.rows)?data.rows:[];
-const found=new Map();
+Array.isArray(data.rows)?data.rows:
+null;
+
+if(!arr)throw Error('Format de données inattendu');
+
+const currentStates={};
+const currentTitles={};
+
 arr.forEach(row=>{
 if(!row||typeof row!=='object')return;
-const flag=gite==='grandzabris'?row.activeGrand:row.activePtit;
-if(!active(flag))return;
+
 const id=String(row.index??row.id??row.title??'').trim();
-if(id)found.set(id,String(row.title||'Une nouvelle recommandation'));
+if(!id)return;
+
+currentStates[id]=recommendationState(row);
+currentTitles[id]=String(row.title||'Nouvelle recommandation');
 });
-const ids=[...found.keys()];
-if(previous===null){
-try{
-const saved=JSON.parse(localStorage.getItem(storageKey));
-previous=Array.isArray(saved)?saved:ids;
-}catch(e){previous=ids;}
+
+if(previousStates===null){
+const stored=readStored(stateKey);
+if(stored&&typeof stored==='object'&&!Array.isArray(stored)){
+previousStates=stored;
 }else{
-const added=ids.filter(id=>!previous.includes(id));
-if(added.length)showNotice(found.get(added[added.length-1]));
-}
-previous=ids;
-try{
-localStorage.setItem(storageKey,JSON.stringify(ids));
-}catch(e){}
-}catch(e){
-console.warn('Conseils indisponibles',e);
+previousStates={...currentStates};
 }
 }
 
+const activated=[];
+
+Object.keys(currentStates).forEach(id=>{
+const wasActive=previousStates[id]===true;
+const isActive=currentStates[id]===true;
+
+if(!wasActive&&isActive&&
+Object.prototype.hasOwnProperty.call(previousStates,id)){
+activated.push(currentTitles[id]);
+}
+});
+
+previousStates={...currentStates};
+saveStored(stateKey,previousStates);
+
+if(activated.length){
+showNotice(activated);
+}
+
+}catch(e){
+console.warn('Surveillance des recommandations :',e);
+}finally{
+adviceBusy=false;
+}
+}
+
+/* NAVIGATION TÉLÉCOMMANDE */
 function tvKeys(){
 document.addEventListener('keydown',e=>{
 if(!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key))return;
-const controls=[...document.querySelectorAll('a,button')]
+
+const noticeOpen=!$('notification').hidden;
+const root=noticeOpen?$('notification'):document;
+const controls=[...root.querySelectorAll('a,button')]
 .filter(x=>x.getClientRects().length&&
 getComputedStyle(x).visibility!=='hidden'&&
 getComputedStyle(x).display!=='none');
+
 if(!controls.length)return;
+
 const current=controls.indexOf(document.activeElement);
 const step=e.key==='ArrowUp'||e.key==='ArrowLeft'?-1:1;
 const next=current<0?0:
 (current+step+controls.length)%controls.length;
+
 e.preventDefault();
 controls[next].focus();
 controls[next].scrollIntoView({block:'nearest',behavior:'smooth'});
@@ -907,11 +1073,12 @@ weather();
 guests();
 apps();
 tvKeys();
+
+restoreNotice();
 advice();
 
-$('closeNotice').onclick=()=>{
-$('notification').hidden=true;
-};
+$('closeNotice').addEventListener('click',closeNotice);
+$('notificationLink').addEventListener('click',closeNotice);
 
 setInterval(clock,30000);
 setInterval(weather,1800000);
