@@ -26,11 +26,12 @@ body{
 }
 a,button{font:inherit}
 a:focus-visible,button:focus-visible{
-  outline:4px solid #ffcb56;
-  outline-offset:4px;
+  outline:3px solid #ffc85c;
+  outline-offset:3px;
 }
 button{cursor:pointer}
 
+/* PHOTOS FIXES AVEC FONDU */
 .hero{
   position:relative;
   isolation:isolate;
@@ -47,38 +48,25 @@ button{cursor:pointer}
 }
 .track{
   position:absolute;
-  top:0;
-  left:0;
-  height:100%;
-  width:max-content;
-  display:flex;
-  align-items:stretch;
-  gap:0;
-  animation:ozabrisScroll 600s linear infinite;
-  will-change:transform;
+  inset:0;
 }
 .track img{
-  display:block;
-  position:relative;
-  flex:0 0 auto;
-  width:auto;
+  position:absolute;
+  inset:0;
+  width:100%;
   height:100%;
-  max-width:none;
-  object-fit:contain;
+  object-fit:cover;
+  opacity:0;
+  transition:opacity 3s ease-in-out;
+}
+.track img.visible{
   opacity:1;
-}
-@keyframes ozabrisScroll{
-  from{transform:translate3d(0,0,0)}
-  to{transform:translate3d(-50%,0,0)}
-}
-@media(prefers-reduced-motion:reduce){
-  .track{animation-duration:1200s}
 }
 .shade{
   position:absolute;
   inset:0;
   z-index:-1;
-  background:rgba(10,27,48,.45);
+  background:rgba(10,27,48,.34);
 }
 .hero-inner{
   max-width:1300px;
@@ -339,55 +327,28 @@ footer{
   color:#e9d8b9;
   padding:25px;
 }
-
-/* NOTIFICATION NOUVELLE RECOMMANDATION */
 .notice{
   position:fixed;
-  top:18px;
+  top:15px;
   left:50%;
   transform:translateX(-50%);
-  width:min(94vw,660px);
+  width:min(92vw,580px);
   z-index:9999;
-  background:#12263a;
+  background:var(--navy);
   color:white;
-  border:3px solid #e6c58d;
-  border-radius:20px;
-  padding:22px;
+  border:2px solid var(--gold);
+  border-radius:15px;
+  padding:20px;
   text-align:center;
-  box-shadow:0 12px 45px #0008;
+  box-shadow:0 12px 35px #0006;
 }
 .notice[hidden]{display:none}
-.notice strong{
-  display:block;
-  font-size:clamp(22px,3vw,32px);
-  color:#ffe0a0;
-}
-.notice p{
-  font-size:clamp(17px,2vw,23px);
-  line-height:1.5;
-}
-.notice-actions{
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:12px;
-}
-.notice-actions a,
-.notice-actions button{
-  display:inline-block;
-  background:var(--gold);
-  color:var(--navy);
+.notice a{color:#e9d8b9}
+.notice button{
+  padding:8px;
   border:0;
-  border-radius:12px;
-  padding:14px 20px;
-  text-decoration:none;
-  font-weight:bold;
-  font-size:18px;
-}
-.notice-actions button{
-  background:#ffffff25;
-  border:1px solid #e6c58d;
-  color:white;
+  border-radius:7px;
+  margin-left:12px;
 }
 @media(max-width:750px){
   .hero-inner{padding:14px 12px 25px}
@@ -400,6 +361,7 @@ footer{
   .heading h2,.dark h2{font-size:29px}
 }
 @media(prefers-reduced-motion:reduce){
+  .track img{transition:none}
   .feature img{transition:none}
   html{scroll-behavior:auto}
 }
@@ -460,12 +422,10 @@ if(new URLSearchParams(location.search).get("tv")==="1"){
 </header>
 
 <div id="notification" class="notice" role="status" aria-live="polite" hidden>
-<strong id="notificationTitle">🌺 Nouveau conseil de Jean !</strong>
+<strong>🌺 Nouveau conseil de Jean !</strong>
 <p id="notificationText"></p>
-<div class="notice-actions">
-<a id="notificationLink" class="conseils-link" href="conseils.html">🌴 Voir les recommandations</a>
-<button id="closeNotice" type="button">Fermer ✕</button>
-</div>
+<a class="conseils-link" href="conseils.html">Voir les recommandations</a>
+<button id="closeNotice" type="button">✕</button>
 </div>
 
 <main>
@@ -589,7 +549,6 @@ if(new URLSearchParams(location.search).get("tv")==="1"){
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
 <script>
 (function(){
 'use strict';
@@ -665,53 +624,90 @@ qr('qrSanibroyeur',SAN);
 qr('qrTri',TRI);
 }
 
-/* DÉFILEMENT HORIZONTAL TRÈS LENT DES PHOTOS */
+/* DIAPORAMA FIXE : 30 SECONDES, FONDU 3 SECONDES */
 function startPhotos(){
-const track=$('track');
-if(!track||!photos.length)return;
+  const track=$('track');
+  if(!track||!photos.length)return;
 
-track.innerHTML='';
+  const first=document.createElement('img');
+  const second=document.createElement('img');
 
-const list=photos.slice();
+  first.alt='';
+  second.alt='';
+  first.src=photos[0];
+  second.src=photos[1]||photos[0];
 
-/*
-  Deux séries identiques assurent une boucle continue.
-  Chaque image conserve ses proportions naturelles.
-*/
-for(let repeat=0;repeat<2;repeat++){
-  list.forEach(src=>{
-    const img=document.createElement('img');
-    img.src=src;
-    img.alt='';
-    img.decoding='async';
-    img.loading='eager';
-    track.appendChild(img);
-  });
-}
+  first.className='visible';
 
-track.style.animationDuration='600s';
+  track.appendChild(first);
+  track.appendChild(second);
 
-let featureIndex=0;
-setInterval(()=>{
-  if(document.hidden)return;
-  featureIndex=(featureIndex+1)%photos.length;
-  changeFeature('guidePhoto',photos[featureIndex]);
-  changeFeature('conseilsPhoto',photos[(featureIndex+9)%photos.length]);
-},120000);
+  let current=0;
+  let front=first;
+  let back=second;
+  let transitioning=false;
+
+  setInterval(()=>{
+    if(document.hidden||transitioning)return;
+
+    transitioning=true;
+    const next=(current+1)%photos.length;
+    const nextPhoto=photos[next];
+    const preload=new Image();
+
+    preload.onload=()=>{
+      back.src=nextPhoto;
+      back.style.opacity='0';
+      back.classList.remove('visible');
+
+      requestAnimationFrame(()=>{
+        requestAnimationFrame(()=>{
+          back.classList.add('visible');
+          front.classList.remove('visible');
+        });
+      });
+
+      setTimeout(()=>{
+        const oldFront=front;
+        front=back;
+        back=oldFront;
+        back.classList.remove('visible');
+        back.style.opacity='';
+        current=next;
+        transitioning=false;
+      },3200);
+    };
+
+    preload.onerror=()=>{
+      current=next;
+      transitioning=false;
+    };
+
+    preload.src=nextPhoto;
+  },30000);
+
+  let featureIndex=0;
+  setInterval(()=>{
+    if(document.hidden)return;
+    featureIndex=(featureIndex+1)%photos.length;
+    changeFeature('guidePhoto',photos[featureIndex]);
+    changeFeature('conseilsPhoto',
+      photos[(featureIndex+9)%photos.length]);
+  },120000);
 }
 
 function changeFeature(id,src){
-const img=$(id);
-if(!img)return;
-const preload=new Image();
-preload.onload=()=>{
-img.style.opacity='0.15';
-setTimeout(()=>{
-img.src=src;
-img.style.opacity='1';
-},700);
-};
-preload.src=src;
+  const img=$(id);
+  if(!img)return;
+  const preload=new Image();
+  preload.onload=()=>{
+    img.style.opacity='0.15';
+    setTimeout(()=>{
+      img.src=src;
+      img.style.opacity='1';
+    },700);
+  };
+  preload.src=src;
 }
 
 function clock(){
@@ -776,45 +772,6 @@ parts.forEach(a=>x[a.type]=a.value);
 return Number(x.year)*10000+Number(x.month)*100+Number(x.day);
 }
 
-/* BIENVENUE AOU POUR 1 PRÉNOM, À ZOT POUR 2 */
-function extractFirstNames(guest){
-const raw=String(
-guest.prenom||
-guest.firstName||
-guest.prenoms||
-guest.firstNames||
-guest.nom||
-''
-).trim();
-
-if(!raw)return [];
-
-const cleaned=raw
-.replace(/\s+(?:et|and|und)\s+/gi,' & ')
-.replace(/\s*\+\s*/g,' & ')
-.replace(/\s*,\s*/g,' & ')
-.replace(/\s*\/\s*/g,' & ')
-.replace(/\s*&\s*/g,' & ');
-
-const names=cleaned.split(' & ')
-.map(s=>s.trim())
-.filter(Boolean);
-
-const second=String(
-guest.prenom2||
-guest.prenom_2||
-guest.deuxiemePrenom||
-guest.secondFirstName||
-''
-).trim();
-
-if(second&&!names.some(n=>norm(n)===norm(second))){
-names.push(second);
-}
-
-return names;
-}
-
 async function guests(){
 try{
 const r=await fetch(GUEST_API+'?t='+Date.now(),{cache:'no-store'});
@@ -833,26 +790,14 @@ return cottage.includes(gite)&&start!==null&&end!==null&&
 start<=today&&today<=end;
 });
 if(!guest)return;
-
 language=String(guest.langue||guest.language||'fr')
 .toLowerCase().slice(0,2);
-
-const firstNames=extractFirstNames(guest);
-
-if(firstNames.length){
-let title;
-if(language==='de'){
-title='Willkommen, '+firstNames.join(' & ')+' !';
-}else if(language==='en'){
-title='Welcome, '+firstNames.join(' & ')+' !';
-}else if(firstNames.length>=2){
-title='Bienvenue à Zot, '+firstNames.join(' & ')+' !';
-}else{
-title='Bienvenue aou, '+firstNames[0]+' !';
+const first=String(guest.prenom||guest.firstName||guest.nom||'').trim();
+if(first){
+setText('welcomeTitle',
+(language==='de'?'Willkommen, ':
+language==='en'?'Welcome, ':'Bienvenue à Zot, ')+first+' !');
 }
-setText('welcomeTitle',title);
-}
-
 setText('stayText',
 language==='de'?'Wir wünschen Ihnen einen schönen Aufenthalt.':
 language==='en'?'We wish you a wonderful stay.':
@@ -882,159 +827,72 @@ launcher();
 $('launcher').addEventListener('click',launcher);
 }
 
-/* NOTIFICATIONS BASÉES SUR LES CHANGEMENTS D'ÉTAT */
-const stateKey='ozabris_etats_conseils_v6_'+gite;
-const noticeKey='ozabris_notification_v6_'+gite;
-let previousStates=null;
-let adviceBusy=false;
+const storageKey='ozabris_conseils_actifs_v5_'+gite;
+let previous=null;
 
 function active(v){
 return v===true||v===1||
-['true','1','oui','yes','actif','active','on']
-.includes(String(v).trim().toLowerCase());
+['true','1','oui','yes','actif','active']
+.includes(String(v).toLowerCase());
 }
 
-function readStored(key){
-try{
-const raw=localStorage.getItem(key);
-return raw===null?null:JSON.parse(raw);
-}catch(e){return null;}
-}
-
-function saveStored(key,value){
-try{
-localStorage.setItem(key,JSON.stringify(value));
-}catch(e){}
-}
-
-function showNotice(titles){
-if(!titles||!titles.length)return;
-
-const count=titles.length;
-let heading;
-let message;
-
-if(count===1){
-heading='🌺 Nouveau conseil de Jean !';
-message='Découvrez notre nouvelle recommandation : '+titles[0];
-}else{
-heading='🌺 '+count+' nouvelles recommandations !';
-message='Jean vient d’activer '+count+
-' recommandations pour votre séjour à '+
-(gite==='grandzabris'?'Grandzabris':'Ptitzabris')+'.';
-}
-
-setText('notificationTitle',heading);
-setText('notificationText',message);
+function showNotice(title){
+setText('notificationText',
+title+' est maintenant disponible pour '+
+(gite==='grandzabris'?'Grandzabris.':'Ptitzabris.'));
 $('notification').hidden=false;
-saveStored(noticeKey,{heading,message});
-}
-
-function restoreNotice(){
-const saved=readStored(noticeKey);
-if(!saved||!saved.heading||!saved.message)return;
-setText('notificationTitle',saved.heading);
-setText('notificationText',saved.message);
-$('notification').hidden=false;
-}
-
-function closeNotice(){
-$('notification').hidden=true;
-try{localStorage.removeItem(noticeKey)}catch(e){}
-}
-
-function recommendationState(row){
-const flag=gite==='grandzabris'?row.activeGrand:row.activePtit;
-return active(flag);
 }
 
 async function advice(){
-if(adviceBusy)return;
-adviceBusy=true;
-
 try{
-const url=ADVICE_API+
-'?type=conseils&gite='+encodeURIComponent(gite)+
-'&t='+Date.now();
-
-const r=await fetch(url,{cache:'no-store'});
-if(!r.ok)throw Error('Erreur de chargement');
-
+const r=await fetch(
+ADVICE_API+'?type=conseils&gite='+gite+'&t='+Date.now(),
+{cache:'no-store'}
+);
+if(!r.ok)return;
 const data=await r.json();
 const arr=Array.isArray(data)?data:
 Array.isArray(data.conseils)?data.conseils:
-Array.isArray(data.rows)?data.rows:
-null;
-
-if(!arr)throw Error('Format de données inattendu');
-
-const currentStates={};
-const currentTitles={};
-
+Array.isArray(data.rows)?data.rows:[];
+const found=new Map();
 arr.forEach(row=>{
 if(!row||typeof row!=='object')return;
-
+const flag=gite==='grandzabris'?row.activeGrand:row.activePtit;
+if(!active(flag))return;
 const id=String(row.index??row.id??row.title??'').trim();
-if(!id)return;
-
-currentStates[id]=recommendationState(row);
-currentTitles[id]=String(row.title||'Nouvelle recommandation');
+if(id)found.set(id,String(row.title||'Une nouvelle recommandation'));
 });
-
-if(previousStates===null){
-const stored=readStored(stateKey);
-if(stored&&typeof stored==='object'&&!Array.isArray(stored)){
-previousStates=stored;
+const ids=[...found.keys()];
+if(previous===null){
+try{
+const saved=JSON.parse(localStorage.getItem(storageKey));
+previous=Array.isArray(saved)?saved:ids;
+}catch(e){previous=ids;}
 }else{
-previousStates={...currentStates};
+const added=ids.filter(id=>!previous.includes(id));
+if(added.length)showNotice(found.get(added[added.length-1]));
 }
-}
-
-const activated=[];
-
-Object.keys(currentStates).forEach(id=>{
-const wasActive=previousStates[id]===true;
-const isActive=currentStates[id]===true;
-
-if(!wasActive&&isActive&&
-Object.prototype.hasOwnProperty.call(previousStates,id)){
-activated.push(currentTitles[id]);
-}
-});
-
-previousStates={...currentStates};
-saveStored(stateKey,previousStates);
-
-if(activated.length){
-showNotice(activated);
-}
-
+previous=ids;
+try{
+localStorage.setItem(storageKey,JSON.stringify(ids));
+}catch(e){}
 }catch(e){
-console.warn('Surveillance des recommandations :',e);
-}finally{
-adviceBusy=false;
+console.warn('Conseils indisponibles',e);
 }
 }
 
-/* NAVIGATION À LA TÉLÉCOMMANDE */
 function tvKeys(){
 document.addEventListener('keydown',e=>{
 if(!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key))return;
-
-const noticeOpen=!$('notification').hidden;
-const root=noticeOpen?$('notification'):document;
-const controls=[...root.querySelectorAll('a,button')]
+const controls=[...document.querySelectorAll('a,button')]
 .filter(x=>x.getClientRects().length&&
 getComputedStyle(x).visibility!=='hidden'&&
 getComputedStyle(x).display!=='none');
-
 if(!controls.length)return;
-
 const current=controls.indexOf(document.activeElement);
 const step=e.key==='ArrowUp'||e.key==='ArrowLeft'?-1:1;
 const next=current<0?0:
 (current+step+controls.length)%controls.length;
-
 e.preventDefault();
 controls[next].focus();
 controls[next].scrollIntoView({block:'nearest',behavior:'smooth'});
@@ -1049,12 +907,11 @@ weather();
 guests();
 apps();
 tvKeys();
-
-restoreNotice();
 advice();
 
-$('closeNotice').addEventListener('click',closeNotice);
-$('notificationLink').addEventListener('click',closeNotice);
+$('closeNotice').onclick=()=>{
+$('notification').hidden=true;
+};
 
 setInterval(clock,30000);
 setInterval(weather,1800000);
