@@ -47,23 +47,38 @@ button{cursor:pointer}
 }
 .track{
   position:absolute;
-  inset:0;
+  top:0;
+  left:0;
+  height:100%;
+  width:max-content;
+  display:flex;
+  align-items:stretch;
+  gap:0;
+  animation:ozabrisScroll 600s linear infinite;
+  will-change:transform;
 }
 .track img{
-  position:absolute;
-  inset:0;
-  width:100%;
+  display:block;
+  position:relative;
+  flex:0 0 auto;
+  width:auto;
   height:100%;
-  object-fit:cover;
-  opacity:0;
-  transition:opacity 3s ease-in-out;
+  max-width:none;
+  object-fit:contain;
+  opacity:1;
 }
-.track img.visible{opacity:1}
+@keyframes ozabrisScroll{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(-50%,0,0)}
+}
+@media(prefers-reduced-motion:reduce){
+  .track{animation-duration:1200s}
+}
 .shade{
   position:absolute;
   inset:0;
   z-index:-1;
-  background:rgba(10,27,48,.34);
+  background:rgba(10,27,48,.45);
 }
 .hero-inner{
   max-width:1300px;
@@ -385,11 +400,11 @@ footer{
   .heading h2,.dark h2{font-size:29px}
 }
 @media(prefers-reduced-motion:reduce){
-  .track img{transition:none}
   .feature img{transition:none}
   html{scroll-behavior:auto}
 }
 </style>
+
 <script>
 if(new URLSearchParams(location.search).get("tv")==="1"){
   document.documentElement.classList.add("tv");
@@ -574,6 +589,7 @@ if(new URLSearchParams(location.search).get("tv")==="1"){
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 <script>
 (function(){
 'use strict';
@@ -649,68 +665,38 @@ qr('qrSanibroyeur',SAN);
 qr('qrTri',TRI);
 }
 
-/* PHOTOS FIXES : 30 SECONDES, FONDU 3 SECONDES */
+/* DÉFILEMENT HORIZONTAL TRÈS LENT DES PHOTOS */
 function startPhotos(){
 const track=$('track');
 if(!track||!photos.length)return;
 
-const first=document.createElement('img');
-const second=document.createElement('img');
-first.alt='';
-second.alt='';
-first.src=photos[0];
-second.src=photos[1]||photos[0];
-first.className='visible';
-track.appendChild(first);
-track.appendChild(second);
+track.innerHTML='';
 
-let current=0;
-let front=first;
-let back=second;
-let transitioning=false;
+const list=photos.slice();
 
-setInterval(()=>{
-if(document.hidden||transitioning)return;
-transitioning=true;
-const next=(current+1)%photos.length;
-const preload=new Image();
+/*
+  Deux séries identiques assurent une boucle continue.
+  Chaque image conserve ses proportions naturelles.
+*/
+for(let repeat=0;repeat<2;repeat++){
+  list.forEach(src=>{
+    const img=document.createElement('img');
+    img.src=src;
+    img.alt='';
+    img.decoding='async';
+    img.loading='eager';
+    track.appendChild(img);
+  });
+}
 
-preload.onload=()=>{
-back.src=photos[next];
-back.classList.remove('visible');
-back.style.opacity='0';
-
-requestAnimationFrame(()=>{
-requestAnimationFrame(()=>{
-back.classList.add('visible');
-front.classList.remove('visible');
-});
-});
-
-setTimeout(()=>{
-const oldFront=front;
-front=back;
-back=oldFront;
-back.classList.remove('visible');
-back.style.opacity='';
-current=next;
-transitioning=false;
-},3200);
-};
-
-preload.onerror=()=>{
-current=next;
-transitioning=false;
-};
-preload.src=photos[next];
-},30000);
+track.style.animationDuration='600s';
 
 let featureIndex=0;
 setInterval(()=>{
-if(document.hidden)return;
-featureIndex=(featureIndex+1)%photos.length;
-changeFeature('guidePhoto',photos[featureIndex]);
-changeFeature('conseilsPhoto',photos[(featureIndex+9)%photos.length]);
+  if(document.hidden)return;
+  featureIndex=(featureIndex+1)%photos.length;
+  changeFeature('guidePhoto',photos[featureIndex]);
+  changeFeature('conseilsPhoto',photos[(featureIndex+9)%photos.length]);
 },120000);
 }
 
@@ -790,6 +776,45 @@ parts.forEach(a=>x[a.type]=a.value);
 return Number(x.year)*10000+Number(x.month)*100+Number(x.day);
 }
 
+/* BIENVENUE AOU POUR 1 PRÉNOM, À ZOT POUR 2 */
+function extractFirstNames(guest){
+const raw=String(
+guest.prenom||
+guest.firstName||
+guest.prenoms||
+guest.firstNames||
+guest.nom||
+''
+).trim();
+
+if(!raw)return [];
+
+const cleaned=raw
+.replace(/\s+(?:et|and|und)\s+/gi,' & ')
+.replace(/\s*\+\s*/g,' & ')
+.replace(/\s*,\s*/g,' & ')
+.replace(/\s*\/\s*/g,' & ')
+.replace(/\s*&\s*/g,' & ');
+
+const names=cleaned.split(' & ')
+.map(s=>s.trim())
+.filter(Boolean);
+
+const second=String(
+guest.prenom2||
+guest.prenom_2||
+guest.deuxiemePrenom||
+guest.secondFirstName||
+''
+).trim();
+
+if(second&&!names.some(n=>norm(n)===norm(second))){
+names.push(second);
+}
+
+return names;
+}
+
 async function guests(){
 try{
 const r=await fetch(GUEST_API+'?t='+Date.now(),{cache:'no-store'});
@@ -808,14 +833,26 @@ return cottage.includes(gite)&&start!==null&&end!==null&&
 start<=today&&today<=end;
 });
 if(!guest)return;
+
 language=String(guest.langue||guest.language||'fr')
 .toLowerCase().slice(0,2);
-const first=String(guest.prenom||guest.firstName||guest.nom||'').trim();
-if(first){
-setText('welcomeTitle',
-(language==='de'?'Willkommen, ':
-language==='en'?'Welcome, ':'Bienvenue à Zot, ')+first+' !');
+
+const firstNames=extractFirstNames(guest);
+
+if(firstNames.length){
+let title;
+if(language==='de'){
+title='Willkommen, '+firstNames.join(' & ')+' !';
+}else if(language==='en'){
+title='Welcome, '+firstNames.join(' & ')+' !';
+}else if(firstNames.length>=2){
+title='Bienvenue à Zot, '+firstNames.join(' & ')+' !';
+}else{
+title='Bienvenue aou, '+firstNames[0]+' !';
 }
+setText('welcomeTitle',title);
+}
+
 setText('stayText',
 language==='de'?'Wir wünschen Ihnen einen schönen Aufenthalt.':
 language==='en'?'We wish you a wonderful stay.':
@@ -846,7 +883,6 @@ $('launcher').addEventListener('click',launcher);
 }
 
 /* NOTIFICATIONS BASÉES SUR LES CHANGEMENTS D'ÉTAT */
-
 const stateKey='ozabris_etats_conseils_v6_'+gite;
 const noticeKey='ozabris_notification_v6_'+gite;
 let previousStates=null;
