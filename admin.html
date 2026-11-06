@@ -2,1465 +2,611 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#12263a">
-
-  <title>Administration — Les Ozabris</title>
-
-  <style>
-    :root {
-      --bleu: #12263a;
-      --bleu-clair: #203c55;
-      --or: #c5a880;
-      --fond: #f4f0e9;
-      --vert: #247a50;
-      --rouge: #a83d3d;
-      --texte: #253342;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      color: var(--texte);
-      background: var(--fond);
-      min-height: 100vh;
-    }
-
-    header {
-      background: var(--bleu);
-      color: white;
-      text-align: center;
-      padding: 24px 16px 28px;
-      border-bottom: 5px solid var(--or);
-    }
-
-    .logo {
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 3px solid var(--or);
-      background: white;
-    }
-
-    h1 {
-      font-size: 27px;
-      margin: 14px 0 5px;
-    }
-
-    header p {
-      margin: 0;
-      color: #e7d8c3;
-      font-size: 15px;
-    }
-
-    main {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 20px 14px 50px;
-    }
-
-    .panel {
-      background: white;
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 3px 15px rgba(0,0,0,.08);
-    }
-
-    h2 {
-      color: var(--bleu);
-      font-size: 21px;
-      margin: 0 0 15px;
-    }
-
-    label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-
-    select, input {
-      width: 100%;
-      padding: 13px;
-      font-size: 17px;
-      border: 2px solid #d7d7d7;
-      border-radius: 10px;
-      background: white;
-      color: var(--bleu);
-    }
-
-    select:focus,
-    input:focus,
-    button:focus-visible,
-    a:focus-visible {
-      outline: 3px solid var(--or);
-      outline-offset: 3px;
-    }
-
-    button, .bouton {
-      display: inline-block;
-      padding: 13px 17px;
-      border: 0;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: bold;
-      text-decoration: none;
-      text-align: center;
-      cursor: pointer;
-    }
-
-    button:disabled {
-      opacity: .55;
-      cursor: wait;
-    }
-
-    .btn-or {
-      background: var(--or);
-      color: var(--bleu);
-    }
-
-    .btn-bleu {
-      background: var(--bleu);
-      color: white;
-    }
-
-    .btn-rouge {
-      background: var(--rouge);
-      color: white;
-    }
-
-    .btn-vert {
-      background: var(--vert);
-      color: white;
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .actions > * {
-      flex: 1 1 180px;
-    }
-
-    .message {
-      margin-top: 14px;
-      padding: 12px;
-      border-radius: 10px;
-      background: #edf2f6;
-      color: var(--bleu);
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .message.erreur {
-      background: #fff0f0;
-      color: var(--rouge);
-    }
-
-    .message.succes {
-      background: #eaf7ee;
-      color: #17613b;
-    }
-
-    .conseil {
-      border: 1px solid #e4e0da;
-      border-radius: 13px;
-      padding: 15px;
-      margin-bottom: 14px;
-      background: white;
-    }
-
-    .conseil-top {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-    }
-
-    .conseil img {
-      width: 95px;
-      height: 95px;
-      object-fit: cover;
-      border-radius: 10px;
-      background: #eee;
-      flex-shrink: 0;
-    }
-
-    .conseil-info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .conseil h3 {
-      margin: 0 0 8px;
-      font-size: 18px;
-      color: var(--bleu);
-    }
-
-    .conseil p {
-      margin: 0 0 10px;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .statut {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .statut.actif {
-      background: #e3f5e9;
-      color: #17613b;
-    }
-
-    .statut.inactif {
-      background: #fbe9e9;
-      color: #963333;
-    }
-
-    .statut.exclu {
-      background: #ececec;
-      color: #666;
-    }
-
-    .conseil .actions {
-      margin-top: 12px;
-    }
-
-    .conseil .actions button {
-      width: 100%;
-    }
-
-    .vide {
-      text-align: center;
-      color: #777;
-      padding: 25px 10px;
-    }
-
-    .petit {
-      font-size: 13px;
-      line-height: 1.5;
-      color: #666;
-    }
-
-    .retour {
-      color: white;
-      display: inline-block;
-      margin-top: 15px;
-      text-decoration: none;
-      border-bottom: 1px solid var(--or);
-      padding-bottom: 4px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 25px;
-      color: #777;
-      font-size: 13px;
-    }
-
-    .cache {
-      display: none !important;
-    }
-
-    .connexion {
-      max-width: 440px;
-      margin: 35px auto;
-      text-align: center;
-      border: 2px solid var(--or);
-    }
-
-    .connexion .symbole {
-      font-size: 46px;
-      margin-bottom: 10px;
-    }
-
-    .connexion p {
-      line-height: 1.6;
-    }
-
-    .connexion input {
-      text-align: center;
-      font-size: 26px;
-      letter-spacing: 7px;
-      margin: 12px 0;
-    }
-
-    .connexion button {
-      width: 100%;
-      margin-top: 10px;
-    }
-
-    .admin-actions {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 15px;
-    }
-
-    .blocage-tv {
-      max-width: 500px;
-      margin: 50px auto;
-      text-align: center;
-    }
-
-    @media (max-width: 550px) {
-      .conseil img {
-        width: 75px;
-        height: 75px;
-      }
-
-      .conseil h3 {
-        font-size: 16px;
-      }
-
-      .panel {
-        padding: 16px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#12263a">
+<title>Administration — Les Ozabris</title>
+<style>
+:root{
+ --bleu:#12263a;--or:#c5a880;--fond:#f4f0e9;
+ --vert:#247a50;--rouge:#a83d3d
+}
+*{box-sizing:border-box}
+body{
+ margin:0;background:var(--fond);color:var(--bleu);
+ font-family:Arial,Helvetica,sans-serif
+}
+header{
+ text-align:center;background:var(--bleu);color:white;
+ padding:22px 14px;border-bottom:5px solid var(--or)
+}
+.logo{
+ width:95px;height:95px;object-fit:cover;
+ border-radius:50%;border:3px solid var(--or)
+}
+h1{font-size:27px;margin:12px 0 5px}
+header p{color:#e7d8c3}
+header a{color:white}
+main{max-width:1000px;margin:auto;padding:20px 13px}
+.panel{
+ background:white;padding:20px;margin-bottom:18px;
+ border-radius:15px;box-shadow:0 3px 12px #0001
+}
+h2{font-size:21px;margin:0 0 15px}
+h3{font-size:18px;margin:0 0 9px}
+label{display:block;font-weight:bold;margin:12px 0 7px}
+input,select{
+ width:100%;padding:12px;border:2px solid #ddd;
+ border-radius:10px;font-size:16px;background:white;
+ color:var(--bleu)
+}
+button,.btn{
+ display:inline-block;border:0;border-radius:10px;
+ padding:12px 15px;font-size:15px;font-weight:bold;
+ cursor:pointer;text-decoration:none;text-align:center
+}
+button:disabled{opacity:.5;cursor:wait}
+.gold{background:var(--or);color:var(--bleu)}
+.blue{background:var(--bleu);color:white}
+.red{background:var(--rouge);color:white}
+.green{background:var(--vert);color:white}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:13px}
+.actions>*{flex:1 1 150px}
+.message{
+ padding:12px;margin:12px 0;border-radius:10px;
+ background:#edf2f6;line-height:1.5
+}
+.error{background:#fff0f0;color:#a83d3d}
+.success{background:#eaf7ee;color:#17613b}
+.small{font-size:13px;color:#666;line-height:1.5}
+.hidden{display:none!important}
+.conseil{
+ border:1px solid #e4e0da;border-radius:12px;
+ padding:14px;margin:12px 0
+}
+.conseil-top{display:flex;gap:13px;align-items:flex-start}
+.conseil img{
+ width:85px;height:85px;object-fit:cover;
+ border-radius:10px;flex-shrink:0
+}
+.conseil-info{flex:1;min-width:0}
+.conseil p{font-size:14px;line-height:1.5}
+.tag{
+ display:inline-block;padding:5px 9px;
+ border-radius:20px;background:#eee;font-size:12px
+}
+.linkbox{
+ overflow-wrap:anywhere;background:#f4f0e9;
+ padding:12px;border-radius:9px;font-size:14px
+}
+.center{text-align:center}
+#loginPanel{max-width:430px;margin:35px auto}
+footer{text-align:center;padding:20px;color:#777}
+@media(max-width:550px){
+ .panel{padding:15px}
+ .conseil img{width:70px;height:70px}
+}
+</style>
 </head>
-
 <body>
 
 <header>
-  <img
-    src="images/logo.jpeg"
-    alt="Logo Les Ozabris"
-    class="logo"
-    onerror="this.style.display='none'"
-  >
-
-  <h1>Administration Les Ozabris</h1>
-  <p>Gestion des recommandations des deux gîtes</p>
-
-  <a
-    id="retourAccueil"
-    class="retour"
-    href="index.html">
-    ← Retour à l'accueil
-  </a>
+<img class="logo" src="images/logo.jpeg" alt="Les Ozabris">
+<h1>Administration Les Ozabris</h1>
+<p>Recommandations et séjours personnalisés</p>
+<a id="back" href="index.html">← Retour à l'accueil</a>
 </header>
 
 <main>
+<section id="tvBlock" class="panel hidden center">
+<h2>Administration indisponible en mode TV</h2>
+</section>
 
-  <!-- ACCES BLOQUE EN MODE TV -->
+<section id="loginPanel" class="panel hidden center">
+<h2>🔐 Accès administrateur</h2>
+<p>Saisis ton code personnel à six chiffres.</p>
+<form id="loginForm">
+<label for="pin">Code administrateur</label>
+<input id="pin" type="password" inputmode="numeric"
+ maxlength="6" pattern="[0-9]{6}" required>
+<button id="loginBtn" class="gold" type="submit">
+Se connecter
+</button>
+</form>
+<div id="loginMessage" class="message hidden"></div>
+</section>
 
-  <section id="ecranTV" class="panel blocage-tv cache">
-    <h2>🔒 Administration indisponible</h2>
-    <p>
-      L'administration des Ozabris
-      n'est pas accessible en mode télévision.
-    </p>
-  </section>
+<div id="adminPanel" class="hidden">
+<div class="actions">
+<button id="logout" class="red">🔒 Se déconnecter</button>
+</div>
 
-  <!-- ECRAN DE CONNEXION -->
+<section class="panel">
+<h2>Choisir le gîte</h2>
+<label for="gite">Gîte à administrer</label>
+<select id="gite">
+<option value="ptitzabris">Ptitzabris</option>
+<option value="grandzabris">Grandzabris</option>
+</select>
+</section>
 
-  <section id="ecranConnexion" class="panel connexion cache">
+<section class="panel">
+<h2>📅 Créer un séjour personnalisé</h2>
+<p class="small">
+Crée un séjour pour attribuer des recommandations
+à des voyageurs précis.
+</p>
+<form id="stayForm">
+<label for="stayName">Prénoms des voyageurs</label>
+<input id="stayName" required maxlength="150"
+ placeholder="Ex. Ronan et Béatrice">
 
-    <div class="symbole">🔐</div>
+<label for="stayEnd">Date de fin des conseils</label>
+<input id="stayEnd" type="date" required>
 
-    <h2>Accès administrateur</h2>
+<button class="gold" type="submit">
++ Créer ce séjour
+</button>
+</form>
+</section>
 
-    <p>
-      Saisis ton code personnel pour accéder
-      aux recommandations des Ozabris.
-    </p>
+<section class="panel">
+<h2>🔗 Liens des séjours</h2>
+<p class="small">
+Ces liens sont personnels. Transmets-les uniquement
+aux voyageurs concernés.
+</p>
+<div id="stays"></div>
+</section>
 
-    <form id="formConnexion">
+<section class="panel">
+<h2>Ajouter une recommandation</h2>
+<a class="btn gold"
+ href="https://forms.gle/w77k6We9HrzRxERy7"
+ target="_blank" rel="noopener noreferrer">
++ Ajouter une recommandation
+</a>
+</section>
 
-      <label for="codeAdmin">
-        Code administrateur
-      </label>
-
-      <input
-        id="codeAdmin"
-        type="password"
-        inputmode="numeric"
-        maxlength="6"
-        pattern="[0-9]{6}"
-        autocomplete="off"
-        placeholder="••••••"
-        required
-      >
-
-      <button
-        id="btnConnexion"
-        class="btn-or"
-        type="submit">
-        🔓 Se connecter
-      </button>
-
-    </form>
-
-    <div
-      id="messageConnexion"
-      class="message cache"
-      role="status"
-      aria-live="polite">
-    </div>
-
-  </section>
-
-  <!-- ADMINISTRATION -->
-
-  <div id="administration" class="cache">
-
-    <div class="admin-actions">
-      <button
-        id="deconnexion"
-        class="btn-rouge"
-        type="button">
-        🔒 Se déconnecter
-      </button>
-    </div>
-
-    <section class="panel">
-
-      <h2>Choisir le gîte</h2>
-
-      <label for="admin-select-gite">
-        Gîte à administrer
-      </label>
-
-      <select id="admin-select-gite">
-        <option value="ptitzabris">
-          Ptitzabris
-        </option>
-        <option value="grandzabris">
-          Grandzabris
-        </option>
-      </select>
-
-      <p class="petit">
-        Les recommandations sont gérées
-        séparément pour chaque gîte.
-      </p>
-
-    </section>
-
-    <section class="panel">
-
-      <h2>Ajouter une recommandation</h2>
-
-      <p>
-        Pour ajouter un lieu, une activité
-        ou une bonne adresse, utilise le formulaire.
-      </p>
-
-      <a
-        class="bouton btn-or"
-        href="https://forms.gle/w77k6We9HrzRxERy7"
-        target="_blank"
-        rel="noopener noreferrer">
-        + Ajouter une recommandation
-      </a>
-
-      <p class="petit">
-        Après avoir ajouté une recommandation,
-        reviens ici et actualise la liste.
-      </p>
-
-    </section>
-
-    <section class="panel">
-
-      <h2>Recommandations</h2>
-
-      <div class="actions">
-
-        <button
-          id="actualiser"
-          class="btn-bleu"
-          type="button">
-          ↻ Actualiser
-        </button>
-
-        <button
-          id="toutDesactiver"
-          class="btn-rouge"
-          type="button">
-          Tout désactiver pour ce gîte
-        </button>
-
-      </div>
-
-      <div
-        id="message"
-        class="message"
-        role="status"
-        aria-live="polite">
-        Chargement des recommandations…
-      </div>
-
-      <div
-        id="listeConseils"
-        style="margin-top:20px;">
-      </div>
-
-    </section>
-
-  </div>
-
+<section class="panel">
+<h2>Recommandations</h2>
+<p class="small">
+Pour chaque recommandation, choisis :
+permanente ou réservée à un séjour.
+</p>
+<div class="actions">
+<button id="refresh" class="blue">↻ Actualiser</button>
+<button id="disableAll" class="red">
+Tout désactiver pour ce gîte
+</button>
+</div>
+<div id="message" class="message">
+Chargement…
+</div>
+<div id="advices"></div>
+</section>
+</div>
 </main>
 
-<footer>
-  Les Ozabris — Administration privée
-</footer>
+<footer>Les Ozabris — Administration privée</footer>
 
 <script>
-(function () {
-  'use strict';
-
-  /*
-   * CONFIGURATION
-   */
-
-  const API_URL =
-    'https://script.google.com/macros/s/' +
-    'AKfycbxS9JcDvy7gGhPFXE3z1a4DVC3pvq-j2MTSbaxDuz3Z6z80AkS3GP5mNpZyibillwDVFg' +
-    '/exec';
-
-  const GITES = [
-    'ptitzabris',
-    'grandzabris'
-  ];
-
-  const LOGO = 'images/logo.jpeg';
-
-  const $ = id => document.getElementById(id);
-
-  const params =
-    new URLSearchParams(window.location.search);
-
-  const isTV = params.get('tv') === '1';
-
-  const selectGite = $('admin-select-gite');
-  const liste = $('listeConseils');
-  const message = $('message');
-  const btnActualiser = $('actualiser');
-  const btnToutDesactiver = $('toutDesactiver');
-
-  let adminPin = '';
-  let connexionEnCours = false;
-  let operationEnCours = false;
-  let cachedAdvices = [];
-  let chargementNumero = 0;
-
-  const giteUrl = params.get('gite');
-
-  if (GITES.includes(giteUrl)) {
-    selectGite.value = giteUrl;
-  }
-
-  /*
-   * OUTILS
-   */
-
-  function giteActuel() {
-    return selectGite.value;
-  }
-
-  function majRetour() {
-    $('retourAccueil').href =
-      'index.html?gite=' +
-      encodeURIComponent(giteActuel()) +
-      (isTV ? '&tv=1' : '');
-
-    const url = new URL(window.location.href);
-
-    url.searchParams.set(
-      'gite',
-      giteActuel()
-    );
-
-    history.replaceState(
-      null,
-      '',
-      url.toString()
-    );
-  }
-
-  function afficherMessage(texte, type) {
-    message.textContent = texte;
-
-    message.className =
-      'message' +
-      (type ? ' ' + type : '');
-  }
-
-  function afficherConnexionMessage(texte, type) {
-    const element = $('messageConnexion');
-
-    element.textContent = texte;
-
-    element.className =
-      'message' +
-      (type ? ' ' + type : '');
-  }
-
-  function verrouiller(verrou) {
-    operationEnCours = verrou;
-
-    btnActualiser.disabled = verrou;
-    btnToutDesactiver.disabled = verrou;
-    selectGite.disabled = verrou;
-
-    liste.querySelectorAll('button').forEach(
-      function (bouton) {
-        bouton.disabled = verrou;
-      }
-    );
-  }
-
-  function attendre(ms) {
-    return new Promise(function (resolve) {
-      setTimeout(resolve, ms);
-    });
-  }
-
-  /*
-   * CONNEXION
-   *
-   * Le code est envoyé au serveur.
-   * Le résultat est consulté grâce
-   * à un identifiant aléatoire.
-   *
-   * Aucun code administrateur
-   * n'est écrit dans ce HTML.
-   */
-
-  function creerNonce() {
-    if (
-      !window.crypto ||
-      !window.crypto.getRandomValues
-    ) {
-      throw new Error(
-        'Navigateur incompatible avec la connexion sécurisée.'
-      );
-    }
-
-    const bytes = new Uint8Array(32);
-
-    window.crypto.getRandomValues(bytes);
-
-    return Array.from(bytes, function (b) {
-      return b.toString(16).padStart(2, '0');
-    }).join('');
-  }
-
-  async function verifierCodeServeur(pin) {
-    const nonce = creerNonce();
-
-    const donnees = new URLSearchParams();
-
-    donnees.set('action', 'verifierAdmin');
-    donnees.set('pin', pin);
-    donnees.set('nonce', nonce);
-
-    await fetch(
-      API_URL,
-      {
-        method: 'POST',
-        mode: 'no-cors',
-        body: donnees
-      }
-    );
-
-    for (let i = 0; i < 12; i++) {
-      await attendre(700);
-
-      const url =
-        API_URL +
-        '?type=statutAdmin' +
-        '&nonce=' +
-        encodeURIComponent(nonce) +
-        '&t=' +
-        Date.now();
-
-      const response = await fetch(
-        url,
-        {
-          cache: 'no-store'
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(
-          'Impossible de contacter Google Apps Script.'
-        );
-      }
-
-      const resultat = await response.json();
-
-      if (resultat.etat === 'valide') {
-        return true;
-      }
-
-      if (resultat.etat === 'refuse') {
-        return false;
-      }
-
-      if (resultat.etat === 'invalide') {
-        throw new Error(
-          'Identifiant de connexion invalide.'
-        );
-      }
-    }
-
-    throw new Error(
-      'Vérification trop longue. Vérifie le déploiement Apps Script.'
-    );
-  }
-
-  async function connecter(event) {
-    event.preventDefault();
-
-    if (isTV || connexionEnCours) {
-      return;
-    }
-
-    const pin = $('codeAdmin').value.trim();
-
-    if (!/^\d{6}$/.test(pin)) {
-      afficherConnexionMessage(
-        'Saisis un code à six chiffres.',
-        'erreur'
-      );
-      return;
-    }
-
-    connexionEnCours = true;
-    $('btnConnexion').disabled = true;
-
-    afficherConnexionMessage(
-      'Vérification du code auprès de Google…'
-    );
-
-    try {
-      const valide =
-        await verifierCodeServeur(pin);
-
-      if (!valide) {
-        afficherConnexionMessage(
-          'Code administrateur incorrect.',
-          'erreur'
-        );
-
-        $('codeAdmin').value = '';
-        $('codeAdmin').focus();
-
-        return;
-      }
-
-      adminPin = pin;
-
-      $('codeAdmin').value = '';
-
-      $('ecranConnexion').classList.add('cache');
-      $('administration').classList.remove('cache');
-
-      chargerConseils(false);
-
-    } catch (erreur) {
-      afficherConnexionMessage(
-        erreur.message,
-        'erreur'
-      );
-
-    } finally {
-      connexionEnCours = false;
-      $('btnConnexion').disabled = false;
-    }
-  }
-
-  function deconnecter() {
-    if (operationEnCours) {
-      return;
-    }
-
-    adminPin = '';
-    cachedAdvices = [];
-    chargementNumero++;
-
-    liste.innerHTML = '';
-
-    $('administration').classList.add('cache');
-    $('ecranConnexion').classList.remove('cache');
-
-    $('codeAdmin').value = '';
-    $('messageConnexion').classList.add('cache');
-
-    $('codeAdmin').focus();
-  }
-
-  /*
-   * PHOTOS
-   *
-   * 1. Google Drive
-   * 2. Postimages
-   * 3. Logo Ozabris
-   */
-
-  function sourcePhoto(conseil) {
-    const sources = [];
-
-    function ajouter(url) {
-      const s = String(url || '').trim();
-
-      if (
-        s &&
-        s !== LOGO &&
-        !sources.includes(s)
-      ) {
-        sources.push(s);
-      }
-    }
-
-    ajouter(conseil.photoDrive);
-    ajouter(conseil.imgLegacy);
-    ajouter(conseil.img);
-    ajouter(LOGO);
-
-    return sources;
-  }
-
-  function installerPhoto(element, conseil) {
-    const sources = sourcePhoto(conseil);
-
-    let position = 0;
-
-    element.onerror = function () {
-      position++;
-
-      if (position < sources.length) {
-        element.src = sources[position];
-      } else {
-        element.onerror = null;
-        element.src = LOGO;
-      }
-    };
-
-    element.src = sources[0] || LOGO;
-  }
-
-  /*
-   * ETAT DES RECOMMANDATIONS
-   */
-
-  function estActive(conseil, gite) {
-    if (gite === 'ptitzabris') {
-      return conseil.activePtit === true;
-    }
-
-    return conseil.activeGrand === true;
-  }
-
-  function estApplicable(conseil, gite) {
-    const target = String(
-      conseil.target || 'both'
-    ).toLowerCase();
-
-    return (
-      target === 'both' ||
-      target === gite
-    );
-  }
-
-  /*
-   * LECTURE GOOGLE SHEETS
-   */
-
-  async function lireEtatServeur() {
-    const url =
-      API_URL +
-      '?type=conseils' +
-      '&gite=' +
-      encodeURIComponent(giteActuel()) +
-      '&t=' +
-      Date.now();
-
-    const response = await fetch(
-      url,
-      {
-        cache: 'no-store'
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(
-        'Lecture du serveur impossible.'
-      );
-    }
-
-    const data = await response.json();
-
-    if (Array.isArray(data)) {
-      return data;
-    }
-
-    if (
-      data &&
-      Array.isArray(data.conseils)
-    ) {
-      return data.conseils;
-    }
-
-    throw new Error(
-      data && data.error
-        ? data.error
-        : 'Réponse inattendue du serveur.'
-    );
-  }
-
-  async function chargerConseils(silencieux) {
-    if (
-      operationEnCours ||
-      !adminPin ||
-      isTV
-    ) {
-      return;
-    }
-
-    const numero = ++chargementNumero;
-
-    if (!silencieux) {
-      afficherMessage(
-        'Chargement des recommandations…'
-      );
-    }
-
-    try {
-      const data = await lireEtatServeur();
-
-      if (
-        numero !== chargementNumero ||
-        !adminPin
-      ) {
-        return;
-      }
-
-      cachedAdvices = data;
-
-      construireListe();
-
-      if (!silencieux) {
-        afficherMessage(
-          cachedAdvices.length +
-          ' recommandation(s) chargée(s) depuis Google Sheets.',
-          'succes'
-        );
-      }
-
-    } catch (erreur) {
-      if (numero !== chargementNumero) {
-        return;
-      }
-
-      afficherMessage(
-        'Impossible de charger les recommandations : ' +
-        erreur.message,
-        'erreur'
-      );
-    }
-  }
-
-  /*
-   * CARTES DES RECOMMANDATIONS
-   */
-
-  function construireListe() {
-    liste.innerHTML = '';
-
-    if (!adminPin) {
-      return;
-    }
-
-    const gite = giteActuel();
-
-    let nombre = 0;
-
-    cachedAdvices.forEach(
-      function (conseil, position) {
-        const titre = String(
-          conseil.title ||
-          conseil['Nom de la recommandation'] ||
-          ''
-        ).trim();
-
-        if (!titre) {
-          return;
-        }
-
-        nombre++;
-
-        const index =
-          Number.isInteger(Number(conseil.index))
-            ? Number(conseil.index)
-            : position;
-
-        const applicable =
-          estApplicable(conseil, gite);
-
-        const actif =
-          estActive(conseil, gite);
-
-        const carte =
-          document.createElement('article');
-
-        carte.className = 'conseil';
-
-        const top =
-          document.createElement('div');
-
-        top.className = 'conseil-top';
-
-        const photo =
-          document.createElement('img');
-
-        photo.alt = titre;
-        photo.loading = 'lazy';
-
-        installerPhoto(photo, conseil);
-
-        const info =
-          document.createElement('div');
-
-        info.className = 'conseil-info';
-
-        const h3 =
-          document.createElement('h3');
-
-        h3.textContent = titre;
-        info.appendChild(h3);
-
-        const description =
-          document.createElement('p');
-
-        description.textContent =
-          String(conseil.text || '');
-
-        info.appendChild(description);
-
-        const statut =
-          document.createElement('span');
-
-        statut.className =
-          'statut ' +
-          (!applicable
-            ? 'exclu'
-            : actif
-              ? 'actif'
-              : 'inactif');
-
-        statut.textContent =
-          !applicable
-            ? 'Non destiné à ce gîte'
-            : actif
-              ? '● Activée'
-              : '○ Désactivée';
-
-        info.appendChild(statut);
-
-        top.appendChild(photo);
-        top.appendChild(info);
-
-        carte.appendChild(top);
-
-        if (applicable) {
-          const actions =
-            document.createElement('div');
-
-          actions.className = 'actions';
-
-          const bouton =
-            document.createElement('button');
-
-          bouton.type = 'button';
-
-          bouton.className =
-            actif ? 'btn-rouge' : 'btn-vert';
-
-          bouton.textContent =
-            actif
-              ? 'Désactiver pour ce gîte'
-              : 'Activer pour ce gîte';
-
-          bouton.addEventListener(
-            'click',
-            function () {
-              modifierConseil(
-                index,
-                !actif,
-                titre
-              );
-            }
-          );
-
-          actions.appendChild(bouton);
-          carte.appendChild(actions);
-        }
-
-        liste.appendChild(carte);
-      }
-    );
-
-    if (nombre === 0) {
-      const vide =
-        document.createElement('p');
-
-      vide.className = 'vide';
-
-      vide.textContent =
-        'Aucune recommandation disponible.';
-
-      liste.appendChild(vide);
-    }
-  }
-
-  /*
-   * ENVOI DES MODIFICATIONS
-   */
-
-  async function envoyerModification(
-    action,
-    options
-  ) {
-    if (!adminPin) {
-      throw new Error(
-        'Connexion administrateur nécessaire.'
-      );
-    }
-
-    const donnees = new URLSearchParams();
-
-    donnees.set('action', action);
-    donnees.set('pin', adminPin);
-    donnees.set('gite', giteActuel());
-
-    if (options.index !== undefined) {
-      donnees.set(
-        'index',
-        String(options.index)
-      );
-    }
-
-    donnees.set(
-      'active',
-      options.active ? 'true' : 'false'
-    );
-
-    await fetch(
-      API_URL,
-      {
-        method: 'POST',
-        mode: 'no-cors',
-        body: donnees
-      }
-    );
-  }
-
-  /*
-   * VERIFICATION DES MODIFICATIONS
-   */
-
-  function attendreVerification(ms) {
-    return attendre(ms);
-  }
-
-  async function verifierModification(
-    condition
-  ) {
-    for (
-      let essai = 0;
-      essai < 5;
-      essai++
-    ) {
-      await attendreVerification(
-        essai === 0 ? 1400 : 1800
-      );
-
-      const data =
-        await lireEtatServeur();
-
-      if (condition(data)) {
-        cachedAdvices = data;
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  /*
-   * ACTIVER OU DESACTIVER
-   */
-
-  async function modifierConseil(
-    index,
-    nouvelEtat,
-    titre
-  ) {
-    if (
-      operationEnCours ||
-      !adminPin
-    ) {
-      return;
-    }
-
-    verrouiller(true);
-
-    afficherMessage(
-      'Enregistrement de « ' +
-      titre +
-      ' » dans Google Sheets…'
-    );
-
-    const gite = giteActuel();
-
-    try {
-      await envoyerModification(
-        'setAdvice',
-        {
-          index: index,
-          active: nouvelEtat
-        }
-      );
-
-      const confirme =
-        await verifierModification(
-          function (data) {
-            const conseil = data.find(
-              function (item) {
-                return Number(
-                  item.index
-                ) === index;
-              }
-            );
-
-            return (
-              conseil &&
-              estActive(
-                conseil,
-                gite
-              ) === nouvelEtat
-            );
-          }
-        );
-
-      if (!confirme) {
-        throw new Error(
-          'Modification non confirmée. Vérifie Apps Script.'
-        );
-      }
-
-      construireListe();
-
-      afficherMessage(
-        'Modification enregistrée pour ' +
-        gite +
-        '. La télévision récupérera le nouveau réglage ' +
-        'lors de sa prochaine actualisation.',
-        'succes'
-      );
-
-    } catch (erreur) {
-      afficherMessage(
-        'Enregistrement non confirmé : ' +
-        erreur.message,
-        'erreur'
-      );
-
-      try {
-        cachedAdvices =
-          await lireEtatServeur();
-
-        construireListe();
-
-      } catch (_) {
-        // On garde la liste existante.
-      }
-
-    } finally {
-      verrouiller(false);
-    }
-  }
-
-  /*
-   * TOUT DESACTIVER
-   */
-
-  async function toutDesactiver() {
-    if (
-      operationEnCours ||
-      !adminPin
-    ) {
-      return;
-    }
-
-    const gite = giteActuel();
-
-    if (!confirm(
-      'Désactiver toutes les recommandations pour ' +
-      gite + ' ?'
-    )) {
-      return;
-    }
-
-    verrouiller(true);
-
-    afficherMessage(
-      'Désactivation en cours pour ' +
-      gite + '…'
-    );
-
-    try {
-      await envoyerModification(
-        'setAllAdvice',
-        {
-          active: false
-        }
-      );
-
-      const confirme =
-        await verifierModification(
-          function (data) {
-            return data.every(
-              function (conseil) {
-                return (
-                  !estApplicable(
-                    conseil,
-                    gite
-                  ) ||
-                  !estActive(
-                    conseil,
-                    gite
-                  )
-                );
-              }
-            );
-          }
-        );
-
-      if (!confirme) {
-        throw new Error(
-          'La désactivation totale n’a pas été confirmée.'
-        );
-      }
-
-      construireListe();
-
-      afficherMessage(
-        'Toutes les recommandations de ' +
-        gite +
-        ' sont désactivées dans Google Sheets.',
-        'succes'
-      );
-
-    } catch (erreur) {
-      afficherMessage(
-        'Opération non confirmée : ' +
-        erreur.message,
-        'erreur'
-      );
-
-      try {
-        cachedAdvices =
-          await lireEtatServeur();
-
-        construireListe();
-
-      } catch (_) {
-        // On garde la dernière liste.
-      }
-
-    } finally {
-      verrouiller(false);
-    }
-  }
-
-  /*
-   * EVENEMENTS
-   */
-
-  $('formConnexion').addEventListener(
-    'submit',
-    connecter
-  );
-
-  $('deconnexion').addEventListener(
-    'click',
-    deconnecter
-  );
-
-  selectGite.addEventListener(
-    'change',
-    function () {
-      chargementNumero++;
-
-      majRetour();
-      construireListe();
-
-      afficherMessage(
-        'Affichage des réglages de ' +
-        giteActuel() + '.'
-      );
-
-      chargerConseils(true);
-    }
-  );
-
-  btnActualiser.addEventListener(
-    'click',
-    function () {
-      chargerConseils(false);
-    }
-  );
-
-  btnToutDesactiver.addEventListener(
-    'click',
-    toutDesactiver
-  );
-
-  /*
-   * DEMARRAGE
-   */
-
-  majRetour();
-
-  if (isTV) {
-    $('ecranTV').classList.remove('cache');
-  } else {
-    $('ecranConnexion').classList.remove('cache');
-  }
-
-  /*
-   * ACTUALISATION AUTOMATIQUE
-   * TOUTES LES 30 SECONDES
-   */
-
-  setInterval(function () {
-    if (
-      adminPin &&
-      !operationEnCours &&
-      !isTV &&
-      document.visibilityState === 'visible'
-    ) {
-      chargerConseils(true);
-    }
-  }, 30000);
+(function(){
+'use strict';
+
+const API='https://script.google.com/macros/s/AKfycbxS9JcDvy7gGhPFXE3z1a4DVC3pvq-j2MTSbaxDuz3Z6z80AkS3GP5mNpZyibillwDVFg/exec';
+const $=id=>document.getElementById(id);
+const params=new URLSearchParams(location.search);
+const isTV=params.get('tv')==='1';
+const validGites=['ptitzabris','grandzabris'];
+
+let session='';
+let conseils=[];
+let sejours=[];
+let busy=false;
+let requestNumber=0;
+
+const initial=params.get('gite');
+if(validGites.includes(initial))$('gite').value=initial;
+
+function gite(){return $('gite').value}
+
+function backLink(){
+ $('back').href='index.html?gite='+gite()+
+ (isTV?'&tv=1':'');
+}
+
+function msg(text,error){
+ $('message').textContent=text;
+ $('message').className='message'+
+ (error?' error':'');
+}
+
+function loginMsg(text,error){
+ $('loginMessage').textContent=text;
+ $('loginMessage').className='message'+
+ (error?' error':'');
+}
+
+function wait(ms){
+ return new Promise(resolve=>setTimeout(resolve,ms));
+}
+
+function nonce(){
+ const bytes=new Uint8Array(32);
+ crypto.getRandomValues(bytes);
+ return Array.from(bytes,b=>
+ b.toString(16).padStart(2,'0')).join('');
+}
+
+async function getData(){
+ const url=API+'?type=adminData&gite='+
+ encodeURIComponent(gite())+
+ '&session='+encodeURIComponent(session)+
+ '&t='+Date.now();
+ const response=await fetch(url,{cache:'no-store'});
+ if(!response.ok)throw Error('Erreur serveur');
+ const data=await response.json();
+ if(!data.ok)throw Error(data.error||'Session invalide');
+ return data;
+}
+
+async function post(action,extra){
+ const body=new URLSearchParams({
+ action:action,session:session,gite:gite(),...extra
+ });
+ await fetch(API,{
+ method:'POST',mode:'no-cors',body:body
+ });
+}
+
+async function verify(test){
+ for(let i=0;i<7;i++){
+ await wait(i===0?1400:1700);
+ const data=await getData();
+ if(test(data))return data;
+ }
+ throw Error('Modification non confirmée par Google Sheets');
+}
+
+function lock(value){
+ busy=value;
+ document.querySelectorAll(
+ '#adminPanel button,#adminPanel select,#adminPanel input'
+ ).forEach(el=>el.disabled=value);
+}
+
+async function update(action,extra,test){
+ if(busy)return;
+ lock(true);
+ msg('Enregistrement dans Google Sheets…');
+ try{
+ await post(action,extra);
+ const data=await verify(test);
+ conseils=data.conseils;
+ sejours=data.sejours;
+ render();
+ msg('Modification enregistrée.',false);
+ $('message').className='message success';
+ }catch(e){
+ msg(e.message,true);
+ try{
+ const data=await getData();
+ conseils=data.conseils;
+ sejours=data.sejours;
+ render();
+ }catch(_){}
+ }finally{lock(false)}
+}
+
+function active(c){
+ return gite()==='ptitzabris'
+ ? c.activePtit===true
+ : c.activeGrand===true;
+}
+
+function applicable(c){
+ return c.target==='both'||c.target===gite();
+}
+
+function stayUrl(s){
+ return new URL(
+ 'conseils.html?gite='+encodeURIComponent(gite())+
+ '&sejour='+encodeURIComponent(s.id),
+ location.href
+ ).href;
+}
+
+function tvUrl(s){
+ return new URL(
+ 'conseils.html?gite='+encodeURIComponent(gite())+
+ '&tv=1&sejour='+encodeURIComponent(s.id),
+ location.href
+ ).href;
+}
+
+function addButton(parent,label,cls,callback){
+ const b=document.createElement('button');
+ b.type='button';
+ b.className=cls;
+ b.textContent=label;
+ b.addEventListener('click',callback);
+ parent.appendChild(b);
+ return b;
+}
+
+function renderStays(){
+ const root=$('stays');
+ root.innerHTML='';
+ if(!sejours.length){
+ const p=document.createElement('p');
+ p.className='small';
+ p.textContent='Aucun séjour personnalisé pour ce gîte.';
+ root.appendChild(p);
+ return;
+ }
+ sejours.slice().reverse().forEach(s=>{
+ const box=document.createElement('div');
+ box.className='conseil';
+ const h=document.createElement('h3');
+ h.textContent=s.nom;
+ box.appendChild(h);
+ const p=document.createElement('p');
+ p.textContent='Fin de validité : '+s.fin;
+ box.appendChild(p);
+ const link=document.createElement('div');
+ link.className='linkbox';
+ link.textContent=stayUrl(s);
+ box.appendChild(link);
+ const actions=document.createElement('div');
+ actions.className='actions';
+
+ addButton(actions,'Copier le lien voyageurs','gold',()=>{
+ navigator.clipboard.writeText(stayUrl(s))
+ .then(()=>msg('Lien copié.'));
+ });
+
+ addButton(actions,'Copier le lien TV','blue',()=>{
+ navigator.clipboard.writeText(tvUrl(s))
+ .then(()=>msg('Lien TV copié.'));
+ });
+
+ box.appendChild(actions);
+ root.appendChild(box);
+ });
+}
+
+function renderAdvices(){
+ const root=$('advices');
+ root.innerHTML='';
+
+ conseils.forEach(c=>{
+ if(!c.title)return;
+
+ const card=document.createElement('article');
+ card.className='conseil';
+ const top=document.createElement('div');
+ top.className='conseil-top';
+
+ const img=document.createElement('img');
+ img.alt=c.title;
+ const sources=[
+ c.photoDrive,c.imgLegacy,c.img,'images/logo.jpeg'
+ ].filter(Boolean);
+ let position=0;
+ img.onerror=()=>{
+ position++;
+ if(position<sources.length)img.src=sources[position];
+ else img.onerror=null;
+ };
+ img.src=sources[0]||'images/logo.jpeg';
+
+ const info=document.createElement('div');
+ info.className='conseil-info';
+ const title=document.createElement('h3');
+ title.textContent=c.title;
+ const text=document.createElement('p');
+ text.textContent=c.text||'';
+ const tag=document.createElement('span');
+ tag.className='tag';
+ tag.textContent=!applicable(c)
+ ? 'Non destiné à ce gîte'
+ : active(c)?'● Activée':'○ Désactivée';
+
+ info.append(title,text,tag);
+ top.append(img,info);
+ card.appendChild(top);
+
+ if(applicable(c)){
+ const actions=document.createElement('div');
+ actions.className='actions';
+
+ addButton(
+ actions,
+ active(c)?'Désactiver':'Activer',
+ active(c)?'red':'green',
+ ()=>{
+ const newState=!active(c);
+ update('setAdvice',{
+ index:String(c.index),
+ active:String(newState)
+ },data=>{
+ const item=data.conseils.find(x=>x.index===c.index);
+ return item && (
+ gite()==='ptitzabris'
+ ? item.activePtit===newState
+ : item.activeGrand===newState
+ );
+ });
+ }
+ );
+
+ card.appendChild(actions);
+
+ const label=document.createElement('label');
+ label.textContent='Visibilité de ce conseil';
+ card.appendChild(label);
+
+ const select=document.createElement('select');
+ const general=document.createElement('option');
+ general.value='';
+ general.textContent='Permanent — tous les voyageurs';
+ select.appendChild(general);
+
+ sejours.forEach(s=>{
+ const option=document.createElement('option');
+ option.value=s.id;
+ option.textContent='Séjour : '+s.nom+' (fin '+s.fin+')';
+ select.appendChild(option);
+ });
+
+ select.value=c.sejourId||'';
+ select.addEventListener('change',()=>{
+ const newValue=select.value;
+ update('assignAdvice',{
+ index:String(c.index),
+ sejourId:newValue
+ },data=>{
+ const item=data.conseils.find(x=>x.index===c.index);
+ return item && (item.sejourId||'')===newValue;
+ });
+ });
+ card.appendChild(select);
+ }
+
+ root.appendChild(card);
+ });
+}
+
+function render(){
+ renderStays();
+ renderAdvices();
+}
+
+async function load(silent){
+ if(!session||busy)return;
+ const n=++requestNumber;
+ if(!silent)msg('Chargement des recommandations…');
+ try{
+ const data=await getData();
+ if(n!==requestNumber)return;
+ conseils=data.conseils;
+ sejours=data.sejours;
+ render();
+ if(!silent)msg('Recommandations chargées.');
+ }catch(e){
+ if(n===requestNumber)msg(e.message,true);
+ }
+}
+
+$('loginForm').addEventListener('submit',async event=>{
+ event.preventDefault();
+ const pin=$('pin').value.trim();
+ if(!/^\d{6}$/.test(pin))return;
+ $('loginBtn').disabled=true;
+ loginMsg('Vérification du code…');
+ try{
+ const n=nonce();
+ const body=new URLSearchParams({
+ action:'verifierAdmin',pin:pin,nonce:n
+ });
+ await fetch(API,{
+ method:'POST',mode:'no-cors',body:body
+ });
+
+ let result=null;
+ for(let i=0;i<12;i++){
+ await wait(700);
+ const response=await fetch(
+ API+'?type=statutAdmin&nonce='+n+
+ '&t='+Date.now(),{cache:'no-store'}
+ );
+ result=await response.json();
+ if(result.etat!=='attente')break;
+ }
+
+ if(!result||result.etat!=='valide'||!result.session){
+ throw Error('Code incorrect ou connexion impossible.');
+ }
+
+ session=result.session;
+ $('pin').value='';
+ $('loginPanel').classList.add('hidden');
+ $('adminPanel').classList.remove('hidden');
+ load(false);
+ }catch(e){
+ loginMsg(e.message,true);
+ }finally{
+ $('loginBtn').disabled=false;
+ }
+});
+
+$('logout').addEventListener('click',()=>{
+ session='';
+ conseils=[];
+ sejours=[];
+ requestNumber++;
+ $('adminPanel').classList.add('hidden');
+ $('loginPanel').classList.remove('hidden');
+});
+
+$('gite').addEventListener('change',()=>{
+ requestNumber++;
+ backLink();
+ const url=new URL(location.href);
+ url.searchParams.set('gite',gite());
+ history.replaceState(null,'',url.href);
+ conseils=[];
+ sejours=[];
+ render();
+ load(false);
+});
+
+$('stayForm').addEventListener('submit',event=>{
+ event.preventDefault();
+ const nom=$('stayName').value.trim();
+ const fin=$('stayEnd').value;
+ if(!nom||!fin)return;
+
+ update('createStay',{nom:nom,fin:fin},data=>
+ data.sejours.some(s=>s.nom===nom&&s.fin===fin)
+ ).then(()=>{
+ $('stayName').value='';
+ $('stayEnd').value='';
+ });
+});
+
+$('refresh').addEventListener('click',()=>load(false));
+
+$('disableAll').addEventListener('click',()=>{
+ if(!confirm('Désactiver toutes les recommandations pour '+
+ gite()+' ?'))return;
+ update('setAllAdvice',{active:'false'},data=>
+ data.conseils.every(c=>
+ !applicable(c)||
+ (gite()==='ptitzabris'
+ ? c.activePtit!==true
+ : c.activeGrand!==true)
+ )
+ );
+});
+
+backLink();
+
+if(isTV){
+ $('tvBlock').classList.remove('hidden');
+}else{
+ $('loginPanel').classList.remove('hidden');
+}
+
+setInterval(()=>{
+ if(session&&!busy&&!isTV&&
+ document.visibilityState==='visible'){
+ load(true);
+ }
+},30000);
 
 })();
 </script>
-
 </body>
 </html>
